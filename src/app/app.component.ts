@@ -22,7 +22,7 @@ export class AppComponent {
     help: false,
     about: true,
     app: {
-      name: 'rpg - Comic Book Repository',
+      name: 'sdrfe - Comic Book Repository',
       version: '3.0.0',
       dependencies: {},
       prefix: ['@zff']
@@ -39,7 +39,7 @@ export class AppComponent {
   public headerConfig: ZxAppHeaderModel = new ZxAppHeaderModel({
     logo: '',
     labelVisible: true,
-    label: 'rpg',
+    label: 'sdrfe',
     description: 'ZIRA Movie Repository',
     userMenuConfig: {
         hideAlarms: true,

@@ -39,6 +39,6 @@ task tar(type: Tar) {
      extension = 'tar.gz'
      baseName = 'build'
      compression = Compression.GZIP
-     into("/") { from "dist/rpg" }
+     into("/") { from "dist/sdrfe" }
 }
 tar.dependsOn buildapp

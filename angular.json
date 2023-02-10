@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "rpg": {
+    "sdrfe": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -26,7 +26,7 @@
             "allowedCommonJsDependencies": [
               "query-string"
             ],
-            "outputPath": "dist/rpg",
+            "outputPath": "dist/sdrfe",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -97,10 +97,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "rpg:build:production"
+              "browserTarget": "sdrfe:build:production"
             },
             "development": {
-              "browserTarget": "rpg:build:development"
+              "browserTarget": "sdrfe:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -108,7 +108,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "rpg:build"
+            "browserTarget": "sdrfe:build"
           }
         },
         "test": {
@@ -130,6 +130,6 @@
         }
       }
     },
-  "defaultProject": "rpg"
+  "defaultProject": "sdrfe"
   }
 }
