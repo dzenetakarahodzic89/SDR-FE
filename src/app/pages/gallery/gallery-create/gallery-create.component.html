@@ -1,0 +1,15 @@
+<zx-block zx-tab-item *ngIf="imageFormConfig" id="overviewTab" [config]="overviewBlock">
+  <div zx-block-action class="buttonContainer">
+      <zx-button [config]="saveButton"></zx-button>
+      <zx-button [config]="cancelButton"></zx-button>
+  </div>
+  
+  <div zx-block-body class="imageRow row span-8">
+      <zx-form-loader [component]="imageFormConfig" [model]="model" class="col-12">
+      </zx-form-loader>
+      <div class="col-12 imageContainer">
+          <zx-button [config]="showImageButton"></zx-button>
+          <img *ngIf="this.model.imageData" [src]="this.model.imageData" alt="image">
+      </div>
+  </div>
+</zx-block>

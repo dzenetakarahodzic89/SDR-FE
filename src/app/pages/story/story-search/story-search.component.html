@@ -1,0 +1,43 @@
+<div class="row mainContainer">
+    <zx-block [config]="storysBlockConfig" class="col-16">
+      <zx-button zx-block-action [config]="newStoryBtn"></zx-button>
+      <div zx-block-body class="row">
+        <zx-preloader *ngIf="storysAreLoading"></zx-preloader>
+      </div>
+      <div
+        *ngIf="foundStorys && foundStorys.length > 0"
+        zx-block-body
+        class="searchResults"
+      >
+        <div class="gridContainer">
+          <div class="divForBoxes" *ngFor="let story of foundStorys">
+            <app-box
+              [id]="story.id"
+              [type]="'story'"
+              [title]="story.name"
+              [description]="story.name"
+              [imageUrl]="story.imageUrl"
+            >
+            </app-box>
+          </div>
+        </div>
+      </div>
+      <div zx-block-footer class="align-center">
+        <zx-button [config]="previousPageButton"></zx-button>
+        <zx-button [config]="nextPageButton"></zx-button>
+      </div>
+    </zx-block>
+  
+    <zx-block [config]="searchBlockConfig" class="col-8">
+      <zx-button zx-block-action [config]="searchButton"></zx-button>
+      <zx-form-loader
+        *ngIf="formConfig"
+        zx-block-body
+        [component]="formConfig"
+        [model]="model"
+        class="col-24"
+      >
+      </zx-form-loader>
+    </zx-block>
+  </div>
+  

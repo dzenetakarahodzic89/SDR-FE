@@ -1,0 +1,41 @@
+.multiSearchImg{
+  max-width: 45px;
+  max-height: 45px;
+}
+
+.multiSearchImg{
+  margin: 12px;
+  grid-area: s;
+}
+
+.multiSearchItemInfo{
+  grid-area: i;
+}
+
+.multiSearchItem {
+  box-shadow: 0 1.5px 1px -1px gray;
+  display: grid;
+  grid-template-columns: 60px 500px;
+  grid-template-rows: 70px;
+  grid-template-areas:
+    "s i";
+}
+
+.itemNameDivName{
+  grid-area: n;
+  margin-top: 18px;
+}
+
+.nameOfItem{
+  height: 15px;
+  grid-area: i;
+}
+
+.itemNameDiv{
+  display: grid;
+  grid-template-columns: 30px;
+  grid-template-rows: 30px;
+  grid-template-areas:
+    "n i"
+    ;
+}

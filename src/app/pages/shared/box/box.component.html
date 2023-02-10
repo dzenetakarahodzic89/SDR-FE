@@ -1,0 +1,27 @@
+<div>
+  <div (click)="this.showOverview(id, type)" class="objects">
+    <img [src]="imageUrl" alt="Object image" class="objectImg" />
+    <div class="objectDescription">
+
+      
+      <p class="title">{{title}}</p>
+      <h4>{{ universalCount }} {{ universalObjectName }}</h4>
+      <p class="description" [innerHtml]="description"></p>
+
+      <div *ngFor="let objectAdditionalAttribute of objectAdditionalAttributes">
+        <p class="releaseRegionAndDate">{{objectAdditionalAttribute.releaseDate | date:'dd.MM.yyyy'}} - ({{objectAdditionalAttribute.region.name}})</p>
+      </div>
+      
+      <div class="mt-75">
+        <zx-button [config]="deleteBtn"></zx-button>
+        
+        <zx-popup [config]="popup">
+          <div zx-popup-body>
+            <p>Are you sure that you want to delete this image?</p>
+          </div>
+            <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+        </zx-popup>
+      </div>
+    </div>
+  </div>
+</div>

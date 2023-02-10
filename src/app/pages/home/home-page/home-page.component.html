@@ -1,0 +1,28 @@
+<div id="searchBlock">
+    <h1>RPG Creation</h1>
+    <div id="searchInput" class="ng-autocomplete">
+        <ng-autocomplete [data]="allMultiSearchObjects" [searchKeyword]="keyword" (selected)="selectEvent($event)"
+            (inputChanged)="onChangeSearch($event)" (inputFocused)="onFocused($event)" [itemTemplate]="itemTemplate"
+            [notFoundTemplate]="notFoundTemplate">
+        </ng-autocomplete>
+
+        <ng-template #itemTemplate let-item>
+            <app-multi-search-item [multiSearchItem]="item"></app-multi-search-item>
+        </ng-template>
+
+        <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+        </ng-template>
+    </div>
+</div>
+
+<div id="gridAll">
+    <zx-block [config]="gamesBlockConfig" id="gridBlock">
+        <zx-grid zx-block-body id="gridAward" [gridOptions]="gridAwardOptions" [source]="awardList">
+        </zx-grid>
+    </zx-block>
+    <zx-block [config]="wikiBlockConfig" id="wikiBlock">
+        <zx-grid zx-block-body id="gridWiki" [gridOptions]="gridOptions" [source]="wikiData"></zx-grid>
+    </zx-block>
+</div>
+<div>GREECE Static<span class="fi fi-gr"></span> Dynamic Bosnia<span class="{{testFlag}}"></span></div>

@@ -1,0 +1,40 @@
+<div class="row mainContainer">
+  <div zx-block-body class="row">
+    <zx-preloader *ngIf="mediaIsLoading"></zx-preloader>
+  </div>
+  <div class="col-14" *ngIf="objectMedia">
+      <div class="row">
+        <div class="col-18 m-0 p-0 ">
+
+          <h2 [innerHTML]="headerString"></h2>
+        </div>
+        <div class="col-6 m-0 pt-30 align-right">
+
+          <zx-button [config]="newImageBtn"></zx-button>
+        </div>
+      </div>
+    <hr/>
+      <zx-block [config]="blockConfig">
+        <div class="imageResults" zx-block-body>
+          <div (click)="showImage(m.url)" class="imageContainer" *ngFor="let m of objectMedia.mediaStores">
+
+            <app-box
+            [id]="m.uuid"
+            [type]="'media'"
+            [title]="'Name: '+m.name"
+            [description]="'Type: ' + m.type"
+            [imageUrl]="m.url"
+            [redirect]="false"
+            [showDeleteBtn]="true"
+            (onDelete)="delete($event)"
+            >
+            </app-box>          
+          </div>
+        </div>
+      </zx-block>
+    </div>
+  
+  <div class="col-10 mt-75 align-center">
+    <img [src]="selectedImage" alt="No image selected" >
+  </div>
+</div>

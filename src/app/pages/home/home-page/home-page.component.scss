@@ -1,0 +1,37 @@
+.ng-autocomplete {
+    width: 1800px;
+}
+
+#searchBlock {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#gridAll {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#gridBlock {
+    width: 50%;
+    margin-right: 2px;
+}
+
+#wikiBlock {
+    width: 50%;
+    margin-left: 2px;
+}
+
+#searchBlock {
+    margin: 15px;
+}
+
+#weekRealeases {
+    width: 100%;
+    align-self: center;
+}

@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        maven {
+          url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.node-gradle:gradle-node-plugin:3.1.1"
+        classpath "com.netflix.nebula:gradle-ospackage-plugin:9.0.0"
+    }
+}
+
+plugins {
+    id "com.github.node-gradle.node" version "3.1.1"
+    id "nebula.ospackage" version "9.0.0"
+}
+
+apply plugin: "com.github.node-gradle.node"
+apply plugin: "nebula.ospackage"
+
+node {
+    download = true
+    version = '12.16.1'
+}
+
+def environment = project.hasProperty('env') ? env : 'prod'
+
+task buildapp {}
+buildapp.dependsOn npmInstall
+buildapp.dependsOn npm_run {
+  args = [environment]
+}
+
+task cleanapp (type: Delete) {
+  delete 'dist', 'node_modules', 'build.tar.gz', 'build'
+}
+
+task tar(type: Tar) {
+     extension = 'tar.gz'
+     baseName = 'build'
+     compression = Compression.GZIP
+     into("/") { from "dist/rpg" }
+}
+tar.dependsOn buildapp

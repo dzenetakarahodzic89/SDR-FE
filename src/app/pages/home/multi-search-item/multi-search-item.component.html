@@ -1,0 +1,11 @@
+<div class="multiSearchItem">
+    <img [src]="multiSearchItem.imageUrl" alt="Game image" class="multiSearchImg" />
+    <div class="multiSearchItemInfo">
+        <div class="itemNameDiv">
+            <span class="itemNameDivName">Name: </span>
+            <a class="nameOfItem" [innerHTML]="multiSearchItem.name"></a>
+        </div>
+
+        <p>Type: &nbsp;&nbsp;&nbsp; {{ multiSearchItem.type }}</p>
+    </div>
+</div>
