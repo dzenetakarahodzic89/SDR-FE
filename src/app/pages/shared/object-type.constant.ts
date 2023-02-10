@@ -1,5 +1,5 @@
 export class ObjectType {
-    public static STORY = "STORY";
+    public static SONG = "SONG";
     public static COUNTRY="COUNTRY";
     public static PLAYER="PLAYER";
     public static STAFF="STAFF";

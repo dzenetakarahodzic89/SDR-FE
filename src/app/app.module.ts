@@ -40,7 +40,7 @@ import { SharedModule } from './pages/shared/shared.module';
 import { HomeModule } from './pages/home/home.module';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { GalleryModule } from './pages/gallery/gallery.module';
-import { StoryModule } from './pages/story/story.module';
+import { SongModule } from './pages/song/song.module';
  
 environment.languages.map(v => registerLocaleData(v.locale));
 
@@ -73,7 +73,7 @@ environment.languages.map(v => registerLocaleData(v.locale));
     SharedModule,
     HomeModule,
     GalleryModule,
-    StoryModule
+    SongModule
     // use forRoot() in main app module only.
   ],
   providers: [

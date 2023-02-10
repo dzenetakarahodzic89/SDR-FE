@@ -2,14 +2,14 @@ import { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home/home-page/home-page.component';
 import { GalleryOverviewComponent } from './pages/gallery/gallery-overview/gallery-overview.component';
 import { GalleryCreateComponent } from './pages/gallery/gallery-create/gallery-create.component';
-import { StorySearchComponent } from './pages/story/story-search/story-search.component';
-import { StoryOverviewComponent } from './pages/story/story-overview/story-overview.component';
+import { SongSearchComponent } from './pages/song/song-search/song-search.component';
+import { SongOverviewComponent } from './pages/song/song/song-overview.component';
 
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent }, 
-  { path: 'story/search', component: StorySearchComponent },
-  { path: 'story/:id/overview', component: StoryOverviewComponent },
+  { path: 'song/search', component: SongSearchComponent },
+  { path: 'song/:id/overview', component: SongOverviewComponent },
   { path: 'gallery/:type/:id', component: GalleryOverviewComponent },
   { path: 'gallery/:type/:id/create', component: GalleryCreateComponent }
 

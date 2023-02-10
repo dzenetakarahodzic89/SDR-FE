@@ -1,22 +1,22 @@
 <div class="row mainContainer">
     <zx-block [config]="storysBlockConfig" class="col-16">
-      <zx-button zx-block-action [config]="newStoryBtn"></zx-button>
+      <zx-button zx-block-action [config]="newSongBtn"></zx-button>
       <div zx-block-body class="row">
         <zx-preloader *ngIf="storysAreLoading"></zx-preloader>
       </div>
       <div
-        *ngIf="foundStorys && foundStorys.length > 0"
+        *ngIf="foundSongs && foundSongs.length > 0"
         zx-block-body
         class="searchResults"
       >
         <div class="gridContainer">
-          <div class="divForBoxes" *ngFor="let story of foundStorys">
+          <div class="divForBoxes" *ngFor="let song of foundSongs">
             <app-box
-              [id]="story.id"
-              [type]="'story'"
-              [title]="story.name"
-              [description]="story.name"
-              [imageUrl]="story.imageUrl"
+              [id]="song.id"
+              [type]="'song'"
+              [title]="song.name"
+              [description]="song.name"
+              [imageUrl]="song.imageUrl"
             >
             </app-box>
           </div>

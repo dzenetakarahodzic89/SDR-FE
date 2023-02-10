@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { SongSearchComponent } from './song-search/song-search.component';
+import { SongService } from './shared/song.service';
+import { SongOverviewComponent } from './song/song-overview.component';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
-import { StorySearchComponent } from './story-search/story-search.component';
-import { StoryOverviewComponent } from './story-overview/story-overview.component';
-import { StoryService } from './shared/story.service';
 
 
 
 @NgModule({
   declarations: [
-    StorySearchComponent,
-    StoryOverviewComponent
+    SongSearchComponent,
+    SongOverviewComponent
   ],
   imports: [
     SharedModule,
@@ -19,11 +19,11 @@ import { StoryService } from './shared/story.service';
     AutocompleteLibModule
   ],
   exports: [
-    StorySearchComponent,
-    StoryOverviewComponent
+    SongSearchComponent,
+    SongOverviewComponent
   ], providers: [
-    StoryService,
+    SongService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
   ]
 })
-export class StoryModule { }
+export class SongModule { }

@@ -1,4 +1,4 @@
-export class StoryResponse {
+export class SongResponse {
     id:number;
     name: string;
     imageUrl: string;
@@ -7,7 +7,7 @@ export class StoryResponse {
     information:string;
 }
 
-export class StorySearchRequest {
+export class SongSearchRequest {
     name: string;
 
     constructor(
@@ -17,7 +17,7 @@ export class StorySearchRequest {
     }
 }
 
-export class StoryPopUpRequest {
+export class SongPopUpRequest {
     personId: number;
     movieId: number;
 
@@ -30,13 +30,13 @@ export class StoryPopUpRequest {
     }
 }
 
-export class StoryPopUpResponse {
+export class SongPopUpResponse {
     id: number;
     name: string;
-    StoryType: string;
+    SongType: string;
 }
 
-export class StoryCreateRequest {
+export class SongCreateRequest {
     information: string;
     type: string;
     movieId: number;
@@ -53,7 +53,7 @@ export class StoryCreateRequest {
     }
 }
 
-export class StoryChartResponse {
+export class SongChartResponse {
     id: number;
     person: string;
     name: string;
@@ -61,7 +61,7 @@ export class StoryChartResponse {
     value: number;
 }
 
-export class StoryListChartResponse {
-    Stories: StoryChartResponse[];
-    awards: StoryChartResponse[];
+export class SongListChartResponse {
+    Stories: SongChartResponse[];
+    awards: SongChartResponse[];
 }

@@ -7,18 +7,18 @@ import { ZxConfirmation } from '@zff/zx-core';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ObjectType } from '../../shared/object-type.constant';
-import { StoryResponse } from '../shared/story.model';
-import { StoryService } from '../shared/story.service';
+import { SongResponse } from '../shared/song.model';
+import { SongService } from '../shared/song.service';
 
 @Component({
-  selector: 'app-story-overview',
-  templateUrl: './story-overview.component.html',
-  styleUrls: ['./story-overview.component.scss']
+  selector: 'app-song-overview',
+  templateUrl: './song-overview.component.html',
+  styleUrls: ['./song-overview.component.scss']
 })
-export class StoryOverviewComponent implements OnInit
+export class SongOverviewComponent implements OnInit
 {
 
-  type = ObjectType.STORY;
+  type = ObjectType.SONG;
   storyIsLoading = false;
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -37,7 +37,7 @@ export class StoryOverviewComponent implements OnInit
 
   public infoBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
-    label: 'Story information',
+    label: 'Song information',
   });
 
   public ratingBtnConfig: ZxBlockModel = new ZxBlockModel({
@@ -46,7 +46,7 @@ export class StoryOverviewComponent implements OnInit
 
   public detailsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
-    label: 'Story details',
+    label: 'Song details',
   });
 
   public storysBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -59,7 +59,7 @@ export class StoryOverviewComponent implements OnInit
         icon: 'fal fa-images',
         name: 'Popup Test',
         label: 'Gallery',
-        action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/' + this.story.id])
+        action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/' + this.song.id])
       },
     ],
   });
@@ -70,7 +70,7 @@ export class StoryOverviewComponent implements OnInit
         icon: 'fal fa-edit',
         name: 'Popup Test',
         label: 'Edit',
-        action: () => this.router.navigate(['./story/update/' + this.story.id])
+        action: () => this.router.navigate(['./song/update/' + this.song.id])
       },
     ],
   });
@@ -79,7 +79,7 @@ export class StoryOverviewComponent implements OnInit
   storysColumnDefs = [
     {
       field: 'name',
-      headerName: 'Story',
+      headerName: 'Song',
       flex: 1,
       floatingFilter: false,
     }
@@ -91,14 +91,14 @@ export class StoryOverviewComponent implements OnInit
     enableColResize: true,
     onRowClicked: (event) =>
     {
-      this.router.navigate(['./story/' + event['data']['id'] + '/overview']);
+      this.router.navigate(['./song/' + event['data']['id'] + '/overview']);
     }
   } as GridOptions;
 
-  story: StoryResponse;
-  linkedStorys: StoryResponse[];
+  song: SongResponse;
+  linkedSongs: SongResponse[];
 
-  constructor(private router: Router, private route: ActivatedRoute, private storyService: StoryService, public confirmation: ZxConfirmation) { }
+  constructor(private router: Router, private route: ActivatedRoute, private storyService: SongService, public confirmation: ZxConfirmation) { }
 
   ngOnInit(): void
   {
@@ -110,9 +110,9 @@ export class StoryOverviewComponent implements OnInit
     this.storyIsLoading = true;
     this.route.params.subscribe(params =>
     {
-      this.storyService.getStory(params.id).subscribe(response =>
+      this.storyService.getSong(params.id).subscribe(response =>
       {
-        this.story = response;
+        this.song = response;
         this.storyIsLoading = false;
       })
     })

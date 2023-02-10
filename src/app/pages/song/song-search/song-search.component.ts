@@ -5,15 +5,15 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { BoxComponent } from '../../shared/box/box.component';
 import { AppBox } from '../../shared/box/box.model';
-import { StorySearchRequest } from '../shared/story.model';
-import { StoryService } from '../shared/story.service';
+import { SongSearchRequest } from '../shared/song.model';
+import { SongService } from '../shared/song.service';
 
 @Component({
-  selector: 'app-story-search',
-  templateUrl: './story-search.component.html',
-  styleUrls: ['./story-search.component.scss']
+  selector: 'app-song-search',
+  templateUrl: './song-search.component.html',
+  styleUrls: ['./song-search.component.scss']
 })
-export class StorySearchComponent implements OnInit {
+export class SongSearchComponent implements OnInit {
   public storysBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     label: 'Stories',
@@ -24,14 +24,14 @@ export class StorySearchComponent implements OnInit {
     label: 'Search Stories',
   });
 
-  public newStoryBtn: ZxButtonModel = new ZxButtonModel({
+  public newSongBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         icon: 'fas fa-plus-square',
-        name: 'newStory',
-        label: 'New Story',
+        name: 'newSong',
+        label: 'New Song',
         action: (btn: any, output: any) => {
-          this.router.navigate(['./story/create']);
+          this.router.navigate(['./song/create']);
         },
       },
     ],
@@ -86,7 +86,7 @@ export class StorySearchComponent implements OnInit {
   
 
   public formConfig: Definition;
-  foundStorys:AppBox[] = [];
+  foundSongs:AppBox[] = [];
   paginationDetails= {
     page:1,
     totalPages:0
@@ -105,7 +105,7 @@ export class StorySearchComponent implements OnInit {
   }
 
 
-  constructor(private router:Router,private storyService:StoryService) {
+  constructor(private router:Router,private storyService:SongService) {
 
   }
   
@@ -120,12 +120,12 @@ export class StorySearchComponent implements OnInit {
 
   searchStories(){
     this.storysAreLoading=true;
-      let searchRequest = new StorySearchRequest(
+      let searchRequest = new SongSearchRequest(
         this.model.name
       );
 
       this.storyService.searchStories(searchRequest).subscribe(response=>{
-        this.foundStorys= response as unknown as AppBox[];
+        this.foundSongs= response as unknown as AppBox[];
         this.paginationDetails.page = response['page'];
         this.paginationDetails.totalPages = response['numberOfPages'];
         this.storysAreLoading=false;
