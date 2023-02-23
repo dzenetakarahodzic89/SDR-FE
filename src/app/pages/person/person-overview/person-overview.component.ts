@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { ZxConfirmation } from '@zff/zx-core';
-import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ObjectType } from '../../shared/object-type.constant';
 import { PersonResponse } from '../shared/person.model';
@@ -31,7 +30,8 @@ export class PersonOverviewComponent implements OnInit
     orientation: 'portrait',
     hideExpand: false,
     items: [
-      { name: 'Persons', id: 'personsTab', label: 'Persons', icon: 'fal fa-film' }
+      { name: 'Artists', id: 'artistsTab', label: 'Artists', icon: 'fal fa-film' },
+      { name: 'Albums', id: 'albumsTab', label: 'Albums', icon: 'fal fa-film' }
     ]
   });
 
@@ -49,7 +49,11 @@ export class PersonOverviewComponent implements OnInit
     label: 'Person details',
   });
 
-  public personsBlockConfig: ZxBlockModel = new ZxBlockModel({
+  public artistsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+
+  public albumsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
@@ -76,27 +80,59 @@ export class PersonOverviewComponent implements OnInit
   });
 
 
-  personsColumnDefs = [
+  artistsColumnDefs = [
     {
       field: 'name',
-      headerName: 'Person',
+      headerName: 'Artist Name',
       flex: 1,
       floatingFilter: false,
     }
   ];
 
-  public personGridOptions: GridOptions = {
-    columnDefs: this.personsColumnDefs,
+  albumsColumnDefs = [
+    {
+      field: 'name',
+      headerName: 'Album Name',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'numberOfSongs',
+      headerName: 'Number of Songs',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'totalPlaytime',
+      headerName: 'Total Playtime',
+      flex: 1,
+      floatingFilter: false,
+    }
+  ];
+
+  public artistGridOptions: GridOptions = {
+    columnDefs: this.artistsColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) =>
     {
-      this.router.navigate(['./person/' + event['data']['id'] + '/overview']);
+      this.router.navigate(['./artist/' + event['data']['id'] + '/overview']);
+    }
+  } as GridOptions;
+
+  public albumGridOptions: GridOptions = {
+    columnDefs: this.albumsColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) =>
+    {
+      this.router.navigate(['./album/' + event['data']['id'] + '/overview']);
     }
   } as GridOptions;
 
   person: PersonResponse;
-  linkedPersons: PersonResponse[];
+  linkedArtists: PersonResponse[];
+  linkedAlbums: any[];
 
   constructor(private router: Router, private route: ActivatedRoute, private personService: PersonService, public confirmation: ZxConfirmation) { }
 
