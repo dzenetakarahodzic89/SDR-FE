@@ -19,7 +19,7 @@ export class PersonOverviewComponent implements OnInit
 
   type = ObjectType.PERSON;
   personIsLoading = false;
-
+  testFlag: string = "fi fi-";
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     hideHeader: true,
@@ -150,6 +150,8 @@ export class PersonOverviewComponent implements OnInit
       {
         this.person = response;
         this.personIsLoading = false;
+        this.testFlag = this.testFlag.concat(this.person.flagAbbreviation).toLowerCase();
+        console.log(this.testFlag);
       })
     })
   }

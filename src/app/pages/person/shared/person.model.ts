@@ -7,6 +7,7 @@ export class PersonResponse {
     outlineText:string;
     fullName:string;
     gender:string;
+    flagAbbreviation: string;
 }
 
 export class PersonSearchRequest {
