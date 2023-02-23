@@ -14,8 +14,8 @@
             <app-box
               [id]="person.id"
               [type]="'person'"
-              [title]="person.name"
-              [description]="person.name"
+              [title]="person.name || ' ' || person.surname"
+              [description]="person.information"
               [imageUrl]="person.imageUrl"
             >
             </app-box>

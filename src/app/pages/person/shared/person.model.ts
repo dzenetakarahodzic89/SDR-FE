@@ -1,7 +1,7 @@
 export class PersonResponse {
     id:number;
-    personName: string;
-    personSurname: string;
+    name: string;
+    surname: string;
     imageUrl: string;
     information:string;
 }
@@ -38,7 +38,6 @@ export class PersonPopUpResponse {
 export class PersonCreateRequest {
     information: string;
     type: string;
-    movieId: number;
     personId: number;
 
     constructor(
@@ -48,7 +47,6 @@ export class PersonCreateRequest {
     ) {
         this.type = type;
         this.personId = personId;
-        this.movieId = movieId;
     }
 }
 
@@ -61,6 +59,6 @@ export class PersonChartResponse {
 }
 
 export class PersonListChartResponse {
-    Persons: PersonChartResponse[];
+    persons: PersonChartResponse[];
     awards: PersonChartResponse[];
 }
