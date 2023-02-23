@@ -5,33 +5,33 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { BoxComponent } from '../../shared/box/box.component';
 import { AppBox } from '../../shared/box/box.model';
-import { SongSearchRequest } from '../shared/song.model';
-import { SongService } from '../shared/song.service';
+import { PersonSearchRequest } from '../shared/person.model';
+import { PersonService } from '../shared/person.service';
 
 @Component({
-  selector: 'app-song-search',
-  templateUrl: './song-search.component.html',
-  styleUrls: ['./song-search.component.scss']
+  selector: 'app-person-search',
+  templateUrl: './person-search.component.html',
+  styleUrls: ['./person-search.component.scss']
 })
-export class SongSearchComponent implements OnInit {
-  public storysBlockConfig: ZxBlockModel = new ZxBlockModel({
+export class PersonSearchComponent implements OnInit {
+  public personsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
-    label: 'Stories',
+    label: 'Persons',
   });
 
   public searchBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
-    label: 'Search Stories',
+    label: 'Search Persons',
   });
 
-  public newSongBtn: ZxButtonModel = new ZxButtonModel({
+  public newPersonBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         icon: 'fas fa-plus-square',
-        name: 'newSong',
-        label: 'New Song',
+        name: 'newPerson',
+        label: 'New Person',
         action: (btn: any, output: any) => {
-          this.router.navigate(['./song/create']);
+          this.router.navigate(['./person/create']);
         },
       },
     ],
@@ -45,7 +45,7 @@ export class SongSearchComponent implements OnInit {
         icon: 'fas fa-search',
         action: () => {
           this.paginationDetails.page = 1;
-          this.searchStories();
+          this.searchPersons();
         },
       },
     ],
@@ -71,7 +71,7 @@ export class SongSearchComponent implements OnInit {
     ],
   });
 
-  storysAreLoading = false;
+  personsAreLoading = false;
 
   public model: any = {};
 
@@ -86,7 +86,7 @@ export class SongSearchComponent implements OnInit {
   
 
   public formConfig: Definition;
-  foundSongs:AppBox[] = [];
+  foundPersons:AppBox[] = [];
   paginationDetails= {
     page:1,
     totalPages:0
@@ -94,8 +94,8 @@ export class SongSearchComponent implements OnInit {
 
   public setFormConfig() {
     this.formConfig = new Definition({
-      label: 'Search Stories',
-      name: 'storySearch',
+      label: 'Search Persons',
+      name: 'personSearch',
       template: 'ZxForm',
       disabled: false,
       children: [
@@ -105,7 +105,7 @@ export class SongSearchComponent implements OnInit {
   }
 
 
-  constructor(private router:Router,private storyService:SongService) {
+  constructor(private router:Router,private personService:PersonService) {
 
   }
   
@@ -115,20 +115,20 @@ export class SongSearchComponent implements OnInit {
   }
   loadData()
   {
-    this.searchStories();
+    this.searchPersons();
   }
 
-  searchStories(){
-    this.storysAreLoading=true;
-      let searchRequest = new SongSearchRequest(
+  searchPersons(){
+    this.personsAreLoading=true;
+      let searchRequest = new PersonSearchRequest(
         this.model.name
       );
 
-      this.storyService.searchStories(searchRequest).subscribe(response=>{
-        this.foundSongs= response as unknown as AppBox[];
+      this.personService.searchPersons(searchRequest).subscribe(response=>{
+        this.foundPersons= response as unknown as AppBox[];
         this.paginationDetails.page = response['page'];
         this.paginationDetails.totalPages = response['numberOfPages'];
-        this.storysAreLoading=false;
+        this.personsAreLoading=false;
       });
    
   }
@@ -136,7 +136,7 @@ export class SongSearchComponent implements OnInit {
   getPreviousPage() {
     if (this.paginationDetails.page > 1) {
       this.paginationDetails.page--;
-      this.searchStories();
+      this.searchPersons();
     }
   }
 
@@ -148,7 +148,7 @@ export class SongSearchComponent implements OnInit {
         )
     ) {
       this.paginationDetails.page++;
-      this.searchStories();
+      this.searchPersons();
 
     }
   }

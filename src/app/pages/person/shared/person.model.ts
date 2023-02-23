@@ -1,13 +1,12 @@
-export class SongResponse {
+export class PersonResponse {
     id:number;
-    name: string;
+    personName: string;
+    personSurname: string;
     imageUrl: string;
-    coordinate_lat: number;
-    coordinate_lang: number;
     information:string;
 }
 
-export class SongSearchRequest {
+export class PersonSearchRequest {
     name: string;
 
     constructor(
@@ -17,7 +16,7 @@ export class SongSearchRequest {
     }
 }
 
-export class SongPopUpRequest {
+export class PersonPopUpRequest {
     personId: number;
     movieId: number;
 
@@ -30,13 +29,13 @@ export class SongPopUpRequest {
     }
 }
 
-export class SongPopUpResponse {
+export class PersonPopUpResponse {
     id: number;
     name: string;
-    SongType: string;
+    PersonType: string;
 }
 
-export class SongCreateRequest {
+export class PersonCreateRequest {
     information: string;
     type: string;
     movieId: number;
@@ -53,7 +52,7 @@ export class SongCreateRequest {
     }
 }
 
-export class SongChartResponse {
+export class PersonChartResponse {
     id: number;
     person: string;
     name: string;
@@ -61,7 +60,7 @@ export class SongChartResponse {
     value: number;
 }
 
-export class SongListChartResponse {
-    Stories: SongChartResponse[];
-    awards: SongChartResponse[];
+export class PersonListChartResponse {
+    Persons: PersonChartResponse[];
+    awards: PersonChartResponse[];
 }

@@ -7,19 +7,19 @@ import { ZxConfirmation } from '@zff/zx-core';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ObjectType } from '../../shared/object-type.constant';
-import { SongResponse } from '../shared/song.model';
-import { SongService } from '../shared/song.service';
+import { PersonResponse } from '../shared/person.model';
+import { PersonService } from '../shared/person.service'; 
 
 @Component({
-  selector: 'app-song-overview',
-  templateUrl: './song-overview.component.html',
-  styleUrls: ['./song-overview.component.scss']
+  selector: 'app-person-overview',
+  templateUrl: './person-overview.component.html',
+  styleUrls: ['./person-overview.component.scss']
 })
-export class SongOverviewComponent implements OnInit
+export class PersonOverviewComponent implements OnInit
 {
 
-  type = ObjectType.SONG;
-  storyIsLoading = false;
+  type = ObjectType.PERSON;
+  personIsLoading = false;
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -31,13 +31,13 @@ export class SongOverviewComponent implements OnInit
     orientation: 'portrait',
     hideExpand: false,
     items: [
-      { name: 'Stories', id: 'storysTab', label: 'Stories', icon: 'fal fa-film' }
+      { name: 'Persons', id: 'personsTab', label: 'Persons', icon: 'fal fa-film' }
     ]
   });
 
   public infoBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
-    label: 'Song information',
+    label: 'Person information',
   });
 
   public ratingBtnConfig: ZxBlockModel = new ZxBlockModel({
@@ -46,10 +46,10 @@ export class SongOverviewComponent implements OnInit
 
   public detailsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
-    label: 'Song details',
+    label: 'Person details',
   });
 
-  public storysBlockConfig: ZxBlockModel = new ZxBlockModel({
+  public personsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
@@ -59,7 +59,7 @@ export class SongOverviewComponent implements OnInit
         icon: 'fal fa-images',
         name: 'Popup Test',
         label: 'Gallery',
-        action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/' + this.song.id])
+        action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/' + this.person.id])
       },
     ],
   });
@@ -70,35 +70,35 @@ export class SongOverviewComponent implements OnInit
         icon: 'fal fa-edit',
         name: 'Popup Test',
         label: 'Edit',
-        action: () => this.router.navigate(['./song/update/' + this.song.id])
+        action: () => this.router.navigate(['./person/update/' + this.person.id])
       },
     ],
   });
 
 
-  storysColumnDefs = [
+  personsColumnDefs = [
     {
       field: 'name',
-      headerName: 'Song',
+      headerName: 'Person',
       flex: 1,
       floatingFilter: false,
     }
   ];
 
-  public storyGridOptions: GridOptions = {
-    columnDefs: this.storysColumnDefs,
+  public personGridOptions: GridOptions = {
+    columnDefs: this.personsColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) =>
     {
-      this.router.navigate(['./song/' + event['data']['id'] + '/overview']);
+      this.router.navigate(['./person/' + event['data']['id'] + '/overview']);
     }
   } as GridOptions;
 
-  song: SongResponse;
-  linkedSongs: SongResponse[];
+  person: PersonResponse;
+  linkedPersons: PersonResponse[];
 
-  constructor(private router: Router, private route: ActivatedRoute, private storyService: SongService, public confirmation: ZxConfirmation) { }
+  constructor(private router: Router, private route: ActivatedRoute, private personService: PersonService, public confirmation: ZxConfirmation) { }
 
   ngOnInit(): void
   {
@@ -107,13 +107,13 @@ export class SongOverviewComponent implements OnInit
 
   loadData()
   {
-    this.storyIsLoading = true;
+    this.personIsLoading = true;
     this.route.params.subscribe(params =>
     {
-      this.storyService.getSong(params.id).subscribe(response =>
+      this.personService.getPerson(params.id).subscribe(response =>
       {
-        this.song = response;
-        this.storyIsLoading = false;
+        this.person = response;
+        this.personIsLoading = false;
       })
     })
   }

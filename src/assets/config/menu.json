@@ -10,9 +10,9 @@
                 "attributes": {},
                 "children": [
                     {
-                        "code": "HUB_SONGS_STATIC",
-                        "label": "Stories",
-                        "url": "song/search",
+                        "code": "HUB_PERSONS_STATIC",
+                        "label": "Persons",
+                        "url": "person/search",
                         "attributes": {}
                     },
                     {

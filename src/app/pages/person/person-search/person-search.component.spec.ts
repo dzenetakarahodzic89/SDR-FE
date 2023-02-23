@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SongOverviewComponent } from './song-overview.component';
+import { PersonSearchComponent } from './person-search.component';
 
-describe('SongOverviewComponent', () => {
-  let component: SongOverviewComponent;
-  let fixture: ComponentFixture<SongOverviewComponent>;
+describe('PersonSearchComponent', () => {
+  let component: PersonSearchComponent;
+  let fixture: ComponentFixture<PersonSearchComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SongOverviewComponent ]
+      declarations: [ PersonSearchComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SongOverviewComponent);
+    fixture = TestBed.createComponent(PersonSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

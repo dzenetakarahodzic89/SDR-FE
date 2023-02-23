@@ -40,7 +40,7 @@ import { SharedModule } from './pages/shared/shared.module';
 import { HomeModule } from './pages/home/home.module';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { GalleryModule } from './pages/gallery/gallery.module';
-import { SongModule } from './pages/song/song.module';
+import { PersonModule } from './pages/person/person.module';
  
 environment.languages.map(v => registerLocaleData(v.locale));
 
@@ -49,7 +49,7 @@ environment.languages.map(v => registerLocaleData(v.locale));
 @NgModule({
 
   declarations: [
-    AppComponent,
+    AppComponent
   ],
 
   imports: [
@@ -73,7 +73,7 @@ environment.languages.map(v => registerLocaleData(v.locale));
     SharedModule,
     HomeModule,
     GalleryModule,
-    SongModule
+    PersonModule
     // use forRoot() in main app module only.
   ],
   providers: [
