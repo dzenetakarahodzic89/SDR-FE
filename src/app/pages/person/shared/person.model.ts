@@ -4,6 +4,8 @@ export class PersonResponse {
     surname: string;
     imageUrl: string;
     information:string;
+    outlineText:string;
+    fullName:string;
 }
 
 export class PersonSearchRequest {
