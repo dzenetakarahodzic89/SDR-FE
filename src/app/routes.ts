@@ -11,7 +11,7 @@ export const appRoutes: Routes = [
   { path: '', component: HomePageComponent }, 
   { path: 'person/search', component: PersonSearchComponent },
   { path: 'person/create', component: PersonCreateComponent },
-  { path: 'person/:id/edit', component: PersonCreateComponent },
+  { path: 'person/update/:id', component: PersonCreateComponent },
   { path: 'person/:id/overview', component: PersonOverviewComponent },
   { path: 'gallery/:type/:id', component: GalleryOverviewComponent },
   { path: 'gallery/:type/:id/create', component: GalleryCreateComponent }
