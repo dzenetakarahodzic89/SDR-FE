@@ -3,3 +3,15 @@ img {
   height: 350px;
   object-fit: contain;
 }
+
+.container {
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+}
+
+#addSongBtn {
+  padding-right: 5px;
+}
+.text-bold {
+  font-weight: bold;
+}

@@ -19,6 +19,6 @@ export const appRoutes: Routes = [
   { path: 'gallery/:type/:id', component: GalleryOverviewComponent },
   { path: 'gallery/:type/:id/create', component: GalleryCreateComponent },
   { path: 'country/overview', component: CountryOverviewComponent },
-  { path: 'instrument/:id/overview', component: InstrumentOverviewComponent }
+  { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
   { path: 'song/:id/overview', component: SongOverviewComponent },
 ];
