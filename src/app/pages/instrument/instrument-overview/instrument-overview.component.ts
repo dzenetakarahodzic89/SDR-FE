@@ -31,7 +31,7 @@ export class InstrumentOverviewComponent implements OnInit {
         icon: 'fal fa-edit',
         name: 'Edit button',
         label: 'Edit instrument',
-        action: () => this.router.navigate(['./instrument/update/' + this.instrument.id])
+        action: () => this.router.navigate(['./instrument/' + this.instrument.id + '/update'])
       },
     ],
   });
