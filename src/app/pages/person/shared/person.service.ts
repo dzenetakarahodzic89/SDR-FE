@@ -27,6 +27,14 @@ export class PersonService {
     );
   }
 
+  updatePerson(person: PersonCreateRequest) {
+    return this.api.post(PersonApi.UPDATE_PERSON, person).pipe(
+      map(response => {
+        return response;
+      })
+    );
+  }
+
   deletePerson(id: number) {
     return this.api.delete(PersonApi.DELETE_PERSON.replace("#", id.toString())).pipe(
       map(response => {

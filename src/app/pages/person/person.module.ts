@@ -1,3 +1,4 @@
+import { PersonCreateComponent } from './person-create/person-create.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
@@ -11,7 +12,8 @@ import { PersonSearchComponent } from './person-search/person-search.component';
 @NgModule({
   declarations: [
     PersonSearchComponent,
-    PersonOverviewComponent
+    PersonOverviewComponent,
+    PersonCreateComponent
   ],
   imports: [
     SharedModule,
@@ -20,7 +22,8 @@ import { PersonSearchComponent } from './person-search/person-search.component';
   ],
   exports: [
     PersonSearchComponent,
-    PersonOverviewComponent
+    PersonOverviewComponent,
+    PersonCreateComponent
   ], providers: [
     PersonService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

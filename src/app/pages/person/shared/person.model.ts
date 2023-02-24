@@ -4,6 +4,10 @@ export class PersonResponse {
     surname: string;
     imageUrl: string;
     information:string;
+    outlineText:string;
+    fullName:string;
+    gender:string;
+    flagAbbreviation: string;
 }
 
 export class PersonSearchRequest {
@@ -37,17 +41,17 @@ export class PersonPopUpResponse {
 
 export class PersonCreateRequest {
     information: string;
-    type: string;
-    personId: number;
+    gender: string;
+    id: number;
+    name:string;
+    surname:string;
+    dateOfBirth:Date;
+    dateOfDeath:Date;
+    coverImageData: string | ArrayBuffer;
+    coverImage: string;
+    coverImage_files: File[];
+    outlineText:string;
 
-    constructor(
-        type: string,
-        personId: number,
-        movieId: number,
-    ) {
-        this.type = type;
-        this.personId = personId;
-    }
 }
 
 export class PersonChartResponse {

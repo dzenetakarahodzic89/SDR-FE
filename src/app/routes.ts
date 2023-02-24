@@ -1,3 +1,4 @@
+import { PersonCreateComponent } from './pages/person/person-create/person-create.component';
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home/home-page/home-page.component';
 import { GalleryOverviewComponent } from './pages/gallery/gallery-overview/gallery-overview.component';
@@ -10,6 +11,8 @@ import { InstrumentOverviewComponent } from './pages/instrument/instrument-overv
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent }, 
   { path: 'person/search', component: PersonSearchComponent },
+  { path: 'person/create', component: PersonCreateComponent },
+  { path: 'person/update/:id', component: PersonCreateComponent },
   { path: 'person/:id/overview', component: PersonOverviewComponent },
   { path: 'gallery/:type/:id', component: GalleryOverviewComponent },
   { path: 'gallery/:type/:id/create', component: GalleryCreateComponent },

@@ -1,0 +1,21 @@
+<zx-tabs [config]="tabConfig">
+    <zx-block zx-tab-item *ngIf="formConfig" id="overviewTab" [config]="overviewBlock">
+        <zx-button zx-block-action [config]="mainButtons"></zx-button>
+        <zx-form-loader zx-block-body [component]="formConfig" [model]="model" class="col-24">
+        </zx-form-loader>
+        <div zx-block-body class="imageRow row">
+            <zx-form-loader [component]="imageFormConfig" [model]="model" class="col-12">
+            </zx-form-loader>
+            <div class="col-12 imageContainer">
+                <zx-button [config]="showImageButton"></zx-button>
+                <img *ngIf="this.model.coverImageData" [src]="this.model.coverImageData" alt="location cover image">
+            </div>
+        </div>
+    </zx-block>
+    <zx-block zx-tab-item id="informationTab" [config]="informationBlock">
+        <zx-button zx-block-action [config]="mainButtons"></zx-button>
+        <div zx-block-body>
+            <editor [init]="{height: 700}" [(ngModel)]="this.model.information"></editor>
+        </div>
+    </zx-block>
+</zx-tabs>
