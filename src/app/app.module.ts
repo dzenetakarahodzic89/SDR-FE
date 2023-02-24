@@ -42,6 +42,7 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
 import { CountryModule } from './pages/country/country.module';
+import { InstrumentModule } from './pages/instrument/instrument.module';
  
 environment.languages.map(v => registerLocaleData(v.locale));
 
@@ -75,7 +76,8 @@ environment.languages.map(v => registerLocaleData(v.locale));
     HomeModule,
     GalleryModule,
     PersonModule,
-    CountryModule
+    CountryModule,
+    InstrumentModule
     // use forRoot() in main app module only.
   ],
   providers: [
