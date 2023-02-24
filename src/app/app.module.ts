@@ -43,6 +43,7 @@ import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
 import { CountryModule } from './pages/country/country.module';
 import { InstrumentModule } from './pages/instrument/instrument.module';
+import { PlaylistModule} from './pages/playlist/playlist.module';
  
 environment.languages.map(v => registerLocaleData(v.locale));
 
@@ -77,7 +78,8 @@ environment.languages.map(v => registerLocaleData(v.locale));
     GalleryModule,
     PersonModule,
     CountryModule,
-    InstrumentModule
+    InstrumentModule,
+    PlaylistModule
     // use forRoot() in main app module only.
   ],
   providers: [

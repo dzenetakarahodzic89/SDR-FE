@@ -7,6 +7,8 @@ import { PersonOverviewComponent } from './pages/person/person-overview/person-o
 import { PersonSearchComponent } from './pages/person/person-search/person-search.component';
 import { CountryOverviewComponent } from './pages/country/country-overview/country-overview.component';
 import { InstrumentOverviewComponent } from './pages/instrument/instrument-overview/instrument-overview.component';
+import { PlaylistSearchComponent } from './pages/playlist/playlist-search/playlist-search.component';
+
 
 
 export const appRoutes: Routes = [
@@ -18,7 +20,8 @@ export const appRoutes: Routes = [
   { path: 'gallery/:type/:id', component: GalleryOverviewComponent },
   { path: 'gallery/:type/:id/create', component: GalleryCreateComponent },
   { path: 'country/overview', component: CountryOverviewComponent },
-  { path: 'instrument/:id/overview', component: InstrumentOverviewComponent }
+  { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
+  { path: 'playlist/search', component: PlaylistSearchComponent }
 ];
 
 
