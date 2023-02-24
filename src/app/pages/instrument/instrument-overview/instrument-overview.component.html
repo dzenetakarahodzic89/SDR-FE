@@ -1,0 +1,42 @@
+<div zx-block-body class="row">
+    <zx-preloader *ngIf="instrumentIsLoading"></zx-preloader>
+</div>
+<div zx-body *ngIf="instrument" class="w-auto">
+    <div class="row col-24 topContainer">
+        <zx-block [config]="containerBlockConfig">
+            <img zx-block-body [src]="instrument.imageUrl" class="width:300px"/>
+        </zx-block>
+        <div class="w-100 pl-10 pr-10">
+            <strong><h1>{{ instrument.name }} </h1></strong>
+
+            <div class="container">
+                <div><h3>{{ this.numOfSongs }} Songs</h3></div>
+                <div class="row">
+                    <zx-button id="addSongBtn" zx-block-action [config]="addSongBtn"></zx-button>
+                    <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
+                </div>
+            </div>        
+            <hr />
+            <br><br>
+            <h5>{{ instrument.outlineText }}</h5>
+        </div>
+    </div>
+    <div class="row-5 bottomContainer">
+        <zx-block [config]="infoBlockConfig" class="col-14">
+            <div zx-block-body [innerHTML]="instrument.information"></div>
+        </zx-block>
+        <zx-block [config]="detailsBlockConfig" class="col-10">
+            <div zx-block-body>
+                <div>
+                    <h5>Type: {{instrument.type}}</h5>
+                </div>
+                <hr>
+                <zx-block [config]="personsBlockConfig">
+                    <zx-grid zx-block-body [gridOptions]="musiciansGridOptions" [source]="linkedMusicians"
+                        domLayout="autoHeight">
+                    </zx-grid>
+                </zx-block>
+            </div>
+        </zx-block>
+    </div>
+</div>

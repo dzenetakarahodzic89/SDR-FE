@@ -16,9 +16,9 @@
                         "attributes": {}
                     },
                     {
-                        "code": "HUB_PLAYER_STATIC",
-                        "label": "Players",
-                        "url": "player/search",
+                        "code": "HUB_COUNTRY_STATIC",
+                        "label": "Countries",
+                        "url": "country/overview",
                         "attributes": {}
                     },
                     {

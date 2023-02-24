@@ -1,0 +1,22 @@
+img {
+    width: 300px;
+    height: 350px;
+    object-fit: contain;
+}
+
+hr {
+    border-top: 3px solid black;
+}
+
+h3 {
+    margin: 0;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 10fr 2fr;
+}
+
+#addSongBtn {
+    padding-right: 5px;
+}
