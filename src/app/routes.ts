@@ -6,6 +6,7 @@ import { GalleryCreateComponent } from './pages/gallery/gallery-create/gallery-c
 import { PersonOverviewComponent } from './pages/person/person-overview/person-overview.component';
 import { PersonSearchComponent } from './pages/person/person-search/person-search.component';
 import { InstrumentOverviewComponent } from './pages/instrument/instrument-overview/instrument-overview.component';
+import { AlbumOverviewComponent } from './pages/album/album-overview/album-overview.component';
 
 
 export const appRoutes: Routes = [
@@ -16,7 +17,8 @@ export const appRoutes: Routes = [
   { path: 'person/:id/overview', component: PersonOverviewComponent },
   { path: 'gallery/:type/:id', component: GalleryOverviewComponent },
   { path: 'gallery/:type/:id/create', component: GalleryCreateComponent },
-  { path: 'instrument/:id/overview', component: InstrumentOverviewComponent }
+  { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
+  { path: 'album/:id/overview', component: AlbumOverviewComponent }
 ];
 
 
