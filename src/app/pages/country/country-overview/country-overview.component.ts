@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ObjectType } from '../../shared/object-type.constant';
 import { ZxBlockModel } from '@zff/zx-block';
 import {  GridOptions } from '@ag-grid-enterprise/all-modules';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ZxConfirmation } from '@zff/zx-core';
 import { CountryResponse, CountryUpdateRequest } from '../shared/country.model';
 import { CountryService } from '../shared/country.service'; 
 import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { ToastrService } from 'ngx-toastr';
+import {isISO31661Alpha2} from '../../../../../node_modules/validator';
 
 @Component({
   selector: 'app-country-overview',
@@ -105,9 +105,9 @@ export class CountryOverviewComponent implements OnInit {
 
   public setFormChildren() {
     this.formConfig.addChildren = [
-      new Definition({ template: 'ZxInput', class: ['col-12'], type: 'text', name: 'name', label: 'Name', validation: { required: true } }),
-      new Definition({ template: 'ZxInput', class: ['col-12'], type: 'text', name: 'region', label: 'Region' }),
-      new Definition({ template: 'ZxInput', class: ['col-12'], type: 'text', name: 'flagAbbriviation', label: 'Flag Abbriviation', validation: {required: true} }),
+      new Definition({ template: 'ZxInput', class: ['col-24'], type: 'text', name: 'name', label: 'Name', validation: { required: true } }),
+      new Definition({ template: 'ZxInput', class: ['col-24'], type: 'text', name: 'region', label: 'Region' }),
+      new Definition({ template: 'ZxInput', class: ['col-24'], type: 'text', name: 'flagAbbriviation', label: 'Flag Abbriviation', validation: {required: true} }),
       
     ]
   }
@@ -127,6 +127,7 @@ export class CountryOverviewComponent implements OnInit {
           this.toastr.success("Country edit successful!");
           this.country = null;
           this.model = new CountryUpdateRequest();
+          this.flag="";
         } else {
           this.toastr.error('Country edit failed!');
         }
@@ -142,10 +143,16 @@ export class CountryOverviewComponent implements OnInit {
     this.model.name = this.country.name;
     this.model.region = this.country.region;
     this.model.flagAbbriviation = this.country.flagAbbriviation;
+    this.flag = "";
   }
 
   checkFlag() {
+    if(isISO31661Alpha2(this.model.flagAbbriviation)) {
     this.flag = "fi fi-" + this.model.flagAbbriviation.toLowerCase();
+    } else {
+      this.flag ="";
+      this.toastr.error("Flag abbriviation incorrect!");
+    }
   }
 
 }
