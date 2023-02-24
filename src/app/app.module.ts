@@ -41,6 +41,7 @@ import { HomeModule } from './pages/home/home.module';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
+import { CountryModule } from './pages/country/country.module';
  
 environment.languages.map(v => registerLocaleData(v.locale));
 
@@ -73,7 +74,8 @@ environment.languages.map(v => registerLocaleData(v.locale));
     SharedModule,
     HomeModule,
     GalleryModule,
-    PersonModule
+    PersonModule,
+    CountryModule
     // use forRoot() in main app module only.
   ],
   providers: [
