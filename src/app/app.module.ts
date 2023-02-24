@@ -42,6 +42,7 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
 import { InstrumentModule } from './pages/instrument/instrument.module';
+import { AlbumModule } from './pages/album/album.module';
  
 environment.languages.map(v => registerLocaleData(v.locale));
 
@@ -50,7 +51,7 @@ environment.languages.map(v => registerLocaleData(v.locale));
 @NgModule({
 
   declarations: [
-    AppComponent
+    AppComponent,
   ],
 
   imports: [
@@ -75,7 +76,8 @@ environment.languages.map(v => registerLocaleData(v.locale));
     HomeModule,
     GalleryModule,
     PersonModule,
-    InstrumentModule
+    InstrumentModule,
+    AlbumModule
     // use forRoot() in main app module only.
   ],
   providers: [
