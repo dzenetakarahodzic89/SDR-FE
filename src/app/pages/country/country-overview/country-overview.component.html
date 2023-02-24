@@ -1,0 +1,24 @@
+<h1>Countries</h1>
+<div zx-block-body class="row">
+    <zx-preloader *ngIf="countryIsLoading"></zx-preloader>
+</div>
+<div zx-body *ngIf="countries" class="w-auto">
+    <div class="row col-24 topContainer">
+        <zx-block [config]="countriesBlockConfig" style="width:100%;">
+            <zx-grid zx-block-body [gridOptions]="countryGridOptions" [source]="countries" domLayout="autoHeight">
+            </zx-grid>
+        </zx-block>
+    </div>
+    <div class="row col-24 bottomContainer">
+        <zx-block *ngIf="country" [config]="countriesBlockConfig" class="col-24">
+            <zx-form-loader zx-block-body [component]="formConfig" [model]="model" class="col-12">
+            </zx-form-loader>
+            <div zx-block-footer style="padding-top: 3px;padding-bottom: 3px;">
+                <div style="float:right;">
+                    <span zx-block-action style="margin-right: 5px;" class="{{flag}}"></span>
+                    <zx-button zx-block-action [config]="mainButtons"></zx-button>
+                </div>
+            </div>
+        </zx-block>
+    </div>
+</div>
