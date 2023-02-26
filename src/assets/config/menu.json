@@ -22,9 +22,9 @@
                         "attributes": {}
                     },
                     {
-                    "code": "HUB_STAFF_STATIC",
-                        "label": "Staff",
-                        "url": "staff/search",
+                    "code": "HUB_PLAYLIST_STATIC",
+                        "label": "Playlists",
+                        "url": "playlist/search",
                         "attributes": {}
                     },
                     {

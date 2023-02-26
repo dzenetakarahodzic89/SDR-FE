@@ -9,6 +9,7 @@ import { CountryOverviewComponent } from './pages/country/country-overview/count
 import { InstrumentOverviewComponent } from './pages/instrument/instrument-overview/instrument-overview.component';
 import { InstrumentCreateComponent } from './pages/instrument/instrument-create/instrument-create.component';
 import { InstrumentSearchComponent } from './pages/instrument/instrument-search/instrument-search.component';
+import { PlaylistSearchComponent } from './pages/playlist/playlist-search/playlist-search.component';
 
 import { SongOverviewComponent } from './pages/song/song-overview/song-overview.component';
 
@@ -26,4 +27,6 @@ export const appRoutes: Routes = [
   { path: 'instrument/:id/update', component: InstrumentCreateComponent },
   { path: 'country/overview', component: CountryOverviewComponent },
   { path: 'song/:id/overview', component: SongOverviewComponent },
+  { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
+  { path: 'playlist/search', component: PlaylistSearchComponent }
 ];

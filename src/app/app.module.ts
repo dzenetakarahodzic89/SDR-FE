@@ -43,10 +43,10 @@ import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
 import { CountryModule } from './pages/country/country.module';
 import { InstrumentModule } from './pages/instrument/instrument.module';
-
-environment.languages.map((v) => registerLocaleData(v.locale));
-
+import { PlaylistModule} from './pages/playlist/playlist.module';
 import { SongModule } from './pages/song/song.module';
+
+
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -77,7 +77,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     PersonModule,
     CountryModule,
     InstrumentModule,
-    SongModule,
+    PlaylistModule,
+    SongModule
     // use forRoot() in main app module only.
   ],
   providers: [
