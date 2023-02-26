@@ -10,9 +10,10 @@ import { InstrumentOverviewComponent } from './pages/instrument/instrument-overv
 import { InstrumentCreateComponent } from './pages/instrument/instrument-create/instrument-create.component';
 import { InstrumentSearchComponent } from './pages/instrument/instrument-search/instrument-search.component';
 
+import { SongOverviewComponent } from './pages/song/song-overview/song-overview.component';
 
 export const appRoutes: Routes = [
-  { path: '', component: HomePageComponent }, 
+  { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
   { path: 'person/create', component: PersonCreateComponent },
   { path: 'person/update/:id', component: PersonCreateComponent },
@@ -23,21 +24,6 @@ export const appRoutes: Routes = [
   { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
   { path: 'instrument/add', component: InstrumentCreateComponent },
   { path: 'instrument/:id/update', component: InstrumentCreateComponent },
-  { path: 'country/overview', component: CountryOverviewComponent }
+  { path: 'country/overview', component: CountryOverviewComponent },
+  { path: 'song/:id/overview', component: SongOverviewComponent },
 ];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
