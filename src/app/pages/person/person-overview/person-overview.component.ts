@@ -7,32 +7,34 @@ import { ZxConfirmation } from '@zff/zx-core';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ObjectType } from '../../shared/object-type.constant';
 import { PersonResponse } from '../shared/person.model';
-import { PersonService } from '../shared/person.service'; 
+import { PersonService } from '../shared/person.service';
 
 @Component({
   selector: 'app-person-overview',
   templateUrl: './person-overview.component.html',
-  styleUrls: ['./person-overview.component.scss']
+  styleUrls: ['./person-overview.component.scss'],
 })
-export class PersonOverviewComponent implements OnInit
-{
-
+export class PersonOverviewComponent implements OnInit {
   type = ObjectType.PERSON;
   personIsLoading = false;
-  testFlag: string = "fi fi-";
+  testFlag: string = 'fi fi-';
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     hideHeader: true,
-
   });
 
   public tabConfig: ZxTabModel = new ZxTabModel({
     orientation: 'portrait',
     hideExpand: false,
     items: [
-      { name: 'Artists', id: 'artistsTab', label: 'Artists', icon: 'fal fa-film' },
-      { name: 'Albums', id: 'albumsTab', label: 'Albums', icon: 'fal fa-film' }
-    ]
+      {
+        name: 'Artists',
+        id: 'artistsTab',
+        label: 'Artists',
+        icon: 'fal fa-film',
+      },
+      { name: 'Albums', id: 'albumsTab', label: 'Albums', icon: 'fal fa-film' },
+    ],
   });
 
   public infoBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -41,7 +43,7 @@ export class PersonOverviewComponent implements OnInit
   });
 
   public ratingBtnConfig: ZxBlockModel = new ZxBlockModel({
-    hideExpand: true
+    hideExpand: true,
   });
 
   public detailsBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -63,7 +65,10 @@ export class PersonOverviewComponent implements OnInit
         icon: 'fal fa-images',
         name: 'Popup Test',
         label: 'Gallery',
-        action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/' + this.person.id])
+        action: () =>
+          this.router.navigate([
+            './gallery/' + this.type.toLowerCase() + '/' + this.person.id,
+          ]),
       },
     ],
   });
@@ -74,11 +79,11 @@ export class PersonOverviewComponent implements OnInit
         icon: 'fal fa-edit',
         name: 'Popup Test',
         label: 'Edit',
-        action: () => this.router.navigate(['./person/update/' + this.person.id])
+        action: () =>
+          this.router.navigate(['./person/update/' + this.person.id]),
       },
     ],
   });
-
 
   artistsColumnDefs = [
     {
@@ -86,7 +91,7 @@ export class PersonOverviewComponent implements OnInit
       headerName: 'Artist Name',
       flex: 1,
       floatingFilter: false,
-    }
+    },
   ];
 
   albumsColumnDefs = [
@@ -107,52 +112,53 @@ export class PersonOverviewComponent implements OnInit
       headerName: 'Total Playtime',
       flex: 1,
       floatingFilter: false,
-    }
+    },
   ];
 
   public artistGridOptions: GridOptions = {
     columnDefs: this.artistsColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
-    onRowClicked: (event) =>
-    {
+    onRowClicked: (event) => {
       this.router.navigate(['./artist/' + event['data']['id'] + '/overview']);
-    }
+    },
   } as GridOptions;
 
   public albumGridOptions: GridOptions = {
     columnDefs: this.albumsColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
-    onRowClicked: (event) =>
-    {
+    onRowClicked: (event) => {
       this.router.navigate(['./album/' + event['data']['id'] + '/overview']);
-    }
+    },
   } as GridOptions;
 
   person: PersonResponse;
   linkedArtists: PersonResponse[];
   linkedAlbums: any[];
 
-  constructor(private router: Router, private route: ActivatedRoute, private personService: PersonService, public confirmation: ZxConfirmation) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private personService: PersonService,
+    public confirmation: ZxConfirmation
+  ) {}
 
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.loadData();
   }
 
-  loadData()
-  {
+  loadData() {
     this.personIsLoading = true;
-    this.route.params.subscribe(params =>
-    {
-      this.personService.getPerson(params.id).subscribe(response =>
-      {
+    this.route.params.subscribe((params) => {
+      this.personService.getPerson(params.id).subscribe((response) => {
         this.person = response;
         this.personIsLoading = false;
-        this.testFlag = this.testFlag.concat(this.person.flagAbbreviation).toLowerCase();
+        this.testFlag = this.testFlag
+          .concat(this.person.flagAbbreviation)
+          .toLowerCase();
         console.log(this.testFlag);
-      })
-    })
+      });
+    });
   }
 }
