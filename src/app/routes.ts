@@ -5,6 +5,7 @@ import { GalleryOverviewComponent } from './pages/gallery/gallery-overview/galle
 import { GalleryCreateComponent } from './pages/gallery/gallery-create/gallery-create.component';
 import { PersonOverviewComponent } from './pages/person/person-overview/person-overview.component';
 import { PersonSearchComponent } from './pages/person/person-search/person-search.component';
+import { LabelOverviewComponent } from './pages/label/label-overview/label-overview.component';
 import { CountryOverviewComponent } from './pages/country/country-overview/country-overview.component';
 import { InstrumentOverviewComponent } from './pages/instrument/instrument-overview/instrument-overview.component';
 import { InstrumentCreateComponent } from './pages/instrument/instrument-create/instrument-create.component';
@@ -22,6 +23,7 @@ export const appRoutes: Routes = [
   { path: 'person/:id/overview', component: PersonOverviewComponent },
   { path: 'gallery/:type/:id', component: GalleryOverviewComponent },
   { path: 'gallery/:type/:id/create', component: GalleryCreateComponent },
+  { path: 'label/:id/overview', component: LabelOverviewComponent },
   { path: 'instrument/search', component: InstrumentSearchComponent },
   { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
   { path: 'instrument/add', component: InstrumentCreateComponent },

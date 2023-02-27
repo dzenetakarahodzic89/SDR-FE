@@ -41,6 +41,7 @@ import { HomeModule } from './pages/home/home.module';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
+import { LabelModule } from './pages/label/label.module';
 import { CountryModule } from './pages/country/country.module';
 import { InstrumentModule } from './pages/instrument/instrument.module';
 import { PlaylistModule} from './pages/playlist/playlist.module';
@@ -51,6 +52,7 @@ import { AlbumModule } from './pages/album/album.module';
 environment.languages.map(v => registerLocaleData(v.locale));
 
 
+environment.languages.map((v) => registerLocaleData(v.locale));
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -79,6 +81,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     HomeModule,
     GalleryModule,
     PersonModule,
+    LabelModule,
     CountryModule,
     InstrumentModule,
     PlaylistModule,
