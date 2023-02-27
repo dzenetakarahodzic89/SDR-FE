@@ -6,8 +6,19 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { ZxConfirmation } from '@zff/zx-core';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ObjectType } from '../../shared/object-type.constant';
-import { PersonResponse } from '../shared/person.model';
+import {
+  PersonResponse,
+  PersonUpdateFlagRequest,
+} from '../shared/person.model';
 import { PersonService } from '../shared/person.service';
+import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
+import { Definition } from '@zff/zx-forms';
+import { ToastrService } from 'ngx-toastr';
+import { isISO31661Alpha2 } from '../../../../../node_modules/validator';
+import {
+  CountryResponse,
+  CountryUpdateRequest,
+} from '../../country/shared/country.model';
 
 @Component({
   selector: 'app-person-overview',
@@ -141,11 +152,73 @@ export class PersonOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private personService: PersonService,
-    public confirmation: ZxConfirmation
+    public confirmation: ZxConfirmation,
+    private toastr: ToastrService
   ) {}
+  public linkPerson: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        label: 'Link person to country',
+        action: () => this.onShow(),
+      },
+    ],
+  });
+
+  public model: any = {};
+  public formConfig: Definition = new Definition({});
+  public updatePerson() {}
+  public lov: CountryResponse[];
+  flag: string;
+  selectedCountry: CountryResponse = new CountryResponse();
+  country: CountryResponse;
+
+  onShow() {
+    this.popup.show();
+  }
+
+  public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    label: 'Link person to country',
+    size: 'col-8',
+    visible: true,
+    hideCloseButton: false,
+  });
+
+  public mainButtons = new ZxButtonModel({
+    items: [
+      {
+        name: 'checkFlag',
+        layout: 'classic',
+        class: 'invert',
+        label: 'Check flag',
+        action: () => this.checkFlag(),
+      },
+      {
+        name: 'save',
+        layout: 'classic',
+        label: 'Save',
+        class: 'invert',
+        action: () => this.updatePerson(),
+      },
+    ],
+  });
+
+  checkFlag() {
+    if (
+      this.selectedCountry &&
+      isISO31661Alpha2(this.selectedCountry.flagAbbriviation)
+    ) {
+      this.flag =
+        'fi fi-' + this.selectedCountry.flagAbbriviation.toLowerCase();
+    } else {
+      this.flag = '';
+      this.toastr.error('Flag abbreviation incorrect!');
+    }
+  }
 
   ngOnInit(): void {
     this.loadData();
+    this.selectedCountry = new CountryResponse();
+    this.country = new CountryResponse();
   }
 
   loadData() {
@@ -158,6 +231,65 @@ export class PersonOverviewComponent implements OnInit {
           .concat(this.person.flagAbbreviation)
           .toLowerCase();
         console.log(this.testFlag);
+      });
+    });
+
+    this.updatePerson = () => {
+      if (!this.selectedCountry.id) {
+        this.toastr.error('Select a country!');
+      } else {
+        const request = new PersonUpdateFlagRequest();
+        request.personId = this.person.id;
+        request.countryId = this.selectedCountry.id;
+
+        this.personService.updatePersonFlag(request).subscribe(
+          (responseCode) => {
+            if (responseCode.hasOwnProperty('payload')) {
+              this.toastr.success('Person updated successfully!');
+              location.reload();
+            } else {
+              this.toastr.error('Person update failed!');
+            }
+          },
+          (errorMsg: string) => {
+            this.toastr.error('Person update failed!');
+          }
+        );
+      }
+    };
+    this.personService.getCountries().subscribe((response) => {
+      const countries = response.map((country: CountryResponse) => {
+        return {
+          name: country.name,
+          id: country.id,
+          flagAbbriviation: country.flagAbbriviation,
+          region: country.region,
+        };
+      });
+      this.lov = countries;
+
+      this.formConfig = new Definition({
+        label: 'Form label',
+        name: 'FormName',
+        template: 'ZxForm',
+        children: [
+          {
+            template: 'ZxSelect',
+            class: ['col-12'],
+            type: 'filter',
+            name: 'select',
+            label: 'Select country',
+            list: this.lov,
+            onSelect: (selectedItemId) => {
+              this.selectedCountry = this.lov.find(
+                (country) => country.name === selectedItemId.value
+              );
+              if (this.selectedCountry) {
+                console.log(this.selectedCountry.id);
+              }
+            },
+          },
+        ],
       });
     });
   }

@@ -10,15 +10,6 @@ export class PlaylistResponse {
     totalPlaytime: number;
 }
 
-export class PlaylistSearchRequest {
-    name: string;
-
-    constructor(
-        name: string
-    ) {
-        this.name = name;
-    }
-}
 
 export class GenreResponse {
     id: number;
@@ -27,7 +18,7 @@ export class GenreResponse {
 }
 
 export class SongResponse {
-    songid: number;
+    songId: number;
     songName: string;
     artistId: number;
     artistName: string;

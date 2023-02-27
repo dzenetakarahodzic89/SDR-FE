@@ -44,6 +44,7 @@
     "@zff/zx-table-view": "^12.1.0",
     "@zff/zx-tree": "^12.1.0",
     "@zff/zx-user": "^12.1.0",
+    "ang-music-player": "^0.0.4",
     "angular-ng-autocomplete": "^2.0.8",
     "chart.js": "^3.8.0",
     "chartjs-chart-matrix": "^1.1.1",

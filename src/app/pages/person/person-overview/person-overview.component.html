@@ -18,12 +18,34 @@
           [config]="galleryButton"
         ></zx-button>
         <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
+        <zx-button
+          id="linkPerson"
+          zx-block-action
+          [config]="linkPerson"
+        ></zx-button>
       </div>
       <hr />
       {{ person.outlineText }}
     </div>
   </div>
 
+  <div *ngIf="country">
+    <zx-popup [config]="popup">
+      <div zx-popup-body>
+        <zx-form-loader
+          [component]="formConfig"
+          [model]="model"
+        ></zx-form-loader>
+        <div style="text-align: right">
+          <span
+            style="margin-right: 5px; margin-left: 5px; font-size: 18px"
+            class="{{ flag }}"
+          ></span>
+          <zx-button [config]="mainButtons"></zx-button>
+        </div>
+      </div>
+    </zx-popup>
+  </div>
   <div class="row-5 bottomContainer">
     <zx-block [config]="infoBlockConfig" class="col-14">
       <div zx-block-body [innerHTML]="person.information"></div>

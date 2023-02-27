@@ -45,6 +45,7 @@ import { CountryModule } from './pages/country/country.module';
 import { InstrumentModule } from './pages/instrument/instrument.module';
 import { PlaylistModule} from './pages/playlist/playlist.module';
 import { SongModule } from './pages/song/song.module';
+import { AngMusicPlayerModule } from  'ang-music-player';
 import { AlbumModule } from './pages/album/album.module';
  
 environment.languages.map(v => registerLocaleData(v.locale));
@@ -85,6 +86,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     CountryModule,
     InstrumentModule,
     PlaylistModule,
+    SongModule,
+    AngMusicPlayerModule
     SongModule
     InstrumentModule,
     AlbumModule
