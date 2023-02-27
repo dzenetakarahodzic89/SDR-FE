@@ -3,68 +3,34 @@
         "label": "HUB",
         "type": "MODULE",
         "children": [
-            {
-                "code": "HUB_WIKI_STATIC",
-                "label": "Wiki",
-                "icon": "fad fa-globe-europe",
-                "attributes": {},
-                "children": [
                     {
                         "code": "HUB_PERSONS_STATIC",
+                        "icon" : "fad fa-user",
                         "label": "Persons",
                         "url": "person/search",
                         "attributes": {}
                     },
                     {
                         "code": "HUB_COUNTRY_STATIC",
+                        "icon" : "fad fa-globe",
                         "label": "Countries",
                         "url": "country/overview",
                         "attributes": {}
                     },
                     {
-                    "code": "HUB_PLAYLIST_STATIC",
+                        "code": "HUB_PLAYLIST_STATIC",
                         "label": "Playlists",
+                        "icon" : "fad fa-list-music",
                         "url": "playlist/search",
                         "attributes": {}
                     },
                     {
-                        "code": "HUB_COMPETITION_STATIC",
-                        "label": "Competition",
-                        "url": "competition/overview",
+                        "code": "HUB_INSTRUMENT_STATIC",
+                        "icon" : "fad fa-violin",
+                        "label": "Instruments",
+                        "url": "instrument/search",
                         "attributes": {}
-                    },
-                    {
-                        "code": "HUB_COUNTRY_STATIC",
-                            "label": "Country",
-                            "url": "country-overview",
-                            "attributes": {}
-                    },
-                     {
-                        "code": "HUB_MATCH_STATIC",
-                        "label": "Match",
-                        "url": "match/3788773/overview",
-                        "attributes": {}
-                    },
-                    {
-                        "code": "HUB_TEAM_STATIC",
-                        "label": "Team",
-                        "url": "team/search",
-                        "attributes": {}
-                    },
-                    {
-                        "code": "HUB_COMPETITION_STATIC",
-                            "label": "Advanced Stats",
-                            "attributes": {},
-                            "children": [
-                                {
-                                    "code": "HUB_COMPETITION_STATIC",
-                                        "label": "Formation/Position Popularity",
-                                        "url": "competition/formation-position-popularity",
-                                        "attributes": {}}
-                            ]
                     }
-                ]
-            }
         ]
     }
 }
