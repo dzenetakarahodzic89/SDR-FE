@@ -14,6 +14,7 @@ import { PlaylistSearchComponent } from './pages/playlist/playlist-search/playli
 import { AlbumOverviewComponent } from './pages/album/album-overview/album-overview.component';
 
 import { SongOverviewComponent } from './pages/song/song-overview/song-overview.component';
+import { AlbumCreateComponent } from './pages/album/album-create/album-create.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -33,5 +34,7 @@ export const appRoutes: Routes = [
   { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
   { path: 'playlist/search', component: PlaylistSearchComponent },
   { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
-  { path: 'album/:id/overview', component: AlbumOverviewComponent }
+  { path: 'album/:id/overview', component: AlbumOverviewComponent },
+  { path: 'album-add', component: AlbumCreateComponent },
+  { path: 'album-update/:id', component: AlbumCreateComponent },
 ];
