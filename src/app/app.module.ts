@@ -57,10 +57,6 @@ environment.languages.map((v) => registerLocaleData(v.locale));
 @NgModule({
   declarations: [AppComponent],
 
-  declarations: [
-    AppComponent,
-  ],
-
   imports: [
     RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
     ZxCoreModule.options(environment),
@@ -87,8 +83,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     InstrumentModule,
     PlaylistModule,
     SongModule,
-    AngMusicPlayerModule
-    SongModule
+    AngMusicPlayerModule,
+    SongModule,
     InstrumentModule,
     AlbumModule
     // use forRoot() in main app module only.

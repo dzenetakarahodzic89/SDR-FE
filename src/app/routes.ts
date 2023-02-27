@@ -29,7 +29,7 @@ export const appRoutes: Routes = [
   { path: 'country/overview', component: CountryOverviewComponent },
   { path: 'song/:id/overview', component: SongOverviewComponent },
   { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
-  { path: 'playlist/search', component: PlaylistSearchComponent }
+  { path: 'playlist/search', component: PlaylistSearchComponent },
   { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
   { path: 'album/:id/overview', component: AlbumOverviewComponent }
 ];
