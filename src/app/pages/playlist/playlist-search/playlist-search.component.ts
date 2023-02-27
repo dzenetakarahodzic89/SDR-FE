@@ -3,10 +3,8 @@ import { Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
-import { BoxComponent } from '../../shared/box/box.component';
 import { AppBox } from '../../shared/box/box.model';
 import { PlaylistService } from '../shared/playlist.service';
-import { PlaylistSearchRequest } from '../shared/playlist.model';
 
 @Component({
   selector: 'app-playlist-search',
@@ -73,6 +71,8 @@ export class PlaylistSearchComponent implements OnInit {
   });
 
   playlistsAreLoading = false;
+  songsAreLoading = false;
+  genresAreLoading = false;
 
   public model: any = {};
 
@@ -81,23 +81,23 @@ export class PlaylistSearchComponent implements OnInit {
     class: ['col-24'],
     type: 'text',
     name: 'name',
-    label: 'Name'
+    label: 'Name',
   };
 
   songInput: Definition = new Definition({
     template: 'ZxSelect',
     class: ['col-24'],
     type: 'select',
-    name: 'song',
-    label: 'Has Song'
+    name: 'songId',
+    label: 'Has Song',
   });
 
   genreInput: Definition = new Definition({
     template: 'ZxSelect',
     class: ['col-24'],
     type: 'select',
-    name: 'genre',
-    label: 'Has Genre'
+    name: 'genreId',
+    label: 'Has Genre',
   });
 
   sortInput: Definition = new Definition({
@@ -106,15 +106,15 @@ export class PlaylistSearchComponent implements OnInit {
     type: 'select',
     name: 'sortBy',
     label: 'Sort By',
-    list: [{sortBy:"No of songs"},{sortBy: "Last edit"},{sortBy: "Alphabetical order"}]
+
   });
 
   public formConfig: Definition;
-  foundPlaylists:AppBox[] = [];
+  foundPlaylists: AppBox[] = [];
 
-  paginationDetails= {
-    page:1,
-    totalPages:0
+  paginationDetails = {
+    page: 1,
+    totalPages: 0
   };
 
   public setFormConfig() {
@@ -129,37 +129,37 @@ export class PlaylistSearchComponent implements OnInit {
         this.genreInput,
         this.sortInput
       ],
+      model: this.model
     });
   }
 
 
-  constructor(private router:Router,private playlistService:PlaylistService) { }
+  constructor(private router: Router, private playlistService: PlaylistService) { }
 
   ngOnInit(): void {
+    this.songsAreLoading = true;
+    this.genresAreLoading = true;
     this.loadData();
     this.getGenres();
     this.getSongs();
+    this.sortInput.list = [{ id: 0, name: "No of songs" }, { id: 1, name: "Last edit" }, { id: 2, name: "Alphabetical order" }]
     this.setFormConfig();
   }
 
-  loadData()
-  {
+  loadData() {
     this.searchPlaylists();
   }
 
-  searchPlaylists(){
-    this.playlistsAreLoading=true;
-      let searchRequest = new PlaylistSearchRequest(
-        this.model.name
-      );
+  searchPlaylists() {
+    this.playlistsAreLoading = true;
 
-      this.playlistService.searchPlaylists(searchRequest).subscribe(response=>{
-        this.foundPlaylists= response as unknown as AppBox[];
-        this.paginationDetails.page = response['page'];
-        this.paginationDetails.totalPages = response['numberOfPages'];
-        this.playlistsAreLoading=false;
-      });
-   
+    this.playlistService.searchPlaylists(this.model.name, this.model.songId, this.model.genreId, this.model.sortBy).subscribe(response => {
+      this.foundPlaylists = response as unknown as AppBox[];
+      this.paginationDetails.page = response['page'];
+      this.paginationDetails.totalPages = response['numberOfPages'];
+      this.playlistsAreLoading = false;
+    });
+
   }
 
   getPreviousPage() {
@@ -171,10 +171,10 @@ export class PlaylistSearchComponent implements OnInit {
 
   getNextPage() {
     if (
-       (
-        this.paginationDetails.totalPages > 
-          this.paginationDetails.page
-        )
+      (
+        this.paginationDetails.totalPages >
+        this.paginationDetails.page
+      )
     ) {
       this.paginationDetails.page++;
       this.searchPlaylists();
@@ -183,23 +183,49 @@ export class PlaylistSearchComponent implements OnInit {
   }
 
   getGenres() {
-    this.playlistService.getAllGenres().subscribe(response=>{
-      let genres = response.map(g => {
-        if(g.mainGenre==null)
-          return {genre: g.name};
-        else 
-          return {genre: g.name + " - " + g.mainGenre.name};
-        });
+    this.playlistService.getAllGenres().subscribe(response => {
+      let genres = response
+      genres.forEach(g => {
+        if (g.mainGenre != null)
+          g.name = g.name + " - " + g.mainGenre.name;
+
+      });
       this.formConfig.children[2].list = genres;
+      this.genresAreLoading = false;
     });
   }
 
   getSongs() {
-    this.playlistService.getAllSongs().subscribe(response=>{
-      let songs = response.map(s => {song: s.songName + " - " + s.artistName});
-      console.log(response);
+    this.playlistService.getAllSongs().subscribe(response => {
+      let songsMap = new Map();
+      response.forEach(s => {
+        if (songsMap.has(s.songId)) {
+          let titleParts = songsMap.get(s.songId);
+          titleParts.push(s.artistName);
+          songsMap.set(s.songId, titleParts);
+        } else {
+          let titleParts = new Array();
+          titleParts.push(s.songName);
+          titleParts.push(s.artistName);
+          songsMap.set(s.songId, titleParts);
+        }
+      })
+      let songs = new Array(songsMap.size);
+      let i = 0;
+      songsMap.forEach((v, k) => {
+        let name = v[0] + " - ";
+        for (let j = 1; j < v.length; j++)
+          if (j < v.length - 1)
+            name += " " + v[j] + ",";
+          else
+            name += " " + v[j];
+        let song = { id: k, name: name };
+        songs[i] = song;
+        i++;
+      });
       this.formConfig.children[1].list = songs;
-      console.log(songs);
+      this.songsAreLoading = false;
+
     });
   }
 

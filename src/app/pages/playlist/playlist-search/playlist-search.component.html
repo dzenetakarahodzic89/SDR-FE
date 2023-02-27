@@ -2,7 +2,7 @@
     <zx-block [config]="playlistsBlockConfig" class="col-16">
       <zx-button zx-block-action [config]="newPlaylistBtn"></zx-button>
       <div zx-block-body class="row">
-        <zx-preloader *ngIf="playlistsAreLoading"></zx-preloader>
+        <zx-preloader *ngIf="playlistsAreLoading || genresAreLoading || songsAreLoading"></zx-preloader>
       </div>
       <div
         *ngIf="foundPlaylists && foundPlaylists.length > 0"
