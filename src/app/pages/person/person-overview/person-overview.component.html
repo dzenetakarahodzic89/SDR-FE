@@ -1,36 +1,78 @@
 <div zx-block-body class="row">
-    <zx-preloader *ngIf="personIsLoading"></zx-preloader>
+  <zx-preloader *ngIf="personIsLoading"></zx-preloader>
 </div>
 <div zx-body *ngIf="person" class="w-auto">
-    <div class="row col-24 topContainer">
-        <zx-block [config]="containerBlockConfig">
-            <img zx-block-body [src]="person.imageUrl" class="width:300px"/>
-        </zx-block>
-        <div class="w-100 pl-10 pr-10">
-            <h1>{{ person.personName }} {{ person.personSurname }}</h1>
+  <div class="row col-24 topContainer">
+    <zx-block [config]="containerBlockConfig">
+      <img zx-block-body [src]="person.imageUrl" class="width:300px" />
+    </zx-block>
+    <div class="w-100 pl-10 pr-10">
+      <div class="row">
+        <h1>{{ person.fullName }}</h1>
+        <span class="{{ testFlag }}"></span>
+      </div>
+      <div class="row">
+        <zx-button
+          id="galleryBtn"
+          zx-block-action
+          [config]="galleryButton"
+        ></zx-button>
+        <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
+        <zx-button
+          id="linkPerson"
+          zx-block-action
+          [config]="linkPerson"
+        ></zx-button>
+      </div>
+      <hr />
+      {{ person.outlineText }}
+    </div>
+  </div>
 
-            <div class="row ">
-                <zx-button id="galleryBtn" zx-block-action [config]="galleryButton"></zx-button>
-                <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
-            </div>
+  <div *ngIf="country">
+    <zx-popup [config]="popup">
+      <div zx-popup-body>
+        <zx-form-loader
+          [component]="formConfig"
+          [model]="model"
+        ></zx-form-loader>
+        <div style="text-align: right">
+          <span
+            style="margin-right: 5px; margin-left: 5px; font-size: 18px"
+            class="{{ flag }}"
+          ></span>
+          <zx-button [config]="mainButtons"></zx-button>
         </div>
-        <hr />
-        <h6>{{ person.outlineText }}</h6>
-    </div>
-    <div class="row-5 bottomContainer">
-        <zx-block [config]="infoBlockConfig" class="col-14">
-            <div zx-block-body [innerHTML]="person.personInformation"></div>
-        </zx-block>
-        <zx-block [config]="detailsBlockConfig" class="col-10">
-            <div zx-block-body>
-                <zx-tabs class="h-100" [config]="tabConfig">
-                    <zx-block zx-tab-item id="personsTab" [config]="personsBlockConfig">
-                        <zx-grid zx-block-body [gridOptions]="personGridOptions" [source]="linkedPersons"
-                            domLayout="autoHeight">
-                        </zx-grid>
-                    </zx-block>
-                </zx-tabs>
-            </div>
-        </zx-block>
-    </div>
+      </div>
+    </zx-popup>
+  </div>
+  <div class="row-5 bottomContainer">
+    <zx-block [config]="infoBlockConfig" class="col-14">
+      <div zx-block-body [innerHTML]="person.information"></div>
+    </zx-block>
+    <zx-block [config]="detailsBlockConfig" class="col-10">
+      <div zx-block-body>
+        <zx-tabs class="h-100" [config]="tabConfig">
+          <zx-block zx-tab-item id="artistsTab" [config]="artistsBlockConfig">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="artistGridOptions"
+              [source]="linkedArtists"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="albumsTab" [config]="albumsBlockConfig">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="albumGridOptions"
+              [source]="linkedAlbums"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </zx-block>
+        </zx-tabs>
+      </div>
+    </zx-block>
+  </div>
 </div>

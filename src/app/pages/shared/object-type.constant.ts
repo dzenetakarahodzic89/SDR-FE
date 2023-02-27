@@ -1,5 +1,8 @@
 export class ObjectType {
-  public static PERSON = 'PERSON';
-  public static COUNTRY = 'COUNTRY';
-  public static LABEL = 'LABEL';
+    public static PERSON = "PERSON";
+    public static COUNTRY="COUNTRY";
+    public static INSTRUMENT="INSTRUMENT";
+  	public static SONG = 'SONG';
+    public static ALBUM="ALBUM"; 
+    public static LABEL = 'LABEL';
 }

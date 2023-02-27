@@ -1,0 +1,76 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="songIsLoading"></zx-preloader>
+</div>
+
+<div zx-body *ngIf="song" class="w-auto">
+  <div class="row col-24 topContainer">
+    <zx-block [config]="containerBlockConfig">
+      <img zx-block-body [src]="song.imageUrl" class="width:300px" />
+    </zx-block>
+    <div class="w-100 pl-10 pr-10">
+      <strong
+        ><h1 class="text-bold">
+          {{ song.name }} - {{ artists[0]?.name }}
+        </h1></strong
+      >
+      <div class="container">
+        <div>
+          <h5>
+            {{ song.dateOfRelease | date : "dd.MM.yyyy" }} -
+            {{ artists[0]?.album }}
+          </h5>
+        </div>
+        <div class="row">
+          <zx-button
+            id="addToPlaylistBtn"
+            zx-block-action
+            [config]="addToPlaylistBtn"
+          ></zx-button>
+          <zx-button
+            id="editBtn"
+            zx-block-action
+            [config]="editBtn"
+          ></zx-button>
+          <zx-button
+            id="linkSimilarSongs"
+            zx-block-action
+            [config]="linkSimilarSongsBtn"
+          ></zx-button>
+        </div>
+      </div>
+      <hr />
+      <h5>{{ song.playlistCount }} Playlist Entries</h5>
+      <br /><br />
+      <h5>{{ song.outlineText }}</h5>
+      <ang-music-player [audioList] = audioList></ang-music-player>
+    </div>
+  </div>
+  <div class="row-5 bottomContainer">
+    <zx-block [config]="infoBlockConfig" class="col-14">
+      <div zx-block-body [innerHTML]="song.information"></div>
+    </zx-block>
+    <zx-block [config]="detailsBlockConfig" class="col-10">
+      <div zx-block-body>
+        <div>
+          <h5>Label: {{ song.artists[0]?.label }}</h5>
+          <hr />
+          <h5>Chord Progression: {{ song?.chordProgression }}</h5>
+          <hr />
+          <h5>Genre: {{ song.genre }}</h5>
+          <hr />
+          <h5>Subgenre: {{ subGenresText[0] }} {{ subGenresText[1] }}</h5>
+        </div>
+        <hr />
+        <zx-block [config]="personsBlockConfig">
+          <zx-grid
+            zx-block-body
+            [gridOptions]="artistGridOptions"
+            [source]="artists"
+            domLayout="autoHeight"
+          >
+          </zx-grid>
+        </zx-block>
+      </div>
+    </zx-block>
+  </div>
+</div>

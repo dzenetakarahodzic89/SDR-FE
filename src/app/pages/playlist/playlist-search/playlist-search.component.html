@@ -1,22 +1,23 @@
 <div class="row mainContainer">
-    <zx-block [config]="personsBlockConfig" class="col-16">
-      <zx-button zx-block-action [config]="newPersonBtn"></zx-button>
+    <zx-block [config]="playlistsBlockConfig" class="col-16">
+      <zx-button zx-block-action [config]="newPlaylistBtn"></zx-button>
       <div zx-block-body class="row">
-        <zx-preloader *ngIf="personsAreLoading"></zx-preloader>
+        <zx-preloader *ngIf="playlistsAreLoading || genresAreLoading || songsAreLoading"></zx-preloader>
       </div>
       <div
-        *ngIf="foundPersons && foundPersons.length > 0"
+        *ngIf="foundPlaylists && foundPlaylists.length > 0"
         zx-block-body
         class="searchResults"
       >
         <div class="gridContainer">
-          <div class="divForBoxes" *ngFor="let person of foundPersons">
+          <div class="divForBoxes" *ngFor="let playlist of foundPlaylists">
             <app-box
-              [id]="person.id"
-              [type]="'person'"
-              [title]="person.fullName"
-              [description]="person.outlineText"
-              [imageUrl]="person.imageUrl"
+              [id]="playlist.id"
+              [type]="'playlist'"
+              [title]="playlist.name"
+              [universalObjectName]="playlist.userCode"
+              [description]="playlist.outlineText"
+              [imageUrl]="playlist.imageUrl"
             >
             </app-box>
           </div>
@@ -40,4 +41,3 @@
       </zx-form-loader>
     </zx-block>
   </div>
-  

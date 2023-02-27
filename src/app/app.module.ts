@@ -42,11 +42,26 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
 import { LabelModule } from './pages/label/label.module';
+import { CountryModule } from './pages/country/country.module';
+import { InstrumentModule } from './pages/instrument/instrument.module';
+import { PlaylistModule} from './pages/playlist/playlist.module';
+import { SongModule } from './pages/song/song.module';
+import { AngMusicPlayerModule } from  'ang-music-player';
+import { AlbumModule } from './pages/album/album.module';
+ 
+environment.languages.map(v => registerLocaleData(v.locale));
+
+
+environment.languages.map((v) => registerLocaleData(v.locale));
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
 @NgModule({
   declarations: [AppComponent],
+
+  declarations: [
+    AppComponent,
+  ],
 
   imports: [
     RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
@@ -71,6 +86,14 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     GalleryModule,
     PersonModule,
     LabelModule,
+    CountryModule,
+    InstrumentModule,
+    PlaylistModule,
+    SongModule,
+    AngMusicPlayerModule
+    SongModule
+    InstrumentModule,
+    AlbumModule
     // use forRoot() in main app module only.
   ],
   providers: [
