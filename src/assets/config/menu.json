@@ -16,15 +16,15 @@
                         "attributes": {}
                     },
                     {
-                        "code": "HUB_PLAYER_STATIC",
-                        "label": "Players",
-                        "url": "player/search",
+                        "code": "HUB_COUNTRY_STATIC",
+                        "label": "Countries",
+                        "url": "country/overview",
                         "attributes": {}
                     },
                     {
-                    "code": "HUB_STAFF_STATIC",
-                        "label": "Staff",
-                        "url": "staff/search",
+                    "code": "HUB_PLAYLIST_STATIC",
+                        "label": "Playlists",
+                        "url": "playlist/search",
                         "attributes": {}
                     },
                     {

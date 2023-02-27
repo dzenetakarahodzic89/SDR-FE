@@ -3,7 +3,7 @@ import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { InstrumentApi } from './instrument-api.constant';
-import { InstrumentResponse, InstrumentSearchRequest, SongInstrumentResponse, SongInstrumentSearchRequest } from './instrument.model';
+import { InstrumentCreateRequest, InstrumentResponse, InstrumentSearchRequest, SongInstrumentResponse, SongInstrumentSearchRequest } from './instrument.model';
 
 @Injectable()
 export class InstrumentService {
@@ -20,6 +20,14 @@ export class InstrumentService {
       }));
     }
 
+    createInstrument(instrument: InstrumentCreateRequest): Observable<any> {
+      return this.api.post(InstrumentApi.POST_INSTRUMENT, instrument);
+    }
+
+    updateInstrument(instrument: InstrumentCreateRequest): Observable<any> {
+      return this.api.put(InstrumentApi.UPDATE_INSTRUMENT.replace("#", instrument.id.toString()), instrument);
+    }
+
     getSongInstruments(id: number): Observable<SongInstrumentResponse[]> {
         const filterRequest = new SongInstrumentSearchRequest(
             id
@@ -30,7 +38,7 @@ export class InstrumentService {
         }));
     }
 
-    getFormattedDate(date: Date): string {
+    private getFormattedDate(date: Date): string {
         const d = date.getDay(); const m = date.getMonth(); const y = date.getFullYear();
         return (d < 10 ? "0" + d : d) 
         + "." +(m < 10 ? "0" + m : m)

@@ -43,3 +43,14 @@ export class SongInstrumentSearchRequest {
         return this.objectifiedRequest;
     }
 };
+
+export class InstrumentCreateRequest {
+    id: number;
+    information: string;
+    type: string;
+    name:string;
+    outlineText:string;
+    coverImageData: string | ArrayBuffer;
+    coverImage: string;
+    coverImage_files: File[];
+}
