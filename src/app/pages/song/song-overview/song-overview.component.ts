@@ -23,6 +23,8 @@ export class SongOverviewComponent implements OnInit {
     hideHeader: true,
   });
 
+  audioList = [];
+
   public editBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -123,8 +125,15 @@ export class SongOverviewComponent implements OnInit {
         this.artists = response.artists;
         this.songIsLoading = false;
         this.getSubGenresText();
+        this.audioList.push(
+          {
+            url: this.song.audioUrl,
+            title: this.song.name,
+            cover: this.song.imageUrl
+          }
+        )
       });
-    });
+    }); 
   }
   getSubGenresText() {
     this.subGenresText = Object.keys(this.song.subgenres).map(

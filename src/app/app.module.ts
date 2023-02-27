@@ -45,7 +45,7 @@ import { CountryModule } from './pages/country/country.module';
 import { InstrumentModule } from './pages/instrument/instrument.module';
 import { PlaylistModule} from './pages/playlist/playlist.module';
 import { SongModule } from './pages/song/song.module';
-
+import { AngMusicPlayerModule } from  'ang-music-player';
 
 
 environment.languages.map((v) => registerLocaleData(v.locale));
@@ -78,7 +78,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     CountryModule,
     InstrumentModule,
     PlaylistModule,
-    SongModule
+    SongModule,
+    AngMusicPlayerModule
     // use forRoot() in main app module only.
   ],
   providers: [

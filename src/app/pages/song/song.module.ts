@@ -5,10 +5,11 @@ import { SongService } from './shared/song.service';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { SharedModule } from '../shared/shared.module';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+import { AngMusicPlayerModule } from 'ang-music-player';
 
 @NgModule({
   declarations: [SongOverviewComponent],
-  imports: [SharedModule, EditorModule, AutocompleteLibModule],
+  imports: [SharedModule, EditorModule, AutocompleteLibModule,AngMusicPlayerModule],
   exports: [SongOverviewComponent],
   providers: [
     SongService,

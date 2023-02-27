@@ -12,6 +12,7 @@ export class SongResponse {
   genreId: number;
   genre: string;
   subgenres: SubGenres;
+  audioUrl: string;
   artists: ArtistSongResponse[];
 }
 interface SubGenres {
