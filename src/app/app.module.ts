@@ -2,11 +2,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import {
-Compiler,
-COMPILER_OPTIONS,
-CompilerFactory,
-LOCALE_ID,
-NgModule,
+  Compiler,
+  COMPILER_OPTIONS,
+  CompilerFactory,
+  LOCALE_ID,
+  NgModule,
 } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ZxApi } from '@zff/zx-core';
@@ -14,10 +14,10 @@ import { ZxAppHeaderModule } from '@zff/zx-app-header';
 import { AgGridModule } from '@ag-grid-community/angular';
 
 import {
-CurrencyPipe,
-DatePipe,
-DecimalPipe,
-registerLocaleData,
+  CurrencyPipe,
+  DatePipe,
+  DecimalPipe,
+  registerLocaleData,
 } from '@angular/common';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { ZxTabLayoutModule } from '@zff/zx-tab-layout';
@@ -35,7 +35,7 @@ import { RestApiService } from './pages/shared/rest-api.service';
 import { appRoutes } from './routes';
 import { ZxTreeModule } from '@zff/zx-tree';
 import { RouterModule } from '@angular/router';
-import { ZxGridModule } from '@zff/zx-grid'; 
+import { ZxGridModule } from '@zff/zx-grid';
 import { SharedModule } from './pages/shared/shared.module';
 import { HomeModule } from './pages/home/home.module';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
@@ -43,16 +43,15 @@ import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
 import { CountryModule } from './pages/country/country.module';
 import { InstrumentModule } from './pages/instrument/instrument.module';
- 
-environment.languages.map(v => registerLocaleData(v.locale));
+import { PlaylistModule} from './pages/playlist/playlist.module';
+import { SongModule } from './pages/song/song.module';
 
 
+
+environment.languages.map((v) => registerLocaleData(v.locale));
 
 @NgModule({
-
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
 
   imports: [
     RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
@@ -77,7 +76,9 @@ environment.languages.map(v => registerLocaleData(v.locale));
     GalleryModule,
     PersonModule,
     CountryModule,
-    InstrumentModule
+    InstrumentModule,
+    PlaylistModule,
+    SongModule
     // use forRoot() in main app module only.
   ],
   providers: [
@@ -85,10 +86,18 @@ environment.languages.map(v => registerLocaleData(v.locale));
     DecimalPipe,
     CurrencyPipe,
     { provide: COMPILER_OPTIONS, useValue: {}, multi: true },
-    { provide: LOCALE_ID, deps: [ZxTranslate], useFactory: (ZxTranslate: { locale: string }) => ZxTranslate.locale },
-    { provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS] },
+    {
+      provide: LOCALE_ID,
+      deps: [ZxTranslate],
+      useFactory: (ZxTranslate: { locale: string }) => ZxTranslate.locale,
+    },
+    {
+      provide: CompilerFactory,
+      useClass: JitCompilerFactory,
+      deps: [COMPILER_OPTIONS],
+    },
     { provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory] },
-    ZxApi, 
+    ZxApi,
 
     {
       provide: LOCALE_ID,
@@ -96,7 +105,8 @@ environment.languages.map(v => registerLocaleData(v.locale));
       useFactory: (ZxTranslate: { locale: string }) => {
         return ZxTranslate.locale;
       },
-    }, RestApiService,
+    },
+    RestApiService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
     {
       provide: CompilerFactory,
@@ -108,9 +118,8 @@ environment.languages.map(v => registerLocaleData(v.locale));
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
 
 export function createCompiler(compilerFactory: CompilerFactory) {
   return compilerFactory.createCompiler();
 }
-
