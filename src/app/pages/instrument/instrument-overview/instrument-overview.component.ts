@@ -31,7 +31,7 @@ export class InstrumentOverviewComponent implements OnInit {
         icon: 'fal fa-edit',
         name: 'Edit button',
         label: 'Edit instrument',
-        action: () => this.router.navigate(['./instrument/' + this.instrument.id + '/update'])
+        action: () => this.router.navigate(['./instrument/update/' + this.instrument.id])
       },
     ],
   });
@@ -49,8 +49,8 @@ export class InstrumentOverviewComponent implements OnInit {
 
   musiciansColumnDefs = [
     {
-      field: 'personName',
-      headerName: 'Person name',
+      field: 'personFullName',
+      headerName: 'Person full name',
       flex: 1,
       floatingFilter: false,
     },
@@ -108,7 +108,7 @@ export class InstrumentOverviewComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.instrumentService.getInstrument(params.id).subscribe(response => {
-        this.instrument = response[0];
+        this.instrument = response;
         if (!this.instrument.imageUrl)
           this.instrument.imageUrl = "http://172.20.20.45:82//vigor//img/mario.jpg";
         this.instrumentService.getSongInstruments(params.id).subscribe(response => {
