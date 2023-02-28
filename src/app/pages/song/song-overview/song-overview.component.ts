@@ -85,7 +85,9 @@ export class SongOverviewComponent implements OnInit {
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) => {
-      this.router.navigate(['./person/' + event['data']['id'] + '/overview']);
+      this.router.navigate([
+        './person/' + event['data']['personId'] + '/overview',
+      ]);
     },
   } as GridOptions;
 
@@ -125,15 +127,13 @@ export class SongOverviewComponent implements OnInit {
         this.artists = response.artists;
         this.songIsLoading = false;
         this.getSubGenresText();
-        this.audioList.push(
-          {
-            url: this.song.audioUrl,
-            title: this.song.name,
-            cover: this.song.imageUrl
-          }
-        )
+        this.audioList.push({
+          url: this.song.audioUrl,
+          title: this.song.name,
+          cover: this.song.imageUrl,
+        });
       });
-    }); 
+    });
   }
   getSubGenresText() {
     this.subGenresText = Object.keys(this.song.subgenres).map(
