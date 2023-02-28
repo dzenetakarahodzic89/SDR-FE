@@ -14,7 +14,7 @@ export class SongResponse {
   id: number;
   name: string;
   playtime: string;
-  genre: string;
+  genreName: string;
 }
 
 export class AlbumCreateRequest {

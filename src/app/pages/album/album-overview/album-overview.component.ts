@@ -79,7 +79,7 @@ export class AlbumOverviewComponent implements OnInit
       floatingFilter: false,
     },
     {
-      field: 'genre',
+      field: 'genreName',
       headerName: 'Genre',
       flex: 1,
       floatingFilter: false,
@@ -102,8 +102,6 @@ export class AlbumOverviewComponent implements OnInit
     }
   } as GridOptions;
 
-  //person: PersonResponse;
-  //linkedArtists: PersonResponse[];
   linkedAlbums: any[];
   album: AlbumResponse;
   constructor(private router: Router, private route: ActivatedRoute, public confirmation: ZxConfirmation, private albumService: AlbumService) { }
