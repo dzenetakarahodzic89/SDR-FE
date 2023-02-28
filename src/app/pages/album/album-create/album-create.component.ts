@@ -133,7 +133,7 @@ export class AlbumCreateComponent implements OnInit {
       new Definition({
         template: 'ZxDate',
         class: ['col-12'],
-        type: 'datetime',
+        type: 'date',
         name: 'dateOfRelease',
         label: 'Date of release',
         validation: { required: true },
@@ -231,7 +231,6 @@ export class AlbumCreateComponent implements OnInit {
       );
     } else {
       newAlbum['id'] = +this.albumId;
-      // newAlbum.id=this.albumId;
       this.albumService.updateAlbum(newAlbum, +this.albumId).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {
