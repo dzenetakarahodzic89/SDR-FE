@@ -26,6 +26,16 @@
             zx-block-action
             [config]="editBtn"
           ></zx-button>
+          <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
+                    <zx-popup [config]="popup">
+                        <div zx-popup-body>
+                            <zx-block [config]="popUpBlockConfig">
+                                <zx-form-loader *ngIf="popUpFormConfig" zx-block-body [component]="popUpFormConfig"
+                                    [model]="connectedMediaModel" class="col-24"></zx-form-loader>
+                            </zx-block>
+                        </div>
+                        <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+                    </zx-popup>
         </div>
       </div>
       <hr />

@@ -7,9 +7,9 @@
       <img zx-block-body [src]="label.imageUrl" class="width:300px" />
     </zx-block>
     <div class="w-100 pl-10 pr-10">
-      <strong
-        ><h1>{{ label.name }}</h1></strong
-      >
+      <strong>
+        <h1>{{ label.name }}</h1>
+      </strong>
 
       <div class="container">
         <div>
@@ -19,21 +19,19 @@
           </h3>
         </div>
         <div class="row">
-          <zx-button
-            id="galleryBtn"
-            zx-block-action
-            [config]="galleryButton"
-          ></zx-button>
-          <zx-button
-            id="addAlbumBtn"
-            zx-block-action
-            [config]="addAlbum"
-          ></zx-button>
-          <zx-button
-            id="editBtn"
-            zx-block-action
-            [config]="editBtn"
-          ></zx-button>
+          <zx-button id="galleryBtn" zx-block-action [config]="galleryButton"></zx-button>
+          <zx-button id="addAlbumBtn" zx-block-action [config]="addAlbum"></zx-button>
+          <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
+          <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
+          <zx-popup [config]="popup">
+            <div zx-popup-body>
+              <zx-block [config]="popUpBlockConfig">
+                <zx-form-loader *ngIf="popUpFormConfig" zx-block-body [component]="popUpFormConfig"
+                  [model]="connectedMediaModel" class="col-24"></zx-form-loader>
+              </zx-block>
+            </div>
+            <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+          </zx-popup>
         </div>
       </div>
       <hr />
@@ -56,12 +54,7 @@
         </div>
         <hr />
         <zx-block [config]="labelsBlockConfig">
-          <zx-grid
-            zx-block-body
-            [gridOptions]="labelGridOptions"
-            [source]="artistsLabel"
-            domLayout="autoHeight"
-          >
+          <zx-grid zx-block-body [gridOptions]="labelGridOptions" [source]="artistsLabel" domLayout="autoHeight">
           </zx-grid>
         </zx-block>
       </div>

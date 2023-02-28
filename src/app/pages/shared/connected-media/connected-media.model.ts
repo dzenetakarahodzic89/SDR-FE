@@ -1,18 +1,25 @@
 export class ConnectedMediaDetailCreateRequest {
+    objectId : number;
+    objectType : string;
     connectionLink : string;
     connectionSource : string;
     connectionType : string;
     connectedMediaId : number;
   }
   
-  export class ConnectedMediaResponse {
-    id : number;
-    objectId : number;
-    objectType : string;
+
+  export enum ConnectedMediaConnectionSource {
+    VGR = "VGR - Video Game Repository",
+    CBR = "CBR - Comic Book Repository",
+    MDR = "MDR - Movie Repository"
+
   }
-  
-  export class ConnectedMediaCreateRequest {
-    objectId : number;
-    objectType : string;
+
+  export enum ConnectedMediaConnectionType {
+    SOUNDTRACK = "Soundtrack",
+    REFERENCE = "Reference",
+    HOMAGE = "Homage",
+    ADDITIONAL_MEDIA = "Additional Media"
+
   }
   

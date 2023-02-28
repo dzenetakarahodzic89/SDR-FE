@@ -6,7 +6,7 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ToastrService } from 'ngx-toastr';
-import { ConnectedMediaCreateRequest, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
+import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType,  ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 import { ObjectType } from '../../shared/object-type.constant';
 import { ArtistSongResponse, SongResponse } from '../shared/song.model';
@@ -29,6 +29,7 @@ export class SongOverviewComponent implements OnInit {
   });
 
   audioList = [];
+
 
   public editBtn: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -125,9 +126,9 @@ export class SongOverviewComponent implements OnInit {
 
   public popUpBlockConfig: ZxBlockModel;
 
-  public popUpFormBlockConfig : Definition;
-  public popUpFormConfig : Definition;
-  public connectedMediaModel : ConnectedMediaDetailCreateRequest;
+  public popUpFormBlockConfig: Definition;
+  public popUpFormConfig: Definition;
+  public connectedMediaModel: ConnectedMediaDetailCreateRequest;
 
   sourceInput: Definition = new Definition({
     template: 'ZxSelect',
@@ -153,7 +154,7 @@ export class SongOverviewComponent implements OnInit {
     type: 'text',
     name: 'connectionLink',
     label: 'Link',
-    validation: { required: true }
+    validation: { required: true, pattern: '((http|https):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9@:%_\+.~#?&/=]*)' }
   });
 
 
@@ -186,19 +187,21 @@ export class SongOverviewComponent implements OnInit {
       {
         name: 'save', description: 'Save', label: 'Save',
         class: 'classic primary', icon: 'fal fa-check-circle',
-        action: () =>
-        {
+        action: () => {
           this.popup.hide()
           this.addConnectedMedia()
         }
       },
       {
         name: 'cancel', description: 'Cancel', label: 'Cancel',
-        class: 'classic', icon: 'fal fa-times', action: () => {this.popup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();}
+        class: 'classic', icon: 'fal fa-times', action: () => { this.popup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest(); }
       },
-      
+
     ]
   });
+
+  connectionSources = [];
+  connectionTypes = [];
 
   constructor(
     private router: Router,
@@ -206,12 +209,25 @@ export class SongOverviewComponent implements OnInit {
     private songService: SongService,
     private connectedMediaService: ConnectedMediaService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    let id = 1;
+    Object.values(ConnectedMediaConnectionSource).forEach(t => {
+      let sourceObject = { id: id, name: t };
+      this.connectionSources.push(sourceObject);
+      id++;
+    });
+    this.sourceInput.list = this.connectionSources;
+
+    id = 1;
+    Object.values(ConnectedMediaConnectionType).forEach(t => {
+      let typeObject = { id: id, name: t };
+      this.connectionTypes.push(typeObject);
+      id++;
+    });
+    this.typeInput.list = this.connectionTypes;
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
-    this.sourceInput.list = [{ id: 1, name: "VGR - Video Game Repository" }, { id: 2, name: "CDR - Comic Book Repository" }];
-    this.typeInput.list = [{ id: 1, name: "Soundtrack" }, { id: 2, name: "Reference" }, { id: 3, name: "Homage" }, { id: 4, name: "Additional Media" }];
     this.loadData();
   }
 
@@ -240,63 +256,18 @@ export class SongOverviewComponent implements OnInit {
 
   addConnectedMedia() {
     if (!this.popUpFormConfig.isValid) {
-      this.toastr.error('Fill in required fields!');
+      this.toastr.error('Input values are not valid!');
       return;
     }
 
-    let getConnectedMediaRequest = { objectId: this.song.id, objectType: "SONG" };
-    this.connectedMediaService.getConnectedMedia(getConnectedMediaRequest).subscribe(
-      (response) => {
-        if (response.hasOwnProperty('payload') && response.numberOfRecords>0) {
-          this.connectedMediaModel.connectedMediaId = response["payload"][0].id;
-          this.createConnectedMediaDetail();
-        } else {
-          let createConnectedMediaRequest = new ConnectedMediaCreateRequest();
-          createConnectedMediaRequest.objectId = this.song.id;
-          createConnectedMediaRequest.objectType = "SONG";
-          this.connectedMediaService.createConnectedMedia(createConnectedMediaRequest).subscribe(
-            (response) => {
-              if (response.hasOwnProperty('payload')) {
-                this.connectedMediaModel.connectedMediaId = response["payload"]["id"];
-                this.createConnectedMediaDetail();
-              } else {
-                this.toastr.error('Failed to add connected media!');
-              }
-            }
-          );
-        }
-      }, (errorMsg: string) => {
-        this.toastr.error('Failed to add connected media!');
-      }
-    )
-
-
+    this.connectedMediaModel.objectId = this.song.id;
+    this.connectedMediaModel.objectType = this.type;
+    this.connectedMediaModel.connectionSource = Object.keys(ConnectedMediaConnectionSource)[parseInt(this.connectedMediaModel.connectionSource) - 1];
+    this.connectedMediaModel.connectionType = Object.keys(ConnectedMediaConnectionType)[parseInt(this.connectedMediaModel.connectionType) - 1];
+    this.createConnectedMediaDetail();
   }
 
   createConnectedMediaDetail() {
-    switch(this.connectedMediaModel.connectionSource.toString()) {
-      case "1":
-        this.connectedMediaModel.connectionSource = "VGR - Video Game Repository";
-      break;
-      case "2":
-        this.connectedMediaModel.connectionSource = "CBR - Comic Book Repository";
-      break;
-    }
-
-    switch(this.connectedMediaModel.connectionType.toString()) {
-      case "1":
-        this.connectedMediaModel.connectionType = "Soundtrack";
-      break;
-      case "2":
-        this.connectedMediaModel.connectionType = "Reference";
-      break;
-      case "3":
-        this.connectedMediaModel.connectionType = "Homage";
-      break;
-      case "4":
-        this.connectedMediaModel.connectionType = "Additional Media";
-      break;
-    }
     this.connectedMediaService.createConnectedMediaDetail(this.connectedMediaModel).subscribe(
       (responseCode) => {
         if (responseCode.hasOwnProperty('payload')) {
