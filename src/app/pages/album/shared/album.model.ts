@@ -5,7 +5,7 @@ export class AlbumResponse {
   name: string;
   status: string;
   era: string;
-  artistName: string;
+  albumArtists: String[];
   imageUrl: string;
   songs: SongResponse[];
 }
