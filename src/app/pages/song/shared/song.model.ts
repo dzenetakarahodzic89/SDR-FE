@@ -21,6 +21,7 @@ interface SubGenres {
 export class ArtistSongResponse {
   id: number;
   name: string;
+  personId: number;
   personName: string;
   dateOfBirth: Date;
   instrument: string;
