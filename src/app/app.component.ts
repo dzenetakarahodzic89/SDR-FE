@@ -22,12 +22,13 @@ export class AppComponent {
     help: false,
     about: true,
     app: {
-      name: 'sdrfe - Comic Book Repository',
+      name: 'SDR - Sound Repository',
       version: '3.0.0',
       dependencies: {},
       prefix: ['@zff']
     }
   });
+
   public menuConfig: ZxMenuModel = new ZxMenuModel({
     logo: './assets/zira.png',
     logoVisible: true,
@@ -36,16 +37,18 @@ export class AppComponent {
     showExpand: true,
     api: './assets/config/menu.json'
   });
+
   public headerConfig: ZxAppHeaderModel = new ZxAppHeaderModel({
     logo: '',
     labelVisible: true,
-    label: 'sdrfe',
-    description: 'ZIRA Movie Repository',
+    label: 'SDR',
+    userInfo: true,
+    description: 'ZIRA Sound Repository',
     userMenuConfig: {
-        hideAlarms: true,
-        hideTasks: true,
-        hideCalendar: true,
-        hideMessages: true
+        hideAlarms: false,
+        hideTasks: false,
+        hideCalendar: false,
+        hideMessages: false
     }
 });
 
