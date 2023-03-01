@@ -80,7 +80,6 @@ export class MultisearchRefreshComponent implements OnInit {
       .subscribe((response) => {
         this.dataStructures = response;
         this.dataStructures.reverse();
-        console.log(this.dataStructures);
         this.setLineChart();
       });
     this.multiSearchService.getRandomMultiSearches().subscribe((response) => {
