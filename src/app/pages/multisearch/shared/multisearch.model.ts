@@ -11,7 +11,7 @@ export class MultiSearchHistoryResponse {
   dataStructure: MultiSearchHistoryDataStructure;
 }
 
-interface MultiSearchHistoryDataStructure {
+export class MultiSearchHistoryDataStructure {
   songs: number;
   albums: number;
   persons: number;

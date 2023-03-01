@@ -35,4 +35,14 @@ export class MultisearchService {
       })
     );
   }
+
+  getAllMultiSearchHistoryByTime(): Observable<MultiSearchHistoryResponse[]> {
+    return this.api
+      .get(MultiSearchApi.GET_ALL_MULTISEARCH_HISTORY_BY_REFRESH_TIME)
+      .pipe(
+        map((response) => {
+          return response['payload'] as MultiSearchHistoryResponse[];
+        })
+      );
+  }
 }
