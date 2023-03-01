@@ -8,6 +8,7 @@ export class AlbumResponse {
   albumArtists: String[];
   imageUrl: string;
   songs: SongResponse[];
+  audioUrls: [];
 }
 
 export class SongResponse {
