@@ -44,7 +44,7 @@ export class MultisearchRefreshComponent implements OnInit {
         name: 'refresh',
         label: 'Refresh',
         class: 'classic primary',
-        action: async () => {
+        action: () => {
           this.loading = true;
           this.pieChart.destroy();
           this.lineChart.destroy();
@@ -69,16 +69,18 @@ export class MultisearchRefreshComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    Chart.register(...registerables);
     this.loadData();
+    Chart.register(...registerables);
   }
 
-  async loadData() {
+  loadData() {
     this.loading = true;
     this.multiSearchService
       .getAllMultiSearchHistoryByTime()
       .subscribe((response) => {
         this.dataStructures = response;
+        this.dataStructures.reverse();
+        console.log(this.dataStructures);
         this.setLineChart();
       });
     this.multiSearchService.getRandomMultiSearches().subscribe((response) => {
