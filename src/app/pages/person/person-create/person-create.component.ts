@@ -6,7 +6,7 @@ import { Definition } from '@zff/zx-forms';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ToastrService } from 'ngx-toastr';
 
-import {  PersonCreateRequest, PersonResponse } from '../shared/person.model';
+import { PersonCreateRequest, PersonResponse } from '../shared/person.model';
 import { PersonService } from '../shared/person.service';
 
 @Component({
@@ -19,27 +19,68 @@ export class PersonCreateComponent implements OnInit {
   public person: PersonResponse;
   public model: PersonCreateRequest;
 
-  public formConfig = new Definition({ name: 'createLocation', template: 'ZxForm', disabled: false, children: [] });
-  public imageFormConfig = new Definition({ name: 'addCoverImage', template: 'ZxForm', disabled: false, children: [] });
+  public formConfig = new Definition({
+    name: 'createLocation',
+    template: 'ZxForm',
+    disabled: false,
+    children: [],
+  });
+  public imageFormConfig = new Definition({
+    name: 'addCoverImage',
+    template: 'ZxForm',
+    disabled: false,
+    children: [],
+  });
 
-  public tabConfig = new ZxTabModel({ orientation: 'portrait', hideExpand: true });
+  public tabConfig = new ZxTabModel({
+    orientation: 'portrait',
+    hideExpand: true,
+  });
 
-  public overviewBlock = new ZxBlockModel({ hideExpand: true, label: 'Add person' });
-  public informationBlock = new ZxBlockModel({ hideExpand: true, label: 'Add information' });
+  public overviewBlock = new ZxBlockModel({
+    hideExpand: true,
+    label: 'Add person',
+  });
+  public informationBlock = new ZxBlockModel({
+    hideExpand: true,
+    label: 'Add information',
+  });
 
   public mainButtons = new ZxButtonModel({
     items: [
-      { name: 'savePerson', layout: 'classic', label: 'Save', class: 'invert', action: () => this.savePerson() },
-      { name: 'cancel', layout: 'classic', class: 'danger invert', label: 'Cancel', action: () => this.redirectAfterCancel() }
-    ]
+      {
+        name: 'savePerson',
+        layout: 'classic',
+        label: 'Save',
+        class: 'invert',
+        action: () => this.savePerson(),
+      },
+      {
+        name: 'cancel',
+        layout: 'classic',
+        class: 'danger invert',
+        label: 'Cancel',
+        action: () => this.redirectAfterCancel(),
+      },
+    ],
   });
 
   public showImageButton = new ZxButtonModel({
-    items: [{ name: 'showImage', label: 'Show uploaded image', action: () => this.showImage() }],
+    items: [
+      {
+        name: 'showImage',
+        label: 'Show uploaded image',
+        action: () => this.showImage(),
+      },
+    ],
   });
 
-
-  constructor(private personService: PersonService, private route: ActivatedRoute, private router: Router, private toastr: ToastrService) { }
+  constructor(
+    private personService: PersonService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.setTabs();
@@ -69,38 +110,67 @@ export class PersonCreateComponent implements OnInit {
 
   public setFormChildren() {
     this.formConfig.addChildren = [
-      new Definition({ template: 'ZxInput', class: ['col-12'], type: 'text', name: 'name', label: 'Name', validation: { required: true } }),
-      new Definition({ template: 'ZxInput', class: ['col-12'], type: 'text', name: 'surname', label: 'Surname', validation: { required: true } }),
-      new Definition({ template: 'ZxInput', class: ['col-12'], type: 'textarea', name: 'outlineText', label: 'Outline Text' }),
-      new Definition({ template: 'ZxInput', class: ['col-12'], type: 'text', name: 'gender', label: 'Gender' })
-    ]
+      new Definition({
+        template: 'ZxInput',
+        class: ['col-12'],
+        type: 'text',
+        name: 'name',
+        label: 'Name',
+        validation: { required: true },
+      }),
+      new Definition({
+        template: 'ZxInput',
+        class: ['col-12'],
+        type: 'text',
+        name: 'surname',
+        label: 'Surname',
+        validation: { required: true },
+      }),
+      new Definition({
+        template: 'ZxInput',
+        class: ['col-12'],
+        type: 'textarea',
+        name: 'outlineText',
+        label: 'Outline Text',
+      }),
+      new Definition({
+        template: 'ZxInput',
+        class: ['col-12'],
+        type: 'text',
+        name: 'gender',
+        label: 'Gender',
+      }),
+    ];
   }
   public setImageFormChildren() {
     this.imageFormConfig.addChildren = [
       new Definition({
-        template: 'ZxFile', class: ['col-24', 'span-8'], type: 'dnd', name: 'coverImage', multiple: false, label: 'Cover image:',
-        onchange: () => this.readFile()
-      })];
+        template: 'ZxFile',
+        class: ['col-24', 'span-8'],
+        type: 'dnd',
+        name: 'coverImage',
+        multiple: false,
+        label: 'Cover image:',
+        onchange: () => this.readFile(),
+      }),
+    ];
   }
   public setTabs() {
     this.tabConfig.items = [
       { id: 'overviewTab', name: 'overviewTab', label: 'Overview' },
-      { id: 'informationTab', name: 'informationTab', label: 'Information' }
-    ]
+      { id: 'informationTab', name: 'informationTab', label: 'Information' },
+    ];
   }
 
   private showImage() {
-    if (this.model.coverImage_files &&
-      this.model.coverImage_files[0]) {
+    if (this.model.coverImage_files && this.model.coverImage_files[0]) {
       this.readFile();
     }
   }
 
   private redirectAfterCancel() {
     if (this.person) {
-      this.router.navigateByUrl(
-        '/person/' + this.personId + '/overview'
-      );
+      this.router.navigateByUrl('/person/' + this.personId + '/overview');
     } else {
       this.router.navigateByUrl('/person/search');
     }
@@ -116,32 +186,27 @@ export class PersonCreateComponent implements OnInit {
       };
       reader.onerror = (err) => reject(err);
 
-      reader.readAsDataURL(
-        this.model.coverImage_files[0]
-      );
+      reader.readAsDataURL(this.model.coverImage_files[0]);
     });
   }
 
   async savePerson() {
-    if (!this.formConfig.isValid){
-      this.toastr.error("Fill in required fields!");
+    if (!this.formConfig.isValid) {
+      this.toastr.error('Fill in required fields!');
       return;
     }
 
-    if (
-      this.model.coverImage_files &&
-      this.model.coverImage_files[0]
-    ) {
+    if (this.model.coverImage_files && this.model.coverImage_files[0]) {
       await this.readFile();
     }
 
     let newPerson = new PersonCreateRequest();
     newPerson.surname = this.model.surname;
     newPerson.name = this.model.name;
-    newPerson.information = this.model.information; 
-    newPerson.coverImageData = this.model.coverImageData; 
+    newPerson.information = this.model.information;
+    newPerson.coverImageData = this.model.coverImageData;
     newPerson.coverImage = this.model.coverImage;
-    newPerson.gender= this.model.gender;
+    newPerson.gender = this.model.gender;
     newPerson.outlineText = this.model.outlineText;
     if (!this.personId) {
       this.personService.createPerson(newPerson).subscribe(
@@ -163,9 +228,7 @@ export class PersonCreateComponent implements OnInit {
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {
             this.toastr.success('Person edited!');
-            this.router.navigateByUrl(
-              '/person/' + this.personId + '/overview'
-            );
+            this.router.navigateByUrl('/person/' + this.personId + '/overview');
           } else {
             this.toastr.error('Person edit failed!');
           }
