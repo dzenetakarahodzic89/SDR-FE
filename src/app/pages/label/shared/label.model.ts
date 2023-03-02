@@ -22,3 +22,21 @@ export class ArtistLabelResponse {
   dateOfBirth: Date;
   album: string;
 }
+
+
+export class LabelCreateRequest {
+  id?: number;
+  labelName: string;
+  information: string;
+  outlineText: string;
+  foundingDate: Date; 
+  founderId: number;
+  coverImageData: string | ArrayBuffer;
+  coverImage: string;
+  coverImage_files: File[];
+  
+}
+export class PersonLoV {
+  id: number;
+  name: string;
+}

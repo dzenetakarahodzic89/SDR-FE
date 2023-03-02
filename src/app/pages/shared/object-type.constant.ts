@@ -4,5 +4,5 @@ export class ObjectType {
     public static INSTRUMENT="INSTRUMENT";
   	public static SONG = 'SONG';
     public static ALBUM="ALBUM"; 
-    public static LABEL = 'LABEL';
+    public static LABEL = "LABEL";
 }
