@@ -7,4 +7,8 @@ export class AlbumApi {
   public static DELETE_ALBUM = '/sdrbe/album/#';
   public static GET_ALBUM = '/sdrbe/album/#';
   public static GET_ERAS = '/sdrbe/era/lov';
+  public static GET_SONG_LOVS = '/sdrbe/song/not-in-album/#';
+  public static GET_LABEL_LOVS = '/sdrbe/label/lov';
+  public static GET_ARTIST_LOVS = '/sdrbe/artist/lov';
+  public static ADD_SONG = '/sdrbe/album/add-song';
 }

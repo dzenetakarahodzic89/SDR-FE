@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 import { ObjectType } from '../../shared/object-type.constant';
-import { AlbumResponse } from '../shared/album.model';
+import { AlbumResponse, SongOfAlbumUpdateRequest, SongResponse } from '../shared/album.model';
 import { AlbumService } from '../shared/album.service';
 
 
@@ -24,6 +24,10 @@ export class AlbumOverviewComponent implements OnInit {
   type = ObjectType.ALBUM;
   testFlag: string = "fi fi-";
   albumIsLoading: Boolean;
+  songsAreLoading: Boolean;
+  labelsAreLoading: Boolean;
+  artistsAreLoading: Boolean;
+  songs : SongResponse[] = [];
   connectionSources = [];
   connectionTypes = [];
 
@@ -60,7 +64,7 @@ export class AlbumOverviewComponent implements OnInit {
       {
         icon: 'fal fa-plus',
         name: 'Popup Test',
-        label: 'Add Song',
+        label: 'Gallery',
         action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/'])
       },
     ],
@@ -77,18 +81,32 @@ export class AlbumOverviewComponent implements OnInit {
     ],
   });
 
+  public addSongBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-plus',
+        name: 'addSong',
+        label: 'Add song',
+        action: () => this.addSongPopup.show()
+      },
+    ],
+  });
+
   public connectMediaBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         name: 'connectMedia',
         label: 'Connect Media',
-        action: () => this.popup.show()
+        action: () => this.connectMediaPopup.show()
       },
     ],
   });
 
-  public popUpBlockConfig: ZxBlockModel;
-  public popUpFormConfig: Definition;
+  public addSongPopUpBlockConfig: ZxBlockModel;
+  public addSongPopUpFormConfig: Definition;
+  public addSongModel: SongOfAlbumUpdateRequest;
+  public connectMediaPopUpBlockConfig: ZxBlockModel;
+  public connectMediaPopUpFormConfig: Definition;
   public connectedMediaModel: ConnectedMediaDetailCreateRequest;
 
   sourceInput: Definition = new Definition({
@@ -119,12 +137,12 @@ export class AlbumOverviewComponent implements OnInit {
   });
 
 
-  public setPopUpFormConfig() {
-    this.popUpBlockConfig = new ZxBlockModel({
+  public setConnectMediaPopUpFormConfig() {
+    this.connectMediaPopUpBlockConfig = new ZxBlockModel({
       hideExpand: true,
       label: 'Connect media to ' + this.album.name,
     });
-    this.popUpFormConfig = new Definition({
+    this.connectMediaPopUpFormConfig = new Definition({
       name: 'connectMedia',
       template: 'ZxForm',
       disabled: false,
@@ -137,25 +155,95 @@ export class AlbumOverviewComponent implements OnInit {
     });
   };
 
-  public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+  songInput: Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-24'],
+    type: 'filter',
+    name: 'songId',
+    label: 'Song',
+    list: this.songs,
+    validation: { required: true }
+  });
+
+  artistInput: Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-24'],
+    type: 'filter',
+    name: 'artistId',
+    label: 'Artist',
+    validation: { required: true }
+  });
+
+  labelInput: Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-24'],
+    type: 'filter',
+    name: 'labelId',
+    label: 'Label',
+    validation: { required: true }
+  });
+
+  public setAddSongPopUpFormConfig() {
+    this.addSongPopUpBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add a song to ' + this.album.name,
+    });
+    this.addSongPopUpFormConfig = new Definition({
+      name: 'addSong',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        this.songInput,
+        this.artistInput,
+        this.labelInput
+      ],
+      model: this.addSongModel
+    });
+  };
+
+  public connectMediaPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
     hideCloseButton: false,
     size: 'col-12',
   });
 
-  public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
+  public connectMediaPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         name: 'save', description: 'Save', label: 'Save',
         class: 'classic primary', icon: 'fal fa-check-circle',
         action: () => {
-          this.popup.hide()
+          this.connectMediaPopup.hide()
           this.addConnectedMedia()
         }
       },
       {
         name: 'cancel', description: 'Cancel', label: 'Cancel',
-        class: 'classic', icon: 'fal fa-times', action: () => { this.popup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest(); }
+        class: 'classic', icon: 'fal fa-times', action: () => { this.connectMediaPopup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest(); }
+      },
+
+    ]
+  });
+
+  public addSongPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+
+  public addSongPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save', description: 'Add song', label: 'Save',
+        class: 'classic primary', icon: 'fal fa-check-circle',
+        action: () => {
+          this.addSongPopup.hide()
+          this.addSong()
+        }
+      },
+      {
+        name: 'cancel', description: 'Cancel', label: 'Cancel',
+        class: 'classic', icon: 'fal fa-times', action: () => { this.addSongPopup.hide(); }
       },
 
     ]
@@ -218,23 +306,31 @@ export class AlbumOverviewComponent implements OnInit {
     this.typeInput.list = this.connectionTypes;
 
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+    this.addSongModel = new SongOfAlbumUpdateRequest();
     this.loadData();
+    this.loadSongs();
+    this.loadArtists();
+    this.loadLabels();
   }
 
   loadData() {
     this.albumIsLoading = true;
+    this.songsAreLoading = true;
+    this.labelsAreLoading = true;
+    this.artistsAreLoading = true;
     this.route.params.subscribe(params => {
       this.albumService.getAlbum(params.id).subscribe(response => {
         console.log("Response: ", response);
         this.album = response;
-        this.setPopUpFormConfig();
+        this.setConnectMediaPopUpFormConfig();
+        this.setAddSongPopUpFormConfig();
         this.albumIsLoading = false;
       })
     })
   }
 
   addConnectedMedia() {
-    if (!this.popUpFormConfig.isValid) {
+    if (!this.connectMediaPopUpFormConfig.isValid) {
       this.toastr.error('Input values are not valid!');
       return;
     }
@@ -264,4 +360,57 @@ export class AlbumOverviewComponent implements OnInit {
       }
     );
   }
+
+  loadSongs() {
+    this.route.params.subscribe(params => {
+      this.albumService.getSongsNotInAlbum(params.id).subscribe(response => {
+        this.songs = response;
+        this.songsAreLoading = false;
+        this.songInput.list = this.songs;
+      })
+    })
+  }
+
+  loadLabels() {
+    this.route.params.subscribe(params => {
+      this.albumService.getLabelsNotInAlbum(params.id).subscribe(response => {
+        this.labelInput.list = response;
+        this.labelsAreLoading = false;
+      })
+    })
+  }
+
+  loadArtists() {
+    this.albumService.getArtists().subscribe(response => {
+      this.artistInput.list = response;
+      this.artistsAreLoading = false;
+    })
+  }
+
+  addSong() {
+    if(!this.addSongPopUpFormConfig.isValid) {
+      this.toastr.error("Fill in the input fields!");
+      return;
+    }
+    this.addSongModel.albumId = this.album.id;
+    this.albumService.addSong(this.addSongModel).subscribe(
+      (response) => {
+        if (response.hasOwnProperty('payload')) {
+          this.toastr.success('Song successfully added!');
+          this.album.songs = [... this.album.songs, response['payload']];
+          this.songs = this.songs.filter(s => s.id != this.addSongModel.songId);
+          this.addSongModel = new SongOfAlbumUpdateRequest();
+          this.songInput.list = this.songs;
+        } else {
+          this.toastr.error('Failed to add song!');
+        }
+      },
+      (errorMsg: string) => {
+        this.toastr.error('Failed to add song!');
+      }
+    );
+
+  }
+
 }
+

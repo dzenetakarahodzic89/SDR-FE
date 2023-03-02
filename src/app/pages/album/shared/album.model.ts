@@ -32,3 +32,10 @@ export class EraLoV {
   id: number;
   name: string;
 }
+
+export class SongOfAlbumUpdateRequest {
+  albumId: number;
+  songId: number;
+  artistId: number;
+  labelId: number;
+}
