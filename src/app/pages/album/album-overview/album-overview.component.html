@@ -11,8 +11,9 @@
                     <h1>{{ album.name }}</h1>
                 </div>
                 <div class="row">
-                    <div class="col-21">
-                        <p>{{ album.dateOfRelease | date: 'dd.MM.yyyy'}} - {{ album.artistName }}</p>
+                    <div class="p-inline col-21">
+                        <p>{{ album.dateOfRelease | date: 'dd.MM.yyyy'}} </p>
+                        <p *ngFor="let artist of this.album.albumArtists"> - {{ artist }}</p>
                     </div>
                     <div class="col-4">
                         <zx-button id="galleryBtn" zx-block-action [config]="galleryButton"></zx-button>
@@ -20,7 +21,8 @@
                     </div>
                 </div>
                 <hr />
-                {{ album.era }}
+                <p> {{ album.era }} </p>
+                <ang-music-player [audioList]="this.album.audioUrls"></ang-music-player>
             </div>
         </div>
         
