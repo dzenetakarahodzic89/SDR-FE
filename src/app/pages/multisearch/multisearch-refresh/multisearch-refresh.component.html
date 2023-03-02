@@ -1,0 +1,54 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="loading"></zx-preloader>
+</div>
+<h2>Multisearch Refresh</h2>
+<div zx-body *ngIf="randomMultiSearches" style="height: 100%">
+  <div style="display: flex; height: 100%">
+    <zx-block style="width: 55%; margin-right: 15px">
+      <zx-grid
+        zx-block-body
+        [gridOptions]="multiSearchGridOptions"
+        [source]="randomMultiSearches"
+        code="playground-client-grid"
+      ></zx-grid>
+    </zx-block>
+    <zx-block [config]="multiSearchHistoryBlockConfig" style="width: 45%">
+      <div zx-block-body style="padding-left: 15px; padding-top: 5px">
+        <table style="width: 60%">
+          <tr>
+            <th><b>Last Refresh Date:</b></th>
+            <th>
+              <b>{{ refreshTime }}</b>
+            </th>
+          </tr>
+          <tr>
+            <th><b>Rows Before:</b></th>
+            <th>
+              <b>{{ rowsBefore }}</b>
+            </th>
+          </tr>
+          <tr>
+            <th><b>Rows After:</b></th>
+            <th>
+              <b>{{ rowsAfter }}</b>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <div class="pie">
+                <canvas id="pieChart"></canvas>
+              </div>
+            </th>
+            <th>
+              <div style="padding-top: 60px">
+                <canvas id="lineChart"></canvas>
+              </div>
+            </th>
+          </tr>
+        </table>
+      </div>
+    </zx-block>
+  </div>
+  <br />
+  <zx-button [config]="refreshButton" style="height: 10%"></zx-button>
+</div>
