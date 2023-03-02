@@ -5,16 +5,17 @@ export class AlbumResponse {
   name: string;
   status: string;
   era: string;
-  artistName: string;
+  albumArtists: String[];
   imageUrl: string;
   songs: SongResponse[];
+  audioUrls: [];
 }
 
 export class SongResponse {
   id: number;
   name: string;
   playtime: string;
-  genre: string;
+  genreName: string;
 }
 
 export class AlbumCreateRequest {

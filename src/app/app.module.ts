@@ -44,13 +44,13 @@ import { PersonModule } from './pages/person/person.module';
 import { LabelModule } from './pages/label/label.module';
 import { CountryModule } from './pages/country/country.module';
 import { InstrumentModule } from './pages/instrument/instrument.module';
-import { PlaylistModule} from './pages/playlist/playlist.module';
+import { PlaylistModule } from './pages/playlist/playlist.module';
 import { SongModule } from './pages/song/song.module';
-import { AngMusicPlayerModule } from  'ang-music-player';
+import { AngMusicPlayerModule } from 'ang-music-player';
 import { AlbumModule } from './pages/album/album.module';
- 
-environment.languages.map(v => registerLocaleData(v.locale));
+import { MultisearchModule } from './pages/multisearch/multisearch.module';
 
+environment.languages.map((v) => registerLocaleData(v.locale));
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -89,7 +89,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     AngMusicPlayerModule,
     SongModule,
     InstrumentModule,
-    AlbumModule
+    AlbumModule,
+    MultisearchModule,
     // use forRoot() in main app module only.
   ],
   providers: [
