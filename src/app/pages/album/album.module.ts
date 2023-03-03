@@ -7,6 +7,8 @@ import { AlbumService } from './shared/album.service';
 import { AlbumCreateComponent } from './album-create/album-create.component';
 import { ZxFormsModule } from '@zff/zx-forms';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
+import { AngMusicPlayerModule } from 'ang-music-player';
+
 
 @NgModule({
   declarations: [AlbumOverviewComponent, AlbumCreateComponent],
@@ -16,6 +18,7 @@ import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
     AutocompleteLibModule,
     ZxPopupLayoutModule,
     ZxFormsModule,
+    AngMusicPlayerModule
   ],
   exports: [AlbumOverviewComponent],
   providers: [

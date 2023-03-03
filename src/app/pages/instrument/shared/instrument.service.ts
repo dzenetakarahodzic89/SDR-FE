@@ -10,12 +10,8 @@ export class InstrumentService {
     
     constructor(private api: ZxApi) { }
     
-    getInstrument(id: number): Observable<InstrumentResponse[]> {
-      const filterRequest = new InstrumentSearchRequest(
-        id
-      );
-
-      return this.api.get(InstrumentApi.GET_INSTRUMENTS, filterRequest).pipe(map(response => {
+    getInstrument(id: number): Observable<InstrumentResponse> {
+      return this.api.get(InstrumentApi.GET_INSTRUMENT.replace("#", id.toString())).pipe(map(response => {
         return response['payload'];
       }));
     }
@@ -34,7 +30,7 @@ export class InstrumentService {
         );
         
         return this.api.get(InstrumentApi.GET_SONG_INSTRUMENTS, filterRequest.getObjectifiedRequest()).pipe(map(response => {
-            return response['payload'].map(val => { return {"songId": val.songId, "personName": val.personName, "personDob": this.getFormattedDate(new Date(val.personDob)), "songName" : val.songName} });
+            return response['payload'].map(val => { return {"songId": val.songId, "personFullName": val.personName + " " + val.personSurname, "personDob": this.getFormattedDate(new Date(val.personDob)), "songName" : val.songName} });
         }));
     }
 

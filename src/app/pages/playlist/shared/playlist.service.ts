@@ -64,5 +64,13 @@ export class PlaylistService {
   }
 
 
+  getGeneratedPlaylist(criteria: any): Observable<any[]> {
+    return this.api.get(PlaylistApi.GENERATE_PLAYLIST, criteria).pipe(map(response => {
+      return response['payload'];
+    }));
+  }
 
+  postPlaylist(body: any): Observable<any> {
+    return this.api.post(PlaylistApi.SAVE_PLAYLIST, body).pipe(map(response => response['payload']));
+  }
 }
