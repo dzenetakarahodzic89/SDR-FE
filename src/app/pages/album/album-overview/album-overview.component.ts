@@ -27,7 +27,6 @@ export class AlbumOverviewComponent implements OnInit {
   songsAreLoading: Boolean;
   labelsAreLoading: Boolean;
   artistsAreLoading: Boolean;
-  songs : SongResponse[] = [];
   connectionSources = [];
   connectionTypes = [];
 
@@ -158,10 +157,10 @@ export class AlbumOverviewComponent implements OnInit {
   songInput: Definition = new Definition({
     template: 'ZxSelect',
     class: ['col-24'],
+    id: 'songInput',
     type: 'filter',
     name: 'songId',
     label: 'Song',
-    list: this.songs,
     validation: { required: true }
   });
 
@@ -364,9 +363,8 @@ export class AlbumOverviewComponent implements OnInit {
   loadSongs() {
     this.route.params.subscribe(params => {
       this.albumService.getSongsNotInAlbum(params.id).subscribe(response => {
-        this.songs = response;
+        this.songInput.list = response;
         this.songsAreLoading = false;
-        this.songInput.list = this.songs;
       })
     })
   }
@@ -398,9 +396,8 @@ export class AlbumOverviewComponent implements OnInit {
         if (response.hasOwnProperty('payload')) {
           this.toastr.success('Song successfully added!');
           this.album.songs = [... this.album.songs, response['payload']];
-          this.songs = this.songs.filter(s => s.id != this.addSongModel.songId);
+          this.addSongPopUpFormConfig.children[0].list = this.songInput.lov.filter(s => s.id != this.addSongModel.songId);
           this.addSongModel = new SongOfAlbumUpdateRequest();
-          this.songInput.list = this.songs;
         } else {
           this.toastr.error('Failed to add song!');
         }
