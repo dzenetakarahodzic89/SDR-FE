@@ -87,7 +87,7 @@ export class PlaylistSearchComponent implements OnInit {
   songInput: Definition = new Definition({
     template: 'ZxSelect',
     class: ['col-24'],
-    type: 'select',
+    type: 'filter',
     name: 'songId',
     label: 'Has Song',
   });
@@ -95,7 +95,7 @@ export class PlaylistSearchComponent implements OnInit {
   genreInput: Definition = new Definition({
     template: 'ZxSelect',
     class: ['col-24'],
-    type: 'select',
+    type: 'filter',
     name: 'genreId',
     label: 'Has Genre',
   });
@@ -103,7 +103,7 @@ export class PlaylistSearchComponent implements OnInit {
   sortInput: Definition = new Definition({
     template: 'ZxSelect',
     class: ['col-24'],
-    type: 'select',
+    type: 'filter',
     name: 'sortBy',
     label: 'Sort By',
 
