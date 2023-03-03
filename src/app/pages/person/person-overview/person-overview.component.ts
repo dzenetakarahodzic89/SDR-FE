@@ -19,6 +19,8 @@ import {
   CountryResponse,
   CountryUpdateRequest,
 } from '../../country/shared/country.model';
+import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
+import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 
 @Component({
   selector: 'app-person-overview',
@@ -29,6 +31,8 @@ export class PersonOverviewComponent implements OnInit {
   type = ObjectType.PERSON;
   personIsLoading = false;
   testFlag: string = 'fi fi-';
+  connectionSources = [];
+  connectionTypes = [];
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     hideHeader: true,
@@ -96,6 +100,90 @@ export class PersonOverviewComponent implements OnInit {
     ],
   });
 
+  public connectMediaBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'connectMedia',
+        label: 'Connect Media',
+        action: () => this.connectMediaPopup.show()
+      },
+    ],
+  });
+
+  public popUpBlockConfig: ZxBlockModel;
+  public popUpFormConfig: Definition;
+  public connectedMediaModel: ConnectedMediaDetailCreateRequest;
+
+  sourceInput: Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-13'],
+    type: 'select',
+    name: 'connectionSource',
+    label: 'Connection Source',
+    validation: { required: true }
+  });
+
+  typeInput: Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-13'],
+    type: 'select',
+    name: 'connectionType',
+    label: 'Connection Type',
+    validation: { required: true }
+  });
+
+  linkInput = new Definition({
+    template: 'ZxInput',
+    class: ['col-24'],
+    type: 'text',
+    name: 'connectionLink',
+    label: 'Link',
+    validation: { required: true, pattern: '((http|https):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9@:%_\+.~#?&/=]*)' }
+  });
+
+
+  public setPopUpFormConfig() {
+    this.popUpBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Connect media to ' + this.person.name,
+    });
+    this.popUpFormConfig = new Definition({
+      name: 'connectMedia',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        this.sourceInput,
+        this.typeInput,
+        this.linkInput
+      ],
+      model: this.connectedMediaModel
+    });
+  };
+
+  public connectMediaPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+
+  public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save', description: 'Save', label: 'Save',
+        class: 'classic primary', icon: 'fal fa-check-circle',
+        action: () => {
+          this.connectMediaPopup.hide()
+          this.addConnectedMedia()
+        }
+      },
+      {
+        name: 'cancel', description: 'Cancel', label: 'Cancel',
+        class: 'classic', icon: 'fal fa-times', action: () => { this.connectMediaPopup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest(); }
+      },
+
+    ]
+  });
+
   artistsColumnDefs = [
     {
       field: 'name',
@@ -153,6 +241,7 @@ export class PersonOverviewComponent implements OnInit {
     private route: ActivatedRoute,
     private personService: PersonService,
     public confirmation: ZxConfirmation,
+    private connectedMediaService: ConnectedMediaService,
     private toastr: ToastrService
   ) {}
   public linkPerson: ZxButtonModel = new ZxButtonModel({
@@ -216,6 +305,23 @@ export class PersonOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let id = 1;
+    Object.values(ConnectedMediaConnectionSource).forEach(t => {
+      let sourceObject = { id: id, name: t };
+      this.connectionSources.push(sourceObject);
+      id++;
+    });
+    this.sourceInput.list = this.connectionSources;
+
+    id = 1;
+    Object.values(ConnectedMediaConnectionType).forEach(t => {
+      let typeObject = { id: id, name: t };
+      this.connectionTypes.push(typeObject);
+      id++;
+    });
+    this.typeInput.list = this.connectionTypes;
+
+    this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
     this.loadData();
     this.selectedCountry = new CountryResponse();
     this.country = new CountryResponse();
@@ -226,6 +332,7 @@ export class PersonOverviewComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.personService.getPerson(params.id).subscribe((response) => {
         this.person = response;
+        this.setPopUpFormConfig();
         this.personIsLoading = false;
         this.testFlag = this.testFlag
           .concat(this.person.flagAbbreviation)
@@ -292,5 +399,37 @@ export class PersonOverviewComponent implements OnInit {
         ],
       });
     });
+  }
+
+  addConnectedMedia() {
+    if (!this.popUpFormConfig.isValid) {
+      this.toastr.error('Input values are not valid!');
+      return;
+    }
+
+    this.connectedMediaModel.objectId = this.person.id;
+    this.connectedMediaModel.objectType = this.type;
+    this.connectedMediaModel.connectionSource = Object.keys(ConnectedMediaConnectionSource)[parseInt(this.connectedMediaModel.connectionSource) - 1];
+    this.connectedMediaModel.connectionType = Object.keys(ConnectedMediaConnectionType)[parseInt(this.connectedMediaModel.connectionType) - 1];
+    this.createConnectedMediaDetail();
+
+
+  }
+
+  createConnectedMediaDetail() {
+
+    this.connectedMediaService.createConnectedMediaDetail(this.connectedMediaModel).subscribe(
+      (responseCode) => {
+        if (responseCode.hasOwnProperty('payload')) {
+          this.toastr.success('Connected media successfully added!');
+          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+        } else {
+          this.toastr.error('Failed to add connected media!');
+        }
+      },
+      (errorMsg: string) => {
+        this.toastr.error('Failed to add connected media!');
+      }
+    );
   }
 }

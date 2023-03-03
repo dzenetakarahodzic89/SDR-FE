@@ -1,43 +1,53 @@
 {
-    "payload": {
-        "label": "HUB",
-        "type": "MODULE",
-        "children": [
-                    {
-                        "code": "HUB_PERSONS_STATIC",
-                        "icon" : "fad fa-user",
-                        "label": "Persons",
-                        "url": "person/search",
-                        "attributes": {}
-                    },
-                    {
-                        "code": "HUB_COUNTRY_STATIC",
-                        "icon" : "fad fa-globe",
-                        "label": "Countries",
-                        "url": "country/overview",
-                        "attributes": {}
-                    },
-                    {
-                        "code": "HUB_PLAYLIST_STATIC",
-                        "label": "Playlists",
-                        "icon" : "fad fa-list-music",
-                        "url": "playlist/search",
-                        "attributes": {}
-                    },
-                    {
-                        "code": "HUB_INSTRUMENT_STATIC",
-                        "icon" : "fad fa-violin",
-                        "label": "Instruments",
-                        "url": "instrument/search",
-                        "attributes": {}
-                    },                    
-                    {
-                        "code": "HUB_ALBUM_STATIC",
-                        "icon" : "fad fa-album",
-                        "label": "Albums",
-                        "url": "album/search",
-                        "attributes": {}
-                    }
-        ]
+
+  "payload": {
+    "label": "HUB",
+    "type": "MODULE",
+    "children": [
+      {
+        "code": "HUB_PERSONS_STATIC",
+        "icon": "fad fa-user",
+        "label": "Persons",
+        "url": "person/search",
+        "attributes": {}
+      },
+      {
+        "code": "HUB_COUNTRY_STATIC",
+        "icon": "fad fa-globe",
+        "label": "Countries",
+        "url": "country/overview",
+        "attributes": {}
+      },
+      {
+        "code": "HUB_PLAYLIST_STATIC",
+        "label": "Playlists",
+        "icon": "fad fa-list-music",
+        "url": "playlist/search",
+        "attributes": {}
+      },
+      {
+        "code": "HUB_INSTRUMENT_STATIC",
+        "icon": "fad fa-violin",
+        "label": "Instruments",
+        "url": "instrument/search",
+        "attributes": {}
+      },
+      {
+        "code": "HUB_MULTISEARCH_STATIC",
+        "icon": "fad fa-repeat",
+        "label": "Multi search refresh",
+        "url": "multisearch/refresh",
+        "attributes": {}
+      },
+
+      {
+        "code": "HUB_ALBUM_STATIC",
+        "icon" : "fad fa-album",
+        "label": "Albums",
+        "url": "album/search",
+        "attributes": {}
     }
+    ]
+  }
+
 }

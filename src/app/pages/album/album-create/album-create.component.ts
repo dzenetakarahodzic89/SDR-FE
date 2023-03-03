@@ -6,21 +6,28 @@ import { Definition } from '@zff/zx-forms';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ToastrService } from 'ngx-toastr';
 
-import { PersonCreateRequest, PersonResponse } from '../shared/person.model';
-import { PersonService } from '../shared/person.service';
+import {
+  AlbumCreateRequest,
+  AlbumResponse,
+  EraLoV,
+} from '../shared/album.model';
+import { AlbumService } from '../shared/album.service';
 
 @Component({
-  selector: 'person-create',
-  templateUrl: './person-create.component.html',
-  styleUrls: ['./person-create.component.scss'],
+  selector: 'album-create',
+  templateUrl: './album-create.component.html',
+  styleUrls: ['./album-create.component.scss'],
 })
-export class PersonCreateComponent implements OnInit {
-  private personId;
-  public person: PersonResponse;
-  public model: PersonCreateRequest;
+export class AlbumCreateComponent implements OnInit {
+  private eraList: EraLoV[];
+  private selectedEra: EraLoV;
+  private albumId;
+  public album: AlbumResponse;
+  public model: AlbumCreateRequest;
+  private updateEra: EraLoV;
 
   public formConfig = new Definition({
-    name: 'createLocation',
+    name: 'createAlbum',
     template: 'ZxForm',
     disabled: false,
     children: [],
@@ -39,7 +46,7 @@ export class PersonCreateComponent implements OnInit {
 
   public overviewBlock = new ZxBlockModel({
     hideExpand: true,
-    label: 'Add person',
+    label: 'Add album',
   });
   public informationBlock = new ZxBlockModel({
     hideExpand: true,
@@ -49,11 +56,11 @@ export class PersonCreateComponent implements OnInit {
   public mainButtons = new ZxButtonModel({
     items: [
       {
-        name: 'savePerson',
+        name: 'saveAlbum',
         layout: 'classic',
         label: 'Save',
         class: 'invert',
-        action: () => this.savePerson(),
+        action: () => this.saveAlbum(),
       },
       {
         name: 'cancel',
@@ -76,7 +83,7 @@ export class PersonCreateComponent implements OnInit {
   });
 
   constructor(
-    private personService: PersonService,
+    private albumService: AlbumService,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
@@ -84,65 +91,65 @@ export class PersonCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.setTabs();
-    this.setFormChildren();
     this.setImageFormChildren();
 
-    this.model = new PersonCreateRequest();
-    this.personId = this.route.snapshot.paramMap.get('id');
+    this.albumService.getEras().subscribe((response) => {
+      this.eraList = response;
+      this.setFormChildren();
+    });
 
-    if (this.personId != null) {
-      this.personService.getPerson(this.personId).subscribe(
-        (sty: PersonResponse) => {
-          this.overviewBlock.label = 'Edit person';
+    this.model = new AlbumCreateRequest();
+    this.albumId = this.route.snapshot.paramMap.get('id');
+
+    if (this.albumId != null) {
+      this.albumService.getAlbum(this.albumId).subscribe(
+        (sty: AlbumResponse) => {
+          this.overviewBlock.label = 'Edit album';
           this.informationBlock.label = 'Edit information';
-          this.person = sty;
-          this.model.surname = sty.surname;
+          this.album = sty;
           this.model.name = sty.name;
           this.model.information = sty.information;
-          this.model.gender = sty.gender;
+          this.model.dateOfRelease = sty.dateOfRelease;
+          this.selectedEra = this.eraList.find((era) => era.name === sty.era);
+          this.model.eraId = this.selectedEra.id;
         },
         (errorMsg: string) => {
-          this.toastr.error('Person could not be loaded!');
+          this.toastr.error('Album could not be loaded!');
         }
       );
     }
   }
 
-  public setFormChildren() {
+  public setFormChildren = () => {
     this.formConfig.addChildren = [
       new Definition({
         template: 'ZxInput',
-        class: ['col-12'],
+        class: ['col-24'],
         type: 'text',
         name: 'name',
         label: 'Name',
         validation: { required: true },
       }),
       new Definition({
-        template: 'ZxInput',
+        template: 'ZxDate',
         class: ['col-12'],
-        type: 'text',
-        name: 'surname',
-        label: 'Surname',
+        type: 'date',
+        name: 'dateOfRelease',
+        label: 'Date of release',
         validation: { required: true },
       }),
       new Definition({
-        template: 'ZxInput',
+        template: 'ZxSelect',
         class: ['col-12'],
-        type: 'textarea',
-        name: 'outlineText',
-        label: 'Outline Text',
-      }),
-      new Definition({
-        template: 'ZxInput',
-        class: ['col-12'],
-        type: 'text',
-        name: 'gender',
-        label: 'Gender',
+        type: 'filter',
+        name: 'eraId',
+        label: 'Era',
+        list: this.eraList,
+        defaultValue: this.updateEra,
       }),
     ];
-  }
-  public setImageFormChildren() {
+  };
+  public setImageFormChildren = () => {
     this.imageFormConfig.addChildren = [
       new Definition({
         template: 'ZxFile',
@@ -154,29 +161,29 @@ export class PersonCreateComponent implements OnInit {
         onchange: () => this.readFile(),
       }),
     ];
-  }
-  public setTabs() {
+  };
+  public setTabs = () => {
     this.tabConfig.items = [
       { id: 'overviewTab', name: 'overviewTab', label: 'Overview' },
       { id: 'informationTab', name: 'informationTab', label: 'Information' },
     ];
-  }
+  };
 
-  private showImage() {
+  private showImage = () => {
     if (this.model.coverImage_files && this.model.coverImage_files[0]) {
       this.readFile();
     }
-  }
+  };
 
-  private redirectAfterCancel() {
-    if (this.person) {
-      this.router.navigateByUrl('/person/' + this.personId + '/overview');
+  private redirectAfterCancel = () => {
+    if (this.album) {
+      this.router.navigateByUrl('/album/' + this.albumId + '/overview');
     } else {
-      this.router.navigateByUrl('/person/search');
+      this.router.navigateByUrl('/album/search');
     }
-  }
+  };
 
-  private readFile() {
+  private readFile = () => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -188,9 +195,9 @@ export class PersonCreateComponent implements OnInit {
 
       reader.readAsDataURL(this.model.coverImage_files[0]);
     });
-  }
+  };
 
-  async savePerson() {
+  saveAlbum = async () => {
     if (!this.formConfig.isValid) {
       this.toastr.error('Fill in required fields!');
       return;
@@ -200,43 +207,43 @@ export class PersonCreateComponent implements OnInit {
       await this.readFile();
     }
 
-    let newPerson = new PersonCreateRequest();
-    newPerson.surname = this.model.surname;
-    newPerson.name = this.model.name;
-    newPerson.information = this.model.information;
-    newPerson.coverImageData = this.model.coverImageData;
-    newPerson.coverImage = this.model.coverImage;
-    newPerson.gender = this.model.gender;
-    newPerson.outlineText = this.model.outlineText;
-    if (!this.personId) {
-      this.personService.createPerson(newPerson).subscribe(
+    let newAlbum = new AlbumCreateRequest();
+    newAlbum.name = this.model.name;
+    newAlbum.information = this.model.information;
+    newAlbum.eraId = this.model.eraId;
+    newAlbum.dateOfRelease = this.model.dateOfRelease;
+    newAlbum.coverImageData = this.model.coverImageData;
+    newAlbum.coverImage = this.model.coverImage;
+    if (!this.albumId) {
+      this.albumService.createAlbum(newAlbum).subscribe(
         (responseCode) => {
+          console.log(responseCode);
           if (responseCode.hasOwnProperty('payload')) {
-            this.toastr.success('Person created!');
-            this.router.navigateByUrl('/person/search');
+            this.toastr.success('Album created!');
+            this.router.navigateByUrl(`/album/search`);
           } else {
-            this.toastr.error('Person creation failed!');
+            this.toastr.error('Album creation failed!');
           }
         },
         (errorMsg: string) => {
-          this.toastr.error('Person creation failed!');
+          this.toastr.error('Album creation failed!');
         }
       );
     } else {
-      newPerson['id'] = this.personId;
-      this.personService.updatePerson(newPerson).subscribe(
+      newAlbum['id'] = +this.albumId;
+      this.albumService.updateAlbum(newAlbum, +this.albumId).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {
-            this.toastr.success('Person edited!');
-            this.router.navigateByUrl('/person/' + this.personId + '/overview');
+            this.toastr.success('Album edited!');
+            this.router.navigateByUrl('/album/' + this.albumId + '/overview');
           } else {
-            this.toastr.error('Person edit failed!');
+            this.toastr.error('Album edit failed!');
           }
         },
         (errorMsg: string) => {
-          this.toastr.error('Person edit failed!');
+          this.toastr.error('Album edit failed!');
         }
       );
     }
-  }
+  };
 }
