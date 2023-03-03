@@ -5,6 +5,7 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ToastrService } from 'ngx-toastr';
+import { CountryResponse } from '../../country/shared/country.model';
 
 import { PersonCreateRequest, PersonResponse } from '../shared/person.model';
 import { PersonService } from '../shared/person.service';
@@ -18,6 +19,7 @@ export class PersonCreateComponent implements OnInit {
   private personId;
   public person: PersonResponse;
   public model: PersonCreateRequest;
+  public countryLov: CountryResponse[];
 
   public formConfig = new Definition({
     name: 'createLocation',
@@ -86,7 +88,7 @@ export class PersonCreateComponent implements OnInit {
     this.setTabs();
     this.setFormChildren();
     this.setImageFormChildren();
-
+    this.loadCountries();
     this.model = new PersonCreateRequest();
     this.personId = this.route.snapshot.paramMap.get('id');
 
@@ -140,8 +142,17 @@ export class PersonCreateComponent implements OnInit {
         name: 'gender',
         label: 'Gender',
       }),
+      new Definition({
+        template: 'ZxSelect',
+        class: ['col-12'],
+        type: 'filter',
+        name: 'countryId',
+        label: 'Country',
+        list: []
+      }),
     ];
   }
+
   public setImageFormChildren() {
     this.imageFormConfig.addChildren = [
       new Definition({
@@ -190,6 +201,22 @@ export class PersonCreateComponent implements OnInit {
     });
   }
 
+  loadCountries() {
+    this.personService.getCountries().subscribe((response) => {
+      const countries = response.map((country: CountryResponse) => {
+        return {
+          name: country.name,
+          id: country.id,
+          flagAbbriviation: country.flagAbbriviation,
+          region: country.region,
+        };
+      });
+      this.countryLov = countries;
+      this.formConfig.children[4].list = this.countryLov;
+    });
+  }
+  
+
   async savePerson() {
     if (!this.formConfig.isValid) {
       this.toastr.error('Fill in required fields!');
@@ -208,6 +235,7 @@ export class PersonCreateComponent implements OnInit {
     newPerson.coverImage = this.model.coverImage;
     newPerson.gender = this.model.gender;
     newPerson.outlineText = this.model.outlineText;
+    newPerson.countryId = this.model.countryId;
     if (!this.personId) {
       this.personService.createPerson(newPerson).subscribe(
         (responseCode) => {

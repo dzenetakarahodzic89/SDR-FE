@@ -46,6 +46,7 @@ export class PersonCreateRequest {
   coverImage: string;
   coverImage_files: File[];
   outlineText: string;
+  countryId: number;
 }
 
 export class PersonChartResponse {
