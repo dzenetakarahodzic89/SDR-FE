@@ -47,20 +47,20 @@ export class InstrumentCreateComponent implements OnInit {
 
     if (this.instrumentId != null) {
       this.instrumentService.getInstrument(this.instrumentId).subscribe(
-        (sty: InstrumentResponse[]) => {
+        (sty: InstrumentResponse) => {
           this.overviewBlock.label = 'Edit instrument';
           this.informationBlock.label = 'Edit information';
 
-          this.instrument = sty[0];
+          this.instrument = sty;
 
-          this.model.id = sty[0].id;
-          this.model.information = sty[0].information;
-          this.model.name = sty[0].name;
-          this.model.outlineText = sty[0].outlineText;
-          this.model.type = sty[0].type;
+          this.model.id = sty.id;
+          this.model.information = sty.information;
+          this.model.name = sty.name;
+          this.model.outlineText = sty.outlineText;
+          this.model.type = sty.type;
 
-          if (sty[0].imageUrl)
-            this.firstUrl = sty[0].imageUrl;
+          if (sty.imageUrl)
+            this.firstUrl = sty.imageUrl;
         },
         (errorMsg: string) => {
           this.toastr.error('Instrument could not be loaded!');

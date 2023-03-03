@@ -8,10 +8,10 @@ export class InstrumentResponse {
 };
 
 export class SongInstrumentResponse {
-    personName: string;
     personDob: Date;
     songName: string;
-}
+    personFullName: string;
+};
 
 export class InstrumentSearchRequest {
     id: number;

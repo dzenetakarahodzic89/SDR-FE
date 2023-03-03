@@ -1,0 +1,41 @@
+<div class="row" style="height: 80vh;">
+    <div class="col-16">
+        <div>
+            <h5>Songs in generated playlist:</h5>
+        </div>
+        <hr />
+        <zx-block *ngIf="!songsAreLoading" [config]="songsBlockConfig">
+            <zx-grid
+                zx-block-body
+                [gridOptions]="songsGridOptions"
+                [source]="generatedSongs"
+                domLayout="autoHeight"
+            >
+            </zx-grid>
+        </zx-block>
+    </div>
+    <div class="col-8">
+        <div>
+            <zx-preloader *ngIf="genresAreLoading || songsAreLoading"></zx-preloader>
+        </div>
+        <div>
+            <br>
+            <br>
+            <br>
+        </div>
+        <zx-block *ngIf="!genresAreLoading" [config]="searchBlockConfig">
+            <div zx-block-footer class="footerContainer">
+                <zx-button [config]="searchButton"></zx-button>
+            </div>
+            <zx-form-loader
+              *ngIf="formConfig"
+              zx-block-body
+              [component]="formConfig"
+              [model]="model"
+              class="col-24"
+            >
+            </zx-form-loader>
+          </zx-block>
+    </div>
+</div>
+  
