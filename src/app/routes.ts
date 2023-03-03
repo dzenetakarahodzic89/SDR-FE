@@ -17,6 +17,7 @@ import { SongOverviewComponent } from './pages/song/song-overview/song-overview.
 import { AlbumCreateComponent } from './pages/album/album-create/album-create.component';
 import { GeneratePlaylistComponent } from './pages/playlist/generate-playlist/generate-playlist.component';
 import { MultisearchRefreshComponent } from './pages/multisearch/multisearch-refresh/multisearch-refresh.component';
+import { LabelCreateComponent } from './pages/label/label-create/label-create.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -41,4 +42,6 @@ export const appRoutes: Routes = [
   { path: 'album/update/:id', component: AlbumCreateComponent },
   { path: 'playlist/generate-playlist', component: GeneratePlaylistComponent },
   { path: 'multisearch/refresh', component: MultisearchRefreshComponent },
+  { path: 'label/create', component: LabelCreateComponent },
+  { path: 'label/update/:id', component: LabelCreateComponent },
 ];

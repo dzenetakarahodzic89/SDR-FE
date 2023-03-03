@@ -4,11 +4,12 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { SharedModule } from '../shared/shared.module';
 import { LabelOverviewComponent } from './label-overview/label-overview.component';
 import { LabelService } from './shared/label.service';
+import { LabelCreateComponent } from './label-create/label-create.component';
 
 @NgModule({
-  declarations: [LabelOverviewComponent],
+  declarations: [LabelOverviewComponent, LabelCreateComponent],
   imports: [SharedModule, EditorModule, AutocompleteLibModule],
-  exports: [LabelOverviewComponent],
+  exports: [LabelOverviewComponent, LabelCreateComponent,],
   providers: [
     LabelService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
