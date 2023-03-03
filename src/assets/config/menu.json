@@ -30,6 +30,13 @@
                         "label": "Instruments",
                         "url": "instrument/search",
                         "attributes": {}
+                    },                    
+                    {
+                        "code": "HUB_ALBUM_STATIC",
+                        "icon" : "fad fa-album",
+                        "label": "Albums",
+                        "url": "album/search",
+                        "attributes": {}
                     }
         ]
     }

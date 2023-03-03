@@ -4,20 +4,22 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { AlbumOverviewComponent } from './album-overview/album-overview.component';
 import { AlbumService } from './shared/album.service';
-
+import { AlbumSearchComponent } from './album-search/album-search.component';
 
 
 @NgModule({
   declarations: [
     AlbumOverviewComponent,
+    AlbumSearchComponent
   ],
   imports: [
     SharedModule,
     EditorModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
   ],
   exports: [
-    AlbumOverviewComponent
+    AlbumOverviewComponent,
+    AlbumSearchComponent
   ], providers: [
     AlbumService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

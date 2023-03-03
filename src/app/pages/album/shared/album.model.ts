@@ -16,3 +16,14 @@ export class SongResponse {
     playtime: string;
     genre: string;
 }
+
+export class AlbumSearchRequest{
+    eras: any[];
+    genres : any[];
+    artists : any [];
+    pageNumber: any;
+    pageSize:any;
+    sort:string;
+    name:string;
+
+}
