@@ -37,6 +37,13 @@
         "label": "Multi search refresh",
         "url": "multisearch/refresh",
         "attributes": {}
+      },
+      {
+        "code": "HUB_SONGSIMILARITY_STATIC",
+        "icon": "fad fa-music",
+        "label": "Similar songs",
+        "url": "song/similar-songs",
+        "attributes": {}
       }
     ]
   }
