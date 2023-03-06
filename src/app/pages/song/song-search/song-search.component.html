@@ -10,6 +10,8 @@
       <div class="gridContainer">
         <div class="divForBoxes" *ngFor="let song of foundSongs">
           <app-box
+            [id]="song.id"
+            [type]="'song'"
             [title]="song.name"
             [description]="song.outlineText"
             [imageUrl]="song.imageUrl"
