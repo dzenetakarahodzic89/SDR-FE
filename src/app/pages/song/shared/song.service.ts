@@ -71,12 +71,6 @@ export class SongService {
       .toPromise();
   }
   getStatusOfAudio(mediaObjectId: number, type: string): Observable<string> {
-    console.log(
-      SongApi.GET_STATUS.replace('#', mediaObjectId.toString()).replace(
-        '?',
-        type.toString()
-      )
-    );
     return this.api
       .get(
         SongApi.GET_STATUS.replace('#', mediaObjectId.toString()).replace(
