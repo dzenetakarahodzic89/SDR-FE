@@ -110,6 +110,23 @@ export class PersonOverviewComponent implements OnInit {
     ],
   });
 
+  public createArtistFromPersonBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'createArtistFromPerson',
+        label: 'Create artist from person',
+        action: () => this.createArtistFromPerson()
+      }
+    ]
+  });
+
+  createArtistFromPerson():void {
+    this.personService.createArtistFromPerson(this.person.id).subscribe(payload => {
+      console.log(payload);
+      this.toastr.success("Artist '" + payload.name + " " + payload.surname + "' created!");
+    });
+  }
+
   public popUpBlockConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
   public connectedMediaModel: ConnectedMediaDetailCreateRequest;
