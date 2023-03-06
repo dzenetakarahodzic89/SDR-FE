@@ -7,11 +7,13 @@ import { SharedModule } from '../shared/shared.module';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { AngMusicPlayerModule } from 'ang-music-player';
 import { SongSearchComponent } from './song-search/song-search.component';
+import { SongSimilarityOverviewComponent } from './song-similarity-overview/song-similarity-overview.component';
+
 
 @NgModule({
-  declarations: [SongOverviewComponent, SongSearchComponent],
+  declarations: [SongOverviewComponent, SongSearchComponent,  SongSimilarityOverviewComponent],
   imports: [SharedModule, EditorModule, AutocompleteLibModule, AngMusicPlayerModule],
-  exports: [SongOverviewComponent, SongSearchComponent],
+  exports: [SongOverviewComponent, SongSearchComponent, SongSimilarityOverviewComponent],
   providers: [
     SongService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },

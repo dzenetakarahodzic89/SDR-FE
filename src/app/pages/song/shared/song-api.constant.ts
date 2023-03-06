@@ -8,4 +8,7 @@ export class SongApi {
   public static GET_ARTISTS_DROPDOWN = '/sdrbe/artist';
   public static UPLOAD_SONG = '/sdrbe/file-upload-segment';
   public static GET_STATUS = '/sdrbe/file-upload-segment/get-status/#/?';
+  public static GET_SONG_SIMILARITY = '/sdrbe/song-similarity/all';
+  public static GET_SONG_SIMILARITY_DETAILS =
+    '/sdrbe/song-similarity-detail/all';
 }

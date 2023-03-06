@@ -53,7 +53,14 @@
         "label": "Albums",
         "url": "album/search",
         "attributes": {}
-    }
+    },
+      {
+        "code": "HUB_SONGSIMILARITY_STATIC",
+        "icon": "fad fa-music",
+        "label": "Similar songs",
+        "url": "song/similar-songs",
+        "attributes": {}
+      }
     ]
   }
 
