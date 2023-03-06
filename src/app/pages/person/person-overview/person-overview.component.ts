@@ -103,6 +103,7 @@ export class PersonOverviewComponent implements OnInit {
   public connectMediaBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
+        icon: 'fas fa-link',
         name: 'connectMedia',
         label: 'Connect Media',
         action: () => this.connectMediaPopup.show()
@@ -113,6 +114,7 @@ export class PersonOverviewComponent implements OnInit {
   public createArtistFromPersonBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
+        icon: 'far fa-plus-square',
         name: 'createArtistFromPerson',
         label: 'Create artist from person',
         action: () => this.createArtistFromPerson()
@@ -264,6 +266,7 @@ export class PersonOverviewComponent implements OnInit {
   public linkPerson: ZxButtonModel = new ZxButtonModel({
     items: [
       {
+        icon: 'fas fa-flag',
         label: 'Link person to country',
         action: () => this.onShow(),
       },
