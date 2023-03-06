@@ -83,3 +83,35 @@ export class FileUploadSegmentCreateRequest {
   fileSegmentContent: string | ArrayBuffer;
   fileSegmentContent_files: File[];
 }
+
+export class SongSimilarityResponse {
+  id: number;
+  songAId: number;
+  songAName: String;
+  albumAName: String;
+  albumAReleaseDate: Date;
+  songBId: number;
+  songBName: String;
+  albumBName: String;
+  albumBReleaseDate: Date;
+  songAimageUrl: string;
+  songBimageUrl: string;
+  songAAudioUrl: string;
+  songBAudioUrl: string;
+}
+
+export class SongSimilarityDetailResponse {
+  id: number;
+  userCode: string;
+  grade: number;
+  totalSimilarityScore: number;
+  albumAReleaseDate: string | number | Date;
+}
+
+export class SongSimilarityDetailRequest {
+  id: number;
+}
+
+export class SongSimilarityRequest {
+  id: number;
+}
