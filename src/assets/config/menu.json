@@ -6,6 +6,13 @@
     "children": [
       {
         "code": "HUB_PERSONS_STATIC",
+        "icon": "fad fa-comment-music",
+        "label": "Songs",
+        "url": "song/search",
+        "attributes": {}
+      },
+      {
+        "code": "HUB_PERSONS_STATIC",
         "icon": "fad fa-user",
         "label": "Persons",
         "url": "person/search",

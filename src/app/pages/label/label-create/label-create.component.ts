@@ -5,34 +5,37 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ToastrService } from 'ngx-toastr';
-import { CountryResponse } from '../../country/shared/country.model';
+import {  LabelCreateRequest, LabelResponse, PersonLoV,} from '../shared/label.model';
+import { LabelService } from '../shared/label.service';
 
-import { PersonCreateRequest, PersonResponse } from '../shared/person.model';
-import { PersonService } from '../shared/person.service';
 
 @Component({
-  selector: 'person-create',
-  templateUrl: './person-create.component.html',
-  styleUrls: ['./person-create.component.scss'],
+  selector: 'app-label-create',
+  templateUrl: './label-create.component.html',
+  styleUrls: ['./label-create.component.scss']
 })
-export class PersonCreateComponent implements OnInit {
-  private personId;
-  public person: PersonResponse;
-  public model: PersonCreateRequest;
-  public countryLov: CountryResponse[];
+export class LabelCreateComponent implements OnInit {
+  private personList: PersonLoV[];
+  private selectedPerson: PersonLoV;
+  private labelId;
+  public label: LabelResponse;
+  public model: LabelCreateRequest;
+  private updatePerson: PersonLoV;
 
   public formConfig = new Definition({
-    name: 'createLocation',
+    name: 'createLabel',
     template: 'ZxForm',
     disabled: false,
     children: [],
   });
+  
   public imageFormConfig = new Definition({
     name: 'addCoverImage',
     template: 'ZxForm',
     disabled: false,
     children: [],
   });
+  
 
   public tabConfig = new ZxTabModel({
     orientation: 'portrait',
@@ -41,7 +44,7 @@ export class PersonCreateComponent implements OnInit {
 
   public overviewBlock = new ZxBlockModel({
     hideExpand: true,
-    label: 'Add person',
+    label: 'Add/Edit label',
   });
   public informationBlock = new ZxBlockModel({
     hideExpand: true,
@@ -51,11 +54,11 @@ export class PersonCreateComponent implements OnInit {
   public mainButtons = new ZxButtonModel({
     items: [
       {
-        name: 'savePerson',
+        name: 'saveLabel',
         layout: 'classic',
         label: 'Save',
         class: 'invert',
-        action: () => this.savePerson(),
+        action: () => this.saveLabel(),
       },
       {
         name: 'cancel',
@@ -67,6 +70,7 @@ export class PersonCreateComponent implements OnInit {
     ],
   });
 
+  
   public showImageButton = new ZxButtonModel({
     items: [
       {
@@ -77,8 +81,11 @@ export class PersonCreateComponent implements OnInit {
     ],
   });
 
-  constructor(
-    private personService: PersonService,
+  
+  
+
+   constructor(
+    private labelService: LabelService,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
@@ -86,74 +93,77 @@ export class PersonCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.setTabs();
-    this.setFormChildren();
     this.setImageFormChildren();
-    this.loadCountries();
-    this.model = new PersonCreateRequest();
-    this.personId = this.route.snapshot.paramMap.get('id');
 
-    if (this.personId != null) {
-      this.personService.getPerson(this.personId).subscribe(
-        (sty: PersonResponse) => {
-          this.overviewBlock.label = 'Edit person';
+    this.labelService.getPerson().subscribe((response) => {
+      this.personList = response;
+      this.setFormChildren();
+    });
+
+    this.model = new LabelCreateRequest();
+    this.labelId = this.route.snapshot.paramMap.get('id');
+
+    if (this.labelId!= null) {
+      this.labelService.getLabel(this.labelId).subscribe(
+        (sty: LabelResponse) => {
+          this.overviewBlock.label = 'Edit label';
           this.informationBlock.label = 'Edit information';
-          this.person = sty;
-          this.model.surname = sty.surname;
-          this.model.name = sty.name;
+
+          this.label = sty;
+  
+          this.model.labelName = sty.name;
+         this.model.outlineText=  sty.outlineText;
           this.model.information = sty.information;
-          this.model.gender = sty.gender;
+          this.model.foundingDate = sty.foundingDate;
+          this.selectedPerson = this.personList.find((founder) => founder.id === sty.founderId);
+          this.model.founderId = this.selectedPerson.id;
         },
         (errorMsg: string) => {
-          this.toastr.error('Person could not be loaded!');
+          this.toastr.error('Label could not be loaded!');
         }
       );
     }
   }
 
-  public setFormChildren() {
+  public setFormChildren = () => {
     this.formConfig.addChildren = [
       new Definition({
         template: 'ZxInput',
-        class: ['col-12'],
+        class: ['col-24'],
         type: 'text',
-        name: 'name',
+        name: 'labelName',
         label: 'Name',
         validation: { required: true },
       }),
+      new Definition({ template: 'ZxTextarea', 
+      
+       class: ['col-24', 'span-4'],
+        type: 'textarea', 
+        name: 'outlineText', 
+        label: 'Outline text',
+        validation: { required: true },
+      }),
+
       new Definition({
-        template: 'ZxInput',
-        class: ['col-12'],
-        type: 'text',
-        name: 'surname',
-        label: 'Surname',
+        template: 'ZxDate',
+        class: ['col-13'],
+        type: 'date',
+        name: 'foundingDate',
+        label: 'Date of founding',
         validation: { required: true },
       }),
       new Definition({
-        template: 'ZxInput',
-        class: ['col-12'],
-        type: 'textarea',
-        name: 'outlineText',
-        label: 'Outline Text',
-      }),
-      new Definition({
-        template: 'ZxInput',
-        class: ['col-12'],
-        type: 'text',
-        name: 'gender',
-        label: 'Gender',
-      }),
-      new Definition({
         template: 'ZxSelect',
-        class: ['col-12'],
+        class: ['col-13'],
         type: 'filter',
-        name: 'countryId',
-        label: 'Country',
-        list: []
+        name: 'founderId',
+        label: 'Founder',
+        list: this.personList,
+        defaultValue: this.updatePerson,
       }),
     ];
-  }
-
-  public setImageFormChildren() {
+  };
+ public setImageFormChildren = () => {
     this.imageFormConfig.addChildren = [
       new Definition({
         template: 'ZxFile',
@@ -165,29 +175,31 @@ export class PersonCreateComponent implements OnInit {
         onchange: () => this.readFile(),
       }),
     ];
-  }
-  public setTabs() {
+  };
+  
+  public setTabs = () => {
     this.tabConfig.items = [
       { id: 'overviewTab', name: 'overviewTab', label: 'Overview' },
       { id: 'informationTab', name: 'informationTab', label: 'Information' },
     ];
-  }
+  };
 
-  private showImage() {
+  private showImage = () => {
     if (this.model.coverImage_files && this.model.coverImage_files[0]) {
       this.readFile();
     }
-  }
+  };
+  
 
-  private redirectAfterCancel() {
-    if (this.person) {
-      this.router.navigateByUrl('/person/' + this.personId + '/overview');
+  private redirectAfterCancel = () => {
+    if (this.label) {
+      this.router.navigateByUrl('/label/' + this.labelId + '/overview');
     } else {
       this.router.navigateByUrl('/person/search');
     }
-  }
+  };
 
-  private readFile() {
+  private readFile = () => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -199,25 +211,10 @@ export class PersonCreateComponent implements OnInit {
 
       reader.readAsDataURL(this.model.coverImage_files[0]);
     });
-  }
-
-  loadCountries() {
-    this.personService.getCountries().subscribe((response) => {
-      const countries = response.map((country: CountryResponse) => {
-        return {
-          name: country.name,
-          id: country.id,
-          flagAbbriviation: country.flagAbbriviation,
-          region: country.region,
-        };
-      });
-      this.countryLov = countries;
-      this.formConfig.children[4].list = this.countryLov;
-    });
-  }
+  };
   
 
-  async savePerson() {
+  saveLabel = async () => {
     if (!this.formConfig.isValid) {
       this.toastr.error('Fill in required fields!');
       return;
@@ -226,45 +223,46 @@ export class PersonCreateComponent implements OnInit {
     if (this.model.coverImage_files && this.model.coverImage_files[0]) {
       await this.readFile();
     }
+    
 
-    let newPerson = new PersonCreateRequest();
-    newPerson.surname = this.model.surname;
-    newPerson.name = this.model.name;
-    newPerson.information = this.model.information;
-    newPerson.coverImageData = this.model.coverImageData;
-    newPerson.coverImage = this.model.coverImage;
-    newPerson.gender = this.model.gender;
-    newPerson.outlineText = this.model.outlineText;
-    newPerson.countryId = this.model.countryId;
-    if (!this.personId) {
-      this.personService.createPerson(newPerson).subscribe(
+    let newLabel = new LabelCreateRequest();
+    newLabel.labelName = this.model.labelName;
+    newLabel.information = this.model.information;
+    newLabel.outlineText=this.model.outlineText;
+    newLabel.founderId = this.model.founderId;
+    newLabel.foundingDate = this.model.foundingDate;
+    newLabel.coverImageData = this.model.coverImageData;
+    newLabel.coverImage = this.model.coverImage;
+    if (!this.labelId) {
+      this.labelService.createLabel(newLabel).subscribe(
         (responseCode) => {
+          console.log(responseCode);
           if (responseCode.hasOwnProperty('payload')) {
-            this.toastr.success('Person created!');
-            this.router.navigateByUrl('/person/search');
+            this.toastr.success('Label created!');
+            this.router.navigateByUrl(`/person/search`);
           } else {
-            this.toastr.error('Person creation failed!');
+            this.toastr.error('Label creation failed!');
           }
         },
         (errorMsg: string) => {
-          this.toastr.error('Person creation failed!');
+          this.toastr.error('Label creation failed!');
         }
       );
     } else {
-      newPerson['id'] = this.personId;
-      this.personService.updatePerson(newPerson).subscribe(
+      newLabel['id'] = +this.labelId;
+      this.labelService.updateLabel(newLabel, +this.labelId).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {
-            this.toastr.success('Person edited!');
-            this.router.navigateByUrl('/person/' + this.personId + '/overview');
+            this.toastr.success('Label edited!');
+            this.router.navigateByUrl('/label/' + this.labelId + '/overview');
           } else {
-            this.toastr.error('Person edit failed!');
+            this.toastr.error('Label edit failed!');
           }
         },
         (errorMsg: string) => {
-          this.toastr.error('Person edit failed!');
+          this.toastr.error('Label edit failed!');
         }
       );
     }
-  }
+  };
 }
