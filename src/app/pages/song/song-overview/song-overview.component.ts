@@ -122,6 +122,19 @@ export class SongOverviewComponent implements OnInit {
       },
     ],
   });
+  public galleryBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-images',
+        name: 'Gallery',
+        label: 'Gallery',
+        action: () =>
+          this.router.navigate([
+            './gallery/' + this.type.toLowerCase() + '/' + this.song.id,
+          ]),
+      },
+    ],
+  });
   public editBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
