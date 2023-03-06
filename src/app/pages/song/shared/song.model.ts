@@ -74,3 +74,12 @@ export class SongSearchRequest {
     this.pageSize = pageSize;
   }
 }
+export class FileUploadSegmentCreateRequest {
+  mediaObjectId: number;
+  fileName: string;
+  type: string;
+  fileSegment: number;
+  fileSegmentTotal: number;
+  fileSegmentContent: string | ArrayBuffer;
+  fileSegmentContent_files: File[];
+}
