@@ -21,9 +21,7 @@ import { AlbumCreateComponent } from './pages/album/album-create/album-create.co
 import { GeneratePlaylistComponent } from './pages/playlist/generate-playlist/generate-playlist.component';
 import { MultisearchRefreshComponent } from './pages/multisearch/multisearch-refresh/multisearch-refresh.component';
 import { LabelCreateComponent } from './pages/label/label-create/label-create.component';
-import { SongSearchComponent } from './pages/song/song-search/song-search.component';
-
-import { SongSimilarityOverviewComponent } from './pages/song/song-similarity-overview/song-similarity-overview.component';
+import { EraSearchComponent } from './pages/era/era-search/era-search.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -56,7 +54,5 @@ export const appRoutes: Routes = [
 
   { path: 'label/create', component: LabelCreateComponent },
   { path: 'label/update/:id', component: LabelCreateComponent },
-  { path: 'song/search', component: SongSearchComponent },
-
-  { path: 'song/similar-songs', component: SongSimilarityOverviewComponent },
+  { path: 'era/search', component: EraSearchComponent},
 ];
