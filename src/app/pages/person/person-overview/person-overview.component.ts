@@ -7,6 +7,10 @@ import { ZxConfirmation } from '@zff/zx-core';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ObjectType } from '../../shared/object-type.constant';
 import {
+  ArtistPersonResponse,
+  SongPersonResponse,
+  AlbumPersonResponse,
+  ConnectedMediaPersonResponse,
   PersonResponse,
   PersonUpdateFlagRequest,
 } from '../shared/person.model';
@@ -17,7 +21,6 @@ import { ToastrService } from 'ngx-toastr';
 import { isISO31661Alpha2 } from '../../../../../node_modules/validator';
 import {
   CountryResponse,
-  CountryUpdateRequest,
 } from '../../country/shared/country.model';
 import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
@@ -33,6 +36,11 @@ export class PersonOverviewComponent implements OnInit {
   testFlag: string = 'fi fi-';
   connectionSources = [];
   connectionTypes = [];
+  artists: ArtistPersonResponse[];
+  songs: SongPersonResponse[];
+  albums: AlbumPersonResponse[];
+  connectedMedias: ConnectedMediaPersonResponse[];
+
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     hideHeader: true,
@@ -43,12 +51,30 @@ export class PersonOverviewComponent implements OnInit {
     hideExpand: false,
     items: [
       {
+        name: 'Songs',
+        id: 'songsTab',
+        label: 'Songs',
+        icon: 'fal fa-music'
+      },
+
+      {
+        name: 'Albums',
+        id: 'albumsTab',
+        label: 'Albums',
+        icon: 'fal fa-film'
+      },
+      {
         name: 'Artists',
         id: 'artistsTab',
         label: 'Artists',
-        icon: 'fal fa-film',
+        icon: 'fal fa-users',
       },
-      { name: 'Albums', id: 'albumsTab', label: 'Albums', icon: 'fal fa-film' },
+      {
+        name: 'Connected Medias',
+        id: 'connectedMediasTab',
+        label: 'Connected Medias',
+        icon: 'fal fa-check-circle',
+      },
     ],
   });
 
@@ -65,12 +91,17 @@ export class PersonOverviewComponent implements OnInit {
     hideExpand: true,
     label: 'Person details',
   });
-
+  public songsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+  public albumsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
   public artistsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
-  public albumsBlockConfig: ZxBlockModel = new ZxBlockModel({
+  public connectedMediasBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
@@ -103,12 +134,31 @@ export class PersonOverviewComponent implements OnInit {
   public connectMediaBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
+        icon: 'fas fa-link',
         name: 'connectMedia',
         label: 'Connect Media',
         action: () => this.connectMediaPopup.show()
       },
     ],
   });
+
+  public createArtistFromPersonBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'far fa-plus-square',
+        name: 'createArtistFromPerson',
+        label: 'Create artist from person',
+        action: () => this.createArtistFromPerson()
+      }
+    ]
+  });
+
+  createArtistFromPerson(): void {
+    this.personService.createArtistFromPerson(this.person.id).subscribe(payload => {
+      console.log(payload);
+      this.toastr.success("Artist '" + payload.name + " " + payload.surname + "' created!");
+    });
+  }
 
   public popUpBlockConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
@@ -184,6 +234,54 @@ export class PersonOverviewComponent implements OnInit {
     ]
   });
 
+  songsColumnDefs = [
+    {
+      field: 'name',
+      headerName: 'Song Name',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Creted Date',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'playtime',
+      headerName: 'Playtime',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'dateOfRelease',
+      headerName: 'Date Of Release',
+      flex: 1,
+      floatingFilter: false,
+    }
+  ];
+
+  albumsColumnDefs = [
+    {
+      field: 'name',
+      headerName: 'Album name',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'status',
+      headerName: 'Album status',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'dateOfRelease',
+      headerName: 'Date Of Release',
+      flex: 1,
+      floatingFilter: false,
+    }
+  ];
+
   artistsColumnDefs = [
     {
       field: 'name',
@@ -191,35 +289,54 @@ export class PersonOverviewComponent implements OnInit {
       flex: 1,
       floatingFilter: false,
     },
+    {
+      field: 'surname',
+      headerName: 'Artist Surname',
+      flex: 1,
+      floatingFilter: false,
+    },
+
+    {
+      field: 'created',
+      headerName: 'Created Date',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      flex: 1,
+      floatingFilter: false,
+    }
   ];
 
-  albumsColumnDefs = [
+  connectedMediasColumnDefs = [
     {
-      field: 'name',
-      headerName: 'Album Name',
+      field: 'created',
+      headerName: 'Crated date',
+      flex: 1,
+      floatingFilter: false,
+    }, {
+      field: 'status',
+      headerName: 'Status',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfSongs',
-      headerName: 'Number of Songs',
+      field: 'objectType',
+      headerName: 'Connectede Media objectType',
       flex: 1,
       floatingFilter: false,
-    },
-    {
-      field: 'totalPlaytime',
-      headerName: 'Total Playtime',
-      flex: 1,
-      floatingFilter: false,
-    },
+    }
   ];
 
-  public artistGridOptions: GridOptions = {
-    columnDefs: this.artistsColumnDefs,
+
+  public songGridOptions: GridOptions = {
+    columnDefs: this.songsColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) => {
-      this.router.navigate(['./artist/' + event['data']['id'] + '/overview']);
+      this.router.navigate(['./song/' + event['data']['id'] + '/overview']);
     },
   } as GridOptions;
 
@@ -232,9 +349,30 @@ export class PersonOverviewComponent implements OnInit {
     },
   } as GridOptions;
 
+
+  public artistGridOptions: GridOptions = {
+    columnDefs: this.artistsColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.router.navigate(['./artist/' + event['data']['id'] + '/overview']);
+    },
+  } as GridOptions;
+
+
+  public connectedMediaGridOptions: GridOptions = {
+    columnDefs: this.connectedMediasColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.router.navigate(['./connectedMedia/' + event['data']['id'] + '/overview']);
+    },
+  } as GridOptions;
+
+
   person: PersonResponse;
-  linkedArtists: PersonResponse[];
-  linkedAlbums: any[];
+
+
 
   constructor(
     private router: Router,
@@ -243,10 +381,11 @@ export class PersonOverviewComponent implements OnInit {
     public confirmation: ZxConfirmation,
     private connectedMediaService: ConnectedMediaService,
     private toastr: ToastrService
-  ) {}
+  ) { }
   public linkPerson: ZxButtonModel = new ZxButtonModel({
     items: [
       {
+        icon: 'fas fa-flag',
         label: 'Link person to country',
         action: () => this.onShow(),
       },
@@ -255,7 +394,7 @@ export class PersonOverviewComponent implements OnInit {
 
   public model: any = {};
   public formConfig: Definition = new Definition({});
-  public updatePerson() {}
+  public updatePerson() { }
   public lov: CountryResponse[];
   flag: string;
   selectedCountry: CountryResponse = new CountryResponse();
@@ -332,8 +471,13 @@ export class PersonOverviewComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.personService.getPerson(params.id).subscribe((response) => {
         this.person = response;
+        this.artists = response.artists;
+        this.albums = response.albums;
+        this.connectedMedias = response.connectedMedia;
+        this.songs = response.songs;
         this.setPopUpFormConfig();
         this.personIsLoading = false;
+
         this.testFlag = this.testFlag
           .concat(this.person.flagAbbreviation)
           .toLowerCase();
@@ -412,8 +556,6 @@ export class PersonOverviewComponent implements OnInit {
     this.connectedMediaModel.connectionSource = Object.keys(ConnectedMediaConnectionSource)[parseInt(this.connectedMediaModel.connectionSource) - 1];
     this.connectedMediaModel.connectionType = Object.keys(ConnectedMediaConnectionType)[parseInt(this.connectedMediaModel.connectionType) - 1];
     this.createConnectedMediaDetail();
-
-
   }
 
   createConnectedMediaDetail() {

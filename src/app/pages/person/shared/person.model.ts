@@ -8,6 +8,11 @@ export class PersonResponse {
   fullName: string;
   gender: string;
   flagAbbreviation: string;
+  artists: ArtistPersonResponse[];
+  songs: SongPersonResponse[];
+  albums: AlbumPersonResponse[];
+  connectedMedias: ConnectedMediaPersonResponse[];
+  objectType: string;
 }
 
 export class PersonSearchRequest {
@@ -65,4 +70,23 @@ export class PersonListChartResponse {
 export class PersonUpdateFlagRequest {
   personId: number;
   countryId: number;
+}
+
+
+export class ArtistPersonResponse {
+  id: number;
+  name: string;
+}
+export class SongPersonResponse {
+  id: number;
+  name: string;
+}
+
+export class AlbumPersonResponse {
+  id: number;
+  name: string;
+}
+export class ConnectedMediaPersonResponse {
+  id: number;
+  name: string;
 }
