@@ -36,13 +36,10 @@ export class PersonOverviewComponent implements OnInit {
   testFlag: string = 'fi fi-';
   connectionSources = [];
   connectionTypes = [];
-  //moje
   artists: ArtistPersonResponse[];
   songs: SongPersonResponse[];
   albums: AlbumPersonResponse[];
   connectedMedias: ConnectedMediaPersonResponse[];
-
-  //
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -70,13 +67,13 @@ export class PersonOverviewComponent implements OnInit {
         name: 'Artists',
         id: 'artistsTab',
         label: 'Artists',
-        icon: 'fal fa-persons',
+        icon: 'fal fa-users',
       },
       {
         name: 'Connected Medias',
         id: 'connectedMediasTab',
         label: 'Connected Medias',
-        icon: 'fal fa-film'
+        icon: 'fal fa-check-circle',
       },
     ],
   });
@@ -156,7 +153,7 @@ export class PersonOverviewComponent implements OnInit {
     ]
   });
 
-  createArtistFromPerson():void {
+  createArtistFromPerson(): void {
     this.personService.createArtistFromPerson(this.person.id).subscribe(payload => {
       console.log(payload);
       this.toastr.success("Artist '" + payload.name + " " + payload.surname + "' created!");
