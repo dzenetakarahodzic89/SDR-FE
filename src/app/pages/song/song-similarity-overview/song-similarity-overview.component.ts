@@ -78,8 +78,7 @@ export class SongSimilarityOverviewComponent implements OnInit {
 
   audioListA = [];
   audioListB = [];
-  songSimilarity: SongSimilarityResponse[];
-  songSimilarityOne: SongSimilarityResponse;
+  songSimilarity: SongSimilarityResponse;
   songSimilarityDetail: SongSimilarityDetailResponse[];
   songSimilarityDetailOne: SongSimilarityDetailResponse;
   song: SongResponse;
@@ -91,40 +90,33 @@ export class SongSimilarityOverviewComponent implements OnInit {
     this.audioListB = [];
 
     this.songSimilarityIsLoading = true;
-    this.songService.getSongSimilarity().subscribe((response) => {
-      this.songSimilarity = response;
-      this.songSimilarityIsLoading = false;
+    this.songService
+      .getSongSimilarity()
+      .subscribe((response: SongSimilarityResponse) => {
+        this.songSimilarity = response;
+        this.songSimilarityIsLoading = false;
 
-      let randomIndex = Math.floor(
-        Math.random() * (this.songSimilarity.length - 1)
-      );
+        const dateA = new Date(this.songSimilarity.albumAReleaseDate);
+        this.yearA = dateA.getFullYear();
+        const dateB = new Date(this.songSimilarity.albumAReleaseDate);
+        this.yearB = dateB.getFullYear();
 
-      this.songSimilarityOne = this.songSimilarity[randomIndex];
-
-      const dateA = new Date(this.songSimilarityOne.albumAReleaseDate);
-      this.yearA = dateA.getFullYear();
-      const dateB = new Date(this.songSimilarityOne.albumAReleaseDate);
-      this.yearB = dateB.getFullYear();
-
-      this.audioListA.push({
-        url: this.songSimilarityOne.songAAudioUrl,
-      });
-      this.audioListB.push({
-        url: this.songSimilarityOne.songBAudioUrl,
-      });
-
-      console.log(this.audioListA);
-      console.log(this.audioListB);
-
-      const request = new SongSimilarityDetailRequest();
-      request.id = this.songSimilarityOne.id;
-      this.songService
-        .getSongSimilarityDetail(request)
-        .subscribe((response: SongSimilarityDetailResponse[]) => {
-          this.songSimilarityDetail = response;
-          this.songSimilarityDetailOne = response[0];
-          this.songSimilarityIsLoading = false;
+        this.audioListA.push({
+          url: this.songSimilarity.songAAudioUrl,
         });
-    });
+        this.audioListB.push({
+          url: this.songSimilarity.songBAudioUrl,
+        });
+
+        const request = new SongSimilarityDetailRequest();
+        request.id = this.songSimilarity.id;
+        this.songService
+          .getSongSimilarityDetail(request)
+          .subscribe((response: SongSimilarityDetailResponse[]) => {
+            this.songSimilarityDetail = response;
+            this.songSimilarityDetailOne = response[0];
+            this.songSimilarityIsLoading = false;
+          });
+      });
   }
 }
