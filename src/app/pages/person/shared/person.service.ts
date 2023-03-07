@@ -30,6 +30,12 @@ export class PersonService {
     );
   }
 
+  createArtistFromPerson(personId) {
+    return this.api.post(PersonApi.POST_ARTIST.replace("#", personId)).pipe(
+      map((response) => response['payload'])
+    );
+  }
+
   updatePerson(person: PersonCreateRequest) {
     return this.api.post(PersonApi.UPDATE_PERSON, person).pipe(
       map((response) => {

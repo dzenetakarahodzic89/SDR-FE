@@ -10,4 +10,5 @@ export class PersonApi {
   public static GET_PERSONN = '/sdrbe/person/#';
 
   public static GET_COUNTRIES = '/sdrbe/country/all';
+  public static POST_ARTIST = '/sdrbe/artist/create-from-person/#';
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SongApi } from './song-api.constant';
 import {
   AlbumResponse,
@@ -9,6 +9,9 @@ import {
   FileUploadSegmentCreateRequest,
   GenreResponse,
   SongResponse,
+  SongSimilarityDetailResponse,
+  SongSimilarityRequest,
+  SongSimilarityResponse,
 } from './song.model';
 
 @Injectable({
@@ -18,15 +21,6 @@ export class SongService {
   constructor(private api: ZxApi) {}
   getSong(id: number) {
     return this.api.get(SongApi.GET_SONG.replace('#', id.toString())).pipe(
-      map((response) => {
-        const message = response['payload'];
-        return message;
-      })
-    );
-  }
-
-  searchSongs(searchParams): Observable<SongResponse[]> {
-    return this.api.post(SongApi.SEARCH_SONGS, searchParams).pipe(
       map((response) => {
         const message = response['payload'];
         return message;
@@ -85,5 +79,32 @@ export class SongService {
           return message;
         })
       );
+  }
+  getSongSimilarityDetail(
+    request: SongSimilarityRequest
+  ): Observable<SongSimilarityDetailResponse[]> {
+    return this.api.get(SongApi.GET_SONG_SIMILARITY_DETAILS, request).pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
+  }
+  searchSongs(searchParams): Observable<SongResponse[]> {
+    return this.api.post(SongApi.SEARCH_SONGS, searchParams).pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
+  }
+
+  getSongSimilarity(): Observable<SongSimilarityResponse[]> {
+    return this.api.get(SongApi.GET_SONG_SIMILARITY).pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
   }
 }
