@@ -36,13 +36,10 @@ export class PersonOverviewComponent implements OnInit {
   testFlag: string = 'fi fi-';
   connectionSources = [];
   connectionTypes = [];
-  //moje
   artists: ArtistPersonResponse[];
   songs: SongPersonResponse[];
   albums: AlbumPersonResponse[];
   connectedMedias: ConnectedMediaPersonResponse[];
-
-  //
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
