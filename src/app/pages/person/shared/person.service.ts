@@ -11,7 +11,7 @@ import {
 
 @Injectable()
 export class PersonService {
-  constructor(private api: ZxApi) {}
+  constructor(private api: ZxApi) { }
 
   searchPersons(searchParams): Observable<PersonResponse[]> {
     return this.api.get(PersonApi.SEARCH_STORIES, searchParams).pipe(

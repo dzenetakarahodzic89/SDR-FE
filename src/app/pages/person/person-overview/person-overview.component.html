@@ -8,23 +8,43 @@
     </zx-block>
     <div class="w-100 pl-10 pr-10">
       <div class="row">
-        <h1>{{ person.fullName }}</h1>
+        <h1>{{ person.name }}</h1>
         <span class="{{ testFlag }}"></span>
       </div>
       <div class="row">
-        <zx-button id="galleryBtn" zx-block-action [config]="galleryButton"></zx-button>
+        <zx-button
+          id="galleryBtn"
+          zx-block-action
+          [config]="galleryButton"
+        ></zx-button>
         <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
-        <zx-button id="createArtistFromPerson" zx-block-action [config]="createArtistFromPersonBtn"></zx-button>
-        <zx-button id="linkPerson" zx-block-action [config]="linkPerson"></zx-button>
-        <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
+        <zx-button
+          id="linkPerson"
+          zx-block-action
+          [config]="linkPerson"
+        ></zx-button>
+        <zx-button
+          id="connectMedia"
+          zx-block-action
+          [config]="connectMediaBtn"
+        ></zx-button>
         <zx-popup [config]="connectMediaPopup">
           <div zx-popup-body>
             <zx-block [config]="popUpBlockConfig">
-              <zx-form-loader *ngIf="popUpFormConfig" zx-block-body [component]="popUpFormConfig"
-                [model]="connectedMediaModel" class="col-24"></zx-form-loader>
+              <zx-form-loader
+                *ngIf="popUpFormConfig"
+                zx-block-body
+                [component]="popUpFormConfig"
+                [model]="connectedMediaModel"
+                class="col-24"
+              ></zx-form-loader>
             </zx-block>
           </div>
-          <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+          <zx-button
+            zx-popup-footer
+            [config]="popupFooterButtons"
+            class="align-right"
+          ></zx-button>
         </zx-popup>
       </div>
       <hr />
@@ -35,9 +55,15 @@
   <div *ngIf="country">
     <zx-popup [config]="popup">
       <div zx-popup-body>
-        <zx-form-loader [component]="formConfig" [model]="model"></zx-form-loader>
+        <zx-form-loader
+          [component]="formConfig"
+          [model]="model"
+        ></zx-form-loader>
         <div style="text-align: right">
-          <span style="margin-right: 5px; margin-left: 5px; font-size: 18px" class="{{ flag }}"></span>
+          <span
+            style="margin-right: 5px; margin-left: 5px; font-size: 18px"
+            class="{{ flag }}"
+          ></span>
           <zx-button [config]="mainButtons"></zx-button>
         </div>
       </div>
@@ -50,12 +76,46 @@
     <zx-block [config]="detailsBlockConfig" class="col-10">
       <div zx-block-body>
         <zx-tabs class="h-100" [config]="tabConfig">
-          <zx-block zx-tab-item id="artistsTab" [config]="artistsBlockConfig">
-            <zx-grid zx-block-body [gridOptions]="artistGridOptions" [source]="linkedArtists" domLayout="autoHeight">
+          <zx-block zx-tab-item id="songsTab" [config]="songsBlockConfig">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="songGridOptions"
+              [source]="songs"
+              domLayout="autoHeight"
+            >
             </zx-grid>
           </zx-block>
+
           <zx-block zx-tab-item id="albumsTab" [config]="albumsBlockConfig">
-            <zx-grid zx-block-body [gridOptions]="albumGridOptions" [source]="linkedAlbums" domLayout="autoHeight">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="albumGridOptions"
+              [source]="albums"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </zx-block>
+
+          <zx-block zx-tab-item id="artistsTab" [config]="artistsBlockConfig">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="artistGridOptions"
+              [source]="artists"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </zx-block>
+          <zx-block
+            zx-tab-item
+            id="connectedMediasTab"
+            [config]="connectedMediasBlockConfig"
+          >
+            <zx-grid
+              zx-block-body
+              [gridOptions]="connectedMediaGridOptions"
+              [source]="connectedMedias"
+              domLayout="autoHeight"
+            >
             </zx-grid>
           </zx-block>
         </zx-tabs>
