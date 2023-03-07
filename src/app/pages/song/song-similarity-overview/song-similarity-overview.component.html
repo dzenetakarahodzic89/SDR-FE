@@ -1,0 +1,66 @@
+<div class="row">
+  <zx-preloader *ngIf="songSimilarityIsLoading"></zx-preloader>
+</div>
+<div class="row">
+  <div class="col-12">
+    <h1 class="title">Similar song</h1>
+  </div>
+  <div class="col-12" style="margin-top: 20px; text-align: end">
+    <zx-button id="addGrade" [config]="addGrade"></zx-button>
+    <zx-button id="nextSong" [config]="nextSong"></zx-button>
+    <zx-button id="linkSong" [config]="linkSong"></zx-button>
+  </div>
+</div>
+
+<div class="row-5" *ngIf="songSimilarityOne">
+  <div class="col-9">
+    <zx-block [config]="containerBlockConfig" style="text-align: center">
+      <img zx-block-body [src]="songSimilarityOne.songAimageUrl" width="250" />
+    </zx-block>
+    <zx-block>
+      <div zx-block-body>
+        <h1>{{ songSimilarityOne.songAName }}</h1>
+        <h2>{{ songSimilarityOne.albumAName }} - {{ yearA }}</h2>
+        <div *ngIf="songSimilarityOne.songAAudioUrl">
+          <ang-music-player [audioList]="audioListA"></ang-music-player>
+        </div>
+      </div>
+    </zx-block>
+  </div>
+  <div class="col-6">
+    <zx-block [config]="containerBlockConfig">
+      <zx-grid
+        zx-block-body
+        [gridOptions]="songSimilarityDetailGridOptions"
+        [source]="songSimilarityDetail"
+        domLayout="autoHeight"
+      >
+      </zx-grid>
+    </zx-block>
+    <zx-block [config]="containerBlockConfig">
+      <div zx-block-body>
+        <h2 style="text-align: center">
+          Total Similarity score:
+          {{ songSimilarityDetailOne?.totalSimilarityScore }}
+        </h2>
+        <h2 style="text-align: center">
+          Number of scores: {{ songSimilarityDetail?.length }}
+        </h2>
+      </div>
+    </zx-block>
+  </div>
+  <div class="col-9">
+    <zx-block [config]="containerBlockConfig" style="text-align: center">
+      <img zx-block-body [src]="songSimilarityOne.songBimageUrl" width="250" />
+    </zx-block>
+    <zx-block>
+      <div zx-block-body>
+        <h1>{{ songSimilarityOne.songBName }}</h1>
+        <h2>{{ songSimilarityOne.albumBName }} - {{ yearB }}</h2>
+        <div *ngIf="songSimilarityOne.songBAudioUrl">
+          <ang-music-player [audioList]="audioListB"></ang-music-player>
+        </div>
+      </div>
+    </zx-block>
+  </div>
+</div>

@@ -4,20 +4,13 @@ import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlbumApi } from './album-api.constant';
+import { AlbumSearchRequest } from './album.model';
 import { AlbumCreateRequest, SongOfAlbumUpdateRequest } from './album.model';
 
 @Injectable()
 export class AlbumService {
   constructor(private api: ZxApi) { }
 
-  getAlbum(id: number) {
-    return this.api.get(AlbumApi.GET_ALBUM.replace('#', id.toString())).pipe(
-      map((response) => {
-        const message = response['payload'];
-        return message;
-      })
-    );
-  }
   updateAlbum(person: AlbumCreateRequest, id: number) {
     return this.api
       .put(AlbumApi.UPDATE_ALBUM.replace('#', id.toString()), person)
@@ -27,6 +20,49 @@ export class AlbumService {
         })
       );
   }
+
+    getAlbum(id: number) {
+        return this.api.get(AlbumApi.GET_ALBUM.replace("#", id.toString())).pipe(
+            map(response => {
+                console.log("Response: ", response);
+                const message = response['payload'];
+                return message;
+            })
+        );
+    }
+
+    searchAlbums(searchParams:AlbumSearchRequest) {
+        return this.api.get(AlbumApi.SEARCH_ALBUMS,searchParams).pipe(
+            map(response => {
+                console.log("Response: ", response);
+                const message = response['payload'];
+                return message;
+            })
+        );
+    }
+
+    getGenres(){
+        return this.api.get('/sdrbe/genre').pipe(
+            map(response=>{
+                console.log("Response: ", response);
+                const message = response['payload'];
+                console.log("Message:" ,message)
+                return message;
+            })
+        )
+    }
+
+    getErasForFilter(){
+        return this.api.get('/sdrbe/era/lov').pipe(
+            map(response=>{
+                console.log("Response: ", response);
+                const message = response['payload'];
+                console.log("Message:" ,message)
+                return message;
+            })
+        )
+    }
+    
 
   createAlbum(person: AlbumCreateRequest) {
     return this.api.post(AlbumApi.CREATE_ALBUM, person).pipe(
@@ -81,3 +117,8 @@ export class AlbumService {
       );
   }
 }
+
+
+
+
+
