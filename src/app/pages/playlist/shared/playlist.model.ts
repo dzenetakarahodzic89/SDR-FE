@@ -48,9 +48,12 @@ export class GenreResponse {
     mainGenre: GenreResponse;
 }
 
-export class SongResponse {
-    songId: number;
-    songName: string;
-    artistId: number;
-    artistName: string;
+export class GenreNameResponse {
+    id: number;
+    name: string;
+}
+
+export class SongNameResponse {
+    id: number;
+    name: string;
 }
