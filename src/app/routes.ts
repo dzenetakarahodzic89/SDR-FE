@@ -14,6 +14,7 @@ import { PlaylistSearchComponent } from './pages/playlist/playlist-search/playli
 import { AlbumOverviewComponent } from './pages/album/album-overview/album-overview.component';
 
 import { SongOverviewComponent } from './pages/song/song-overview/song-overview.component';
+import { SongCreateComponent } from './pages/song/song-create/song-create.component';
 
 import { AlbumSearchComponent } from './pages/album/album-search/album-search.component';
 
@@ -55,4 +56,6 @@ export const appRoutes: Routes = [
   { path: 'label/create', component: LabelCreateComponent },
   { path: 'label/update/:id', component: LabelCreateComponent },
   { path: 'era/search', component: EraSearchComponent},
+  { path: 'song/create', component: SongCreateComponent },
+  { path: 'song/update/:id', component: SongCreateComponent },
 ];

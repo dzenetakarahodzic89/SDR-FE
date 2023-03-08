@@ -11,9 +11,9 @@ import { SongSimilarityOverviewComponent } from './song-similarity-overview/song
 
 
 @NgModule({
-  declarations: [SongOverviewComponent, SongSearchComponent,  SongSimilarityOverviewComponent],
+  declarations: [SongOverviewComponent, SongSearchComponent,  SongSimilarityOverviewComponent, SongCreateComponent],
   imports: [SharedModule, EditorModule, AutocompleteLibModule, AngMusicPlayerModule],
-  exports: [SongOverviewComponent, SongSearchComponent, SongSimilarityOverviewComponent],
+  exports: [SongOverviewComponent, SongSearchComponent, SongSimilarityOverviewComponent, SongCreateComponent],
   providers: [
     SongService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },

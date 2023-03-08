@@ -13,12 +13,14 @@ import {
   SongSimilarityRequest,
   SongSimilarityResponse,
 } from './song.model';
+import { SongCreateRequest } from './song.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SongService {
   constructor(private api: ZxApi) {}
+
   getSong(id: number) {
     return this.api.get(SongApi.GET_SONG.replace('#', id.toString())).pipe(
       map((response) => {
@@ -32,7 +34,16 @@ export class SongService {
     return this.api.get(SongApi.GET_GENRES_DROPDOWN).pipe(
       map((response) => {
         const stories = response['payload'] as GenreResponse[];
-        return stories;
+        return stories;      
+        })
+    );
+  }
+  
+  getSongs() {
+    return this.api.get(SongApi.GET_SONGS).pipe(
+      map((response) => {
+        const songs = response['payload'];
+        return songs;
       })
     );
   }
@@ -42,6 +53,14 @@ export class SongService {
       map((response) => {
         const stories = response['payload'] as AlbumResponse[];
         return stories;
+       })
+    );
+  }
+  
+  createSong(song: SongCreateRequest) {
+    return this.api.post(SongApi.CREATE_SONG, song).pipe(
+      map((response) => {
+        return response;
       })
     );
   }
@@ -94,7 +113,26 @@ export class SongService {
     return this.api.post(SongApi.SEARCH_SONGS, searchParams).pipe(
       map((response) => {
         const message = response['payload'];
-        return message;
+        return message;      
+        })
+    );
+  }
+  
+  updateSong(songId: number, song: SongCreateRequest) {
+    return this.api
+      .put(SongApi.UPDATE_SONG.replace('#', songId.toString()), song)
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
+  }
+
+  getGenres() {
+    return this.api.get(SongApi.GET_GENRES).pipe(
+      map((response) => {
+        const genres = response['payload'];
+        return genres;
       })
     );
   }
@@ -103,7 +141,27 @@ export class SongService {
     return this.api.get(SongApi.GET_SONG_SIMILARITY).pipe(
       map((response) => {
         const message = response['payload'];
-        return message;
+        return message;      
+        })
+    );
+  }
+  
+  getSubgenres(genreId: number) {
+    return this.api
+      .get(SongApi.GET_SUBGENRES.replace('#', genreId.toString()))
+      .pipe(
+        map((response) => {
+          const subgenres = response['payload'];
+          return subgenres;
+        })
+      );
+  }
+
+  getChordProgressions() {
+    return this.api.get(SongApi.GET_CHORD_PROGRESSIONS).pipe(
+      map((response) => {
+        const chordProgressions = response['payload'];
+        return chordProgressions;
       })
     );
   }

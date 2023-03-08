@@ -8,9 +8,13 @@ export class SongResponse {
   information: string;
   dateOfRelease: Date;
   label: string;
-  chordProgression: string;
+  remixId?: number;
+  coverId?: number;
+  playtime?: string;
+  chordProgression?: string;
   genreId: number;
   genre: string;
+  subgenreId?: number;
   subgenres: SubGenres;
   audioUrl: string;
   artists: ArtistSongResponse[];
@@ -114,4 +118,43 @@ export class SongSimilarityDetailRequest {
 
 export class SongSimilarityRequest {
   id: number;
+}
+
+export class SongCreateRequest {
+  id?: number;
+  name: string;
+  outlineText: string;
+  information: string;
+  isRemix?: boolean;
+  isCover?: boolean;
+  remixId?: number;
+  coverId?: number;
+  dateOfRelease?: Date;
+  chordProgressionId?: number;
+  genreId: number;
+  subgenreId?: number;
+  playtimeHours?: number;
+  playtimeMinutes?: number;
+  playtimeSeconds?: number;
+  playtime?: string;
+  coverImageData: string | ArrayBuffer;
+  coverImage: string;
+  coverImage_files: File[];
+}
+export class Song {
+  id: number;
+  name: string;
+}
+export class ChordProgression {
+  id: number;
+  name: string;
+}
+export class Genre {
+  id: number;
+  name: string;
+  mainGenre: Genre;
+}
+export class Subgenre {
+  id: number;
+  name: string;
 }
