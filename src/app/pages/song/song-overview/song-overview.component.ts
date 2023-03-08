@@ -357,7 +357,6 @@ export class SongOverviewComponent implements OnInit {
       if (response['payload'] != undefined)
         this.toastr.success("Successfully linked songs together!");
     });
-    console.log(this.similarityCreateRequest);
   }
 
   public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
