@@ -1,3 +1,10 @@
+export class SongResponseAll {
+  songId: number;
+  songName: string;
+  artistId: number;
+  artistName: string;
+};
+
 export class SongResponse {
   id: number;
   name: string;
@@ -83,6 +90,11 @@ export class FileUploadSegmentCreateRequest {
   fileSegmentContent: string | ArrayBuffer;
   fileSegmentContent_files: File[];
 }
+
+export class SimilarityCreateRequest {
+  songA: number;
+  songB: number;
+};
 
 export class SongSimilarityResponse {
   id: number;

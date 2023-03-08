@@ -1,5 +1,5 @@
 <div zx-block-body class="row">
-  <zx-preloader *ngIf="songIsLoading"></zx-preloader>
+  <zx-preloader *ngIf="songIsLoading || songsAreLoading"></zx-preloader>
 </div>
 
 <div zx-body *ngIf="song" class="w-auto">
@@ -51,6 +51,24 @@
                 zx-block-action
                 [config]="uploadSongBtn"
               ></zx-button>
+              <zx-popup [config]="linkPopupConfig">
+                <div zx-popup-body>
+                  <zx-block [config]="linkPopupBlockConfig">
+                    <zx-form-loader
+                      *ngIf="linkPopupFormConfig && !songsAreLoading"
+                      zx-block-body
+                      [component]="linkPopupFormConfig"
+                      [model]="similarityCreateRequest"
+                      class="col-24"
+                    ></zx-form-loader>
+                  </zx-block>
+                </div>
+                <zx-button
+                  zx-popup-footer
+                  [config]="linkPopupFooterButtons"
+                  class="align-right"
+                ></zx-button>
+              </zx-popup>
               <zx-popup [config]="popup">
                 <div zx-popup-body>
                   <zx-block [config]="popUpBlockConfig">

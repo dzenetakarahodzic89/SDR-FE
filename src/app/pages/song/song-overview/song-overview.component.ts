@@ -16,6 +16,7 @@ import { ObjectType } from '../../shared/object-type.constant';
 import {
   ArtistSongResponse,
   FileUploadSegmentCreateRequest,
+  SimilarityCreateRequest,
   SongResponse,
 } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
@@ -158,6 +159,7 @@ export class SongOverviewComponent implements OnInit {
       {
         name: 'Link similar songs',
         label: 'Link similar songs',
+        action: () => this.linkPopupConfig.show(),
       },
     ],
   });
@@ -229,8 +231,13 @@ export class SongOverviewComponent implements OnInit {
   });
 
   public popUpBlockConfig: ZxBlockModel;
+  public linkPopupBlockConfig: ZxBlockModel;
+  
+  similarityCreateRequest: SimilarityCreateRequest;
 
   public popUpFormBlockConfig: Definition;
+  public linkPopupFormConfig: Definition;
+
   public popUpFormConfig: Definition;
   public connectedMediaModel: ConnectedMediaDetailCreateRequest;
 
@@ -250,6 +257,14 @@ export class SongOverviewComponent implements OnInit {
     name: 'connectionType',
     label: 'Connection Type',
     validation: { required: true },
+  });
+
+  songInput: Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-24'],
+    type: 'filter',
+    name: 'songB',
+    label: 'Song',
   });
 
   linkInput = new Definition({
@@ -279,11 +294,70 @@ export class SongOverviewComponent implements OnInit {
     });
   }
 
+  public setLinkPopupConfig() {
+    this.linkPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Connect song "' + this.song.name + '" to:',
+    });
+
+    this.linkPopupFormConfig = new Definition({
+      label: 'Link songs',
+      name: 'linkSongs',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        this.songInput
+      ],
+      model: this.similarityCreateRequest
+    });
+  }
+
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
     hideCloseButton: false,
     size: 'col-12',
   });
+
+  public linkPopupConfig: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+
+  public linkPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'link',
+        description: 'Link',
+        label: 'Link',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.linkPopupConfig.hide();
+          this.linkSongs();
+        },
+      },
+      {
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.linkPopupConfig.hide();
+          this.similarityCreateRequest = new SimilarityCreateRequest();
+        },
+      }
+    ]
+  });
+
+  linkSongs():void {
+    this.similarityCreateRequest.songA = this.song.id;
+    this.songService.saveSimilarity(this.similarityCreateRequest).subscribe(response => {
+      if (response['payload'] != undefined)
+        this.toastr.success("Successfully linked songs together!");
+    });
+  }
 
   public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -314,6 +388,7 @@ export class SongOverviewComponent implements OnInit {
 
   connectionSources = [];
   connectionTypes = [];
+  songsAreLoading = false;
 
   constructor(
     private router: Router,
@@ -355,6 +430,7 @@ export class SongOverviewComponent implements OnInit {
     }
   };
   ngOnInit(): void {
+    this.loadData();
     let id = 1;
     this.uploadSongModel = new FileUploadSegmentCreateRequest();
     Object.values(ConnectedMediaConnectionSource).forEach((t) => {
@@ -372,15 +448,18 @@ export class SongOverviewComponent implements OnInit {
     });
     this.typeInput.list = this.connectionTypes;
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
-    this.loadData();
+    this.similarityCreateRequest = new SimilarityCreateRequest();
   }
 
   loadData(): void {
     this.songIsLoading = true;
     this.route.params.subscribe((params) => {
+      this.songsAreLoading = true;
+      this.getSongs();
       this.songService.getSong(params.id).subscribe((response) => {
         this.song = response;
         this.setPopUpFormConfig();
+        this.setLinkPopupConfig();
         this.setUpSongUploadFormConfig();
         this.artists = response.artists;
         this.songIsLoading = false;
@@ -437,5 +516,38 @@ export class SongOverviewComponent implements OnInit {
           this.toastr.error('Failed to add connected media!');
         }
       );
+  }
+
+  getSongs() {
+    this.songService.getAllSongs().subscribe(response => {
+      let songsMap = new Map();
+      response.forEach(s => {
+        if (songsMap.has(s.songId)) {
+          let titleParts = songsMap.get(s.songId);
+          titleParts.push(s.artistName);
+          songsMap.set(s.songId, titleParts);
+        } else {
+          let titleParts = new Array();
+          titleParts.push(s.songName);
+          titleParts.push(s.artistName);
+          songsMap.set(s.songId, titleParts);
+        }
+      })
+      let songs = new Array(songsMap.size);
+      let i = 0;
+      songsMap.forEach((v, k) => {
+        let name = v[0] + " - ";
+        for (let j = 1; j < v.length; j++)
+          if (j < v.length - 1)
+            name += " " + v[j] + ",";
+          else
+            name += " " + v[j];
+        let song = { id: k, name: name };
+        songs[i] = song;
+        i++;
+      });
+      this.linkPopupFormConfig.children[0].list = songs;
+      this.songsAreLoading = false;
+    });
   }
 }
