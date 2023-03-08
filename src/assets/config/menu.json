@@ -40,6 +40,13 @@
         "attributes": {}
       },
       {
+        "code": "HUB_ERA_STATIC",
+        "icon": "fad fa-opera",
+        "label": "Eras",
+        "url": "era/search",
+        "attributes": {}
+      },
+      {
         "code": "HUB_MULTISEARCH_STATIC",
         "icon": "fad fa-repeat",
         "label": "Multi search refresh",
