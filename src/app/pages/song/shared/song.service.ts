@@ -114,8 +114,7 @@ export class SongService {
       })
     );
   }
-
-  getSongSimilarity(): Observable<SongSimilarityResponse[]> {
+  getSongSimilarity() {
     return this.api.get(SongApi.GET_SONG_SIMILARITY).pipe(
       map((response) => {
         const message = response['payload'];
