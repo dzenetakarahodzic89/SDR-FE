@@ -8,7 +8,9 @@ import {
   ArtistResponse,
   FileUploadSegmentCreateRequest,
   GenreResponse,
+  SimilarityCreateRequest,
   SongResponse,
+  SongResponseAll,
   SongSimilarityDetailResponse,
   SongSimilarityRequest,
   SongSimilarityResponse,
@@ -19,6 +21,20 @@ import {
 })
 export class SongService {
   constructor(private api: ZxApi) {}
+
+  getAllSongs(): Observable<SongResponseAll[]> {
+    return this.api.get(SongApi.GET_SONGS).pipe(
+      map((response) => {
+        const songs: SongResponseAll[] = response['payload'];
+        return songs;
+      })
+    )
+  }
+
+  saveSimilarity(similarityCreateRequest: SimilarityCreateRequest): Observable<any> {
+    return this.api.post(SongApi.POST_SIMILARITY, similarityCreateRequest);
+  }
+
   getSong(id: number) {
     return this.api.get(SongApi.GET_SONG.replace('#', id.toString())).pipe(
       map((response) => {
