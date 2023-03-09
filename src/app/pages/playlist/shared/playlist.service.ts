@@ -3,7 +3,7 @@ import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PlaylistApi } from './playlist-api.constant';
-import { GenreResponse, PlaylistResponse, SongResponse } from './playlist.model';
+import { GenreNameResponse, GenreResponse, PlaylistResponse, SongNameResponse} from './playlist.model';
 
 @Injectable()
 export class PlaylistService {
@@ -54,10 +54,19 @@ export class PlaylistService {
     )
   }
 
-  getAllSongs(): Observable<SongResponse[]> {
-    return this.api.get(PlaylistApi.GET_SONGS).pipe(
+  getAllGenreNames(): Observable<GenreNameResponse[]> {
+    return this.api.get(PlaylistApi.GET_GENRE_NAMES).pipe(
       map((response) => {
-        const songs: SongResponse[] = response['payload'];
+        const genres: GenreResponse[] = response['payload'];
+        return genres;
+      })
+    )
+  }
+
+  getAllSongNames(): Observable<SongNameResponse[]> {
+    return this.api.get(PlaylistApi.GET_SONG_NAMES).pipe(
+      map((response) => {
+        const songs: SongNameResponse[] = response['payload'];
         return songs;
       })
     )

@@ -12,16 +12,16 @@
   </div>
 </div>
 
-<div class="row-5" *ngIf="songSimilarityOne">
+<div class="row-5" *ngIf="songSimilarity">
   <div class="col-9">
     <zx-block [config]="containerBlockConfig" style="text-align: center">
-      <img zx-block-body [src]="songSimilarityOne.songAimageUrl" width="250" />
+      <img zx-block-body [src]="songSimilarity.songAimageUrl" width="280" />
     </zx-block>
     <zx-block>
       <div zx-block-body>
-        <h1>{{ songSimilarityOne.songAName }}</h1>
-        <h2>{{ songSimilarityOne.albumAName }} - {{ yearA }}</h2>
-        <div *ngIf="songSimilarityOne.songAAudioUrl">
+        <h1>{{ songSimilarity.songAName }}</h1>
+        <h2>{{ songSimilarity.albumAName }} - {{ yearA }}</h2>
+        <div *ngIf="songSimilarity.songAAudioUrl">
           <ang-music-player [audioList]="audioListA"></ang-music-player>
         </div>
       </div>
@@ -51,13 +51,13 @@
   </div>
   <div class="col-9">
     <zx-block [config]="containerBlockConfig" style="text-align: center">
-      <img zx-block-body [src]="songSimilarityOne.songBimageUrl" width="250" />
+      <img zx-block-body [src]="songSimilarity.songBimageUrl" width="280" />
     </zx-block>
     <zx-block>
       <div zx-block-body>
-        <h1>{{ songSimilarityOne.songBName }}</h1>
-        <h2>{{ songSimilarityOne.albumBName }} - {{ yearB }}</h2>
-        <div *ngIf="songSimilarityOne.songBAudioUrl">
+        <h1>{{ songSimilarity.songBName }}</h1>
+        <h2>{{ songSimilarity.albumBName }} - {{ yearB }}</h2>
+        <div *ngIf="songSimilarity.songBAudioUrl">
           <ang-music-player [audioList]="audioListB"></ang-music-player>
         </div>
       </div>

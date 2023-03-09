@@ -8,7 +8,7 @@
     </zx-block>
     <div class="w-100 pl-10 pr-10">
       <div class="row">
-        <h1>{{ person.name }}</h1>
+        <h1>{{ person.name }} {{ person.surname }}</h1>
         <span class="{{ testFlag }}"></span>
       </div>
       <div class="row">
@@ -18,16 +18,9 @@
           [config]="galleryButton"
         ></zx-button>
         <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
-        <zx-button
-          id="linkPerson"
-          zx-block-action
-          [config]="linkPerson"
-        ></zx-button>
-        <zx-button
-          id="connectMedia"
-          zx-block-action
-          [config]="connectMediaBtn"
-        ></zx-button>
+        <zx-button id="createArtistFromPerson" zx-block-action [config]="createArtistFromPersonBtn"></zx-button>
+        <zx-button id="linkPerson" zx-block-action [config]="linkPerson"></zx-button>
+        <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
         <zx-popup [config]="connectMediaPopup">
           <div zx-popup-body>
             <zx-block [config]="popUpBlockConfig">
