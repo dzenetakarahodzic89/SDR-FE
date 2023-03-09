@@ -11,7 +11,7 @@ import {
 
 @Injectable()
 export class PersonService {
-  constructor(private api: ZxApi) {}
+  constructor(private api: ZxApi) { }
 
   searchPersons(searchParams): Observable<PersonResponse[]> {
     return this.api.get(PersonApi.SEARCH_STORIES, searchParams).pipe(
@@ -27,6 +27,12 @@ export class PersonService {
       map((response) => {
         return response;
       })
+    );
+  }
+
+  createArtistFromPerson(personId) {
+    return this.api.post(PersonApi.POST_ARTIST.replace("#", personId)).pipe(
+      map((response) => response['payload'])
     );
   }
 

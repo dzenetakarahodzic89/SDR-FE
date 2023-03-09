@@ -92,7 +92,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     InstrumentModule,
     AlbumModule,
     MultisearchModule,
-    EraModule
+    EraModule,
     // use forRoot() in main app module only.
   ],
   providers: [

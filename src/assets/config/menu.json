@@ -1,8 +1,16 @@
 {
+
   "payload": {
     "label": "HUB",
     "type": "MODULE",
     "children": [
+      {
+        "code": "HUB_PERSONS_STATIC",
+        "icon": "fad fa-comment-music",
+        "label": "Songs",
+        "url": "song/search",
+        "attributes": {}
+      },
       {
         "code": "HUB_PERSONS_STATIC",
         "icon": "fad fa-user",
@@ -32,12 +40,35 @@
         "attributes": {}
       },
       {
+        "code": "HUB_ERA_STATIC",
+        "icon": "fad fa-opera",
+        "label": "Eras",
+        "url": "era/search",
+        "attributes": {}
+      },
+      {
         "code": "HUB_MULTISEARCH_STATIC",
         "icon": "fad fa-repeat",
         "label": "Multi search refresh",
         "url": "multisearch/refresh",
         "attributes": {}
+      },
+
+      {
+        "code": "HUB_ALBUM_STATIC",
+        "icon" : "fad fa-album",
+        "label": "Albums",
+        "url": "album/search",
+        "attributes": {}
+    },
+      {
+        "code": "HUB_SONGSIMILARITY_STATIC",
+        "icon": "fad fa-music",
+        "label": "Similar songs",
+        "url": "song/similar-songs",
+        "attributes": {}
       }
     ]
   }
+
 }

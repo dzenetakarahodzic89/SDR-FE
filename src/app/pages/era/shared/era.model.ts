@@ -1,33 +1,71 @@
-export class Era {
+export class EraResponse {
   id: number;
-  created: Date;
-  createdBy: string;
-  modified: Date;
-  modifiedBy: string;
-  status: string;
   name: string;
-  information: string;
-  startDate: Date;
-  endDate: Date;
   scope: string;
-  outlineText: string;
+  playlistCount: number;
   imageUrl: string;
-}
-
-export class EraCreateRequest {
-  id?: number;
-  name: string;
+  album: string;
   information: string;
-  startDate: Date;
-  endDate: Date;
-  scope: string;
-  outlineText: string;
-  coverImageData: string | ArrayBuffer;
-  coverImage: string;
-  coverImage_files: File[];
+  dateOfRelease: Date;
+  label: string;
+  chordProgression: string;
+  genreId: number;
+  genre: string;
+  subgenres: SubGenres;
+  audioUrl: string;
+  artists: ArtistSongResponse[];
 }
-
-export class EraLoV {
+interface SubGenres {
+  [key: number]: string;
+}
+export class ArtistSongResponse {
   id: number;
   name: string;
+  personId: number;
+  personName: string;
+  dateOfBirth: Date;
+  instrument: string;
+  album: string;
+  label: string;
+}
+
+export class GenreResponse {
+  id: number;
+  name:string;
+}
+
+export class AlbumResponse {
+  id: number;
+  name: string;
+}
+export class ArtistResponse {
+  id: number;
+  name: string;
+}
+export class EraSearchRequest {
+  name: string;
+  artistIds: number[];
+  albumIds: number[];
+  genreIds: number[];
+  sortBy: number;
+  page: number;
+  pageSize: number;
+
+  constructor(
+    name: string,
+    genreIds: number[],
+    albumIds: number[],
+    artistIds: number[],
+    sortBy: number,
+    page: number,
+    pageSize: number
+  ) {
+    this.name = name;
+    this.genreIds = genreIds;
+    this.albumIds = albumIds;
+    this.artistIds = artistIds;
+    this.sortBy = sortBy;
+    this.page = page;
+    this.pageSize = pageSize;
+  }
 }

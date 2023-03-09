@@ -1,5 +1,5 @@
 <div zx-block-body class="row">
-  <zx-preloader *ngIf="songIsLoading"></zx-preloader>
+  <zx-preloader *ngIf="songIsLoading || songsAreLoading"></zx-preloader>
 </div>
 
 <div zx-body *ngIf="song" class="w-auto">
@@ -10,9 +10,7 @@
     <div class="w-100 pl-10 pr-10">
       <div class="col-24">
         <strong>
-          <h1 class="text-bold">
-            {{ song.name }} - {{ artists[0]?.name }}
-          </h1>
+          <h1 class="text-bold">{{ song.name }} - {{ artists[0]?.name }}</h1>
         </strong>
         <div class="container">
           <div class="row">
@@ -23,18 +21,95 @@
               </h5>
             </div>
             <div class="col-16">
-              <zx-button id="addToPlaylistBtn" zx-block-action [config]="addToPlaylistBtn"></zx-button>
-              <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
-              <zx-button id="linkSimilarSongs" zx-block-action [config]="linkSimilarSongsBtn"></zx-button>
-              <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
+              <zx-button
+                id="galleryBtn"
+                zx-block-action
+                [config]="galleryBtn"
+              ></zx-button>
+              <zx-button
+                id="addToPlaylistBtn"
+                zx-block-action
+                [config]="addToPlaylistBtn"
+              ></zx-button>
+              <zx-button
+                id="editBtn"
+                zx-block-action
+                [config]="editBtn"
+              ></zx-button>
+              <zx-button
+                id="linkSimilarSongs"
+                zx-block-action
+                [config]="linkSimilarSongsBtn"
+              ></zx-button>
+              <zx-button
+                id="connectMedia"
+                zx-block-action
+                [config]="connectMediaBtn"
+              ></zx-button>
+              <zx-button
+                id="uploadSong"
+                zx-block-action
+                [config]="uploadSongBtn"
+              ></zx-button>
+              <zx-popup [config]="linkPopupConfig">
+                <div zx-popup-body>
+                  <zx-block [config]="linkPopupBlockConfig">
+                    <zx-form-loader
+                      *ngIf="linkPopupFormConfig && !songsAreLoading"
+                      zx-block-body
+                      [component]="linkPopupFormConfig"
+                      [model]="similarityCreateRequest"
+                      class="col-24"
+                    ></zx-form-loader>
+                  </zx-block>
+                </div>
+                <zx-button
+                  zx-popup-footer
+                  [config]="linkPopupFooterButtons"
+                  class="align-right"
+                ></zx-button>
+              </zx-popup>
               <zx-popup [config]="popup">
                 <div zx-popup-body>
                   <zx-block [config]="popUpBlockConfig">
-                    <zx-form-loader *ngIf="popUpFormConfig" zx-block-body [component]="popUpFormConfig"
-                      [model]="connectedMediaModel" class="col-24"></zx-form-loader>
+                    <zx-form-loader
+                      *ngIf="popUpFormConfig"
+                      zx-block-body
+                      [component]="popUpFormConfig"
+                      [model]="connectedMediaModel"
+                      class="col-24"
+                    ></zx-form-loader>
                   </zx-block>
                 </div>
-                <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+                <zx-button
+                  zx-popup-footer
+                  [config]="popupFooterButtons"
+                  class="align-right"
+                ></zx-button>
+              </zx-popup>
+
+              <zx-popup [config]="songPopup">
+                <div zx-popup-body>
+                  <zx-block [config]="popUpSongBlockConfig">
+                    <zx-form-loader
+                      *ngIf="popUpSongFormConfig"
+                      zx-block-body
+                      [component]="popUpSongFormConfig"
+                      [model]="uploadSongModel"
+                      class="col-24"
+                    ></zx-form-loader>
+                  </zx-block>
+                </div>
+                <div
+                  zx-popup-footer
+                  style="display: flex; justify-content: space-between"
+                >
+                  <h4>{{ uploadingText }}</h4>
+                  <zx-button
+                    [config]="songUploadFooterPopupButtons"
+                    class="align-right"
+                  ></zx-button>
+                </div>
               </zx-popup>
             </div>
           </div>
@@ -44,13 +119,13 @@
       <div class="row">
         <div class="col-14">
           <h5>{{ song.playlistCount }} Playlist Entries</h5>
-          <br /><br />
+          <h5>Audio status - {{ statusOfAudio }}</h5>
           <h5>{{ song.outlineText }}</h5>
         </div>
       </div>
       <div class="row">
         <div class="col-20">
-          <ang-music-player [audioList]=audioList></ang-music-player>
+          <ang-music-player [audioList]="audioList"></ang-music-player>
         </div>
       </div>
     </div>
@@ -72,9 +147,15 @@
         </div>
         <hr />
         <zx-block [config]="personsBlockConfig">
-          <zx-grid zx-block-body [gridOptions]="artistGridOptions" [source]="artists" domLayout="autoHeight">
+          <zx-grid
+            zx-block-body
+            [gridOptions]="artistGridOptions"
+            [source]="artists"
+            domLayout="autoHeight"
+          >
           </zx-grid>
         </zx-block>
       </div>
     </zx-block>
   </div>
+</div>
