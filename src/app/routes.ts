@@ -19,6 +19,8 @@ import { GeneratePlaylistComponent } from './pages/playlist/generate-playlist/ge
 import { MultisearchRefreshComponent } from './pages/multisearch/multisearch-refresh/multisearch-refresh.component';
 import { LabelCreateComponent } from './pages/label/label-create/label-create.component';
 
+import { EraCreateComponent } from './pages/era/era-create/era-create.component';
+
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -44,4 +46,7 @@ export const appRoutes: Routes = [
   { path: 'multisearch/refresh', component: MultisearchRefreshComponent },
   { path: 'label/create', component: LabelCreateComponent },
   { path: 'label/update/:id', component: LabelCreateComponent },
+
+  { path: 'era/create', component: EraCreateComponent },
+  { path: 'era/update/:id', component: EraCreateComponent },
 ];

@@ -49,6 +49,7 @@ import { SongModule } from './pages/song/song.module';
 import { AngMusicPlayerModule } from 'ang-music-player';
 import { AlbumModule } from './pages/album/album.module';
 import { MultisearchModule } from './pages/multisearch/multisearch.module';
+import { EraModule } from './pages/era/era.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -91,6 +92,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     InstrumentModule,
     AlbumModule,
     MultisearchModule,
+    EraModule
     // use forRoot() in main app module only.
   ],
   providers: [
