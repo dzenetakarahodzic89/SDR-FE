@@ -575,7 +575,6 @@ export class SongOverviewComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    // this.loadData();
     let id = 1;
     this.uploadSongModel = new FileUploadSegmentCreateRequest();
     Object.values(ConnectedMediaConnectionSource).forEach((t) => {
@@ -594,8 +593,8 @@ export class SongOverviewComponent implements OnInit {
     this.typeInput.list = this.connectionTypes;
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
     this.addInstrumentModel= new AddInstrumentToSongRequest();
-    this.loadData();
     this.similarityCreateRequest = new SimilarityCreateRequest();
+    this.loadData()
   }
 
   loadData(): void {
