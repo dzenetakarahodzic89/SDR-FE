@@ -14,6 +14,18 @@ export class SongResponse {
   subgenres: SubGenres;
   audioUrl: string;
   artists: ArtistSongResponse[];
+  songInstruments:SongInstrumentSongResponse[]
+}
+
+export class SongInstrumentSongResponse{
+  songInstrumentId:number;
+  songId:number;
+  instrumentId:number;
+
+}
+export class PersonLov{
+  id:number;
+  name:string;
 }
 interface SubGenres {
   [key: number]: string;
@@ -73,6 +85,11 @@ export class SongSearchRequest {
     this.page = page;
     this.pageSize = pageSize;
   }
+}
+export class AddInstrumentToSongRequest {
+  instrumentId:number;
+  songId:number;
+  personId:number;
 }
 export class FileUploadSegmentCreateRequest {
   mediaObjectId: number;

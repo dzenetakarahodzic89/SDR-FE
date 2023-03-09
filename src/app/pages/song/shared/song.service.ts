@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { InstrumentResponse } from '../../instrument/shared/instrument.model';
 import { SongApi } from './song-api.constant';
 import {
+  AddInstrumentToSongRequest,
   AlbumResponse,
   ArtistResponse,
   FileUploadSegmentCreateRequest,
   GenreResponse,
+  PersonLov,
   SongResponse,
   SongSimilarityDetailResponse,
   SongSimilarityRequest,
@@ -104,6 +107,32 @@ export class SongService {
       map((response) => {
         const message = response['payload'];
         return message;
+      })
+    );
+  }
+  addInstrumentToSong(request:AddInstrumentToSongRequest):Observable<any>{
+    return this.api.post(SongApi.POST_INSTRUMENTS_TO_SONG,{list:[request]}).pipe(
+      map((response) => {
+        const stories = response['payload'] as InstrumentResponse[];
+        return stories;
+      })
+    );
+  }
+
+
+  getAllInstruments(): Observable<InstrumentResponse[]> {
+    return this.api.get(SongApi.GET_INSTRUMENT_DROPDOWN).pipe(
+      map((response) => {
+        const stories = response['payload'] as InstrumentResponse[];
+        return stories;
+      })
+    );
+  }
+  getAllPersonLov(): Observable<PersonLov[]> {
+    return this.api.get(SongApi.GET_PERSON_LOV).pipe(
+      map((response) => {
+        const stories = response['payload'] as PersonLov[];
+        return stories;
       })
     );
   }

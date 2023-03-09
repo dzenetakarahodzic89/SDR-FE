@@ -6,6 +6,7 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ToastrService } from 'ngx-toastr';
+import { InstrumentResponse } from '../../instrument/shared/instrument.model';
 import {
   ConnectedMediaConnectionSource,
   ConnectedMediaConnectionType,
@@ -14,8 +15,10 @@ import {
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 import { ObjectType } from '../../shared/object-type.constant';
 import {
+  AddInstrumentToSongRequest,
   ArtistSongResponse,
   FileUploadSegmentCreateRequest,
+  SongInstrumentSongResponse,
   SongResponse,
 } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
@@ -30,6 +33,7 @@ export class SongOverviewComponent implements OnInit {
   songIsLoading = false;
   song: SongResponse;
   artists: ArtistSongResponse[];
+  instruments:InstrumentResponse[];
   subGenresText: string[];
   audioArray: string[];
   audioName: string;
@@ -315,6 +319,135 @@ export class SongOverviewComponent implements OnInit {
   connectionSources = [];
   connectionTypes = [];
 
+
+  public addInstrumentBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-plus',
+        name: 'addInstrument',
+        label: 'Add instrument',
+        action: () => this.addInstrumentPopup.show()
+      },
+    ],
+  });
+
+  public addInstrumentPopUpBlockConfig: ZxBlockModel;
+  public addInstrumentPopUpFormConfig: Definition;
+  public addInstrumentPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public addInstrumentPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save', description: 'Add song', label: 'Save',
+        class: 'classic primary', icon: 'fal fa-check-circle',
+        action: () => {
+
+          if(this.addInstrumentPopUpFormConfig.isValid){
+            this.addInstrumentPopup.hide()
+            this.addInstrumentToSong()
+          }
+        }
+      },
+      {
+        name: 'cancel', description: 'Cancel', label: 'Cancel',
+        class: 'classic', icon: 'fal fa-times', action: () => { 
+          this.addInstrumentPopup.hide(); 
+        }
+      },
+
+    ]
+  });
+  public instrumentsAreLoading:boolean;
+  public instrumentPersonsAreLoading:boolean;
+
+  instrumentInput:Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-24'],
+    id: 'instrumentInput',
+    type: 'filter',
+    name: 'instrumentId',
+    label: 'Instrument',
+    validation: { required: true },
+
+  });
+  personInstrumentInput:Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-24'],
+    id: 'personInstrumentInput',
+    type: 'filter',
+    name: 'personId',
+    label: 'Person',
+    validation: { required: true },
+
+  });
+  getPersons(){
+    this.instrumentPersonsAreLoading=true;
+    this.songService.getAllPersonLov().subscribe(response=>{
+     
+      this.instrumentPersonsAreLoading=false;
+      this.addInstrumentPopUpFormConfig.children[1].list=response.map(person=>{
+        return {
+          code:person.id,
+          displayName:person.name
+        }
+      })
+    });
+
+  }
+  getInstruments(){
+    this.songService.getAllInstruments().subscribe(response=>{
+      this.instrumentsAreLoading=false;
+      this.instruments=response;
+      this.addInstrumentPopUpFormConfig.children[0].list=this.getInstrumentsThatAreNotInSong()
+    });
+
+  }
+
+
+  public addInstrumentModel :AddInstrumentToSongRequest;
+  public setAddInstrumentPopUpFormConfig() {
+    this.addInstrumentPopUpBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add Instrument'// + this.album.name,
+    });
+    this.addInstrumentPopUpFormConfig = new Definition({
+      name: 'addInstrument',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        this.instrumentInput,
+        this.personInstrumentInput
+      ],
+     model: this.addInstrumentModel
+    });
+  };
+
+  getInstrumentsThatAreNotInSong(){
+    let result = []
+    for(let i = 0; i<this.instruments.length;i++){
+      let instrumentFound = false;
+      for(let j = 0;j<this.song.songInstruments.length;j++){
+        if(this.instruments[i].id==this.song.songInstruments[j].instrumentId)
+        instrumentFound=true;
+      }
+      if(!instrumentFound){
+        result.push(this.instruments[i])
+      }
+    }
+    return result.map(instrument=>{
+      return {
+        code:instrument.id,
+        displayName:instrument.name
+      }
+    });
+
+  }
+  
+
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -354,6 +487,18 @@ export class SongOverviewComponent implements OnInit {
       }
     }
   };
+  addInstrumentToSong(){
+    this.addInstrumentModel.songId=this.song.id;
+    this.songService.addInstrumentToSong(this.addInstrumentModel).subscribe(response=>{
+
+      let addedInstrument =  new SongInstrumentSongResponse()
+      addedInstrument.instrumentId=this.addInstrumentModel.instrumentId
+      this.song.songInstruments.push(addedInstrument)
+      //reset model
+      this.addInstrumentModel = new AddInstrumentToSongRequest()
+      this.addInstrumentPopUpFormConfig.children[0].list= this.getInstrumentsThatAreNotInSong();
+    })
+  }
   ngOnInit(): void {
     let id = 1;
     this.uploadSongModel = new FileUploadSegmentCreateRequest();
@@ -372,6 +517,7 @@ export class SongOverviewComponent implements OnInit {
     });
     this.typeInput.list = this.connectionTypes;
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+    this.addInstrumentModel= new AddInstrumentToSongRequest();
     this.loadData();
   }
 
@@ -382,6 +528,7 @@ export class SongOverviewComponent implements OnInit {
         this.song = response;
         this.setPopUpFormConfig();
         this.setUpSongUploadFormConfig();
+        this.setAddInstrumentPopUpFormConfig();
         this.artists = response.artists;
         this.songIsLoading = false;
         this.getSubGenresText();
@@ -390,6 +537,9 @@ export class SongOverviewComponent implements OnInit {
           title: this.song.name,
           cover: this.song.imageUrl,
         });
+        this.getInstruments();
+        this.getPersons();
+
       });
       this.songService
         .getStatusOfAudio(params.id, 'SONG')
@@ -397,7 +547,9 @@ export class SongOverviewComponent implements OnInit {
           this.statusOfAudio = response;
         });
     });
+
   }
+  
   getSubGenresText() {
     this.subGenresText = Object.keys(this.song.subgenres).map(
       (key) => this.song.subgenres[key]

@@ -31,6 +31,13 @@
                 zx-block-action
                 [config]="addToPlaylistBtn"
               ></zx-button>
+
+              <zx-button
+              id="addInstrumentBtn"
+              zx-block-action
+              [config]="addInstrumentBtn"
+            ></zx-button>
+
               <zx-button
                 id="editBtn"
                 zx-block-action
@@ -93,6 +100,21 @@
                   ></zx-button>
                 </div>
               </zx-popup>
+              <zx-popup [config]="addInstrumentPopup">
+                <div zx-popup-body>
+                    <zx-block *ngIf="addInstrumentPopUpBlockConfig" [config]="addInstrumentPopUpBlockConfig">
+                      <zx-preloader *ngIf="instrumentsAreLoading"></zx-preloader>
+                      <!-- *ngIf="addInstrumentPopupFormConfig && !instrumentsAreLoading"  -->
+                          
+                      <zx-form-loader
+                         *ngIf="addInstrumentPopUpFormConfig"
+                         zx-block-body 
+                         [component]="addInstrumentPopUpFormConfig"
+                         [model]="addInstrumentModel" class="col-24"></zx-form-loader>
+                    </zx-block>
+                </div>
+                <zx-button zx-popup-footer [config]="addInstrumentPopupFooterButtons" class="align-right"></zx-button>
+            </zx-popup>
             </div>
           </div>
         </div>
@@ -137,6 +159,7 @@
           >
           </zx-grid>
         </zx-block>
+
       </div>
     </zx-block>
   </div>
