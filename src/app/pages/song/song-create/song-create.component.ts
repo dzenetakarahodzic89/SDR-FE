@@ -50,10 +50,41 @@ export class SongCreateComponent implements OnInit {
     } else return numConvertedToString;
   }
 
-  buildPlaytimeFromParts(hours: number, minutes: number, seconds: number) {
+  buildPlaytimeFromParts(hours = 0, minutes = 0, seconds = 0) {
     return `${this.padIfOneChar(hours.toString())}:${this.padIfOneChar(
       minutes.toString()
     )}:${this.padIfOneChar(seconds.toString())}`;
+  }
+
+  printSongResponse(sr: SongResponse) {
+    console.log('sr: ' + sr);
+    console.log('sr.id: ' + sr.id);
+    console.log('sr.name: ' + sr.name);
+    console.log('sr.outlineText: ' + sr.outlineText);
+    console.log('sr.imageUrl: ' + sr.imageUrl);
+    console.log('sr.information: ' + sr.information);
+    console.log('sr.dateOfRelease: ' + sr.dateOfRelease);
+    console.log('sr.remixId: ' + sr.remixId);
+    console.log('sr.coverId: ' + sr.coverId);
+    console.log('sr.playtime: ' + sr.playtime);
+    console.log('sr.chordProgression: ' + sr.chordProgression);
+    console.log('sr.genreId: ' + sr.genreId);
+    console.log('sr.subgenreId: ' + sr.subgenreId);
+  }
+
+  printNewSong(newSong: SongCreateRequest) {
+    console.log('newSong.id: ' + newSong.id);
+    console.log('newSong.name: ' + newSong.name);
+    console.log('newSong.information: ' + newSong.information);
+    console.log('newSong.outlineText: ' + newSong.outlineText);
+    console.log('newSong.dateOfRelease: ' + newSong.dateOfRelease);
+    console.log('newSong.chordProgressionId: ' + newSong.chordProgressionId);
+    console.log('newSong.playtime: ' + newSong.playtime);
+    console.log('newSong.remixId: ' + newSong.remixId);
+    console.log('newSong.coverId: ' + newSong.coverId);
+    console.log('newSong.genreId: ' + newSong.genreId);
+    console.log('newSong.coverImageData: ' + newSong.coverImageData);
+    console.log('newSong.coverImage: ' + newSong.coverImage);
   }
 
   public formConfig = new Definition({
@@ -115,17 +146,28 @@ export class SongCreateComponent implements OnInit {
 
     this.songService.getSongs().subscribe((response) => {
       this.songList = response;
+      console.log(
+        'songList after setting response from getSongs to it: ' + this.songList
+      );
       this.formConfig.children[3].list = response;
       this.formConfig.children[5].list = response;
     });
 
     this.songService.getChordProgressions().subscribe((response) => {
       this.chordProgressionList = response;
+      console.log(
+        'chordProgressionList after setting response from getChordProgressions to it: ' +
+          this.chordProgressionList
+      );
       this.formConfig.children[7].list = response;
     });
 
     this.songService.getGenres().subscribe((response) => {
       this.genreList = response;
+      console.log(
+        'genreList after setting response from getGenres to it: ' +
+          this.genreList
+      );
       this.formConfig.children[8].list = response;
     });
 
@@ -134,84 +176,120 @@ export class SongCreateComponent implements OnInit {
     this.model = new SongCreateRequest();
     this.songId = this.route.snapshot.paramMap.get('id');
 
-    setTimeout(() => {
-      if (this.songId != null) {
-        this.songService.getSong(this.songId).subscribe(
-          (sr: SongResponse) => {
-            this.overviewBlock.label = 'Edit song';
-            this.informationBlock.label = 'Edit information';
-            this.song = sr;
-            this.model.name = sr.name;
-            this.model.outlineText = sr.outlineText;
-            this.model.information = sr.information;
-            this.model.dateOfRelease = sr.dateOfRelease;
+    if (this.songId != null) {
+      this.songService.getSong(this.songId).subscribe(
+        (sr: SongResponse) => {
+          this.overviewBlock.label = 'Edit song';
+          this.informationBlock.label = 'Edit information';
 
-            this.model.isRemix = sr.remixId === undefined ? false : true;
-            this.model.isCover = sr.coverId === undefined ? false : true;
-            if (this.model.isRemix === true) {
-              this.formConfig.children[3].disabled = false;
-            }
-            if (this.model.isCover === true) {
-              this.formConfig.children[5].disabled = false;
-            }
+          this.song = sr;
+          this.model.name = sr.name;
 
-            this.model.playtimeHours = +sr.playtime.slice(0, 2);
-            this.model.playtimeMinutes = +sr.playtime.slice(3, 5);
-            this.model.playtimeSeconds = +sr.playtime.slice(6, 8);
+          this.model.outlineText = sr.outlineText;
 
-            if (sr.remixId !== undefined) {
-              this.selectedRemixOfSong = this.songList.find(
-                (remixOfSong) => remixOfSong.id === sr.remixId
-              );
-              this.model.remixId = this.selectedRemixOfSong.id;
-            }
+          this.model.information = sr.information;
+          this.model.dateOfRelease = sr.dateOfRelease;
 
-            if (sr.coverId !== undefined) {
-              this.selectedCoverOfSong = this.songList.find(
-                (coverOfSong) => coverOfSong.id === sr.coverId
-              );
-              this.model.coverId = this.selectedCoverOfSong.id;
-            }
-
-            if (sr.chordProgression) {
-              this.selectedChordProgression = this.chordProgressionList.find(
-                (chordProgression) =>
-                  chordProgression.name === sr.chordProgression
-              );
-              this.model.chordProgressionId = this.selectedChordProgression.id;
-            }
-
-            this.selectedGenre = this.genreList.find(
-              (genre) => genre.id === sr.genreId
-            );
-            this.model.genreId = this.selectedGenre.id;
-
-            this.formConfig.children[9].disabled = false;
-
-            this.songService
-              .getSubgenres(this.model.genreId)
-              .subscribe((response) => {
-                this.subgenreList = response;
-                this.formConfig.children[9].list = response;
-              });
-
-            setTimeout(() => {
-              if (sr.subgenreId !== undefined) {
-                this.selectedSubgenre = this.subgenreList.find(
-                  (subgenre) => subgenre.id === sr.subgenreId
-                );
-                this.model.subgenreId = this.selectedSubgenre.id;
-              }
-            }, 500);
-
-            if (sr.imageUrl) this.defaultImgUrl = sr.imageUrl;
-          },
-          (errorMsg: string) => {
-            this.toastr.error('Song could not be loaded!');
+          this.model.isRemix = sr.remixId === undefined ? false : true;
+          this.model.isCover = sr.coverId === undefined ? false : true;
+          if (this.model.isRemix === true) {
+            this.formConfig.children[3].disabled = false;
           }
-        );
-      }
-    }, 1000);
+          if (this.model.isCover === true) {
+            this.formConfig.children[5].disabled = false;
+          }
+
+          this.model.playtimeHours = +sr.playtime.slice(0, 2);
+          this.model.playtimeMinutes = +sr.playtime.slice(3, 5);
+          this.model.playtimeSeconds = +sr.playtime.slice(6, 8);
+
+          let songListObjectsCounter = 0;
+
+          if (sr.remixId !== undefined) {
+            console.log(
+              'songList before find is called on it: ' + this.songList
+            );
+            this.selectedRemixOfSong = this.songList.find((remixOfSong) => {
+              ++songListObjectsCounter;
+              remixOfSong.id === sr.remixId;
+            });
+            //
+            console.log('songListObjectsCounter: ' + songListObjectsCounter);
+            console.log(
+              'this.selectedRemixOfSong: ' + this.selectedRemixOfSong
+            );
+            this.model.remixId = this.selectedRemixOfSong.id;
+          }
+
+          if (sr.coverId !== undefined) {
+            console.log(
+              'songList before find is called on it: ' + this.songList
+            );
+            this.selectedCoverOfSong = this.songList.find((coverOfSong) => {
+              coverOfSong.id === sr.coverId;
+            });
+            console.log(
+              'this.selectedCoverOfSong: ' + this.selectedCoverOfSong
+            );
+            this.model.coverId = this.selectedCoverOfSong.id;
+          }
+
+          if (sr.chordProgression) {
+            console.log(
+              'chordProgressionList before find is called on it: ' +
+                this.chordProgressionList
+            );
+            this.selectedChordProgression = this.chordProgressionList.find(
+              (chordProgression) =>
+                chordProgression.name === sr.chordProgression
+            );
+            console.log(
+              'this.selectedChordProgression: ' + this.selectedChordProgression
+            );
+            this.model.chordProgressionId = this.selectedChordProgression.id;
+          }
+
+          console.log(
+            'genreList before find is called on it: ' + this.genreList
+          );
+          this.selectedGenre = this.genreList.find((genre) => {
+            console.log('genre: ' + genre);
+            genre.id === sr.genreId;
+          });
+          console.log('this.selectedGenre: ' + this.selectedGenre);
+          this.model.genreId = this.selectedGenre.id;
+
+          this.formConfig.children[9].disabled = false;
+
+          this.songService
+            .getSubgenres(this.model.genreId)
+            .subscribe((response) => {
+              this.subgenreList = response;
+              console.log(
+                'subgenreList after setting response from getSubgenres to it: ' +
+                  this.subgenreList
+              );
+              this.formConfig.children[9].list = response;
+            });
+
+          if (sr.subgenreId !== undefined) {
+            console.log(
+              'subgenreList before find is called on it: ' + this.subgenreList
+            );
+            this.selectedSubgenre = this.subgenreList.find(
+              (subgenre) => subgenre.id === sr.subgenreId
+            );
+            console.log('this.selectedSubgenre: ' + this.selectedSubgenre);
+            this.model.subgenreId = this.selectedSubgenre.id;
+          }
+
+          if (sr.imageUrl) this.defaultImgUrl = sr.imageUrl;
+        },
+        (errorMsg: string) => {
+          this.toastr.error('Song could not be loaded!');
+        }
+      );
+    }
   }
 
   public setFormChildren() {
@@ -417,22 +495,37 @@ export class SongCreateComponent implements OnInit {
     newSong.outlineText = this.model.outlineText;
     newSong.dateOfRelease = this.model.dateOfRelease;
     newSong.chordProgressionId = this.model.chordProgressionId;
-    newSong.playtime = this.buildPlaytimeFromParts(
-      this.model.playtimeHours,
-      this.model.playtimeMinutes,
-      this.model.playtimeSeconds
-    );
+
+    if (
+      this.model.playtimeHours !== undefined ||
+      this.model.playtimeMinutes !== undefined ||
+      this.model.playtimeSeconds !== undefined
+    ) {
+      newSong.playtime = this.buildPlaytimeFromParts(
+        this.model.playtimeHours,
+        this.model.playtimeMinutes,
+        this.model.playtimeSeconds
+      );
+    }
+
     newSong.remixId = this.model.remixId;
     newSong.coverId = this.model.coverId;
-    newSong.genreId = this.model.genreId;
-    newSong.subgenreId = this.model.subgenreId;
+
+    if (
+      this.model.genreId !== undefined &&
+      this.model.subgenreId !== undefined
+    ) {
+      newSong.genreId = this.model.subgenreId;
+    } else {
+      newSong.genreId = this.model.genreId;
+    }
+
     newSong.coverImageData = this.model.coverImageData;
     newSong.coverImage = this.model.coverImage;
 
     if (!this.songId) {
-      console.log('-----TESTING CREATE SONG-----');
-      console.log('CREATE -> newSong object(SongCreateRequest): ' + newSong);
-      /* this.songService.createSong(newSong).subscribe(
+      //this.printNewSong(newSong);
+      this.songService.createSong(newSong).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {
             this.toastr.success('Song created!');
@@ -444,11 +537,14 @@ export class SongCreateComponent implements OnInit {
         (errorMsg: string) => {
           this.toastr.error('Song creation failed!');
         }
-      ); */
+      );
     } else {
       console.log('-----TESTING UPDATE SONG-----');
       newSong['id'] = +this.songId;
-      console.log('UPDATE -> newSong object(SongCreateRequest): ' + newSong);
+      console.log(
+        'UPDATE -> newSong object(SongCreateRequest): ' +
+          this.printNewSong(newSong)
+      );
       /* this.songService.updateSong(+this.songId, newSong).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {
