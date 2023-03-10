@@ -1,0 +1,63 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="noteSheetIsLoading"></zx-preloader>
+</div>
+<div zx-body *ngIf="notesheet" class="w-80">
+  <div class="row col-24 topContainer">
+    <div class="w-100 pl-10 pr-10">
+      <div class="container">
+        <div>
+          <h3>
+            Note Sheets for {{ notesheet.instrumentName }} in
+            {{ notesheet.songName }}
+          </h3>
+        </div>
+        <hr />
+      </div>
+    </div>
+    <hr />
+    <br /><br />
+  </div>
+</div>
+<div class="row-5 bottomContainer w-auto">
+  <zx-block [config]="infoBlockConfig" class="col-14">
+    <div zx-block-body>
+      <div id="output"></div>
+    </div>
+  </zx-block>
+  <zx-block [config]="detailsBlockConfig" class="col-14">
+    <div zx-block-body>
+      <div>
+        <h5>Song name: {{ notesheet.songName }}</h5>
+      </div>
+      <br />
+      <div>
+        <h5>
+          Date of release:
+          {{ notesheet.dateOfRelease | date : "dd.MM.yyyy" }}
+        </h5>
+      </div>
+      <br />
+      <div>
+        <h5>Artist: {{ artists.name }}</h5>
+      </div>
+      <br />
+      <div>
+        <h5>Instrument: {{ notesheet.instrumentName }}</h5>
+      </div>
+      <br />
+      <div>
+        <h5>
+          Person: {{ artists.personName }}
+          <span class="{{ testFlag }}"></span>
+        </h5>
+      </div>
+      <br />
+      <hr />
+    </div>
+    <ang-music-player
+      zx-block-body
+      [audioList]="audioList"
+      class="player"
+    ></ang-music-player>
+  </zx-block>
+</div>

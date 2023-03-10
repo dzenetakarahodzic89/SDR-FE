@@ -184,46 +184,14 @@ export class PlaylistSearchComponent implements OnInit {
 
   getGenres() {
     this.playlistService.getAllGenres().subscribe(response => {
-      let genres = response
-      genres.forEach(g => {
-        if (g.mainGenre != null)
-          g.name = g.name + " - " + g.mainGenre.name;
-
-      });
-      this.formConfig.children[2].list = genres;
+      this.formConfig.children[2].list = response;
       this.genresAreLoading = false;
     });
   }
 
   getSongs() {
-    this.playlistService.getAllSongs().subscribe(response => {
-      let songsMap = new Map();
-      response.forEach(s => {
-        if (songsMap.has(s.songId)) {
-          let titleParts = songsMap.get(s.songId);
-          titleParts.push(s.artistName);
-          songsMap.set(s.songId, titleParts);
-        } else {
-          let titleParts = new Array();
-          titleParts.push(s.songName);
-          titleParts.push(s.artistName);
-          songsMap.set(s.songId, titleParts);
-        }
-      })
-      let songs = new Array(songsMap.size);
-      let i = 0;
-      songsMap.forEach((v, k) => {
-        let name = v[0] + " - ";
-        for (let j = 1; j < v.length; j++)
-          if (j < v.length - 1)
-            name += " " + v[j] + ",";
-          else
-            name += " " + v[j];
-        let song = { id: k, name: name };
-        songs[i] = song;
-        i++;
-      });
-      this.formConfig.children[1].list = songs;
+    this.playlistService.getAllSongNames().subscribe(response => {
+      this.formConfig.children[1].list = response;
       this.songsAreLoading = false;
 
     });
