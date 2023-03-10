@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { InstrumentResponse } from '../../instrument/shared/instrument.model';
 import { SongApi } from './song-api.constant';
 import {
+  AddInstrumentToSongRequest,
   AlbumResponse,
   ArtistResponse,
   FileUploadSegmentCreateRequest,
   GenreResponse,
+  PersonLov,
+  SimilarityCreateRequest,
   SongResponse,
+  SongResponseAll,
   SongSimilarityDetailResponse,
   SongSimilarityRequest,
   SongSimilarityResponse,
@@ -20,6 +25,19 @@ import { SongCreateRequest } from './song.model';
 })
 export class SongService {
   constructor(private api: ZxApi) {}
+
+  getAllSongs(): Observable<SongResponseAll[]> {
+    return this.api.get(SongApi.GET_SONGS).pipe(
+      map((response) => {
+        const songs: SongResponseAll[] = response['payload'];
+        return songs;
+      })
+    )
+  }
+
+  saveSimilarity(similarityCreateRequest: SimilarityCreateRequest): Observable<any> {
+    return this.api.post(SongApi.POST_SIMILARITY, similarityCreateRequest);
+  }
 
   getSong(id: number) {
     return this.api.get(SongApi.GET_SONG.replace('#', id.toString())).pipe(
@@ -136,8 +154,7 @@ export class SongService {
       })
     );
   }
-
-  getSongSimilarity(): Observable<SongSimilarityResponse[]> {
+  getSongSimilarity() {
     return this.api.get(SongApi.GET_SONG_SIMILARITY).pipe(
       map((response) => {
         const message = response['payload'];
@@ -162,6 +179,32 @@ export class SongService {
       map((response) => {
         const chordProgressions = response['payload'];
         return chordProgressions;
+      })
+    );
+  }
+  addInstrumentToSong(request:AddInstrumentToSongRequest):Observable<any>{
+    return this.api.post(SongApi.POST_INSTRUMENTS_TO_SONG,{list:[request]}).pipe(
+      map((response) => {
+        const stories = response['payload'] as InstrumentResponse[];
+        return stories;
+      })
+    );
+  }
+
+
+  getAllInstruments(): Observable<InstrumentResponse[]> {
+    return this.api.get(SongApi.GET_INSTRUMENT_DROPDOWN).pipe(
+      map((response) => {
+        const stories = response['payload'] as InstrumentResponse[];
+        return stories;
+      })
+    );
+  }
+  getAllPersonLov(): Observable<PersonLov[]> {
+    return this.api.get(SongApi.GET_PERSON_LOV).pipe(
+      map((response) => {
+        const stories = response['payload'] as PersonLov[];
+        return stories;
       })
     );
   }
