@@ -23,6 +23,7 @@ import {
   SongResponse,
   SongInstrumentsResponse,
   FindNoteSheet,
+  SongNameResponse,
 } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
 
@@ -41,6 +42,7 @@ export class SongOverviewComponent implements OnInit {
   subGenresText: string[];
   audioArray: string[];
   audioName: string;
+  songTitles: SongNameResponse[];
   uploadingText = '';
   statusOfAudio: string = '';
   readonly AUDIO_SPLIT_CONSTANT = 1500000;
@@ -402,6 +404,7 @@ export class SongOverviewComponent implements OnInit {
       children: [this.songInput],
       model: this.similarityCreateRequest,
     });
+    this.linkPopupFormConfig.children[0].list=this.songTitles;
   }
 
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
@@ -770,33 +773,14 @@ export class SongOverviewComponent implements OnInit {
   }
 
   getSongs() {
-    this.songService.getAllSongs().subscribe((response) => {
-      let songsMap = new Map();
-      response.forEach((s) => {
-        if (songsMap.has(s.songId)) {
-          let titleParts = songsMap.get(s.songId);
-          titleParts.push(s.artistName);
-          songsMap.set(s.songId, titleParts);
-        } else {
-          let titleParts = new Array();
-          titleParts.push(s.songName);
-          titleParts.push(s.artistName);
-          songsMap.set(s.songId, titleParts);
-        }
-      });
-      let songs = new Array(songsMap.size);
-      let i = 0;
-      songsMap.forEach((v, k) => {
-        let name = v[0] + ' - ';
-        for (let j = 1; j < v.length; j++)
-          if (j < v.length - 1) name += ' ' + v[j] + ',';
-          else name += ' ' + v[j];
-        let song = { id: k, name: name };
-        songs[i] = song;
-        i++;
-      });
-      this.linkPopupFormConfig.children[0].list = songs;
+    this.route.params.subscribe((params) => {
+    this.songService.getAllSongNames().subscribe((response) => {
+      response = response.filter(s => s.id != params.id);
+      this.songTitles = response;
+      if(this.linkPopupBlockConfig!=undefined)
+        this.linkPopupFormConfig.children[0].list = response;
       this.songsAreLoading = false;
     });
   }
+)}
 }

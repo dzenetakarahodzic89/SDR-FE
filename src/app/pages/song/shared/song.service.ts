@@ -17,6 +17,7 @@ import {
   SongSimilarityDetailResponse,
   SongSimilarityRequest,
   SongSimilarityResponse,
+  SongNameResponse
 } from './song.model';
 
 @Injectable({
@@ -150,5 +151,14 @@ export class SongService {
         return stories;
       })
     );
+  }
+
+  getAllSongNames(): Observable<SongNameResponse[]> {
+    return this.api.get(SongApi.GET_SONG_NAMES).pipe(
+      map((response) => {
+        const songs: SongNameResponse[] = response['payload'];
+        return songs;
+      })
+    )
   }
 }

@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import {
   AlbumCreateRequest,
   AlbumResponse,
-  EraLoV,
+  LoV,
 } from '../shared/album.model';
 import { AlbumService } from '../shared/album.service';
 
@@ -19,12 +19,12 @@ import { AlbumService } from '../shared/album.service';
   styleUrls: ['./album-create.component.scss'],
 })
 export class AlbumCreateComponent implements OnInit {
-  private eraList: EraLoV[];
-  private selectedEra: EraLoV;
+  private eraList: LoV[];
+  private selectedEra: LoV;
   private albumId;
   public album: AlbumResponse;
   public model: AlbumCreateRequest;
-  private updateEra: EraLoV;
+  private updateEra: LoV;
 
   public formConfig = new Definition({
     name: 'createAlbum',
