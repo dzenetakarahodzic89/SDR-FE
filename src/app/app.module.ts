@@ -50,6 +50,7 @@ import { AngMusicPlayerModule } from 'ang-music-player';
 import { AlbumModule } from './pages/album/album.module';
 import { MultisearchModule } from './pages/multisearch/multisearch.module';
 import { EraModule } from './pages/era/era.module';
+import { NotesheetModule } from './pages/notesheet/notesheet-overview/notesheet.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -90,6 +91,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     AngMusicPlayerModule,
     SongModule,
     InstrumentModule,
+    NotesheetModule,
     AlbumModule,
     MultisearchModule,
     EraModule,

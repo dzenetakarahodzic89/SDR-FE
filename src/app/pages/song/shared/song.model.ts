@@ -3,7 +3,7 @@ export class SongResponseAll {
   songName: string;
   artistId: number;
   artistName: string;
-};
+}
 
 export class SongResponse {
   id: number;
@@ -21,18 +21,28 @@ export class SongResponse {
   subgenres: SubGenres;
   audioUrl: string;
   artists: ArtistSongResponse[];
-  songInstruments:SongInstrumentSongResponse[]
+  songInstruments: SongInstrumentSongResponse[];
+  instrumentsNoteSheet: SongInstrumentsResponse;
 }
 
-export class SongInstrumentSongResponse{
-  songInstrumentId:number;
-  songId:number;
-  instrumentId:number;
-
+export class SongInstrumentsResponse {
+  id: number;
+  displayName: string;
 }
-export class PersonLov{
-  id:number;
-  name:string;
+
+export class FindNoteSheet {
+  instrumentId: number;
+  displayName: string;
+}
+
+export class SongInstrumentSongResponse {
+  songInstrumentId: number;
+  songId: number;
+  instrumentId: number;
+}
+export class PersonLov {
+  id: number;
+  name: string;
 }
 interface SubGenres {
   [key: number]: string;
@@ -94,9 +104,9 @@ export class SongSearchRequest {
   }
 }
 export class AddInstrumentToSongRequest {
-  instrumentId:number;
-  songId:number;
-  personId:number;
+  instrumentId: number;
+  songId: number;
+  personId: number;
 }
 export class FileUploadSegmentCreateRequest {
   mediaObjectId: number;
@@ -111,7 +121,7 @@ export class FileUploadSegmentCreateRequest {
 export class SimilarityCreateRequest {
   songA: number;
   songB: number;
-};
+}
 
 export class SongSimilarityResponse {
   id: number;

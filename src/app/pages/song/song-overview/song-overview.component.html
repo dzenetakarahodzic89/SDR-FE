@@ -33,10 +33,10 @@
               ></zx-button>
 
               <zx-button
-              id="addInstrumentBtn"
-              zx-block-action
-              [config]="addInstrumentBtn"
-            ></zx-button>
+                id="addInstrumentBtn"
+                zx-block-action
+                [config]="addInstrumentBtn"
+              ></zx-button>
 
               <zx-button
                 id="editBtn"
@@ -58,6 +58,30 @@
                 zx-block-action
                 [config]="uploadSongBtn"
               ></zx-button>
+              <zx-button
+                id="showNoteSheetBtn"
+                zx-block-action
+                [config]="showInstruments"
+              ></zx-button>
+              <zx-popup [config]="instrumentPopUp">
+                <div zx-popup-body>
+                  <zx-block [config]="instrumentPopUpBlockConfig">
+                    <zx-preloader *ngIf="songIsLoading"></zx-preloader>
+                    <zx-form-loader
+                      *ngIf="instrumentPopUpFormConfig && !songIsLoading"
+                      zx-block-body
+                      [component]="instrumentPopUpFormConfig"
+                      [model]="instrumentPopUpModel"
+                      class="col-24"
+                    ></zx-form-loader>
+                  </zx-block>
+                </div>
+                <zx-button
+                  zx-popup-footer
+                  [config]="instrumentPopUpFooterButtons"
+                  class="align-right"
+                ></zx-button>
+              </zx-popup>
               <zx-popup [config]="linkPopupConfig">
                 <div zx-popup-body>
                   <zx-block [config]="linkPopupBlockConfig">
@@ -120,19 +144,28 @@
               </zx-popup>
               <zx-popup [config]="addInstrumentPopup">
                 <div zx-popup-body>
-                    <zx-block *ngIf="addInstrumentPopUpBlockConfig" [config]="addInstrumentPopUpBlockConfig">
-                      <zx-preloader *ngIf="instrumentsAreLoading"></zx-preloader>
-                      <!-- *ngIf="addInstrumentPopupFormConfig && !instrumentsAreLoading"  -->
-                          
-                      <zx-form-loader
-                         *ngIf="addInstrumentPopUpFormConfig"
-                         zx-block-body 
-                         [component]="addInstrumentPopUpFormConfig"
-                         [model]="addInstrumentModel" class="col-24"></zx-form-loader>
-                    </zx-block>
+                  <zx-block
+                    *ngIf="addInstrumentPopUpBlockConfig"
+                    [config]="addInstrumentPopUpBlockConfig"
+                  >
+                    <zx-preloader *ngIf="instrumentsAreLoading"></zx-preloader>
+                    <!-- *ngIf="addInstrumentPopupFormConfig && !instrumentsAreLoading"  -->
+
+                    <zx-form-loader
+                      *ngIf="addInstrumentPopUpFormConfig"
+                      zx-block-body
+                      [component]="addInstrumentPopUpFormConfig"
+                      [model]="addInstrumentModel"
+                      class="col-24"
+                    ></zx-form-loader>
+                  </zx-block>
                 </div>
-                <zx-button zx-popup-footer [config]="addInstrumentPopupFooterButtons" class="align-right"></zx-button>
-            </zx-popup>
+                <zx-button
+                  zx-popup-footer
+                  [config]="addInstrumentPopupFooterButtons"
+                  class="align-right"
+                ></zx-button>
+              </zx-popup>
             </div>
           </div>
         </div>
@@ -177,7 +210,6 @@
           >
           </zx-grid>
         </zx-block>
-
       </div>
     </zx-block>
   </div>
