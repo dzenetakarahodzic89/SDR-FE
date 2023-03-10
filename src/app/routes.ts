@@ -23,6 +23,7 @@ import { MultisearchRefreshComponent } from './pages/multisearch/multisearch-ref
 import { LabelCreateComponent } from './pages/label/label-create/label-create.component';
 import { EraSearchComponent } from './pages/era/era-search/era-search.component';
 import { SongSimilarityOverviewComponent } from './pages/song/song-similarity-overview/song-similarity-overview.component';
+import { SongSearchComponent } from './pages/song/song-search/song-search.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -43,17 +44,13 @@ export const appRoutes: Routes = [
   { path: 'playlist/search', component: PlaylistSearchComponent },
   { path: 'instrument/:id/overview', component: InstrumentOverviewComponent },
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
-
+  { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
-  {
-    path: 'notesheet/:songId/:instrumentId/overview',
-    component: NotesheetOverviewComponent,
-  },
+  { path: 'notesheet/:songId/:instrumentId/overview',component: NotesheetOverviewComponent},
   { path: 'album/create', component: AlbumCreateComponent },
   { path: 'album/update/:id', component: AlbumCreateComponent },
   { path: 'playlist/generate-playlist', component: GeneratePlaylistComponent },
   { path: 'multisearch/refresh', component: MultisearchRefreshComponent },
-
   { path: 'song/similar-songs', component: SongSimilarityOverviewComponent },
   { path: 'label/create', component: LabelCreateComponent },
   { path: 'label/update/:id', component: LabelCreateComponent },
