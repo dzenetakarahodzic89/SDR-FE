@@ -41,7 +41,7 @@ export class AlbumCreateRequest {
   coverImage: string;
   coverImage_files: File[];
 }
-export class EraLoV {
+export class LoV {
   id: number;
   name: string;
 }
