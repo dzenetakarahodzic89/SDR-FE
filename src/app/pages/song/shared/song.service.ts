@@ -8,17 +8,22 @@ import {
   AddInstrumentToSongRequest,
   AlbumResponse,
   ArtistResponse,
+  ChordProgressionLoV,
   FileUploadSegmentCreateRequest,
   GenreResponse,
+  MainGenreLoV,
   PersonLov,
   SimilarityCreateRequest,
+  SongLoV,
   SongResponse,
   SongResponseAll,
   SongSimilarityDetailResponse,
   SongSimilarityRequest,
   SongSimilarityResponse,
-  SongNameResponse
+  SongNameResponse,
+  SubgenreLoV
 } from './song.model';
+import { SongCreateRequest } from './song.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,10 +37,12 @@ export class SongService {
         const songs: SongResponseAll[] = response['payload'];
         return songs;
       })
-    )
+    );
   }
 
-  saveSimilarity(similarityCreateRequest: SimilarityCreateRequest): Observable<any> {
+  saveSimilarity(
+    similarityCreateRequest: SimilarityCreateRequest
+  ): Observable<any> {
     return this.api.post(SongApi.POST_SIMILARITY, similarityCreateRequest);
   }
 
@@ -57,11 +64,28 @@ export class SongService {
     );
   }
 
+  getSongLoV(): Observable<SongLoV[]> {
+    return this.api.get(SongApi.GET_SONG_LOV).pipe(
+      map((response) => {
+        const songs: SongLoV[] = response['payload'];
+        return songs;
+      })
+    );
+  }
+
   getAllAlbums(): Observable<AlbumResponse[]> {
     return this.api.get(SongApi.GET_ALBUMS_DROPDOWN).pipe(
       map((response) => {
         const stories = response['payload'] as AlbumResponse[];
         return stories;
+      })
+    );
+  }
+
+  createSong(song: SongCreateRequest) {
+    return this.api.post(SongApi.CREATE_SONG, song).pipe(
+      map((response) => {
+        return response;
       })
     );
   }
@@ -118,6 +142,25 @@ export class SongService {
       })
     );
   }
+
+  updateSong(songId: number, song: SongCreateRequest) {
+    return this.api
+      .put(SongApi.UPDATE_SONG.replace('#', songId.toString()), song)
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
+  }
+
+  getMainGenreLoV(): Observable<MainGenreLoV[]> {
+    return this.api.get(SongApi.GET_MAIN_GENRE_LOV).pipe(
+      map((response) => {
+        const genres: MainGenreLoV[] = response['payload'];
+        return genres;
+      })
+    );
+  }
   getSongSimilarity() {
     return this.api.get(SongApi.GET_SONG_SIMILARITY).pipe(
       map((response) => {
@@ -126,15 +169,36 @@ export class SongService {
       })
     );
   }
-  addInstrumentToSong(request:AddInstrumentToSongRequest):Observable<any>{
-    return this.api.post(SongApi.POST_INSTRUMENTS_TO_SONG,{list:[request]}).pipe(
+
+  getSubgenreLoV(mainGenreId: number): Observable<SubgenreLoV[]> {
+    return this.api
+      .get(SongApi.GET_SUBGENRE_LOV.replace('#', mainGenreId.toString()))
+      .pipe(
+        map((response) => {
+          const subgenres: SubgenreLoV[] = response['payload'];
+          return subgenres;
+        })
+      );
+  }
+
+  getChordProgressionLoV(): Observable<ChordProgressionLoV[]> {
+    return this.api.get(SongApi.GET_CHORD_PROGRESSION_LOV).pipe(
       map((response) => {
-        const stories = response['payload'] as InstrumentResponse[];
-        return stories;
+        const chordProgressions: ChordProgressionLoV[] = response['payload'];
+        return chordProgressions;
       })
     );
   }
-
+  addInstrumentToSong(request: AddInstrumentToSongRequest): Observable<any> {
+    return this.api
+      .post(SongApi.POST_INSTRUMENTS_TO_SONG, { list: [request] })
+      .pipe(
+        map((response) => {
+          const stories = response['payload'] as InstrumentResponse[];
+          return stories;
+        })
+      );
+  }
 
   getAllInstruments(): Observable<InstrumentResponse[]> {
     return this.api.get(SongApi.GET_INSTRUMENT_DROPDOWN).pipe(

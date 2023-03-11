@@ -8,15 +8,30 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { AngMusicPlayerModule } from 'ang-music-player';
 import { SongSearchComponent } from './song-search/song-search.component';
 import { SongSimilarityOverviewComponent } from './song-similarity-overview/song-similarity-overview.component';
-
+import { SongCreateComponent } from './song-create/song-create.component';
 
 @NgModule({
-  declarations: [SongOverviewComponent, SongSearchComponent,  SongSimilarityOverviewComponent],
-  imports: [SharedModule, EditorModule, AutocompleteLibModule, AngMusicPlayerModule],
-  exports: [SongOverviewComponent, SongSearchComponent, SongSimilarityOverviewComponent],
+  declarations: [
+    SongOverviewComponent,
+    SongSearchComponent,
+    SongSimilarityOverviewComponent,
+    SongCreateComponent,
+  ],
+  imports: [
+    SharedModule,
+    EditorModule,
+    AutocompleteLibModule,
+    AngMusicPlayerModule,
+  ],
+  exports: [
+    SongOverviewComponent,
+    SongSearchComponent,
+    SongSimilarityOverviewComponent,
+    SongCreateComponent,
+  ],
   providers: [
     SongService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
 })
-export class SongModule { }
+export class SongModule {}

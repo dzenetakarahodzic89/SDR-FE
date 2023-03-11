@@ -3,6 +3,12 @@ export class SongApi {
   public static POST_SIMILARITY = '/sdrbe/song-similarity';
   public static SEARCH_SONGS = '/sdrbe/song/search';
   public static GET_SONGS = '/sdrbe/song-artist';
+  public static CREATE_SONG = '/sdrbe/song/';
+  public static UPDATE_SONG = '/sdrbe/song/#';
+  public static GET_MAIN_GENRE_LOV = '/sdrbe/genre/main-genre';
+  public static GET_SUBGENRE_LOV = '/sdrbe/genre/#/subgenres';
+  public static GET_CHORD_PROGRESSION_LOV = '/sdrbe/chordprogression/lov';
+  public static GET_SONG_LOV = '/sdrbe/song/song-artist-titles';
   public static GET_GENRES_DROPDOWN = '/sdrbe/genre';
   public static GET_ALBUMS_DROPDOWN = '/sdrbe/album';
   public static GET_ARTISTS_DROPDOWN = '/sdrbe/artist';
