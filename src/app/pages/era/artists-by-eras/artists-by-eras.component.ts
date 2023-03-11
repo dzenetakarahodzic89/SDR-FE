@@ -5,8 +5,6 @@ import { Definition } from '@zff/zx-forms';
 import { Chart, ChartType, registerables } from 'chart.js';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AppBox } from '../../shared/box/box.model';
 import { EraArtistResponse, EraRequest } from '../shared/era.model';
 import { EraService } from '../shared/era.service';
 
@@ -32,7 +30,7 @@ export class ArtistsByErasComponent implements OnInit {
 
   public searchBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
-    label: 'Aritst by eras',
+    label: 'Artists distribution over eras',
   });
 
   public formConfig: Definition;
@@ -49,20 +47,9 @@ export class ArtistsByErasComponent implements OnInit {
     class: ['col-24'],
     type: 'filter',
     name: 'selectEra',
-    label: 'Select an era',
+    label: 'Eras chosen',
     list: [],
   };
-
-  onEraChange(selectedEras: any[]) {
-    this.foundArtistByEras = [];
-    this.pieCharts.forEach((chart) => chart.destroy());
-    this.pieCharts = [];
-
-    const selectedEraNames = selectedEras.map((era) => era.name);
-    this.formConfig.children[0].list = this.formConfig.children[0].list.filter(
-      (era) => !selectedEraNames.includes(era.name)
-    );
-  }
 
   public setFormConfig() {
     this.getAllEras();
@@ -104,9 +91,6 @@ export class ArtistsByErasComponent implements OnInit {
           groupCount: response.groupCount,
         };
       });
-
-      console.log(this.foundArtistByEras);
-      console.log(this.model.selectEra);
       this.setPieChart();
     });
   }

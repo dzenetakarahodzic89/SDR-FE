@@ -70,8 +70,8 @@
       {
         "code": "HUB_ARTISTS_BY_ERAS_STATIC",
         "icon": "fad fa-user-music",
-        "label": "Artists by eras",
-        "url": "era/artists-by-eras",
+        "label": "Artists distribution over eras",
+        "url": "era/artists-over-eras",
         "attributes": {}
       }
     ]
