@@ -7,14 +7,11 @@ import { AppBox } from '../../shared/box/box.model';
 import { EraSearchRequest } from '../shared/era.model';
 import { EraService } from '../shared/era.service';
 
-
 @Component({
   selector: 'app-era-search',
   templateUrl: './era-search.component.html',
-  styleUrls: ['./era-search.component.scss']
+  styleUrls: ['./era-search.component.scss'],
 })
-
-
 export class EraSearchComponent implements OnInit {
   public ErasBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -38,7 +35,6 @@ export class EraSearchComponent implements OnInit {
       },
     ],
   });
-
 
   public searchButton: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -68,8 +64,7 @@ export class EraSearchComponent implements OnInit {
       {
         name: 'nextPage',
         icon: 'fas fa-angle-double-right',
-        action: () => this.getNextPage()
-
+        action: () => this.getNextPage(),
       },
     ],
   });
@@ -83,51 +78,48 @@ export class EraSearchComponent implements OnInit {
     class: ['col-24'],
     type: 'text',
     name: 'eraName',
-    label: 'Name'
+    label: 'Name',
   };
-
 
   inputAlbum = {
     template: 'ZxMultiselect',
     class: ['col-24'],
-    type: "filter",
-    name: "selectAlbum",
-    label: "Album",
-    list: []
+    type: 'filter',
+    name: 'selectAlbum',
+    label: 'Album',
+    list: [],
   };
 
   inputGenre = {
     template: 'ZxMultiselect',
     class: ['col-24'],
-    type: "filter",
-    name: "selectGenre",
-    label: "Genre",
-    list: []
+    type: 'filter',
+    name: 'selectGenre',
+    label: 'Genre',
+    list: [],
   };
-
 
   inputArtist = {
     template: 'ZxMultiselect',
     class: ['col-24'],
-    type: "filter",
-    name: "selectArtist",
+    type: 'filter',
+    name: 'selectArtist',
     label: 'Artists',
     list: [],
-
-
   };
 
-  sortList = [{ code: "last_date", displayName: "Last edit" }, { code: "name", displayName: "Alphabetical order" }]
+  sortList = [
+    { code: 'last_date', displayName: 'Last edit' },
+    { code: 'name', displayName: 'Alphabetical order' },
+  ];
   sortByInput = {
     template: 'ZxSelect',
     class: ['col-24'],
-    type: "select",
-    name: "sortBy",
+    type: 'select',
+    name: 'sortBy',
     label: 'Sort by',
-    list: this.sortList
-
+    list: this.sortList,
   };
-
 
   public formConfig: Definition;
   foundEras: AppBox[] = [];
@@ -135,7 +127,6 @@ export class EraSearchComponent implements OnInit {
     page: 1,
     totalPages: 5,
   };
-
 
   public submitBtn: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -150,9 +141,7 @@ export class EraSearchComponent implements OnInit {
     ],
   });
 
-
   public setFormConfig() {
-
     this.getAllGenres();
     this.getAllAlbums();
     this.getAllArtists();
@@ -167,14 +156,11 @@ export class EraSearchComponent implements OnInit {
         this.inputAlbum,
         this.inputArtist,
         this.sortByInput,
-
-
       ],
     });
   }
 
-
-  constructor(private router: Router, private Eraservice: EraService) { }
+  constructor(private router: Router, private Eraservice: EraService) {}
 
   ngOnInit(): void {
     this.setFormConfig();
@@ -194,25 +180,24 @@ export class EraSearchComponent implements OnInit {
       this.paginationDetails.page,
       this.paginationDetails.totalPages
     );
-    this.Eraservice.searchEras(searchRequest).subscribe(response => {
+    this.Eraservice.searchEras(searchRequest).subscribe((response) => {
       this.foundEras = response as unknown as AppBox[];
-
     });
   }
 
   getAllGenres() {
-    this.Eraservice.getAllGenres().subscribe(response => {
+    this.Eraservice.getAllGenres().subscribe((response) => {
       this.formConfig.children[1].list = response;
     });
   }
   getAllAlbums() {
-    this.Eraservice.getAllAlbums().subscribe(response => {
+    this.Eraservice.getAllAlbums().subscribe((response) => {
       this.formConfig.children[2].list = response;
     });
   }
 
   getAllArtists() {
-    this.Eraservice.getAllArtists().subscribe(response => {
+    this.Eraservice.getAllArtists().subscribe((response) => {
       this.formConfig.children[3].list = response;
     });
   }
@@ -225,14 +210,9 @@ export class EraSearchComponent implements OnInit {
   }
 
   getNextPage() {
-    if
-      (
-      this.foundEras.length >= this.paginationDetails.totalPages
-    ) {
+    if (this.foundEras.length >= this.paginationDetails.totalPages) {
       this.paginationDetails.page++;
       this.searchEras();
-
     }
   }
-
 }

@@ -1,5 +1,4 @@
 {
-
   "payload": {
     "label": "HUB",
     "type": "MODULE",
@@ -56,19 +55,25 @@
 
       {
         "code": "HUB_ALBUM_STATIC",
-        "icon" : "fad fa-album",
+        "icon": "fad fa-album",
         "label": "Albums",
         "url": "album/search",
         "attributes": {}
-    },
+      },
       {
         "code": "HUB_SONGSIMILARITY_STATIC",
         "icon": "fad fa-music",
         "label": "Similar songs",
         "url": "song/similar-songs",
         "attributes": {}
+      },
+      {
+        "code": "HUB_ARTISTS_BY_ERAS_STATIC",
+        "icon": "fad fa-user-music",
+        "label": "Artists distribution over eras",
+        "url": "era/artists-over-eras",
+        "attributes": {}
       }
     ]
   }
-
 }

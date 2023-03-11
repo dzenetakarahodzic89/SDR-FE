@@ -24,6 +24,7 @@ import { LabelCreateComponent } from './pages/label/label-create/label-create.co
 import { EraSearchComponent } from './pages/era/era-search/era-search.component';
 import { SongSimilarityOverviewComponent } from './pages/song/song-similarity-overview/song-similarity-overview.component';
 import { SongSearchComponent } from './pages/song/song-search/song-search.component';
+import { ArtistsByErasComponent } from './pages/era/artists-by-eras/artists-by-eras.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -46,7 +47,10 @@ export const appRoutes: Routes = [
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
   { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
-  { path: 'notesheet/:songId/:instrumentId/overview',component: NotesheetOverviewComponent},
+  {
+    path: 'notesheet/:songId/:instrumentId/overview',
+    component: NotesheetOverviewComponent,
+  },
   { path: 'album/create', component: AlbumCreateComponent },
   { path: 'album/update/:id', component: AlbumCreateComponent },
   { path: 'playlist/generate-playlist', component: GeneratePlaylistComponent },
@@ -55,4 +59,5 @@ export const appRoutes: Routes = [
   { path: 'label/create', component: LabelCreateComponent },
   { path: 'label/update/:id', component: LabelCreateComponent },
   { path: 'era/search', component: EraSearchComponent },
+  { path: 'era/artists-over-eras', component: ArtistsByErasComponent },
 ];
