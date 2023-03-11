@@ -22,7 +22,7 @@
                         <div zx-popup-body>
                             <zx-block [config]="addSongPopUpBlockConfig">
                                 <zx-preloader *ngIf="songsAreLoading || artistsAreLoading || labelsAreLoading"></zx-preloader>
-                                <zx-form-loader *ngIf="addSongPopUpFormConfig && !songsAreLoading && !artistsAreLoading && !labelsAreLoading" zx-block-body [component]="addSongPopUpFormConfig"
+                                <zx-form-loader *ngIf="addSongPopUpFormConfig" zx-block-body [component]="addSongPopUpFormConfig"
                                     [model]="addSongModel" class="col-24"></zx-form-loader>
                             </zx-block>
                         </div>

@@ -35,6 +35,11 @@ export class SongInstrumentsResponse {
   displayName: string;
 }
 
+export class SongNameResponse {
+  id: number;
+  name: string;
+}
+
 export class FindNoteSheet {
   instrumentId: number;
   displayName: string;

@@ -20,7 +20,8 @@ import {
   SongSimilarityDetailResponse,
   SongSimilarityRequest,
   SongSimilarityResponse,
-  SubgenreLoV,
+  SongNameResponse,
+  SubgenreLoV
 } from './song.model';
 import { SongCreateRequest } from './song.model';
 
@@ -214,5 +215,14 @@ export class SongService {
         return stories;
       })
     );
+  }
+
+  getAllSongNames(): Observable<SongNameResponse[]> {
+    return this.api.get(SongApi.GET_SONG_NAMES).pipe(
+      map((response) => {
+        const songs: SongNameResponse[] = response['payload'];
+        return songs;
+      })
+    )
   }
 }

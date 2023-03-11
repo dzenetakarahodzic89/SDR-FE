@@ -131,19 +131,19 @@ export class PlaylistSearchComponent implements OnInit {
       ],
       model: this.model
     });
+    this.formConfig.children[3].list = [{ id: 0, name: "No of songs" }, { id: 1, name: "Last edit" }, { id: 2, name: "Alphabetical order" }]
   }
 
 
   constructor(private router: Router, private playlistService: PlaylistService) { }
 
   ngOnInit(): void {
+    this.setFormConfig();
     this.songsAreLoading = true;
     this.genresAreLoading = true;
     this.loadData();
     this.getGenres();
     this.getSongs();
-    this.sortInput.list = [{ id: 0, name: "No of songs" }, { id: 1, name: "Last edit" }, { id: 2, name: "Alphabetical order" }]
-    this.setFormConfig();
   }
 
   loadData() {
@@ -183,7 +183,7 @@ export class PlaylistSearchComponent implements OnInit {
   }
 
   getGenres() {
-    this.playlistService.getAllGenres().subscribe(response => {
+    this.playlistService.getAllGenreNames().subscribe(response => {
       this.formConfig.children[2].list = response;
       this.genresAreLoading = false;
     });
