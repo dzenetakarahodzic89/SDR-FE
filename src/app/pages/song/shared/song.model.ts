@@ -19,6 +19,7 @@ export class SongResponse {
   coverId?: number;
   playtime?: string;
   chordProgression?: string;
+  chordProgressionId?: number;
   genreId: number;
   genre: string;
   subgenreId?: number;
@@ -180,20 +181,19 @@ export class SongCreateRequest {
   coverImage: string;
   coverImage_files: File[];
 }
-export class Song {
+export class SongLoV {
   id: number;
   name: string;
 }
-export class ChordProgression {
+export class ChordProgressionLoV {
   id: number;
   name: string;
 }
-export class Genre {
+export class MainGenreLoV {
   id: number;
   name: string;
-  mainGenre: Genre;
 }
-export class Subgenre {
+export class SubgenreLoV {
   id: number;
   name: string;
 }
