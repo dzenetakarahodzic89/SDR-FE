@@ -75,7 +75,7 @@ export class EraRequest {
 }
 
 export class EraArtistResponse {
-  eraName: String;
+  eraName: string;
   soloCount: number;
   groupCount: number;
 }

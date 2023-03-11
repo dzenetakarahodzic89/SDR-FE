@@ -53,6 +53,17 @@ export class ArtistsByErasComponent implements OnInit {
     list: [],
   };
 
+  onEraChange(selectedEras: any[]) {
+    this.foundArtistByEras = [];
+    this.pieCharts.forEach((chart) => chart.destroy());
+    this.pieCharts = [];
+
+    const selectedEraNames = selectedEras.map((era) => era.name);
+    this.formConfig.children[0].list = this.formConfig.children[0].list.filter(
+      (era) => !selectedEraNames.includes(era.name)
+    );
+  }
+
   public setFormConfig() {
     this.getAllEras();
     this.formConfig = new Definition({
@@ -72,13 +83,15 @@ export class ArtistsByErasComponent implements OnInit {
   loadData() {}
 
   public foundArtistByEras: EraArtistResponse[] = [];
+
   getArtistsByEras() {
-    let eraRequest = new EraRequest();
-    if (!this.model.selectEra) {
+    if (!this.model.selectEra || this.model.selectEra.length === 0) {
       this.toastr.error('Please select at least one era');
       return;
     }
+
     const requests = this.model.selectEra.map((era) => {
+      const eraRequest = new EraRequest();
       eraRequest.era = era;
       return this.Eraservice.artistByEras(eraRequest);
     });
@@ -92,6 +105,8 @@ export class ArtistsByErasComponent implements OnInit {
         };
       });
 
+      console.log(this.foundArtistByEras);
+      console.log(this.model.selectEra);
       this.setPieChart();
     });
   }
@@ -100,6 +115,8 @@ export class ArtistsByErasComponent implements OnInit {
   pieCharts: Chart[] = [];
 
   setPieChart() {
+    this.pieCharts.forEach((chart) => chart.destroy());
+    this.pieCharts = [];
     this.foundArtistByEras.forEach((era, index) => {
       const pieChart = new Chart(`pieChart${index}`, {
         type: this.pieChartType,
@@ -118,7 +135,16 @@ export class ArtistsByErasComponent implements OnInit {
             },
           ],
         },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: era.eraName,
+            },
+          },
+        },
       });
+
       this.pieCharts.push(pieChart);
     });
   }

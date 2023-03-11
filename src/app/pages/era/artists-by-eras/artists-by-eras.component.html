@@ -8,11 +8,10 @@
   <zx-button zx-block-action [config]="searchButton"></zx-button>
 </zx-block>
 
-<div class="row">
-  <div class="col-4" *ngFor="let era of model.selectEra; let i = index">
+<div class="chart-container">
+  <div *ngFor="let era of model.selectEra; let i = index" class="chart">
     <div style="text-align: center">
       <canvas id="pieChart{{ i }}"></canvas>
-      <h4>{{ foundArtistByEras[i]?.eraName }}</h4>
     </div>
   </div>
 </div>

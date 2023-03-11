@@ -1,5 +1,5 @@
 .chart-container {
-  display: inline-block;
-  width: 300px;
-  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 }
