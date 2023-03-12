@@ -23,9 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": [
-              "query-string"
-            ],
+            "allowedCommonJsDependencies": ["query-string"],
             "outputPath": "dist/sdrfe",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -42,9 +40,10 @@
                 "input": "node_modules/monaco-editor/min-maps",
                 "output": "./assets/min-maps/"
               },
-              { "glob": "**/*", 
-                "input": "node_modules/tinymce", 
-                "output": "/tinymce/" 
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce",
+                "output": "/tinymce/"
               },
               "src/favicon.ico",
               "src/assets"
@@ -56,9 +55,7 @@
               "src/styles.scss",
               "node_modules/flag-icons/css/flag-icons.css"
             ],
-            "scripts": [
-
-            ]
+            "scripts": ["node_modules/vexflow/releases/vexflow-debug.js"]
           },
           "configurations": {
             "production": {
@@ -118,18 +115,13 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
+            "scripts": ["node_modules/vexflow/releases/vexflow-debug.js"]
           }
         }
       }
     },
-  "defaultProject": "sdrfe"
+    "defaultProject": "sdrfe"
   }
 }

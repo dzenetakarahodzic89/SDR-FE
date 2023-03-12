@@ -36,7 +36,7 @@ export class ArtistSongResponse {
 
 export class GenreResponse {
   id: number;
-  name:string;
+  name: string;
 }
 
 export class AlbumResponse {
@@ -75,6 +75,16 @@ export class EraSearchRequest {
     this.page = page;
     this.pageSize = pageSize;
   }
+}
+
+export class EraRequest {
+  era: number;
+}
+
+export class EraArtistResponse {
+  eraName: string;
+  soloCount: number;
+  groupCount: number;
 }
 
 export class EraCreateRequest {

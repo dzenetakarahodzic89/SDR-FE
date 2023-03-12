@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 import { ObjectType } from '../../shared/object-type.constant';
-import { AlbumResponse, SongOfAlbumUpdateRequest, SongResponse } from '../shared/album.model';
+import { AlbumResponse, SongOfAlbumUpdateRequest, SongResponse, LoV } from '../shared/album.model';
 import { AlbumService } from '../shared/album.service';
 
 
@@ -29,6 +29,9 @@ export class AlbumOverviewComponent implements OnInit {
   artistsAreLoading: Boolean;
   connectionSources = [];
   connectionTypes = [];
+  songsPopUp: LoV[];
+  artistsPopUp: LoV[];
+  labelsPopUp: LoV[];
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -198,6 +201,9 @@ export class AlbumOverviewComponent implements OnInit {
       ],
       model: this.addSongModel
     });
+    this.addSongPopUpFormConfig.children[0].list = this.songsPopUp;
+    this.addSongPopUpFormConfig.children[1].list = this.artistsPopUp;
+    this.addSongPopUpFormConfig.children[2].list = this.labelsPopUp;
   };
 
   public connectMediaPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
@@ -363,7 +369,9 @@ export class AlbumOverviewComponent implements OnInit {
   loadSongs() {
     this.route.params.subscribe(params => {
       this.albumService.getSongsNotInAlbum(params.id).subscribe(response => {
-        this.songInput.list = response;
+        this.songsPopUp = response;
+        if (this.addSongPopUpFormConfig != undefined)
+          this.addSongPopUpFormConfig.children[0].list = response;
         this.songsAreLoading = false;
       })
     })
@@ -372,7 +380,9 @@ export class AlbumOverviewComponent implements OnInit {
   loadLabels() {
     this.route.params.subscribe(params => {
       this.albumService.getLabelsNotInAlbum(params.id).subscribe(response => {
-        this.labelInput.list = response;
+        this.labelsPopUp = response;
+        if (this.addSongPopUpFormConfig != undefined)
+          this.addSongPopUpFormConfig.children[2].list = response;
         this.labelsAreLoading = false;
       })
     })
@@ -380,13 +390,15 @@ export class AlbumOverviewComponent implements OnInit {
 
   loadArtists() {
     this.albumService.getArtists().subscribe(response => {
-      this.artistInput.list = response;
+      this.artistsPopUp = response;
+      if (this.addSongPopUpFormConfig != undefined)
+        this.addSongPopUpFormConfig.children[1].list = response;
       this.artistsAreLoading = false;
     })
   }
 
   addSong() {
-    if(!this.addSongPopUpFormConfig.isValid) {
+    if (!this.addSongPopUpFormConfig.isValid) {
       this.toastr.error("Fill in the input fields!");
       return;
     }

@@ -3,7 +3,7 @@ export class SongResponseAll {
   songName: string;
   artistId: number;
   artistName: string;
-};
+}
 
 export class SongResponse {
   id: number;
@@ -15,12 +15,44 @@ export class SongResponse {
   information: string;
   dateOfRelease: Date;
   label: string;
-  chordProgression: string;
+  remixId?: number;
+  coverId?: number;
+  playtime?: string;
+  chordProgression?: string;
+  chordProgressionId?: number;
   genreId: number;
   genre: string;
+  subgenreId?: number;
   subgenres: SubGenres;
   audioUrl: string;
   artists: ArtistSongResponse[];
+  songInstruments: SongInstrumentSongResponse[];
+  instrumentsNoteSheet: SongInstrumentsResponse;
+}
+
+export class SongInstrumentsResponse {
+  id: number;
+  displayName: string;
+}
+
+export class SongNameResponse {
+  id: number;
+  name: string;
+}
+
+export class FindNoteSheet {
+  instrumentId: number;
+  displayName: string;
+}
+
+export class SongInstrumentSongResponse {
+  songInstrumentId: number;
+  songId: number;
+  instrumentId: number;
+}
+export class PersonLov {
+  id: number;
+  name: string;
 }
 interface SubGenres {
   [key: number]: string;
@@ -81,6 +113,11 @@ export class SongSearchRequest {
     this.pageSize = pageSize;
   }
 }
+export class AddInstrumentToSongRequest {
+  instrumentId: number;
+  songId: number;
+  personId: number;
+}
 export class FileUploadSegmentCreateRequest {
   mediaObjectId: number;
   fileName: string;
@@ -94,7 +131,7 @@ export class FileUploadSegmentCreateRequest {
 export class SimilarityCreateRequest {
   songA: number;
   songB: number;
-};
+}
 
 export class SongSimilarityResponse {
   id: number;
@@ -126,4 +163,42 @@ export class SongSimilarityDetailRequest {
 
 export class SongSimilarityRequest {
   id: number;
+}
+
+export class SongCreateRequest {
+  id?: number;
+  name: string;
+  outlineText: string;
+  information: string;
+  isRemix?: boolean;
+  isCover?: boolean;
+  remixId?: number;
+  coverId?: number;
+  dateOfRelease?: Date;
+  chordProgressionId?: number;
+  genreId: number;
+  subgenreId?: number;
+  playtimeHours?: number;
+  playtimeMinutes?: number;
+  playtimeSeconds?: number;
+  playtime?: string;
+  coverImageData: string | ArrayBuffer;
+  coverImage: string;
+  coverImage_files: File[];
+}
+export class SongLoV {
+  id: number;
+  name: string;
+}
+export class ChordProgressionLoV {
+  id: number;
+  name: string;
+}
+export class MainGenreLoV {
+  id: number;
+  name: string;
+}
+export class SubgenreLoV {
+  id: number;
+  name: string;
 }
