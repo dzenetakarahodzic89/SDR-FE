@@ -40,7 +40,7 @@
       },
       {
         "code": "HUB_ERA_STATIC",
-        "icon": "fad fa-opera",
+        "icon": "fad fa-timer",
         "label": "Eras",
         "url": "era/search",
         "attributes": {}
@@ -53,6 +53,13 @@
         "attributes": {}
       },
 
+      {
+        "code": "HUB_ARTIST_STATIC",
+        "icon": "fad fa-pallete",
+        "label": "Artists",
+        "url": "artist/search",
+        "attributes": {}
+      },
       {
         "code": "HUB_ALBUM_STATIC",
         "icon": "fad fa-album",
