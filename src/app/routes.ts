@@ -27,6 +27,7 @@ import { SongSimilarityOverviewComponent } from './pages/song/song-similarity-ov
 import { SongSearchComponent } from './pages/song/song-search/song-search.component';
 import { ArtistsByErasComponent } from './pages/era/artists-by-eras/artists-by-eras.component';
 import { ChordProgressionSearchComponent } from './pages/chordprogression/chordprogression-search/chordprogression-search.component';
+import { ArtistSearchComponent } from './pages/artist/artist-search/artist-search.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -64,5 +65,6 @@ export const appRoutes: Routes = [
   { path: 'era/artists-over-eras', component: ArtistsByErasComponent },
   { path: 'song/create', component: SongCreateComponent },
   { path: 'song/update/:id', component: SongCreateComponent },
-  { path: 'chord-progress/search', component: ChordProgressionSearchComponent }
+  { path: 'chord-progress/search', component: ChordProgressionSearchComponent },
+  { path: 'artist/search', component: ArtistSearchComponent },
 ];
