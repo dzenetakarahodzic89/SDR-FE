@@ -1,17 +1,16 @@
 <zx-tabs [config]="tabConfig">
-    <zx-block zx-tab-item *ngIf="prvaFormaConfig" id="overviewTab" [config]="overviewBlock">
+    <zx-block zx-tab-item *ngIf="firstFormConfig && secondFormConfig && this.model" id="overviewTab" [config]="overviewBlock">
         
-        <zx-form-loader zx-block-body [component]="prvaFormaConfig" [model]="this.model" class="col-24">
-        </zx-form-loader>
+        <zx-form-loader zx-block-body [component]="firstFormConfig" [model]="this.model" class="col-24"></zx-form-loader>
 
-        <div zx-block-body class="row">
-            <zx-form-loader zx-block-body [component]="drugaFormaConfig" [model]="this.model" class="col-10"></zx-form-loader>  
-            <div zx-block-body class="col-12 row imageRow bodyContainer">
+        <div zx-block-body class="row col-24">
+            <zx-form-loader zx-block-body [component]="secondFormConfig" [model]="this.model" class="col-10"></zx-form-loader>
+            <div zx-block-body class="row col-14 imageRow bodyContainer">
                 <div class="placeholder"></div>
                 <p class="">Cover image: </p>
                 <img class="imageContainer" *ngIf="this.model.coverImageData" [src]="this.model.coverImageData" alt="location cover image">
                 <img class="imageContainer" *ngIf="!this.model.coverImageData" [src]="this.firstUrl" alt="Default image">
-                <zx-form-loader [component]="imageFormConfig" [model]="this.model" class="col-10"></zx-form-loader>
+                <zx-form-loader [component]="imageFormConfig" [model]="this.model" class="col-8"></zx-form-loader>
             </div>
         </div>
     

@@ -23,7 +23,6 @@ import { MultisearchRefreshComponent } from './pages/multisearch/multisearch-ref
 import { LabelCreateComponent } from './pages/label/label-create/label-create.component';
 import { EraSearchComponent } from './pages/era/era-search/era-search.component';
 import { SongSimilarityOverviewComponent } from './pages/song/song-similarity-overview/song-similarity-overview.component';
-
 import { EraCreateComponent } from './pages/era/era-create/era-create.component';
 
 export const appRoutes: Routes = [
@@ -57,7 +56,6 @@ export const appRoutes: Routes = [
   { path: 'label/create', component: LabelCreateComponent },
   { path: 'label/update/:id', component: LabelCreateComponent },
   { path: 'era/search', component: EraSearchComponent },
-
   { path: 'era/create', component: EraCreateComponent },
   { path: 'era/update/:id', component: EraCreateComponent },
 ];

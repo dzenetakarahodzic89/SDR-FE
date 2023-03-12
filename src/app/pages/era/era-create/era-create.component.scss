@@ -7,18 +7,17 @@
 }
 
 img {
-    width     : 300px;
-    height    : 300px;
+    width: 350px;
+    height: 350px;
     margin-top: 5px;
 }
     
 .imageContainer {
     border: 1px solid black;
-    margin-top: 5px;
 }
 
 .bodyContainer {
-    margin-left: 125px;
-    column-gap: 5px;
-    //flex-direction: end;
+    column-gap: 10px;
+    display: flex;
+    justify-content: flex-end;
 }
