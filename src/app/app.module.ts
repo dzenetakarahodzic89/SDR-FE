@@ -51,6 +51,7 @@ import { AlbumModule } from './pages/album/album.module';
 import { MultisearchModule } from './pages/multisearch/multisearch.module';
 import { EraModule } from './pages/era/era.module';
 import { NotesheetModule } from './pages/notesheet/notesheet-overview/notesheet.module';
+import { ChordProgressionModule } from './pages/chordprogression/chordprogression.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -95,6 +96,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     AlbumModule,
     MultisearchModule,
     EraModule,
+    ChordProgressionModule
     // use forRoot() in main app module only.
   ],
   providers: [
@@ -134,7 +136,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
 
 export function createCompiler(compilerFactory: CompilerFactory) {
   return compilerFactory.createCompiler();
