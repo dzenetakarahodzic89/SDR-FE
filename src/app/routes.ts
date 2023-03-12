@@ -50,10 +50,7 @@ export const appRoutes: Routes = [
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
   { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
-  {
-    path: 'notesheet/:songId/:instrumentId/overview',
-    component: NotesheetOverviewComponent,
-  },
+  { path: 'notesheet/:songId/:instrumentId/overview', component: NotesheetOverviewComponent},
   { path: 'album/create', component: AlbumCreateComponent },
   { path: 'album/update/:id', component: AlbumCreateComponent },
   { path: 'playlist/generate-playlist', component: GeneratePlaylistComponent },
@@ -65,7 +62,7 @@ export const appRoutes: Routes = [
   { path: 'era/artists-over-eras', component: ArtistsByErasComponent },
   { path: 'song/create', component: SongCreateComponent },
   { path: 'song/update/:id', component: SongCreateComponent },
-  { path: 'chord-progress/search', component: ChordProgressionSearchComponent }
+  { path: 'chord-progress/search', component: ChordProgressionSearchComponent },
   { path: 'era/create', component: EraCreateComponent },
   { path: 'era/update/:id', component: EraCreateComponent },
 ];
