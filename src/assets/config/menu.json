@@ -40,7 +40,7 @@
       },
       {
         "code": "HUB_ERA_STATIC",
-        "icon": "fad fa-timer",
+        "icon": "far fa-hourglass",
         "label": "Eras",
         "url": "era/search",
         "attributes": {}
@@ -55,7 +55,7 @@
 
       {
         "code": "HUB_ARTIST_STATIC",
-        "icon": "fad fa-pallete",
+        "icon": "far fa-palette",
         "label": "Artists",
         "url": "artist/search",
         "attributes": {}
@@ -79,6 +79,13 @@
         "icon": "fad fa-user-music",
         "label": "Artists distribution over eras",
         "url": "era/artists-over-eras",
+        "attributes": {}
+      },
+      {
+        "code": "HUB_CHORD_PROGRESSION_STATIC",
+        "icon": "far fa-music",
+        "label": "Chord Progressions",
+        "url": "chord-progress/search",
         "attributes": {}
       }
     ]
