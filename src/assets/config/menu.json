@@ -87,6 +87,13 @@
         "label": "Chord Progressions",
         "url": "chord-progress/search",
         "attributes": {}
+      },
+      {
+        "code": "HUB_EVENT_SEARCH_STATIC",
+        "icon": "fad fa-calendar-star",
+        "label": "Event search",
+        "url": "event/search",
+        "attributes": {}        
       }
     ]
   }
