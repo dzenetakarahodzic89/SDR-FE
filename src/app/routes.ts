@@ -29,6 +29,8 @@ import { ArtistsByErasComponent } from './pages/era/artists-by-eras/artists-by-e
 import { ChordProgressionSearchComponent } from './pages/chordprogression/chordprogression-search/chordprogression-search.component';
 import { EraCreateComponent } from './pages/era/era-create/era-create.component';
 import { ArtistSearchComponent } from './pages/artist/artist-search/artist-search.component';
+import { EventSearchComponent } from './pages/event/event-search/event-search.component';
+import { EventOverviewComponent } from './pages/event/event-overview/event-overview.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -67,4 +69,6 @@ export const appRoutes: Routes = [
   { path: 'era/create', component: EraCreateComponent },
   { path: 'era/update/:id', component: EraCreateComponent },
   { path: 'artist/search', component: ArtistSearchComponent },
+  { path: 'event/search', component: EventSearchComponent },
+  { path: 'event/overview', component: EventOverviewComponent }
 ];
