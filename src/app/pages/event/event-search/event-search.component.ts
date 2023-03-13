@@ -176,7 +176,6 @@ export class EventSearchComponent implements OnInit {
       this.paginationInfo.currentPage = response.page;
 
       this.events = response.payload;
-      console.log(response);
     });
   }
 }
