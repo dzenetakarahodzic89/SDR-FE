@@ -14,8 +14,10 @@ export class EventSearchComponent implements OnInit {
   public model: any = {};
   public formConfig: Definition;
   public eventQuery: EventFilterQuery;
+  public events: any[];
 
   private paginationInfo: PaginationInformation = new PaginationInformation();
+  public eventsAreLoading = false;
 
   constructor(
     private eventService: EventService
@@ -30,6 +32,48 @@ export class EventSearchComponent implements OnInit {
     label: 'Search events',
   });
 
+  
+  public eventsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+    label: 'Events',
+  });
+
+  public previousPageButton: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'previousPage',
+        icon: 'fas fa-angle-double-left',
+        action: () => this.getPreviousPage(),
+      },
+    ],
+  });
+
+  getPreviousPage() {
+    if (this.paginationInfo.currentPage > 1) 
+      this.paginationInfo.currentPage--;
+    else 
+      this.paginationInfo.currentPage = this.paginationInfo.numberOfPages;
+    this.searchEvents();
+  }
+
+  public nextPageButton: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'nextPage',
+        icon: 'fas fa-angle-double-right',
+        action: () => this.getNextPage()
+      },
+    ],
+  });
+
+  getNextPage() {
+    if (this.paginationInfo.currentPage < this.paginationInfo.numberOfPages)
+      this.paginationInfo.currentPage++;
+    else 
+      this.paginationInfo.currentPage = 1;
+    this.searchEvents();
+  }
+
   public searchButton: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -37,6 +81,7 @@ export class EventSearchComponent implements OnInit {
         label: 'Search',
         icon: 'fas fa-search',
         action: () => {
+          this.paginationInfo.currentPage = 1;
           this.searchEvents();
         },
       },
@@ -95,6 +140,7 @@ export class EventSearchComponent implements OnInit {
   }
 
   searchEvents() {
+    this.eventsAreLoading = true;
     this.eventQuery = new EventFilterQuery();
 
     if (this.model.name != undefined && (this.model.name as string).trim() != "") {
@@ -122,8 +168,14 @@ export class EventSearchComponent implements OnInit {
     this.eventQuery.page = this.paginationInfo.currentPage;
     this.eventQuery.size = this.paginationInfo.pageSize;
 
-    console.log(this.eventQuery);
     this.eventService.searchEvents(this.eventQuery).subscribe(response => {
+      this.eventsAreLoading = false;
+
+      this.paginationInfo.numberOfPages = response.numberOfPages;
+      this.paginationInfo.numberOfRecords = response.numberOfRecords;
+      this.paginationInfo.currentPage = response.page;
+
+      this.events = response.payload;
       console.log(response);
     });
   }
