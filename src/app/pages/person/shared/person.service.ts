@@ -14,7 +14,7 @@ export class PersonService {
   constructor(private api: ZxApi) { }
 
   searchPersons(searchParams): Observable<PersonResponse[]> {
-    return this.api.get(PersonApi.SEARCH_STORIES, searchParams).pipe(
+    return this.api.post(PersonApi.SEARCH_STORIES, searchParams).pipe(
       map((response) => {
         const stories = response['payload'] as PersonResponse[];
         return stories;
@@ -31,9 +31,9 @@ export class PersonService {
   }
 
   createArtistFromPerson(personId) {
-    return this.api.post(PersonApi.POST_ARTIST.replace("#", personId)).pipe(
-      map((response) => response['payload'])
-    );
+    return this.api
+      .post(PersonApi.POST_ARTIST.replace('#', personId))
+      .pipe(map((response) => response['payload']));
   }
 
   updatePerson(person: PersonCreateRequest) {

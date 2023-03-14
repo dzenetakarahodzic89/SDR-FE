@@ -17,9 +17,19 @@ export class PersonResponse {
 
 export class PersonSearchRequest {
   name: string;
+  sortBy: number;
+  personGender: string;
+  page: number;
+  pageSize: number;
 
-  constructor(name: string) {
+  constructor(name: string, sortBy: number, personGender: string,
+    page: number,
+    pageSize: number) {
     this.name = name;
+    this.sortBy = sortBy;
+    this.personGender = personGender
+    this.page = page;
+    this.pageSize = pageSize;
   }
 }
 
