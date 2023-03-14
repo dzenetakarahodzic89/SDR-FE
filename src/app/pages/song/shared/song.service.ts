@@ -22,7 +22,8 @@ import {
   SongSimilarityResponse,
   SongNameResponse,
   SubgenreLoV,
-  LanguageNameResponse
+  LanguageNameResponse,
+  LyricResponseUpdate
 } from './song.model';
 import { SongCreateRequest } from './song.model';
 
@@ -216,6 +217,18 @@ export class SongService {
         return stories;
       })
     );
+  }
+
+  createLyric(body: any): Observable<LyricResponseUpdate> {
+    return this.api.post(SongApi.POST_LYRIC, body).pipe(map((response) => response['payload']));
+  }
+
+  updateLyrics(body: LyricResponseUpdate): Observable<LyricResponseUpdate> {
+    return this.api.put(SongApi.PUT_LYRIC.replace("#", body.id.toString()), body).pipe(map((response) => response['payload']));
+  }
+
+  getLyricsByCriteria(criteria: any): Observable<LyricResponseUpdate[]> {
+    return this.api.get(SongApi.GET_LYRICS, criteria).pipe(map((response) => response['payload']));
   }
 
   getAllSongNames(): Observable<SongNameResponse[]> {

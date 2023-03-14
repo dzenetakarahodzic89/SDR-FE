@@ -98,7 +98,7 @@
                       [model]="lyricPopupModel"
                       class="col-24"
                     ></zx-form-loader>
-                    <div zx-block-body *ngIf="lyricPopupFormConfig && !songIsLoading">
+                    <div zx-block-body *ngIf="lyricPopupFormConfig && !songIsLoading && showEditor">
                       <editor [init]="{height: 300}" [(ngModel)]="this.lyricPopupModel.lyrics"></editor>
                     </div>
                   </zx-block>

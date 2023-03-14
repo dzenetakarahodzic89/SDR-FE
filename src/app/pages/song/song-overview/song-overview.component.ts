@@ -25,7 +25,8 @@ import {
   FindNoteSheet,
   SongNameResponse,
   LanguageNameResponse,
-  Lyrics,
+  LyricPopupModel,
+  LyricResponseUpdate,
 } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
 
@@ -35,8 +36,9 @@ import { SongService } from '../shared/song.service';
   styleUrls: ['./song-overview.component.scss'],
 })
 export class SongOverviewComponent implements OnInit {
+  showEditor: boolean = false;
   cachedLanguages: LanguageNameResponse[] = [];
-  cachedLyrics: Lyrics[] = [];
+  cachedLyrics: LyricPopupModel[] = [];
   type = ObjectType.SONG;
   songIsLoading = false;
   song: SongResponse;
@@ -72,7 +74,7 @@ export class SongOverviewComponent implements OnInit {
   public instrumentPopUpFormConfig: Definition;
   public lyricPopupFormConfig: Definition;
   public instrumentPopUpModel: FindNoteSheet;
-  public lyricPopupModel: any;
+  public lyricPopupModel: LyricPopupModel;
 
   instrumentNoteSheetInput: Definition = new Definition({
     template: 'ZxSelect',
@@ -180,34 +182,78 @@ export class SongOverviewComponent implements OnInit {
         icon: 'fas fa-pen-square',
         action: () => {
           this.updateLyrics();
-          this.lyricPopupModel = {
-            languageId: undefined,
-            lyrics: ''
-          };
+          this.resetLyrics();
           this.lyricPopup.hide();
         }
       },
       {
         name: 'close',
         label: 'Close',
-        class: 'classic primary',
+        class: 'classic',
         icon: 'fa fa-plus-circle',
         action: () => {
-          this.lyricPopupModel = {
-            languageId: undefined,
-            lyrics: ''
-          };
-          this.lyricPopup.hide()
+          this.resetLyrics();
+          this.lyricPopup.hide();
         }
       }
     ],
   });
 
-  updateLyrics() {
-    console.log("Updated my lyrics!");
-    console.log(this.lyricPopupModel);
+  resetLyrics() {
+    this.lyricPopupModel = new LyricPopupModel();
+    this.lyricPopupModel.languageId = undefined;
+    this.lyricPopupModel.lyrics = '';
   }
 
+  onLanguageSelect() {
+    let cachedLyric: LyricPopupModel = undefined;
+
+    this.cachedLyrics.forEach(lyric => {
+      if (lyric.languageId == this.lyricPopupModel.languageId) 
+        cachedLyric = lyric;
+    });
+
+    if (cachedLyric != undefined) {
+      this.lyricPopupModel = JSON.parse(JSON.stringify(cachedLyric)) as LyricPopupModel;
+    }
+    else {
+      this.songService.getLyricsByCriteria(this.makeLyricSearchRequest()).subscribe(lyricArray => {
+        if (lyricArray.length == 0) {
+          this.songService.createLyric({
+            languageId: this.lyricPopupModel.languageId,
+            text: '',
+            songId: this.song.id
+          }).subscribe(payload => {
+            this.lyricPopupModel.id = payload['id'];
+            this.lyricPopupModel.lyrics = payload['text'];
+            this.cachedLyrics.push(JSON.parse(JSON.stringify(this.lyricPopupModel)));
+          })
+        } else {
+          this.lyricPopupModel.id = lyricArray[0].id;
+          this.lyricPopupModel.lyrics = lyricArray[0].text;
+          this.cachedLyrics.push(JSON.parse(JSON.stringify(this.lyricPopupModel)));
+        }
+      });
+    }
+  }
+
+  updateLyrics() {
+    let body = new LyricResponseUpdate();
+    body.id = this.lyricPopupModel.id;
+    body.languageId = this.lyricPopupModel.languageId;
+    body.songId = this.song.id;
+    body.text = this.lyricPopupModel.lyrics;
+    this.songService.updateLyrics(body).subscribe(lyric => {
+      this.cachedLyrics.find(el => el.id == lyric.id).lyrics = lyric.text;
+    });
+  } 
+
+  makeLyricSearchRequest(): any {
+    return {
+      'language.id': this.lyricPopupModel.languageId,
+      'song.id': this.song.id
+    };
+  }
 
   public popUpSongBlockConfig: ZxBlockModel;
   public popUpSongFormConfig: Definition;
@@ -240,9 +286,11 @@ export class SongOverviewComponent implements OnInit {
       {
         name: 'changeLyric',
         label: 'Change lyrics',
+        icon: 'fas fa-music-alt',
         action: () => {
           this.getLanguages();
           this.lyricPopup.show();
+          this.showEditor = true;
         },
       },
     ],
@@ -461,6 +509,10 @@ export class SongOverviewComponent implements OnInit {
     type: 'filter',
     name: 'languageId',
     label: 'Select language',
+    validation: {
+      required: true
+    },
+    onSelect: () => this.onLanguageSelect() 
   });
 
   linkInput = new Definition({
@@ -718,6 +770,7 @@ export class SongOverviewComponent implements OnInit {
     private connectedMediaService: ConnectedMediaService,
     private toastr: ToastrService
   ) {}
+
   saveAudioToSong = async () => {
     if (
       this.uploadSongModel.fileSegmentContent_files &&
@@ -766,10 +819,8 @@ export class SongOverviewComponent implements OnInit {
   }
   ngOnInit(): void {
     this.instrumentPopUpModel = new FindNoteSheet();
-    this.lyricPopupModel = {
-      languageId: undefined,
-      lyrics: '',
-    };
+    this.showEditor = false;
+    this.resetLyrics();
     let id = 1;
     this.uploadSongModel = new FileUploadSegmentCreateRequest();
     Object.values(ConnectedMediaConnectionSource).forEach((t) => {
@@ -830,7 +881,6 @@ export class SongOverviewComponent implements OnInit {
     if (this.cachedLanguages.length != 0) 
       this.lyricPopupFormConfig.children[0].list = this.cachedLanguages;
     else {
-      console.log('Kontaktiram bekend!');
       this.songService.getAllLanguages().subscribe(response => {
         this.cachedLanguages = response;
         this.lyricPopupFormConfig.children[0].list = this.cachedLanguages;
@@ -849,7 +899,6 @@ export class SongOverviewComponent implements OnInit {
       this.songService.getSong(params.id).subscribe((response) => {
         this.instrumentPopUpFormConfig.children[0].list = response.instruments;
         this.songIsLoading = false;
-        console.log(this.instrumentPopUpFormConfig.children[0].list);
       });
     });
   }

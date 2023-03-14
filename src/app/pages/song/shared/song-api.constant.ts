@@ -1,4 +1,7 @@
 export class SongApi {
+  public static PUT_LYRIC = '/sdrbe/lyric/#';
+  public static POST_LYRIC = '/sdrbe/lyric';
+  public static GET_LYRICS = '/sdrbe/lyric';
   public static GET_LANGUAGES = '/sdrbe/language';
   public static GET_SONG = '/sdrbe/song/#';
   public static POST_SIMILARITY = '/sdrbe/song-similarity';
