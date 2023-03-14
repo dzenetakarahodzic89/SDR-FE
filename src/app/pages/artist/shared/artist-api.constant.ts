@@ -4,4 +4,6 @@ export class ArtistApi {
   public static GET_GENRE_LOV = '/sdrbe/genre/lov';
   public static GET_ALBUM_LOV = '/sdrbe/album/lov';
   public static GET_GENRE_NAMES = '/sdrbe/genre/subGenre-mainGenre';
+  public static GET_ARTIST_BY_ID = '/sdrbe/artist/#';
+
 }

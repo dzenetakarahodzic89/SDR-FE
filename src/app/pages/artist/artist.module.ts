@@ -7,9 +7,10 @@ import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { SharedModule } from '../shared/shared.module';
 import { ArtistService } from './shared/artist.service';
+import { ArtistOverviewComponent } from './artist-overview/artist-overview.component';
 
 @NgModule({
-  declarations: [ArtistSearchComponent],
+  declarations: [ArtistSearchComponent,ArtistOverviewComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -18,7 +19,7 @@ import { ArtistService } from './shared/artist.service';
     ZxPopupLayoutModule,
     ZxFormsModule,
   ],
-  exports: [ArtistSearchComponent],
+  exports: [ArtistSearchComponent,ArtistOverviewComponent],
   providers: [
     ArtistService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
