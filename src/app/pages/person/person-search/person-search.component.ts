@@ -83,8 +83,16 @@ export class PersonSearchComponent implements OnInit {
     label: 'Name'
   };
 
-  sortByInput = "last_date";
+  sortList = [{ code: "last_date", displayName: "Last edit" }, { code: "name", displayName: "Alphabetical order" }]
+  sortByInput = {
+    template: 'ZxSelect',
+    class: ['col-24'],
+    type: "select",
+    name: "sortBy",
+    label: 'Sort by',
+    list: this.sortList
 
+  };
   public formConfig: Definition;
   foundPersons: AppBox[] = [];
   paginationDetails = {
