@@ -12,6 +12,7 @@ import { InstrumentCreateComponent } from './pages/instrument/instrument-create/
 import { InstrumentSearchComponent } from './pages/instrument/instrument-search/instrument-search.component';
 import { PlaylistSearchComponent } from './pages/playlist/playlist-search/playlist-search.component';
 import { AlbumOverviewComponent } from './pages/album/album-overview/album-overview.component';
+import { ArtistOverviewComponent } from './pages/artist/artist-overview/artist-overview.component';
 
 import { SongOverviewComponent } from './pages/song/song-overview/song-overview.component';
 import { SongCreateComponent } from './pages/song/song-create/song-create.component';
@@ -69,6 +70,8 @@ export const appRoutes: Routes = [
   { path: 'era/create', component: EraCreateComponent },
   { path: 'era/update/:id', component: EraCreateComponent },
   { path: 'artist/search', component: ArtistSearchComponent },
+  { path: 'artist/:id/overview', component: ArtistOverviewComponent },
+  
   { path: 'event/search', component: EventSearchComponent },
   { path: 'event/overview', component: EventOverviewComponent }
 ];

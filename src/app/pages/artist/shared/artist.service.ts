@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { ArtistApi } from './artist-api.constant';
 import {
   ArtistResponse,
+  ArtistSingleResponse,
   GenreNameResponse,
   GenreResponse,
   LoVResponse,
@@ -84,5 +85,13 @@ export class ArtistService {
         return genres;
       })
     );
+  }
+  getArtist(id:number): Observable<ArtistSingleResponse> {
+    return this.api.get(ArtistApi.GET_ARTIST_BY_ID.replace('#',id.toString())).pipe(
+      map(response=>{
+        const message = response['payload'];
+        return message;
+      })
+    )
   }
 }
