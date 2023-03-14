@@ -1,4 +1,5 @@
 export class SongApi {
+  public static GET_LANGUAGES = '/sdrbe/language';
   public static GET_SONG = '/sdrbe/song/#';
   public static POST_SIMILARITY = '/sdrbe/song-similarity';
   public static SEARCH_SONGS = '/sdrbe/song/search';

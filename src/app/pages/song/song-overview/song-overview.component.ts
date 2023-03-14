@@ -24,6 +24,8 @@ import {
   SongInstrumentsResponse,
   FindNoteSheet,
   SongNameResponse,
+  LanguageNameResponse,
+  Lyrics,
 } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
 
@@ -33,6 +35,8 @@ import { SongService } from '../shared/song.service';
   styleUrls: ['./song-overview.component.scss'],
 })
 export class SongOverviewComponent implements OnInit {
+  cachedLanguages: LanguageNameResponse[] = [];
+  cachedLyrics: Lyrics[] = [];
   type = ObjectType.SONG;
   songIsLoading = false;
   song: SongResponse;
@@ -64,8 +68,11 @@ export class SongOverviewComponent implements OnInit {
   });
 
   public instrumentPopUpBlockConfig: ZxBlockModel;
+  public lyricPopupBlockConfig: ZxBlockModel;
   public instrumentPopUpFormConfig: Definition;
+  public lyricPopupFormConfig: Definition;
   public instrumentPopUpModel: FindNoteSheet;
+  public lyricPopupModel: any;
 
   instrumentNoteSheetInput: Definition = new Definition({
     template: 'ZxSelect',
@@ -76,17 +83,41 @@ export class SongOverviewComponent implements OnInit {
     validation: { required: true },
   });
 
+  lyricInput: Definition = new Definition({
+    template: 'ZxInput',
+    class: ['col-24'],
+    type: 'textarea',
+    name: 'lyrics',
+    label: 'Song lyrics'
+  });
+
   public setInstrumentPopUpFormConfig() {
     this.instrumentPopUpBlockConfig = new ZxBlockModel({
       hideExpand: true,
       label: 'Instruments for song' + this.song.name,
     });
+
     this.instrumentPopUpFormConfig = new Definition({
       name: 'showNoteSheet',
       template: 'ZxForm',
       disabled: false,
       children: [this.instrumentNoteSheetInput],
       model: this.instrumentPopUpModel,
+    });
+  }
+
+  public setLyricPopupFormConfig() {
+    this.lyricPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Lyrics for ' + this.song.name,
+    });
+
+    this.lyricPopupFormConfig = new Definition({
+      name: 'changeLyric',
+      template: 'ZxForm',
+      disabled: false,
+      children: [this.languageInput],
+      model: this.lyricPopupModel,
     });
   }
 
@@ -140,14 +171,60 @@ export class SongOverviewComponent implements OnInit {
     ],
   });
 
+  public lyricPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'updateLyrics',
+        label: 'Update lyrics',
+        class: 'classic primary',
+        icon: 'fas fa-pen-square',
+        action: () => {
+          this.updateLyrics();
+          this.lyricPopupModel = {
+            languageId: undefined,
+            lyrics: ''
+          };
+          this.lyricPopup.hide();
+        }
+      },
+      {
+        name: 'close',
+        label: 'Close',
+        class: 'classic primary',
+        icon: 'fa fa-plus-circle',
+        action: () => {
+          this.lyricPopupModel = {
+            languageId: undefined,
+            lyrics: ''
+          };
+          this.lyricPopup.hide()
+        }
+      }
+    ],
+  });
+
+  updateLyrics() {
+    console.log("Updated my lyrics!");
+    console.log(this.lyricPopupModel);
+  }
+
+
   public popUpSongBlockConfig: ZxBlockModel;
   public popUpSongFormConfig: Definition;
   public uploadSongModel: FileUploadSegmentCreateRequest;
+
   public songPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
     hideCloseButton: false,
     size: 'col-12',
   });
+
+  public lyricPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+
   public uploadSongBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -157,6 +234,20 @@ export class SongOverviewComponent implements OnInit {
       },
     ],
   });
+
+  public changeLyricBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'changeLyric',
+        label: 'Change lyrics',
+        action: () => {
+          this.getLanguages();
+          this.lyricPopup.show();
+        },
+      },
+    ],
+  });
+
   public setUpSongUploadFormConfig() {
     this.popUpSongBlockConfig = new ZxBlockModel({
       hideExpand: true,
@@ -361,6 +452,15 @@ export class SongOverviewComponent implements OnInit {
     type: 'filter',
     name: 'songB',
     label: 'Song',
+  });
+
+  languageInput: Definition = new Definition({
+    template: 'ZxSelect',
+    class: ['col-24'],
+    layout: 'inline',
+    type: 'filter',
+    name: 'languageId',
+    label: 'Select language',
   });
 
   linkInput = new Definition({
@@ -666,6 +766,10 @@ export class SongOverviewComponent implements OnInit {
   }
   ngOnInit(): void {
     this.instrumentPopUpModel = new FindNoteSheet();
+    this.lyricPopupModel = {
+      languageId: undefined,
+      lyrics: '',
+    };
     let id = 1;
     this.uploadSongModel = new FileUploadSegmentCreateRequest();
     Object.values(ConnectedMediaConnectionSource).forEach((t) => {
@@ -698,6 +802,7 @@ export class SongOverviewComponent implements OnInit {
         this.setPopUpFormConfig();
         this.setLinkPopupConfig();
         this.setUpSongUploadFormConfig();
+        this.setLyricPopupFormConfig();
         this.setAddInstrumentPopUpFormConfig();
         this.instrumentsNoteSheet = response.instruments;
         this.loadInstruments();
@@ -719,6 +824,18 @@ export class SongOverviewComponent implements OnInit {
           this.statusOfAudio = response;
         });
     });
+  }
+
+  getLanguages(): void {
+    if (this.cachedLanguages.length != 0) 
+      this.lyricPopupFormConfig.children[0].list = this.cachedLanguages;
+    else {
+      console.log('Kontaktiram bekend!');
+      this.songService.getAllLanguages().subscribe(response => {
+        this.cachedLanguages = response;
+        this.lyricPopupFormConfig.children[0].list = this.cachedLanguages;
+      });
+    }      
   }
 
   getSubGenresText() {

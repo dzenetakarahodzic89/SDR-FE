@@ -40,6 +40,16 @@ export class SongNameResponse {
   name: string;
 }
 
+export class Lyrics {
+  languageId: number;
+  lyrics: string;
+}
+
+export class LanguageNameResponse {
+  id: number;
+  name: string;
+};
+
 export class FindNoteSheet {
   instrumentId: number;
   displayName: string;

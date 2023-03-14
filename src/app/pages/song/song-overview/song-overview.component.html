@@ -59,6 +59,11 @@
                 [config]="uploadSongBtn"
               ></zx-button>
               <zx-button
+                id="changeLyric"
+                zx-block-action
+                [config]="changeLyricBtn"
+              ></zx-button>
+              <zx-button
                 id="showNoteSheetBtn"
                 zx-block-action
                 [config]="showInstruments"
@@ -79,6 +84,29 @@
                 <zx-button
                   zx-popup-footer
                   [config]="instrumentPopUpFooterButtons"
+                  class="align-right"
+                ></zx-button>
+              </zx-popup>
+              <zx-popup [config]="lyricPopup">
+                <div zx-popup-body>
+                  <zx-block [config]="lyricPopupBlockConfig">
+                    <zx-preloader *ngIf="songIsLoading"></zx-preloader>
+                    <zx-form-loader
+                      *ngIf="lyricPopupFormConfig && !songIsLoading"
+                      zx-block-body
+                      [component]="lyricPopupFormConfig"
+                      [model]="lyricPopupModel"
+                      class="col-24"
+                    ></zx-form-loader>
+                    <div zx-block-body *ngIf="lyricPopupFormConfig && !songIsLoading">
+                      <editor [init]="{height: 300}" [(ngModel)]="this.lyricPopupModel.lyrics"></editor>
+                    </div>
+                  </zx-block>
+                </div>
+                
+                <zx-button
+                  zx-popup-footer
+                  [config]="lyricPopupFooterButtons"
                   class="align-right"
                 ></zx-button>
               </zx-popup>

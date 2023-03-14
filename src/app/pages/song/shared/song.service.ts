@@ -21,7 +21,8 @@ import {
   SongSimilarityRequest,
   SongSimilarityResponse,
   SongNameResponse,
-  SubgenreLoV
+  SubgenreLoV,
+  LanguageNameResponse
 } from './song.model';
 import { SongCreateRequest } from './song.model';
 
@@ -224,5 +225,11 @@ export class SongService {
         return songs;
       })
     )
+  }
+
+  getAllLanguages(): Observable<LanguageNameResponse[]> {
+    return this.api.get(SongApi.GET_LANGUAGES).pipe(
+      map(response => response['payload'])
+    );
   }
 }
