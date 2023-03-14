@@ -50,19 +50,22 @@ export class PersonPopUpResponse {
   PersonType: string;
 }
 
+
+
+
 export class PersonCreateRequest {
-  information: string;
+  id?: number;
+  information?: string;
   gender: string;
-  id: number;
   name: string;
   surname: string;
-  dateOfBirth: Date;
-  dateOfDeath: Date;
-  coverImageData: string | ArrayBuffer;
-  coverImage: string;
-  coverImage_files: File[];
-  outlineText: string;
-  countryId: number;
+  dateOfBirth?: Date;
+  dateOfDeath?: Date;
+  coverImageData?: string | ArrayBuffer;
+  coverImage?: string;
+  coverImage_files?: File[];
+  outlineText?: string;
+  countryId?: number;
 }
 
 export class PersonChartResponse {

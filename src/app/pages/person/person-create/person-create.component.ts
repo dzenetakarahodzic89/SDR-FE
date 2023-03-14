@@ -143,7 +143,10 @@ export class PersonCreateComponent implements OnInit {
         type: 'text',
         name: 'gender',
         label: 'Gender',
+        validation: { required: true }
       }),
+
+
       new Definition({
         template: 'ZxSelect',
         class: ['col-12'],
@@ -238,6 +241,7 @@ export class PersonCreateComponent implements OnInit {
     newPerson.gender = this.model.gender;
     newPerson.outlineText = this.model.outlineText;
     newPerson.countryId = this.model.countryId;
+
     if (!this.personId) {
       this.personService.createPerson(newPerson).subscribe(
         (responseCode) => {
@@ -253,18 +257,20 @@ export class PersonCreateComponent implements OnInit {
         }
       );
     } else {
-      newPerson['id'] = this.personId;
-      this.personService.updatePerson(newPerson).subscribe(
+      newPerson['id'] = +this.personId;
+      this.personService.updatePerson(+this.personId, newPerson).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {
             this.toastr.success('Person edited!');
             this.router.navigateByUrl('/person/' + this.personId + '/overview');
           } else {
-            this.toastr.error('Person edit failed!');
+            this.toastr.error('Person edit failed! ');
           }
         },
+
         (errorMsg: string) => {
-          this.toastr.error('Person edit failed!');
+          this.toastr.error('Person edit failed! OVU IZBACU');
+          console.log(this.personId);
         }
       );
     }

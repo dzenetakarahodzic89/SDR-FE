@@ -36,12 +36,14 @@ export class PersonService {
       .pipe(map((response) => response['payload']));
   }
 
-  updatePerson(person: PersonCreateRequest) {
-    return this.api.post(PersonApi.UPDATE_PERSON, person).pipe(
-      map((response) => {
-        return response;
-      })
-    );
+  updatePerson(personId: number, person: PersonCreateRequest) {
+    return this.api
+      .put(PersonApi.UPDATE_PERSON.replace('#', personId.toString()), person)
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
   }
 
   updatePersonFlag(request: PersonUpdateFlagRequest) {
