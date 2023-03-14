@@ -64,7 +64,7 @@ export class PersonCreateRequest {
   coverImageData?: string | ArrayBuffer;
   coverImage?: string;
   coverImage_files?: File[];
-  outlineText?: string;
+  outlineText: string;
   countryId?: number;
 }
 

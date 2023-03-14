@@ -111,6 +111,7 @@ export class PersonCreateComponent implements OnInit {
       );
     }
   }
+  genderList = [{ code: "male", displayName: "Male" }, { code: "female", displayName: "Female" }]
 
   public setFormChildren() {
     this.formConfig.addChildren = [
@@ -137,13 +138,16 @@ export class PersonCreateComponent implements OnInit {
         name: 'outlineText',
         label: 'Outline Text',
       }),
+
       new Definition({
-        template: 'ZxInput',
+
+        template: 'ZxSelect',
         class: ['col-12'],
-        type: 'text',
+        type: 'filter',
         name: 'gender',
         label: 'Gender',
-        validation: { required: true }
+        validation: { required: true },
+        list: this.genderList
       }),
 
 
@@ -153,6 +157,7 @@ export class PersonCreateComponent implements OnInit {
         type: 'filter',
         name: 'countryId',
         label: 'Country',
+        validation: { required: true },
         list: []
       }),
     ];
