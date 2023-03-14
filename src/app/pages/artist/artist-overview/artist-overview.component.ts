@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ArtistService } from '../shared/artist.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlbumArtistSingleResponse, ArtistSingleResponse, SongArtistSingleResponse } from '../shared/artist.model';
+import { AlbumArtistSingleResponse, ArtistSingleResponse, LabelArtistSingleResponse, SongArtistSingleResponse } from '../shared/artist.model';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { GridOptions } from '@ag-grid-enterprise/all-modules';
@@ -84,6 +84,13 @@ export class ArtistOverviewComponent implements OnInit{
             label: 'Albums',
             icon: 'fal fa-film'
           },
+
+          {
+            name: 'Labels',
+            id: 'labelsTab',
+            label: 'Labels',
+            icon: 'fal fa-film'
+          },
         ],
       });
 
@@ -98,7 +105,8 @@ export class ArtistOverviewComponent implements OnInit{
     artistIsLoading:boolean;
     artist:ArtistSingleResponse;
     songs:SongArtistSingleResponse[]=[];
-    albums:AlbumArtistSingleResponse[]=[]
+    albums:AlbumArtistSingleResponse[]=[];
+    labels:LabelArtistSingleResponse[]=[];
 
     songsColumnDefs = [
       {
@@ -142,6 +150,28 @@ export class ArtistOverviewComponent implements OnInit{
       },
     ];
 
+    labelsColumnDefs = [
+      {
+        field: 'id',
+        headerName: 'ID',
+        flex: 1,
+        floatingFilter: false,
+      },
+      {
+        field: 'labelName',
+        headerName: 'Label Name',
+        flex: 1,
+        floatingFilter: false,
+      },      {
+        field: 'created',
+        headerName: 'Created',
+        flex: 1,
+        floatingFilter: false,
+      },
+
+
+    ];
+
    
   public songGridOptions: GridOptions = {
     columnDefs: this.songsColumnDefs,
@@ -164,6 +194,15 @@ export class ArtistOverviewComponent implements OnInit{
     },
   } as GridOptions;
 
+  public labelGridOptions: GridOptions = {
+    columnDefs: this.labelsColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.router.navigate(['./label/' + event['data']['id'] + '/overview']);
+    },
+  } as GridOptions;
+
     loadData(){
         this.artistIsLoading = true;
         this.route.params.subscribe(params => {
@@ -173,6 +212,7 @@ export class ArtistOverviewComponent implements OnInit{
               this.artistIsLoading = false;
               this.albums=this.artist.albums;
               this.songs=this.artist.recentsSong;
+              this.labels=this.artist.labels;
               console.log('Artist',this.artist);
               
             })

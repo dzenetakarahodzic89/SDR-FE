@@ -82,6 +82,18 @@
                             domLayout="autoHeight">
                         </zx-grid>
                     </zx-block>
+                    <zx-block 
+                    zx-tab-item 
+                    id="labelsTab" 
+                    [config]="labelsBlockConfig"
+                >
+                    <zx-grid 
+                        zx-block-body 
+                        [gridOptions]="labelGridOptions" 
+                        [source]="labels"
+                        domLayout="autoHeight">
+                    </zx-grid>
+                </zx-block>
 
                 </zx-tabs>
             </div>

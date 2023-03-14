@@ -30,10 +30,12 @@ export class ArtistSingleResponse{
   albums:any[];
   recentsSong:any[];
   imageUrl:string;
+  labels:LabelArtistSingleResponse[];
 }
 export class LabelArtistSingleResponse{
     id:number;
     labelName:string;
+    created:Date;
 
 }
 export class AlbumArtistSingleResponse{
