@@ -82,7 +82,7 @@ export class PersonCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.setTabs();
@@ -100,6 +100,8 @@ export class PersonCreateComponent implements OnInit {
           this.person = sty;
           this.model.surname = sty.surname;
           this.model.name = sty.name;
+          this.model.outlineText = sty.outlineText;
+          this.model.countryId = sty.countryId;
           this.model.information = sty.information;
           this.model.gender = sty.gender;
         },
@@ -215,7 +217,7 @@ export class PersonCreateComponent implements OnInit {
       this.formConfig.children[4].list = this.countryLov;
     });
   }
-  
+
 
   async savePerson() {
     if (!this.formConfig.isValid) {

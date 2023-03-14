@@ -13,6 +13,7 @@ export class PersonResponse {
   albums: AlbumPersonResponse[];
   connectedMedias: ConnectedMediaPersonResponse[];
   objectType: string;
+  countryId: number;
 }
 
 export class PersonSearchRequest {
