@@ -44,13 +44,13 @@ export class ArtistOverviewComponent implements OnInit{
       public labelsBlockConfig: ZxBlockModel = new ZxBlockModel({
         hideExpand: true,
       });
-      public galleryButton: ZxButtonModel = new ZxButtonModel({
+      public copyImageButton: ZxButtonModel = new ZxButtonModel({
         items: [
           {
-            icon: 'fal fa-plus',
-            name: 'Copy image from person',
-            label: 'Copy image from person',
-            class: 'classic primary'
+            
+            name: 'Copy Image From Person',
+            label: 'Copy Image From Person',
+          
             // action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/'])
           },
         ],
@@ -60,9 +60,9 @@ export class ArtistOverviewComponent implements OnInit{
         items: [
           {
             icon: 'fal fa-edit',
-            name: 'Edit Album',
-            label: 'Edit Album',
-            action: () => this.router.navigate(['./album/update/'])
+            name: 'Edit Artist',
+            label: 'Edit Artist',
+            action: () => this.router.navigate(['./artist/update/'])
           },
         ],
       });

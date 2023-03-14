@@ -8,7 +8,7 @@
         </zx-block>
         <div class="w-100 pl-10 pr-10">
             <div class="row">
-                <h1>{{ artist.name }}</h1>
+                <h1> {{ artist.name + ' ' + artist.surname}}</h1>
             </div>
             <div class="row">
                 <div class="p-inline col-14">
@@ -16,7 +16,7 @@
                     <p> Albums {{ artist.albums.length }}</p>
                 </div>
                 <div class="col-10">
-                    <zx-button id="galleryBtn" zx-block-action [config]="galleryButton"></zx-button>
+                    <zx-button id="copyImageButton" zx-block-action [config]="copyImageButton"></zx-button>
                     <zx-button id="addSongBtn" zx-block-action [config]="addSongBtn"></zx-button>
 
                     <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
