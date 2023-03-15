@@ -82,7 +82,7 @@ export class PersonCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.setTabs();
@@ -100,6 +100,8 @@ export class PersonCreateComponent implements OnInit {
           this.person = sty;
           this.model.surname = sty.surname;
           this.model.name = sty.name;
+          this.model.outlineText = sty.outlineText;
+          this.model.countryId = sty.countryId;
           this.model.information = sty.information;
           this.model.gender = sty.gender;
         },
@@ -109,6 +111,7 @@ export class PersonCreateComponent implements OnInit {
       );
     }
   }
+  genderList = [{ code: "male", displayName: "Male" }, { code: "female", displayName: "Female" }]
 
   public setFormChildren() {
     this.formConfig.addChildren = [
@@ -135,19 +138,26 @@ export class PersonCreateComponent implements OnInit {
         name: 'outlineText',
         label: 'Outline Text',
       }),
+
       new Definition({
-        template: 'ZxInput',
+
+        template: 'ZxSelect',
         class: ['col-12'],
-        type: 'text',
+        type: 'filter',
         name: 'gender',
         label: 'Gender',
+        validation: { required: true },
+        list: this.genderList
       }),
+
+
       new Definition({
         template: 'ZxSelect',
         class: ['col-12'],
         type: 'filter',
         name: 'countryId',
         label: 'Country',
+        validation: { required: true },
         list: []
       }),
     ];
@@ -215,7 +225,7 @@ export class PersonCreateComponent implements OnInit {
       this.formConfig.children[4].list = this.countryLov;
     });
   }
-  
+
 
   async savePerson() {
     if (!this.formConfig.isValid) {
@@ -236,6 +246,7 @@ export class PersonCreateComponent implements OnInit {
     newPerson.gender = this.model.gender;
     newPerson.outlineText = this.model.outlineText;
     newPerson.countryId = this.model.countryId;
+
     if (!this.personId) {
       this.personService.createPerson(newPerson).subscribe(
         (responseCode) => {
@@ -251,18 +262,20 @@ export class PersonCreateComponent implements OnInit {
         }
       );
     } else {
-      newPerson['id'] = this.personId;
-      this.personService.updatePerson(newPerson).subscribe(
+      newPerson['id'] = +this.personId;
+      this.personService.updatePerson(+this.personId, newPerson).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {
             this.toastr.success('Person edited!');
             this.router.navigateByUrl('/person/' + this.personId + '/overview');
           } else {
-            this.toastr.error('Person edit failed!');
+            this.toastr.error('Person edit failed! ');
           }
         },
+
         (errorMsg: string) => {
-          this.toastr.error('Person edit failed!');
+          this.toastr.error('Person edit failed! OVU IZBACU');
+          console.log(this.personId);
         }
       );
     }

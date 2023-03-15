@@ -13,13 +13,24 @@ export class PersonResponse {
   albums: AlbumPersonResponse[];
   connectedMedias: ConnectedMediaPersonResponse[];
   objectType: string;
+  countryId: number;
 }
 
 export class PersonSearchRequest {
   name: string;
+  sortBy: number;
+  personGender: string;
+  page: number;
+  pageSize: number;
 
-  constructor(name: string) {
+  constructor(name: string, sortBy: number, personGender: string,
+    page: number,
+    pageSize: number) {
     this.name = name;
+    this.sortBy = sortBy;
+    this.personGender = personGender
+    this.page = page;
+    this.pageSize = pageSize;
   }
 }
 
@@ -39,19 +50,22 @@ export class PersonPopUpResponse {
   PersonType: string;
 }
 
+
+
+
 export class PersonCreateRequest {
-  information: string;
+  id?: number;
+  information?: string;
   gender: string;
-  id: number;
   name: string;
   surname: string;
-  dateOfBirth: Date;
-  dateOfDeath: Date;
-  coverImageData: string | ArrayBuffer;
-  coverImage: string;
-  coverImage_files: File[];
+  dateOfBirth?: Date;
+  dateOfDeath?: Date;
+  coverImageData?: string | ArrayBuffer;
+  coverImage?: string;
+  coverImage_files?: File[];
   outlineText: string;
-  countryId: number;
+  countryId?: number;
 }
 
 export class PersonChartResponse {
