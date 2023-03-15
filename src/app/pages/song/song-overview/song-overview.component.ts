@@ -184,6 +184,7 @@ export class SongOverviewComponent implements OnInit {
           this.updateLyrics();
           this.resetLyrics();
           this.lyricPopup.hide();
+          window.location.reload();
         }
       },
       {
@@ -194,6 +195,7 @@ export class SongOverviewComponent implements OnInit {
         action: () => {
           this.resetLyrics();
           this.lyricPopup.hide();
+          window.location.reload();
         }
       }
     ],
@@ -245,6 +247,7 @@ export class SongOverviewComponent implements OnInit {
     body.text = this.lyricPopupModel.lyrics;
     this.songService.updateLyrics(body).subscribe(lyric => {
       this.cachedLyrics.find(el => el.id == lyric.id).lyrics = lyric.text;
+      this.toastr.success("Successfully updated lyrics for '" + this.song.name + "'!");
     });
   } 
 
