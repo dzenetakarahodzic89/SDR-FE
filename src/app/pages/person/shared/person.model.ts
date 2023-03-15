@@ -51,8 +51,6 @@ export class PersonPopUpResponse {
 }
 
 
-
-
 export class PersonCreateRequest {
   id?: number;
   information?: string;
