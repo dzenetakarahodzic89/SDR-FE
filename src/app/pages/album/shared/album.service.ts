@@ -35,8 +35,7 @@ export class AlbumService {
         return this.api.get(AlbumApi.SEARCH_ALBUMS,searchParams).pipe(
             map(response => {
                 console.log("Response: ", response);
-                const message = response['payload'];
-                return message;
+                return response;
             })
         );
     }

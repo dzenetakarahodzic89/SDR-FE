@@ -23,8 +23,8 @@ export class AlbumSearchRequest{
     eras: any[];
     genres : any[];
     artists : any [];
-    pageNumber: any;
-    pageSize:any;
+    page: any;
+    size:any;
     sort:string;
     name:string;
 
