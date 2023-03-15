@@ -9,6 +9,8 @@ import { AngMusicPlayerModule } from 'ang-music-player';
 import { SongSearchComponent } from './song-search/song-search.component';
 import { SongSimilarityOverviewComponent } from './song-similarity-overview/song-similarity-overview.component';
 import { SongCreateComponent } from './song-create/song-create.component';
+import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
+import { ZxFormsModule } from '@zff/zx-forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { SongCreateComponent } from './song-create/song-create.component';
     SharedModule,
     EditorModule,
     AutocompleteLibModule,
-    AngMusicPlayerModule,
+    AngMusicPlayerModule,    
+    ZxPopupLayoutModule,
+    ZxFormsModule
   ],
   exports: [
     SongOverviewComponent,
