@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
@@ -6,11 +7,7 @@ import { Definition } from '@zff/zx-forms';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ToastrService } from 'ngx-toastr';
 
-import {
-  AlbumCreateRequest,
-  AlbumResponse,
-  LoV,
-} from '../shared/album.model';
+import { AlbumCreateRequest, AlbumResponse, LoV } from '../shared/album.model';
 import { AlbumService } from '../shared/album.service';
 
 @Component({
@@ -48,6 +45,7 @@ export class AlbumCreateComponent implements OnInit {
     hideExpand: true,
     label: 'Add album',
   });
+
   public informationBlock = new ZxBlockModel({
     hideExpand: true,
     label: 'Add information',
@@ -60,7 +58,9 @@ export class AlbumCreateComponent implements OnInit {
         layout: 'classic',
         label: 'Save',
         class: 'invert',
-        action: () => this.saveAlbum(),
+        action: () => {
+          this.saveAlbum();
+        },
       },
       {
         name: 'cancel',
@@ -146,6 +146,7 @@ export class AlbumCreateComponent implements OnInit {
         label: 'Era',
         list: this.eraList,
         defaultValue: this.updateEra,
+        validation: { required: true },
       }),
     ];
   };
@@ -198,7 +199,8 @@ export class AlbumCreateComponent implements OnInit {
   };
 
   saveAlbum = async () => {
-    if (!this.formConfig.isValid) {
+    let newAlbum = new AlbumCreateRequest();
+    if (!this.formConfig.isValid || this.model.information === undefined) {
       this.toastr.error('Fill in required fields!');
       return;
     }
@@ -207,7 +209,6 @@ export class AlbumCreateComponent implements OnInit {
       await this.readFile();
     }
 
-    let newAlbum = new AlbumCreateRequest();
     newAlbum.name = this.model.name;
     newAlbum.information = this.model.information;
     newAlbum.eraId = this.model.eraId;

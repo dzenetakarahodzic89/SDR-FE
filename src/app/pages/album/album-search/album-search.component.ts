@@ -11,7 +11,7 @@ import { AlbumService } from '../shared/album.service';
 @Component({
   selector: 'app-album-search',
   templateUrl: './album-search.component.html',
-  styleUrls: ['./album-search.component.scss']
+  styleUrls: ['./album-search.component.scss'],
 })
 export class AlbumSearchComponent implements OnInit {
   public albumsBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -66,7 +66,7 @@ export class AlbumSearchComponent implements OnInit {
       {
         name: 'nextPage',
         icon: 'fas fa-angle-double-right',
-        action: () => this.getNextPage()
+        action: () => this.getNextPage(),
       },
     ],
   });
@@ -74,51 +74,43 @@ export class AlbumSearchComponent implements OnInit {
   albumsAreLoading = false;
 
   public model: any = {};
-  genreOptions:any[] = [];
-  eraOptions:any[] = [];
-  artistOptions:any[] = [];
-  sortByOptions:any[] = [
-
+  genreOptions: any[] = [];
+  eraOptions: any[] = [];
+  artistOptions: any[] = [];
+  sortByOptions: any[] = [
     {
-      code:"last_edit",
-      displayName:"Last edit"
+      code: 'last_edit',
+      displayName: 'Last edit',
     },
 
     {
-      code:"alphabetical",
-      displayName:"Alphabetical order"
-
+      code: 'alphabetical',
+      displayName: 'Alphabetical order',
     },
 
     {
-
-      code:"play_time",
-      displayName:"Play time"
-    }
+      code: 'play_time',
+      displayName: 'Play time',
+    },
   ];
 
-
-        
-
-
   public formConfig: Definition;
-  foundAlbums:AppBox[] = [];
-  paginationDetails= {
-    page:1,
-    totalPages:0
+  foundAlbums: AppBox[] = [];
+  paginationDetails = {
+    page: 1,
+    totalPages: 0,
   };
 
   public setFormConfig() {
-    console.log('GenreOptions',this.genreOptions)
+    console.log('GenreOptions', this.genreOptions);
 
     let nameInput = {
       template: 'ZxInput',
       class: ['col-24'],
       type: 'text',
       name: 'name',
-      label: 'Name'
+      label: 'Name',
     };
-
 
     let eraInput = {
       template: 'ZxMultiselect',
@@ -126,16 +118,16 @@ export class AlbumSearchComponent implements OnInit {
       type: 'filter',
       name: 'era',
       label: 'Era',
-      list: this.eraOptions
+      list: this.eraOptions,
     };
 
     let genreInput = {
-      template:"ZxMultiselect", 
-      class:["col-24"],  
-      type:"filter", 
-      name:"genre", 
-      label:"Genre", 
-      list: this.genreOptions
+      template: 'ZxMultiselect',
+      class: ['col-24'],
+      type: 'filter',
+      name: 'genre',
+      label: 'Genre',
+      list: this.genreOptions,
     };
     let artistInput = {
       template: 'ZxMultiselect',
@@ -143,8 +135,7 @@ export class AlbumSearchComponent implements OnInit {
       type: 'filter',
       name: 'artist',
       label: 'Artist',
-      list: this.artistOptions
-      
+      list: this.artistOptions,
     };
 
     let sortByInput = {
@@ -153,8 +144,7 @@ export class AlbumSearchComponent implements OnInit {
       type: 'filter',
       name: 'sortBy',
       label: 'SortBy',
-      list: this.sortByOptions
-      
+      list: this.sortByOptions,
     };
 
     this.formConfig = new Definition({
@@ -162,137 +152,114 @@ export class AlbumSearchComponent implements OnInit {
       name: 'albumSearch',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        nameInput,
-        eraInput,
-        genreInput,
-        artistInput,
-        sortByInput
-      ],
+      children: [nameInput, eraInput, genreInput, artistInput, sortByInput],
     });
   }
 
+  constructor(private router: Router, private albumService: AlbumService) {}
 
-  constructor(private router:Router,private albumService:AlbumService) {
-
-  }
-  
   ngOnInit(): void {
     this.loadData();
-    this.setFormConfig()
+    this.setFormConfig();
   }
-  loadData(){
+  loadData() {
     this.loadEras();
     this.loadGenres();
     this.loadArtists();
     this.searchAlbums();
   }
 
-  loadGenres(){
-    this.albumService.getGenres().subscribe(response=>{
-      let listOfOptions:any = [];
-      for(let i = 0;i<response.length;i++){
+  loadGenres() {
+    this.albumService.getGenres().subscribe((response) => {
+      let listOfOptions: any = [];
+      for (let i = 0; i < response.length; i++) {
         let genre = response[i];
         let subgenres = genre.subGenreNames;
-        for(let key in subgenres){
+        for (let key in subgenres) {
           let subGenreName = subgenres[key];
           let newOption = {
-            code:key,
-            displayName:subGenreName+'-'+genre.name
+            code: key,
+            displayName: subGenreName + '-' + genre.name,
           };
           listOfOptions.push(newOption);
         }
-          listOfOptions.push({
-            code:genre.id,
-            displeyName:genre.name
-
-        })
-
+        listOfOptions.push({
+          code: genre.id,
+          displeyName: genre.name,
+        });
       }
-      this.genreOptions=listOfOptions;
-      if(this.formConfig !=null && this.formConfig!=undefined){
-        console.log('Form',this.formConfig)
+      this.genreOptions = listOfOptions;
+      if (this.formConfig != null && this.formConfig != undefined) {
+        console.log('Form', this.formConfig);
         this.formConfig.children[2].list = listOfOptions;
-      }else{
+      } else {
         this.setFormConfig();
       }
-      
-    })
-
-
+    });
   }
 
-  loadEras(){
-    this.albumService.getEras().subscribe(response=>{
-      let listOfOptions:any = [];
-      for(let i = 0;i<response.length;i++){
+  loadEras() {
+    this.albumService.getEras().subscribe((response) => {
+      let listOfOptions: any = [];
+      for (let i = 0; i < response.length; i++) {
         let era = response[i];
         let newOption = {
-          code:era.id,
-          displayName:era.name
+          code: era.id,
+          displayName: era.name,
         };
-          listOfOptions.push(newOption);
-        }
-      
-      this.eraOptions=listOfOptions;
-      if(this.formConfig !=null && this.formConfig!=undefined){
-        console.log('Form',this.formConfig)
-        this.formConfig.children[1].list = listOfOptions;
-      }else{
-        this.setFormConfig();
-      } 
-      
-    }
-    )
+        listOfOptions.push(newOption);
+      }
 
+      this.eraOptions = listOfOptions;
+      if (this.formConfig != null && this.formConfig != undefined) {
+        console.log('Form', this.formConfig);
+        this.formConfig.children[1].list = listOfOptions;
+      } else {
+        this.setFormConfig();
+      }
+    });
   }
 
-
-
-  loadArtists(){
-    this.albumService.getArtists().subscribe(response=>{
-      let listOfOptions:any = [];
-      for(let i = 0;i<response.length;i++){
+  loadArtists() {
+    this.albumService.getArtists().subscribe((response) => {
+      let listOfOptions: any = [];
+      for (let i = 0; i < response.length; i++) {
         let artist = response[i];
         let newOption = {
-          code:artist.id,
-          displayName:artist.name
+          code: artist.id,
+          displayName: artist.name,
         };
-          listOfOptions.push(newOption);
-        }
-        console.log("ListOfOptions", listOfOptions);
-      this.artistOptions=listOfOptions;
-      if(this.formConfig !=null && this.formConfig!=undefined){
-        console.log('Form',this.formConfig)
+        listOfOptions.push(newOption);
+      }
+      console.log('ListOfOptions', listOfOptions);
+      this.artistOptions = listOfOptions;
+      if (this.formConfig != null && this.formConfig != undefined) {
+        console.log('Form', this.formConfig);
         this.formConfig.children[3].list = listOfOptions;
-      }else{
+      } else {
         this.setFormConfig();
-      } 
-      
-    }
-    )
-
+      }
+    });
   }
 
-  searchAlbums(){
-        console.log(this.model)
-        this.albumsAreLoading=true;
-        let searchParams = new AlbumSearchRequest();
-        searchParams.artists=this.model.artist;
-        searchParams.genres=this.model.genre;
-        searchParams.eras=this.model.era;
-        searchParams.sort=this.model.sortBy;
-        searchParams.pageNumber=this.paginationDetails.page;
-        searchParams.name=this.model.name;
-        searchParams.pageSize=10;
-        
-        this.albumService.searchAlbums(searchParams).subscribe(response=>{
-        this.foundAlbums= response as unknown as AppBox[];
-        this.paginationDetails.page = response['page'];
-        this.paginationDetails.totalPages = response['numberOfPages'];
-        this.albumsAreLoading=false;
-      });
-   
+  searchAlbums() {
+    console.log(this.model);
+    this.albumsAreLoading = true;
+    let searchParams = new AlbumSearchRequest();
+    searchParams.artists = this.model.artist;
+    searchParams.genres = this.model.genre;
+    searchParams.eras = this.model.era;
+    searchParams.sort = this.model.sortBy;
+    searchParams.pageNumber = this.paginationDetails.page;
+    searchParams.name = this.model.name;
+    searchParams.pageSize = 10;
+
+    this.albumService.searchAlbums(searchParams).subscribe((response) => {
+      this.foundAlbums = response as unknown as AppBox[];
+      this.paginationDetails.page = response['page'];
+      this.paginationDetails.totalPages = response['numberOfPages'];
+      this.albumsAreLoading = false;
+    });
   }
 
   getPreviousPage() {
@@ -303,16 +270,9 @@ export class AlbumSearchComponent implements OnInit {
   }
 
   getNextPage() {
-    if (
-       (
-        this.paginationDetails.totalPages > 
-          this.paginationDetails.page
-        )
-    ) {
+    if (this.paginationDetails.totalPages > this.paginationDetails.page) {
       this.paginationDetails.page++;
       this.searchAlbums();
-
     }
   }
-
 }
