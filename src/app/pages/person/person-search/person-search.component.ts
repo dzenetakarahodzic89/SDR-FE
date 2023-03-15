@@ -71,25 +71,43 @@ export class PersonSearchComponent implements OnInit {
     ],
   });
 
-  personsAreLoading = false;
+  loading = false;
 
   public model: any = {};
 
-  nameInput = {
+  personNameInput = {
     template: 'ZxInput',
     class: ['col-24'],
     type: 'text',
-    name: 'name',
+    name: 'personName',
     label: 'Name'
   };
 
-  
+  sortList = [{ code: "last_edit", displayName: "Last edit" }, { code: "alphabetical", displayName: "Alphabetical (asc)" }, { code: "alphabetical_reverse", displayName: "Alphabetical (desc)" },]
+  sortByInput = {
+    template: 'ZxSelect',
+    class: ['col-24'],
+    type: "select",
+    name: "sortBy",
+    label: 'Sort by',
+    list: this.sortList
 
+  };
   public formConfig: Definition;
-  foundPersons:AppBox[] = [];
-  paginationDetails= {
-    page:1,
-    totalPages:0
+  foundPersons: AppBox[] = [];
+  paginationDetails = {
+    page: 1,
+    totalPages: 12
+  };
+
+  genderList = [{ code: null, displayName: "Select all" }, { code: "Male", displayName: "Male" }, { code: "Female", displayName: "Female" }, { code: "Other", displayName: "Other" },]
+  personGender = {
+    template: 'ZxSelect',
+    class: ['col-24'],
+    type: "select",
+    name: "personGender",
+    label: 'Select Gender',
+    list: this.genderList
   };
 
   public setFormConfig() {
@@ -99,39 +117,41 @@ export class PersonSearchComponent implements OnInit {
       template: 'ZxForm',
       disabled: false,
       children: [
-        this.nameInput
+        this.personNameInput,
+        this.sortByInput,
+        this.personGender,
       ],
     });
   }
 
-
-  constructor(private router:Router,private personService:PersonService) {
-
+  constructor(private router: Router, private personService: PersonService) {
   }
-  
+
   ngOnInit(): void {
     this.loadData();
     this.setFormConfig()
   }
-  loadData()
-  {
+  loadData() {
     this.searchPersons();
   }
 
-  searchPersons(){
-    this.personsAreLoading=true;
-      let searchRequest = new PersonSearchRequest(
-        this.model.name
-      );
+  searchPersons() {
+    this.loading = true;
+    let searchRequest = new PersonSearchRequest(
+      this.model.personName,
+      this.model.sortBy,
+      this.model.personGender,
+      this.paginationDetails.page,
+      this.paginationDetails.totalPages
+    );
 
-      this.personService.searchPersons(searchRequest).subscribe(response=>{
-        this.foundPersons= response as unknown as AppBox[];
-        this.paginationDetails.page = response['page'];
-        this.paginationDetails.totalPages = response['numberOfPages'];
-        this.personsAreLoading=false;
-      });
-   
+    this.personService.searchPersons(searchRequest).subscribe(response => {
+      this.foundPersons = response as unknown as AppBox[];
+      this.loading = false;
+    });
+
   }
+
 
   getPreviousPage() {
     if (this.paginationDetails.page > 1) {
@@ -141,15 +161,12 @@ export class PersonSearchComponent implements OnInit {
   }
 
   getNextPage() {
-    if (
-       (
-        this.paginationDetails.totalPages > 
-          this.paginationDetails.page
-        )
+    if
+      (
+      this.foundPersons.length >= this.paginationDetails.totalPages
     ) {
       this.paginationDetails.page++;
       this.searchPersons();
-
     }
   }
 
