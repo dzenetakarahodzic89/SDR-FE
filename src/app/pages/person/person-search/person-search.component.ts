@@ -83,7 +83,7 @@ export class PersonSearchComponent implements OnInit {
     label: 'Name'
   };
 
-  sortList = [{ code: "last_date", displayName: "Last edit" }, { code: "name", displayName: "Alphabetical order" }]
+  sortList = [{ code: "last_edit", displayName: "Last edit" }, { code: "alphabetical", displayName: "Alphabetical (asc)" }, { code: "alphabetical_reverse", displayName: "Alphabetical (desc)" },]
   sortByInput = {
     template: 'ZxSelect',
     class: ['col-24'],
@@ -100,7 +100,7 @@ export class PersonSearchComponent implements OnInit {
     totalPages: 12
   };
 
-  genderList = [{ code: null, displayName: "Select all" }, { code: "Male", displayName: "Male" }, { code: "Female", displayName: "Female" }]
+  genderList = [{ code: null, displayName: "Select all" }, { code: "Male", displayName: "Male" }, { code: "Female", displayName: "Female" }, { code: "Other", displayName: "Other" },]
   personGender = {
     template: 'ZxSelect',
     class: ['col-24'],
