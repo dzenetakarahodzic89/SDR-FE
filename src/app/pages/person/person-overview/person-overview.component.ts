@@ -19,10 +19,12 @@ import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { Definition } from '@zff/zx-forms';
 import { ToastrService } from 'ngx-toastr';
 import { isISO31661Alpha2 } from '../../../../../node_modules/validator';
+import { CountryResponse } from '../../country/shared/country.model';
 import {
-  CountryResponse,
-} from '../../country/shared/country.model';
-import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
+  ConnectedMediaConnectionSource,
+  ConnectedMediaConnectionType,
+  ConnectedMediaDetailCreateRequest,
+} from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 
 @Component({
@@ -54,14 +56,14 @@ export class PersonOverviewComponent implements OnInit {
         name: 'Songs',
         id: 'songsTab',
         label: 'Songs',
-        icon: 'fal fa-music'
+        icon: 'fal fa-music',
       },
 
       {
         name: 'Albums',
         id: 'albumsTab',
         label: 'Albums',
-        icon: 'fal fa-film'
+        icon: 'fal fa-film',
       },
       {
         name: 'Artists',
@@ -137,7 +139,7 @@ export class PersonOverviewComponent implements OnInit {
         icon: 'fas fa-link',
         name: 'connectMedia',
         label: 'Connect Media',
-        action: () => this.connectMediaPopup.show()
+        action: () => this.connectMediaPopup.show(),
       },
     ],
   });
@@ -148,16 +150,20 @@ export class PersonOverviewComponent implements OnInit {
         icon: 'far fa-plus-square',
         name: 'createArtistFromPerson',
         label: 'Create artist from person',
-        action: () => this.createArtistFromPerson()
-      }
-    ]
+        action: () => this.createArtistFromPerson(),
+      },
+    ],
   });
 
   createArtistFromPerson(): void {
-    this.personService.createArtistFromPerson(this.person.id).subscribe(payload => {
-      console.log(payload);
-      this.toastr.success("Artist '" + payload.name + " " + payload.surname + "' created!");
-    });
+    this.personService
+      .createArtistFromPerson(this.person.id)
+      .subscribe((payload) => {
+        console.log(payload);
+        this.toastr.success(
+          "Artist '" + payload.name + ' ' + payload.surname + "' created!"
+        );
+      });
   }
 
   public popUpBlockConfig: ZxBlockModel;
@@ -170,7 +176,7 @@ export class PersonOverviewComponent implements OnInit {
     type: 'select',
     name: 'connectionSource',
     label: 'Connection Source',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   typeInput: Definition = new Definition({
@@ -179,7 +185,7 @@ export class PersonOverviewComponent implements OnInit {
     type: 'select',
     name: 'connectionType',
     label: 'Connection Type',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   linkInput = new Definition({
@@ -188,9 +194,12 @@ export class PersonOverviewComponent implements OnInit {
     type: 'text',
     name: 'connectionLink',
     label: 'Link',
-    validation: { required: true, pattern: '((http|https):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9@:%_\+.~#?&/=]*)' }
+    validation: {
+      required: true,
+      pattern:
+        '((http|https)://)?(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,6}([-a-zA-Z0-9@:%_+.~#?&/=]*)',
+    },
   });
-
 
   public setPopUpFormConfig() {
     this.popUpBlockConfig = new ZxBlockModel({
@@ -201,14 +210,10 @@ export class PersonOverviewComponent implements OnInit {
       name: 'connectMedia',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        this.sourceInput,
-        this.typeInput,
-        this.linkInput
-      ],
-      model: this.connectedMediaModel
+      children: [this.sourceInput, this.typeInput, this.linkInput],
+      model: this.connectedMediaModel,
     });
-  };
+  }
 
   public connectMediaPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
@@ -219,19 +224,28 @@ export class PersonOverviewComponent implements OnInit {
   public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        name: 'save', description: 'Save', label: 'Save',
-        class: 'classic primary', icon: 'fal fa-check-circle',
+        name: 'save',
+        description: 'Save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
         action: () => {
-          this.connectMediaPopup.hide()
-          this.addConnectedMedia()
-        }
+          this.connectMediaPopup.hide();
+          this.addConnectedMedia();
+        },
       },
       {
-        name: 'cancel', description: 'Cancel', label: 'Cancel',
-        class: 'classic', icon: 'fal fa-times', action: () => { this.connectMediaPopup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest(); }
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.connectMediaPopup.hide();
+          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+        },
       },
-
-    ]
+    ],
   });
 
   songsColumnDefs = [
@@ -243,7 +257,7 @@ export class PersonOverviewComponent implements OnInit {
     },
     {
       field: 'created',
-      headerName: 'Creted Date',
+      headerName: 'Created Date',
       flex: 1,
       floatingFilter: false,
     },
@@ -258,7 +272,7 @@ export class PersonOverviewComponent implements OnInit {
       headerName: 'Date Of Release',
       flex: 1,
       floatingFilter: false,
-    }
+    },
   ];
 
   albumsColumnDefs = [
@@ -279,7 +293,7 @@ export class PersonOverviewComponent implements OnInit {
       headerName: 'Date Of Release',
       flex: 1,
       floatingFilter: false,
-    }
+    },
   ];
 
   artistsColumnDefs = [
@@ -307,16 +321,17 @@ export class PersonOverviewComponent implements OnInit {
       headerName: 'Status',
       flex: 1,
       floatingFilter: false,
-    }
+    },
   ];
 
   connectedMediasColumnDefs = [
     {
       field: 'created',
-      headerName: 'Crated date',
+      headerName: 'Created Date',
       flex: 1,
       floatingFilter: false,
-    }, {
+    },
+    {
       field: 'status',
       headerName: 'Status',
       flex: 1,
@@ -324,12 +339,11 @@ export class PersonOverviewComponent implements OnInit {
     },
     {
       field: 'objectType',
-      headerName: 'Connectede Media objectType',
+      headerName: 'Connected Media Object Type',
       flex: 1,
       floatingFilter: false,
-    }
+    },
   ];
-
 
   public songGridOptions: GridOptions = {
     columnDefs: this.songsColumnDefs,
@@ -349,7 +363,6 @@ export class PersonOverviewComponent implements OnInit {
     },
   } as GridOptions;
 
-
   public artistGridOptions: GridOptions = {
     columnDefs: this.artistsColumnDefs,
     rowModelType: 'clientSide',
@@ -359,20 +372,18 @@ export class PersonOverviewComponent implements OnInit {
     },
   } as GridOptions;
 
-
   public connectedMediaGridOptions: GridOptions = {
     columnDefs: this.connectedMediasColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) => {
-      this.router.navigate(['./connectedMedia/' + event['data']['id'] + '/overview']);
+      this.router.navigate([
+        './connectedMedia/' + event['data']['id'] + '/overview',
+      ]);
     },
   } as GridOptions;
 
-
   person: PersonResponse;
-
-
 
   constructor(
     private router: Router,
@@ -381,7 +392,7 @@ export class PersonOverviewComponent implements OnInit {
     public confirmation: ZxConfirmation,
     private connectedMediaService: ConnectedMediaService,
     private toastr: ToastrService
-  ) { }
+  ) {}
   public linkPerson: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -394,7 +405,7 @@ export class PersonOverviewComponent implements OnInit {
 
   public model: any = {};
   public formConfig: Definition = new Definition({});
-  public updatePerson() { }
+  public updatePerson() {}
   public lov: CountryResponse[];
   flag: string;
   selectedCountry: CountryResponse = new CountryResponse();
@@ -445,7 +456,7 @@ export class PersonOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     let id = 1;
-    Object.values(ConnectedMediaConnectionSource).forEach(t => {
+    Object.values(ConnectedMediaConnectionSource).forEach((t) => {
       let sourceObject = { id: id, name: t };
       this.connectionSources.push(sourceObject);
       id++;
@@ -453,7 +464,7 @@ export class PersonOverviewComponent implements OnInit {
     this.sourceInput.list = this.connectionSources;
 
     id = 1;
-    Object.values(ConnectedMediaConnectionType).forEach(t => {
+    Object.values(ConnectedMediaConnectionType).forEach((t) => {
       let typeObject = { id: id, name: t };
       this.connectionTypes.push(typeObject);
       id++;
@@ -553,25 +564,30 @@ export class PersonOverviewComponent implements OnInit {
 
     this.connectedMediaModel.objectId = this.person.id;
     this.connectedMediaModel.objectType = this.type;
-    this.connectedMediaModel.connectionSource = Object.keys(ConnectedMediaConnectionSource)[parseInt(this.connectedMediaModel.connectionSource) - 1];
-    this.connectedMediaModel.connectionType = Object.keys(ConnectedMediaConnectionType)[parseInt(this.connectedMediaModel.connectionType) - 1];
+    this.connectedMediaModel.connectionSource = Object.keys(
+      ConnectedMediaConnectionSource
+    )[parseInt(this.connectedMediaModel.connectionSource) - 1];
+    this.connectedMediaModel.connectionType = Object.keys(
+      ConnectedMediaConnectionType
+    )[parseInt(this.connectedMediaModel.connectionType) - 1];
     this.createConnectedMediaDetail();
   }
 
   createConnectedMediaDetail() {
-
-    this.connectedMediaService.createConnectedMediaDetail(this.connectedMediaModel).subscribe(
-      (responseCode) => {
-        if (responseCode.hasOwnProperty('payload')) {
-          this.toastr.success('Connected media successfully added!');
-          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
-        } else {
+    this.connectedMediaService
+      .createConnectedMediaDetail(this.connectedMediaModel)
+      .subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Connected media successfully added!');
+            this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+          } else {
+            this.toastr.error('Failed to add connected media!');
+          }
+        },
+        (errorMsg: string) => {
           this.toastr.error('Failed to add connected media!');
         }
-      },
-      (errorMsg: string) => {
-        this.toastr.error('Failed to add connected media!');
-      }
-    );
+      );
   }
 }
