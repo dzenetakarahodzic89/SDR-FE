@@ -98,12 +98,20 @@
                       [model]="lyricPopupModel"
                       class="col-24"
                     ></zx-form-loader>
-                    <div zx-block-body *ngIf="lyricPopupFormConfig && !songIsLoading && showEditor">
-                      <editor [init]="{height: 300}" [(ngModel)]="this.lyricPopupModel.lyrics"></editor>
+                    <div
+                      zx-block-body
+                      *ngIf="
+                        lyricPopupFormConfig && !songIsLoading && showEditor
+                      "
+                    >
+                      <editor
+                        [init]="{ height: 300 }"
+                        [(ngModel)]="this.lyricPopupModel.lyrics"
+                      ></editor>
                     </div>
                   </zx-block>
                 </div>
-                
+
                 <zx-button
                   zx-popup-footer
                   [config]="lyricPopupFooterButtons"
@@ -206,9 +214,26 @@
           <h5>{{ song.outlineText }}</h5>
         </div>
       </div>
-      <div class="row">
-        <div class="col-20">
-          <ang-music-player [audioList]="audioList"></ang-music-player>
+      <div style="display: flex">
+        <div class="row">
+          <div class="col-20">
+            <ang-music-player
+              [audioList]="audioList"
+              style="width: 200px; height: 100px"
+            ></ang-music-player>
+          </div>
+        </div>
+        <div *ngIf="srcUrl.length > 0">
+          <iframe
+            style="border-radius: 12px"
+            [src]="srcUrl | safe : 'resourceUrl'"
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
         </div>
       </div>
     </div>
