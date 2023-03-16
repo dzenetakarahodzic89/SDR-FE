@@ -12,6 +12,7 @@ export class PersonResponse {
   songs: SongPersonResponse[];
   albums: AlbumPersonResponse[];
   connectedMedias: ConnectedMediaPersonResponse[];
+  instruments: SongInstrumentPersonResponse[];
   objectType: string;
   countryId: number;
 }
@@ -23,12 +24,16 @@ export class PersonSearchRequest {
   page: number;
   pageSize: number;
 
-  constructor(name: string, sortBy: number, personGender: string,
+  constructor(
+    name: string,
+    sortBy: number,
+    personGender: string,
     page: number,
-    pageSize: number) {
+    pageSize: number
+  ) {
     this.name = name;
     this.sortBy = sortBy;
-    this.personGender = personGender
+    this.personGender = personGender;
     this.page = page;
     this.pageSize = pageSize;
   }
@@ -49,7 +54,6 @@ export class PersonPopUpResponse {
   name: string;
   PersonType: string;
 }
-
 
 export class PersonCreateRequest {
   id?: number;
@@ -84,7 +88,6 @@ export class PersonUpdateFlagRequest {
   countryId: number;
 }
 
-
 export class ArtistPersonResponse {
   id: number;
   name: string;
@@ -93,12 +96,15 @@ export class SongPersonResponse {
   id: number;
   name: string;
 }
-
 export class AlbumPersonResponse {
   id: number;
   name: string;
 }
 export class ConnectedMediaPersonResponse {
+  id: number;
+  name: string;
+}
+export class SongInstrumentPersonResponse {
   id: number;
   name: string;
 }

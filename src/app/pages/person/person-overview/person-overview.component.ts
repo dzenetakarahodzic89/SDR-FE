@@ -13,6 +13,7 @@ import {
   ConnectedMediaPersonResponse,
   PersonResponse,
   PersonUpdateFlagRequest,
+  SongInstrumentPersonResponse,
 } from '../shared/person.model';
 import { PersonService } from '../shared/person.service';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
@@ -42,6 +43,7 @@ export class PersonOverviewComponent implements OnInit {
   songs: SongPersonResponse[];
   albums: AlbumPersonResponse[];
   connectedMedias: ConnectedMediaPersonResponse[];
+  instruments: SongInstrumentPersonResponse[];
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -77,6 +79,12 @@ export class PersonOverviewComponent implements OnInit {
         label: 'Connected Medias',
         icon: 'fal fa-check-circle',
       },
+      {
+        name: 'Song Involvement',
+        id: 'songInstrumentsTab',
+        label: 'Song Involvement',
+        icon: 'fal fa-guitar',
+      },
     ],
   });
 
@@ -104,6 +112,10 @@ export class PersonOverviewComponent implements OnInit {
   });
 
   public connectedMediasBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+
+  public songInstrumentsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
@@ -345,6 +357,21 @@ export class PersonOverviewComponent implements OnInit {
     },
   ];
 
+  songInstrumentsColumnDefs = [
+    {
+      field: 'song',
+      headerName: 'Song Name',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'instrument',
+      headerName: 'Instrument Name',
+      flex: 1,
+      floatingFilter: false,
+    },
+  ];
+
   public songGridOptions: GridOptions = {
     columnDefs: this.songsColumnDefs,
     rowModelType: 'clientSide',
@@ -380,6 +407,15 @@ export class PersonOverviewComponent implements OnInit {
       this.router.navigate([
         './connectedMedia/' + event['data']['id'] + '/overview',
       ]);
+    },
+  } as GridOptions;
+
+  public songInstrumentGridOptions: GridOptions = {
+    columnDefs: this.songInstrumentsColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.router.navigate(['./song/' + event['data']['songId'] + '/overview']);
     },
   } as GridOptions;
 
@@ -486,6 +522,7 @@ export class PersonOverviewComponent implements OnInit {
         this.albums = response.albums;
         this.connectedMedias = response.connectedMedia;
         this.songs = response.songs;
+        this.instruments = response.instruments;
         this.setPopUpFormConfig();
         this.personIsLoading = false;
 
