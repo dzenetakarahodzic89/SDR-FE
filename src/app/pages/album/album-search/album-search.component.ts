@@ -174,20 +174,14 @@ export class AlbumSearchComponent implements OnInit {
       let listOfOptions: any = [];
       for (let i = 0; i < response.length; i++) {
         let genre = response[i];
-        let subgenres = genre.subGenreNames;
-        for (let key in subgenres) {
-          let subGenreName = subgenres[key];
-          let newOption = {
-            code: key,
-            displayName: subGenreName + '-' + genre.name,
-          };
-          listOfOptions.push(newOption);
-        }
-        listOfOptions.push({
+        let newOption = {
           code: genre.id,
-          displeyName: genre.name,
-        });
+          displayName: genre.name,
+        };
+        listOfOptions.push(newOption);
+        console.log(newOption);
       }
+
       this.genreOptions = listOfOptions;
       if (this.formConfig != null && this.formConfig != undefined) {
         console.log('Form', this.formConfig);

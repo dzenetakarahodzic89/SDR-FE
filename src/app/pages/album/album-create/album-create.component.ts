@@ -16,6 +16,7 @@ import { AlbumService } from '../shared/album.service';
   styleUrls: ['./album-create.component.scss'],
 })
 export class AlbumCreateComponent implements OnInit {
+  albumIsLoading: boolean = false;
   private eraList: LoV[];
   private selectedEra: LoV;
   private albumId;
@@ -102,6 +103,7 @@ export class AlbumCreateComponent implements OnInit {
     this.albumId = this.route.snapshot.paramMap.get('id');
 
     if (this.albumId != null) {
+      this.albumIsLoading = true;
       this.albumService.getAlbum(this.albumId).subscribe(
         (sty: AlbumResponse) => {
           this.overviewBlock.label = 'Edit album';
@@ -112,6 +114,7 @@ export class AlbumCreateComponent implements OnInit {
           this.model.dateOfRelease = sty.dateOfRelease;
           this.selectedEra = this.eraList.find((era) => era.name === sty.era);
           this.model.eraId = this.selectedEra.id;
+          this.albumIsLoading = false;
         },
         (errorMsg: string) => {
           this.toastr.error('Album could not be loaded!');
