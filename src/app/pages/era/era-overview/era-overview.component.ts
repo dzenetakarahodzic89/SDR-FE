@@ -101,7 +101,7 @@ export class EraOverviewComponent implements OnInit {
         action: () => {
           if (this.addAlbumPopUpFormConfig.isValid) {
             this.addAlbumPopup.hide();
-            this.addAlbumToEra();
+            //this.addAlbumToEra();
           }
         },
       },
@@ -156,12 +156,12 @@ export class EraOverviewComponent implements OnInit {
     this.eraService.getAllArtists().subscribe((response) => {
       this.artistsAreLoading = false;
       this.artists = response;
-      this.addAlbumPopUpFormConfig.children[0].list =
-        this.getArtistsByEras();
+      /*this.addAlbumPopUpFormConfig.children[0].list =
+        this.getArtistsByEras();*/
     });
   }
 
-  public addAlbumModel : ;
+ // public addAlbumModel : ;
   public setAddAlbumPopUpFormConfig() {
     this.addAlbumPopUpBlockConfig = new ZxBlockModel({
       hideExpand: true,
@@ -175,13 +175,13 @@ export class EraOverviewComponent implements OnInit {
         this.albumInput,
         this.artistInput
       ],
-      model: this.addAlbumModel,
+      //model: this.addAlbumModel,
     });
-    this.addAlbumPopUpFormConfig.children[0].list = this.albumsPopUp;
-    this.addAlbumPopUpFormConfig.children[1].list = this.artistsPopUp;
+    //this.addAlbumPopUpFormConfig.children[0].list = this.albumsPopUp;
+    //this.addAlbumPopUpFormConfig.children[1].list = this.artistsPopUp;
   };
 
-  addAlbumToEra() {
+  /*addAlbumToEra() {
     this.addAlbumModel.eraId = this.era.id;
     this.eraService
       .addAlbumToEra(this.addAlbumModel)
@@ -194,7 +194,7 @@ export class EraOverviewComponent implements OnInit {
         this.addAlbumPopUpFormConfig.children[0].list =
           this.();
       });
-  }
+  }*/
 
   public popUpBlockConfig: ZxBlockModel;
   public popUpFormBlockConfig: Definition;
@@ -251,7 +251,7 @@ export class EraOverviewComponent implements OnInit {
   } as GridOptions;
 
   erasAreLoading = false;
-
+/*
   getEras() {
     this.route.params.subscribe((params) => {
     this.eraService.getAllEras().subscribe((response) => {
@@ -263,17 +263,17 @@ export class EraOverviewComponent implements OnInit {
     });
   }
 )}
-
+*/
   loadData(): void {
     this.eraIsLoading = true;
     this.route.params.subscribe((params) => {
       this.erasAreLoading = true;
-      this.getEras();
+      //this.getEras();
       this.eraService.getEra(params.id).subscribe((response) => {
         this.era = response;
         this.setAddAlbumPopUpFormConfig();
-        this.loadAlbums();
-        this.setAlbumPopUpFormConfig();
+        //this.loadAlbums();
+        //this.setAlbumPopUpFormConfig();
         this.artists = response.artists;
         this.eraIsLoading = false;
         this.getAlbums();
