@@ -19,14 +19,15 @@ export class SongResponse {
   genre: string;
 }
 
-export class AlbumSearchRequest {
-  eras: any[];
-  genres: any[];
-  artists: any[];
-  pageNumber: any;
-  pageSize: any;
-  sort: string;
-  name: string;
+export class AlbumSearchRequest{
+    eras: any[];
+    genres : any[];
+    artists : any [];
+    page: any;
+    size:any;
+    sort:string;
+    name:string;
+
 }
 
 export class AlbumCreateRequest {
