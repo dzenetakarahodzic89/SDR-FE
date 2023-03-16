@@ -93,7 +93,27 @@
         "icon": "fad fa-calendar-star",
         "label": "Event search",
         "url": "event/search",
-        "attributes": {}        
+        "attributes": {}
+      },
+      {
+        "code": "HUB_STATISTICS_STATIC",
+        "label": "Statistics",
+        "icon": "fal fa-analytics",
+        "attributes": {},
+        "children": [
+          {
+            "code": "HUB_DEEZER_STATIC",
+            "label": "Deezer Statistics",
+            "url": "deezer-integration",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_ARTISTERA_STATIC",
+            "label": "Artists over eras",
+            "url": "era/artists-over-eras",
+            "attributes": {}
+          }
+        ]
       }
     ]
   }
