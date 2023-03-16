@@ -31,15 +31,14 @@ export class AlbumService {
     );
   }
 
-  searchAlbums(searchParams: AlbumSearchRequest) {
-    return this.api.get(AlbumApi.SEARCH_ALBUMS, searchParams).pipe(
-      map((response) => {
-        console.log('Response: ', response);
-        const message = response['payload'];
-        return message;
-      })
-    );
-  }
+    searchAlbums(searchParams:AlbumSearchRequest) {
+        return this.api.get(AlbumApi.SEARCH_ALBUMS,searchParams).pipe(
+            map(response => {
+                console.log("Response: ", response);
+                return response;
+            })
+        );
+    }
 
   getGenres() {
     return this.api.get('/sdrbe/genre/subGenre-mainGenre').pipe(

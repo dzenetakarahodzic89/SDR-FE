@@ -438,6 +438,8 @@ export class AlbumOverviewComponent implements OnInit {
           this.album.songs = [...this.album.songs, response['payload']];
           this.addSongPopUpFormConfig.children[0].list =
             this.songInput.lov.filter((s) => s.id != this.addSongModel.songId);
+          this.album.songs = [... this.album.songs, response['payload']];
+          this.addSongPopUpFormConfig.children[0].list = this.addSongPopUpFormConfig.children[0].list.filter(s => s.id != this.addSongModel.songId);
           this.addSongModel = new SongOfAlbumUpdateRequest();
         } else {
           this.toastr.error('Failed to add song!');

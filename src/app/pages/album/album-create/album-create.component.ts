@@ -234,7 +234,7 @@ export class AlbumCreateComponent implements OnInit {
         }
       );
     } else {
-      newAlbum['id'] = +this.albumId;
+      newAlbum['id'] = this.albumId;
       this.albumService.updateAlbum(newAlbum, +this.albumId).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {

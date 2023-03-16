@@ -19,7 +19,7 @@
           <div (click)="showImage(m.url)" class="imageContainer" *ngFor="let m of objectMedia.mediaStores">
 
             <app-box
-            [id]="m.uuid"
+            [id]="m.id"
             [type]="'media'"
             [title]="'Name: '+m.name"
             [description]="'Type: ' + m.type"
