@@ -7,12 +7,14 @@ import { EraCreateComponent } from './era-create/era-create.component';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { EraService } from './shared/era.service';
+import { EraOverviewComponent } from './era-overview/era-overview.component';
 
 @NgModule({
   declarations: [
     EraSearchComponent, 
     EraCreateComponent,
-    ArtistsByErasComponent
+    ArtistsByErasComponent,
+    EraOverviewComponent
   ],
   imports: [
     SharedModule, 

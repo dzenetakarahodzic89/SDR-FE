@@ -11,7 +11,7 @@ import { AlbumService } from '../shared/album.service';
 @Component({
   selector: 'app-album-search',
   templateUrl: './album-search.component.html',
-  styleUrls: ['./album-search.component.scss']
+  styleUrls: ['./album-search.component.scss'],
 })
 export class AlbumSearchComponent implements OnInit {
   public albumsBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -66,7 +66,7 @@ export class AlbumSearchComponent implements OnInit {
       {
         name: 'nextPage',
         icon: 'fas fa-angle-double-right',
-        action: () => this.getNextPage()
+        action: () => this.getNextPage(),
       },
     ],
   });
@@ -116,9 +116,8 @@ export class AlbumSearchComponent implements OnInit {
       class: ['col-24'],
       type: 'text',
       name: 'name',
-      label: 'Name'
+      label: 'Name',
     };
-
 
     let eraInput = {
       template: 'ZxMultiselect',
@@ -126,7 +125,7 @@ export class AlbumSearchComponent implements OnInit {
       type: 'filter',
       name: 'era',
       label: 'Era',
-      list: this.eraOptions
+      list: this.eraOptions,
     };
 
     let genreInput = {
@@ -162,24 +161,16 @@ export class AlbumSearchComponent implements OnInit {
       name: 'albumSearch',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        nameInput,
-        eraInput,
-        genreInput,
-        artistInput,
-        sortByInput
-      ],
+      children: [nameInput, eraInput, genreInput, artistInput, sortByInput],
     });
   }
 
+  constructor(private router: Router, private albumService: AlbumService) {}
 
-  constructor(private router: Router, private albumService: AlbumService) {
-
-  }
 
   ngOnInit(): void {
     this.loadData();
-    this.setFormConfig()
+    this.setFormConfig();
   }
   loadData() {
     this.loadEras();
@@ -189,29 +180,21 @@ export class AlbumSearchComponent implements OnInit {
   }
 
   loadGenres() {
-    this.albumService.getGenres().subscribe(response => {
+    this.albumService.getGenres().subscribe((response) => {
       let listOfOptions: any = [];
       for (let i = 0; i < response.length; i++) {
         let genre = response[i];
-        let subgenres = genre.subGenreNames;
-        for (let key in subgenres) {
-          let subGenreName = subgenres[key];
-          let newOption = {
-            code: key,
-            displayName: subGenreName + '-' + genre.name
-          };
-          listOfOptions.push(newOption);
-        }
-        listOfOptions.push({
+        let newOption = {
           code: genre.id,
-          displeyName: genre.name
-
-        })
-
+          displayName: genre.name,
+        };
+        listOfOptions.push(newOption);
+        console.log(newOption);
       }
+
       this.genreOptions = listOfOptions;
       if (this.formConfig != null && this.formConfig != undefined) {
-
+        console.log('Form', this.formConfig);
         this.formConfig.children[2].list = listOfOptions;
       } else {
         this.setFormConfig();
@@ -245,7 +228,8 @@ export class AlbumSearchComponent implements OnInit {
     }
     )
 
-  }
+  };
+  
 
 
 
@@ -313,8 +297,6 @@ export class AlbumSearchComponent implements OnInit {
     ) {
       this.paginationDetails.page++;
       this.searchAlbums();
-
     }
   }
-
 }

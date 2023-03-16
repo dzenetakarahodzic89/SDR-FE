@@ -32,6 +32,7 @@ import { EraCreateComponent } from './pages/era/era-create/era-create.component'
 import { ArtistSearchComponent } from './pages/artist/artist-search/artist-search.component';
 import { EventSearchComponent } from './pages/event/event-search/event-search.component';
 import { EventOverviewComponent } from './pages/event/event-overview/event-overview.component';
+import { DeezerStatisticsComponent } from './pages/deezer/deezer-statistics/deezer-statistics.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -54,7 +55,11 @@ export const appRoutes: Routes = [
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
   { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
-  { path: 'notesheet/:songId/:instrumentId/overview', component: NotesheetOverviewComponent},
+  {
+    path: 'notesheet/:songId/:instrumentId/overview',
+    component: NotesheetOverviewComponent,
+  },
+
   { path: 'album/create', component: AlbumCreateComponent },
   { path: 'album/update/:id', component: AlbumCreateComponent },
   { path: 'playlist/generate-playlist', component: GeneratePlaylistComponent },
@@ -71,7 +76,7 @@ export const appRoutes: Routes = [
   { path: 'era/update/:id', component: EraCreateComponent },
   { path: 'artist/search', component: ArtistSearchComponent },
   { path: 'artist/:id/overview', component: ArtistOverviewComponent },
-  
   { path: 'event/search', component: EventSearchComponent },
-  { path: 'event/overview', component: EventOverviewComponent }
+  { path: 'event/overview', component: EventOverviewComponent },
+  { path: 'deezer-integration', component: DeezerStatisticsComponent },
 ];

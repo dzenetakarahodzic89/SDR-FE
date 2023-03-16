@@ -7,22 +7,29 @@ import { ZxConfirmation } from '@zff/zx-core';
 import { Definition } from '@zff/zx-forms';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ToastrService } from 'ngx-toastr';
-import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
+import {
+  ConnectedMediaConnectionSource,
+  ConnectedMediaConnectionType,
+  ConnectedMediaDetailCreateRequest,
+} from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 import { ObjectType } from '../../shared/object-type.constant';
-import { AlbumResponse, SongOfAlbumUpdateRequest, SongResponse, LoV } from '../shared/album.model';
+import {
+  AlbumResponse,
+  SongOfAlbumUpdateRequest,
+  SongResponse,
+  LoV,
+} from '../shared/album.model';
 import { AlbumService } from '../shared/album.service';
-
 
 @Component({
   selector: 'app-album-overview',
   templateUrl: './album-overview.component.html',
-  styleUrls: ['./album-overview.component.scss']
+  styleUrls: ['./album-overview.component.scss'],
 })
 export class AlbumOverviewComponent implements OnInit {
-
   type = ObjectType.ALBUM;
-  testFlag: string = "fi fi-";
+  testFlag: string = 'fi fi-';
   albumIsLoading: Boolean;
   songsAreLoading: Boolean;
   labelsAreLoading: Boolean;
@@ -36,7 +43,6 @@ export class AlbumOverviewComponent implements OnInit {
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     hideHeader: true,
-
   });
 
   public infoBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -45,7 +51,7 @@ export class AlbumOverviewComponent implements OnInit {
   });
 
   public ratingBtnConfig: ZxBlockModel = new ZxBlockModel({
-    hideExpand: true
+    hideExpand: true,
   });
 
   public detailsBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -67,7 +73,10 @@ export class AlbumOverviewComponent implements OnInit {
         icon: 'fal fa-plus',
         name: 'Popup Test',
         label: 'Gallery',
-        action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/'])
+        action: () =>
+          this.router.navigate([
+            './gallery/' + this.type.toLowerCase() + '/' + this.album.id,
+          ]),
       },
     ],
   });
@@ -78,7 +87,7 @@ export class AlbumOverviewComponent implements OnInit {
         icon: 'fal fa-edit',
         name: 'Popup Test',
         label: 'Edit Album',
-        action: () => this.router.navigate(['./album/update/'])
+        action: () => this.router.navigate(['./album/update/' + this.album.id]),
       },
     ],
   });
@@ -89,7 +98,7 @@ export class AlbumOverviewComponent implements OnInit {
         icon: 'fal fa-plus',
         name: 'addSong',
         label: 'Add song',
-        action: () => this.addSongPopup.show()
+        action: () => this.addSongPopup.show(),
       },
     ],
   });
@@ -99,7 +108,7 @@ export class AlbumOverviewComponent implements OnInit {
       {
         name: 'connectMedia',
         label: 'Connect Media',
-        action: () => this.connectMediaPopup.show()
+        action: () => this.connectMediaPopup.show(),
       },
     ],
   });
@@ -117,7 +126,7 @@ export class AlbumOverviewComponent implements OnInit {
     type: 'select',
     name: 'connectionSource',
     label: 'Connection Source',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   typeInput: Definition = new Definition({
@@ -126,7 +135,7 @@ export class AlbumOverviewComponent implements OnInit {
     type: 'select',
     name: 'connectionType',
     label: 'Connection Type',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   linkInput = new Definition({
@@ -135,9 +144,12 @@ export class AlbumOverviewComponent implements OnInit {
     type: 'text',
     name: 'connectionLink',
     label: 'Link',
-    validation: { required: true, pattern: '((http|https):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9@:%_\+.~#?&/=]*)' }
+    validation: {
+      required: true,
+      pattern:
+        '((http|https)://)?(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,6}([-a-zA-Z0-9@:%_+.~#?&/=]*)',
+    },
   });
-
 
   public setConnectMediaPopUpFormConfig() {
     this.connectMediaPopUpBlockConfig = new ZxBlockModel({
@@ -148,14 +160,10 @@ export class AlbumOverviewComponent implements OnInit {
       name: 'connectMedia',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        this.sourceInput,
-        this.typeInput,
-        this.linkInput
-      ],
-      model: this.connectedMediaModel
+      children: [this.sourceInput, this.typeInput, this.linkInput],
+      model: this.connectedMediaModel,
     });
-  };
+  }
 
   songInput: Definition = new Definition({
     template: 'ZxSelect',
@@ -164,7 +172,7 @@ export class AlbumOverviewComponent implements OnInit {
     type: 'filter',
     name: 'songId',
     label: 'Song',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   artistInput: Definition = new Definition({
@@ -173,7 +181,7 @@ export class AlbumOverviewComponent implements OnInit {
     type: 'filter',
     name: 'artistId',
     label: 'Artist',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   labelInput: Definition = new Definition({
@@ -182,7 +190,7 @@ export class AlbumOverviewComponent implements OnInit {
     type: 'filter',
     name: 'labelId',
     label: 'Label',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   public setAddSongPopUpFormConfig() {
@@ -194,17 +202,13 @@ export class AlbumOverviewComponent implements OnInit {
       name: 'addSong',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        this.songInput,
-        this.artistInput,
-        this.labelInput
-      ],
-      model: this.addSongModel
+      children: [this.songInput, this.artistInput, this.labelInput],
+      model: this.addSongModel,
     });
     this.addSongPopUpFormConfig.children[0].list = this.songsPopUp;
     this.addSongPopUpFormConfig.children[1].list = this.artistsPopUp;
     this.addSongPopUpFormConfig.children[2].list = this.labelsPopUp;
-  };
+  }
 
   public connectMediaPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
@@ -215,19 +219,28 @@ export class AlbumOverviewComponent implements OnInit {
   public connectMediaPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        name: 'save', description: 'Save', label: 'Save',
-        class: 'classic primary', icon: 'fal fa-check-circle',
+        name: 'save',
+        description: 'Save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
         action: () => {
-          this.connectMediaPopup.hide()
-          this.addConnectedMedia()
-        }
+          this.connectMediaPopup.hide();
+          this.addConnectedMedia();
+        },
       },
       {
-        name: 'cancel', description: 'Cancel', label: 'Cancel',
-        class: 'classic', icon: 'fal fa-times', action: () => { this.connectMediaPopup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest(); }
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.connectMediaPopup.hide();
+          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+        },
       },
-
-    ]
+    ],
   });
 
   public addSongPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
@@ -239,19 +252,27 @@ export class AlbumOverviewComponent implements OnInit {
   public addSongPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        name: 'save', description: 'Add song', label: 'Save',
-        class: 'classic primary', icon: 'fal fa-check-circle',
+        name: 'save',
+        description: 'Add song',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
         action: () => {
-          this.addSongPopup.hide()
-          this.addSong()
-        }
+          this.addSongPopup.hide();
+          this.addSong();
+        },
       },
       {
-        name: 'cancel', description: 'Cancel', label: 'Cancel',
-        class: 'classic', icon: 'fal fa-times', action: () => { this.addSongPopup.hide(); }
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.addSongPopup.hide();
+        },
       },
-
-    ]
+    ],
   });
 
   songColumnDefs = [
@@ -272,7 +293,7 @@ export class AlbumOverviewComponent implements OnInit {
       headerName: 'Playtime',
       flex: 1,
       floatingFilter: false,
-    }
+    },
   ];
 
   public songGridOptions: GridOptions = {
@@ -281,21 +302,23 @@ export class AlbumOverviewComponent implements OnInit {
     enableColResize: true,
     onRowClicked: (event) => {
       this.router.navigate(['./song/' + event['data']['id'] + '/overview']);
-    }
+    },
   } as GridOptions;
 
   linkedAlbums: any[];
   album: AlbumResponse;
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private route: ActivatedRoute,
     public confirmation: ZxConfirmation,
     private albumService: AlbumService,
     private connectedMediaService: ConnectedMediaService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     let id = 1;
-    Object.values(ConnectedMediaConnectionSource).forEach(t => {
+    Object.values(ConnectedMediaConnectionSource).forEach((t) => {
       let sourceObject = { id: id, name: t };
       this.connectionSources.push(sourceObject);
       id++;
@@ -303,7 +326,7 @@ export class AlbumOverviewComponent implements OnInit {
     this.sourceInput.list = this.connectionSources;
 
     id = 1;
-    Object.values(ConnectedMediaConnectionType).forEach(t => {
+    Object.values(ConnectedMediaConnectionType).forEach((t) => {
       let typeObject = { id: id, name: t };
       this.connectionTypes.push(typeObject);
       id++;
@@ -323,15 +346,15 @@ export class AlbumOverviewComponent implements OnInit {
     this.songsAreLoading = true;
     this.labelsAreLoading = true;
     this.artistsAreLoading = true;
-    this.route.params.subscribe(params => {
-      this.albumService.getAlbum(params.id).subscribe(response => {
-        console.log("Response: ", response);
+    this.route.params.subscribe((params) => {
+      this.albumService.getAlbum(params.id).subscribe((response) => {
+        console.log('Response: ', response);
         this.album = response;
         this.setConnectMediaPopUpFormConfig();
         this.setAddSongPopUpFormConfig();
         this.albumIsLoading = false;
-      })
-    })
+      });
+    });
   }
 
   addConnectedMedia() {
@@ -342,64 +365,69 @@ export class AlbumOverviewComponent implements OnInit {
 
     this.connectedMediaModel.objectId = this.album.id;
     this.connectedMediaModel.objectType = this.type;
-    this.connectedMediaModel.connectionSource = Object.keys(ConnectedMediaConnectionSource)[parseInt(this.connectedMediaModel.connectionSource) - 1];
-    this.connectedMediaModel.connectionType = Object.keys(ConnectedMediaConnectionType)[parseInt(this.connectedMediaModel.connectionType) - 1];
+    this.connectedMediaModel.connectionSource = Object.keys(
+      ConnectedMediaConnectionSource
+    )[parseInt(this.connectedMediaModel.connectionSource) - 1];
+    this.connectedMediaModel.connectionType = Object.keys(
+      ConnectedMediaConnectionType
+    )[parseInt(this.connectedMediaModel.connectionType) - 1];
     this.createConnectedMediaDetail();
-
-
   }
 
   createConnectedMediaDetail() {
-
-    this.connectedMediaService.createConnectedMediaDetail(this.connectedMediaModel).subscribe(
-      (responseCode) => {
-        if (responseCode.hasOwnProperty('payload')) {
-          this.toastr.success('Connected media successfully added!');
-          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
-        } else {
+    this.connectedMediaService
+      .createConnectedMediaDetail(this.connectedMediaModel)
+      .subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Connected media successfully added!');
+            this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+          } else {
+            this.toastr.error('Failed to add connected media!');
+          }
+        },
+        (errorMsg: string) => {
           this.toastr.error('Failed to add connected media!');
         }
-      },
-      (errorMsg: string) => {
-        this.toastr.error('Failed to add connected media!');
-      }
-    );
+      );
   }
 
   loadSongs() {
-    this.route.params.subscribe(params => {
-      this.albumService.getSongsNotInAlbum(params.id).subscribe(response => {
+    this.route.params.subscribe((params) => {
+      this.albumService.getSongsNotInAlbum(params.id).subscribe((response) => {
         this.songsPopUp = response;
         if (this.addSongPopUpFormConfig != undefined)
           this.addSongPopUpFormConfig.children[0].list = response;
         this.songsAreLoading = false;
-      })
-    })
+      });
+    });
   }
 
   loadLabels() {
-    this.route.params.subscribe(params => {
-      this.albumService.getLabelsNotInAlbum(params.id).subscribe(response => {
+    this.route.params.subscribe((params) => {
+      this.albumService.getLabelsNotInAlbum(params.id).subscribe((response) => {
         this.labelsPopUp = response;
         if (this.addSongPopUpFormConfig != undefined)
           this.addSongPopUpFormConfig.children[2].list = response;
         this.labelsAreLoading = false;
-      })
-    })
+      });
+    });
   }
 
   loadArtists() {
-    this.albumService.getArtists().subscribe(response => {
+    this.albumService.getArtists().subscribe((response) => {
       this.artistsPopUp = response;
+      console.log(response);
       if (this.addSongPopUpFormConfig != undefined)
         this.addSongPopUpFormConfig.children[1].list = response;
+      console.log(response);
       this.artistsAreLoading = false;
-    })
+    });
   }
 
   addSong() {
     if (!this.addSongPopUpFormConfig.isValid) {
-      this.toastr.error("Fill in the input fields!");
+      this.toastr.error('Fill in the input fields!');
       return;
     }
     this.addSongModel.albumId = this.album.id;
@@ -407,6 +435,9 @@ export class AlbumOverviewComponent implements OnInit {
       (response) => {
         if (response.hasOwnProperty('payload')) {
           this.toastr.success('Song successfully added!');
+          this.album.songs = [...this.album.songs, response['payload']];
+          this.addSongPopUpFormConfig.children[0].list =
+            this.songInput.lov.filter((s) => s.id != this.addSongModel.songId);
           this.album.songs = [... this.album.songs, response['payload']];
           this.addSongPopUpFormConfig.children[0].list = this.addSongPopUpFormConfig.children[0].list.filter(s => s.id != this.addSongModel.songId);
           this.addSongModel = new SongOfAlbumUpdateRequest();
@@ -418,8 +449,5 @@ export class AlbumOverviewComponent implements OnInit {
         this.toastr.error('Failed to add song!');
       }
     );
-
   }
-
 }
-
