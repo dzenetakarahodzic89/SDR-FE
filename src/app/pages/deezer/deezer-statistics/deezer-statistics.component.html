@@ -1,0 +1,52 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="integrationIsLoading"></zx-preloader>
+</div>
+<div zx-body *ngIf="deezerIntegration" class="w-auto" style="padding: 5px">
+  <div class="row col-24 headContainer">
+    <h1 style="font-weight: bold">Deezer Integration</h1>
+    <zx-button
+      id="refreshBtn"
+      zx-block-action
+      [config]="refreshBtn"
+      style="padding-left: auto"
+    ></zx-button>
+  </div>
+  <div style="height: 200px">
+    <zx-block [config]="deezerBlockConfig">
+      <zx-grid
+        zx-block-body
+        [gridOptions]="deezerTableTypeGridOptions"
+        [source]="dataTypes"
+        domLayout="autoHeight"
+      >
+      </zx-grid>
+    </zx-block>
+  </div>
+  <div style="margin-top: 10px; display: flex; height: 300px">
+    <div class="col-12">
+      <div style="display: flex; justify-content: space-evenly">
+        <div>
+          <div class="pie">
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+        <div>
+          <div class="pie">
+            <canvas id="pieChartTwo"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <zx-block [config]="deezerDataTypeConfigBlock">
+        <zx-grid
+          zx-block-body
+          [gridOptions]="deezerTableDataTypeGridOptions"
+          [source]="deezerData"
+          domLayout="autoHeight"
+        >
+        </zx-grid>
+      </zx-block>
+    </div>
+  </div>
+</div>

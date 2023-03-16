@@ -54,6 +54,7 @@ import { NotesheetModule } from './pages/notesheet/notesheet-overview/notesheet.
 import { ChordProgressionModule } from './pages/chordprogression/chordprogression.module';
 import { ArtistModule } from './pages/artist/artist.module';
 import { EventModule } from './pages/event/event.module';
+import { DeezerModule } from './pages/deezer/deezer.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -100,7 +101,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     EraModule,
     ChordProgressionModule,
     ArtistModule,
-    EventModule
+    EventModule,
+    DeezerModule,
     // use forRoot() in main app module only.
   ],
   providers: [
