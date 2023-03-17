@@ -28,6 +28,7 @@ import { AlbumService } from '../shared/album.service';
   styleUrls: ['./album-overview.component.scss'],
 })
 export class AlbumOverviewComponent implements OnInit {
+  srcUrl: string = '';
   type = ObjectType.ALBUM;
   testFlag: string = 'fi fi-';
   albumIsLoading: Boolean;
@@ -348,7 +349,11 @@ export class AlbumOverviewComponent implements OnInit {
     this.artistsAreLoading = true;
     this.route.params.subscribe((params) => {
       this.albumService.getAlbum(params.id).subscribe((response) => {
-        console.log('Response: ', response);
+        console.log(response);
+        this.srcUrl =
+          'https://open.spotify.com/embed/album/' +
+          response.spotifyId +
+          '?utm_source=generator&theme=0';
         this.album = response;
         this.setConnectMediaPopUpFormConfig();
         this.setAddSongPopUpFormConfig();

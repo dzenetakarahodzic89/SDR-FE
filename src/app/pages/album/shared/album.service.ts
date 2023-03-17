@@ -24,7 +24,6 @@ export class AlbumService {
   getAlbum(id: number) {
     return this.api.get(AlbumApi.GET_ALBUM.replace('#', id.toString())).pipe(
       map((response) => {
-        console.log('Response: ', response);
         const message = response['payload'];
         return message;
       })
@@ -42,9 +41,7 @@ export class AlbumService {
   getGenres() {
     return this.api.get('/sdrbe/genre/subGenre-mainGenre').pipe(
       map((response) => {
-        console.log('Response: ', response);
         const message = response['payload'];
-        console.log('Message:', message);
         return message;
       })
     );
@@ -53,9 +50,7 @@ export class AlbumService {
   getErasForFilter() {
     return this.api.get('/sdrbe/era/lov').pipe(
       map((response) => {
-        console.log('Response: ', response);
         const message = response['payload'];
-        console.log('Message:', message);
         return message;
       })
     );

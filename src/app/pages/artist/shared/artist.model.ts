@@ -16,47 +16,46 @@ export class ArtistSearchRequest {
   isSolo: boolean;
   sortBy: string;
 }
-export class ArtistSingleResponse{
-  
-  id:number;
-  name:string;
-  surname:string;
+export class ArtistSingleResponse {
+  id: number;
+  name: string;
+  surname: string;
   numberOfSongs: number;
-  information:string;
-  outlineText:string;
-  dateOfBirth:Date;
-  type:string;
-  persons:any[];
-  albums:any[];
-  recentsSong:any[];
-  imageUrl:string;
-  labels:LabelArtistSingleResponse[];
+  information: string;
+  outlineText: string;
+  dateOfBirth: Date;
+  type: string;
+  persons: any[];
+  albums: any[];
+  recentsSong: any[];
+  imageUrl: string;
+  labels: LabelArtistSingleResponse[];
+  spotifyId: string;
 }
-export class LabelArtistSingleResponse{
-    id:number;
-    labelName:string;
-    created:Date;
+export class LabelArtistSingleResponse {
+  id: number;
+  labelName: string;
+  created: Date;
+}
+export class AlbumArtistSingleResponse {
+  id: number;
+  dateOfRelease: Date;
 
+  name: string;
 }
-export class AlbumArtistSingleResponse{
-  id:number;
-  dateOfRelease:Date;
-  
-  name:string;
-}
-export class SongArtistSingleResponse{
-    id:number;
-    dateOfRelease:Date;
-    name:string;
-    eraName:string;
-    playtime:string;
+export class SongArtistSingleResponse {
+  id: number;
+  dateOfRelease: Date;
+  name: string;
+  eraName: string;
+  playtime: string;
 }
 export class PersonArtistSingleResponse {
-  id:number;
-  name:string;
-  surname:string;
-  dateOfBirth:Date;
-  labels:LabelArtistSingleResponse[];
+  id: number;
+  name: string;
+  surname: string;
+  dateOfBirth: Date;
+  labels: LabelArtistSingleResponse[];
 }
 export class GenreResponse {
   id: number;
