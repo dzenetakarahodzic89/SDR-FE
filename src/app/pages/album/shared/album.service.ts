@@ -33,8 +33,7 @@ export class AlbumService {
   searchAlbums(searchParams: AlbumSearchRequest) {
     return this.api.get(AlbumApi.SEARCH_ALBUMS, searchParams).pipe(
       map((response) => {
-        const message = response['payload'];
-        return message;
+        return response;
       })
     );
   }
