@@ -8,6 +8,8 @@ import { Definition } from '@zff/zx-forms';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ToastrService } from 'ngx-toastr';
 import { InstrumentResponse } from '../../instrument/shared/instrument.model';
+
+import {Location} from '@angular/common'; 
 import {
   ConnectedMediaConnectionSource,
   ConnectedMediaConnectionType,
@@ -186,6 +188,8 @@ export class SongOverviewComponent implements OnInit {
           this.updateLyrics();
           this.resetLyrics();
           this.lyricPopup.hide();
+          if(this.router.url.includes("lyric"))
+            this.location.replaceState('/song/'+this.song.id+'/overview');
           window.location.reload();
         },
       },
@@ -197,6 +201,8 @@ export class SongOverviewComponent implements OnInit {
         action: () => {
           this.resetLyrics();
           this.lyricPopup.hide();
+          if(this.router.url.includes("lyric"))
+            this.location.replaceState('/song/'+this.song.id+'/overview');
           window.location.reload();
         },
       },
@@ -304,13 +310,17 @@ export class SongOverviewComponent implements OnInit {
         label: 'Change lyrics',
         icon: 'fas fa-music-alt',
         action: () => {
-          this.getLanguages();
-          this.lyricPopup.show();
-          this.showEditor = true;
+          this.changeLyricAction();
         },
       },
     ],
   });
+
+  private changeLyricAction() {
+    this.getLanguages();
+    this.lyricPopup.show();
+    this.showEditor = true;
+  }
 
   public setUpSongUploadFormConfig() {
     this.popUpSongBlockConfig = new ZxBlockModel({
@@ -785,7 +795,8 @@ export class SongOverviewComponent implements OnInit {
     private songService: SongService,
     private connectedMediaService: ConnectedMediaService,
     private toastr: ToastrService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private location: Location
   ) {}
 
   saveAudioToSong = async () => {
@@ -889,6 +900,9 @@ export class SongOverviewComponent implements OnInit {
         });
         this.getInstruments();
         this.getPersons();
+        if(this.router.url.includes('/lyric')) {
+          this.changeLyricAction();
+        }
       });
       this.songService
         .getStatusOfAudio(params.id, 'SONG')

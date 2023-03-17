@@ -112,6 +112,12 @@
             "label": "Artists over eras",
             "url": "era/artists-over-eras",
             "attributes": {}
+          },
+          {
+            "code": "HUB_MUSICMATCH_STATIC",
+            "label": "Music Match Statistics",
+            "url": "music-match-integration",
+            "attributes": {}
           }
         ]
       }
