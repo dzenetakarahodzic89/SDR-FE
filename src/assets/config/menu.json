@@ -95,6 +95,7 @@
         "url": "event/search",
         "attributes": {}
       },
+
       {
         "code": "HUB_STATISTICS_STATIC",
         "label": "Statistics",
@@ -120,6 +121,13 @@
             "attributes": {}
           }
         ]
+      },
+      {
+        "code": "HUB_SCORECOMPARE_STATIC",
+        "label": "Compare user score",
+        "url": "compare-score",
+        "icon": "fa fa-star",
+        "attributes": {}
       }
     ]
   }
