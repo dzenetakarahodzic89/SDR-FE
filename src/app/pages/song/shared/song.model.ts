@@ -15,19 +15,53 @@ export class SongResponse {
   information: string;
   dateOfRelease: Date;
   label: string;
-  chordProgression: string;
+  remixId?: number;
+  coverId?: number;
+  playtime?: string;
+  chordProgression?: string;
+  chordProgressionId?: number;
   genreId: number;
   genre: string;
+  subgenreId?: number;
   subgenres: SubGenres;
   audioUrl: string;
+  spotifyId: string;
   artists: ArtistSongResponse[];
   songInstruments: SongInstrumentSongResponse[];
   instrumentsNoteSheet: SongInstrumentsResponse;
 }
 
+export class LyricPopupModel {
+  id: number;
+  languageId: number;
+  lyrics: string;
+}
+
+export class LyricResponseUpdate {
+  id: number;
+  songId: number;
+  languageId: number;
+  text: string;
+}
+
 export class SongInstrumentsResponse {
   id: number;
   displayName: string;
+}
+
+export class SongNameResponse {
+  id: number;
+  name: string;
+}
+
+export class Lyrics {
+  languageId: number;
+  lyrics: string;
+}
+
+export class LanguageNameResponse {
+  id: number;
+  name: string;
 }
 
 export class FindNoteSheet {
@@ -155,6 +189,44 @@ export class SongSimilarityRequest {
   id: number;
 }
 
+export class SongCreateRequest {
+  id?: number;
+  name: string;
+  outlineText: string;
+  information: string;
+  isRemix?: boolean;
+  isCover?: boolean;
+  remixId?: number;
+  coverId?: number;
+  dateOfRelease?: Date;
+  chordProgressionId?: number;
+  genreId: number;
+  subgenreId?: number;
+  playtimeHours?: number;
+  playtimeMinutes?: number;
+  playtimeSeconds?: number;
+  playtime?: string;
+  coverImageData: string | ArrayBuffer;
+  coverImage: string;
+  coverImage_files: File[];
+}
+export class SongLoV {
+  id: number;
+  name: string;
+}
+export class ChordProgressionLoV {
+  id: number;
+  name: string;
+}
+export class MainGenreLoV {
+  id: number;
+  name: string;
+}
+export class SubgenreLoV {
+  id: number;
+  name: string;
+  }
+  
 export class NotesheetResponse {
   id: number;
   songId: number;

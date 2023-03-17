@@ -1,0 +1,37 @@
+<zx-tabs [config]="tabConfig">
+    <zx-block zx-tab-item *ngIf="firstFormConfig && secondFormConfig && this.model" id="overviewTab" [config]="overviewBlock">
+        
+        <zx-form-loader zx-block-body [component]="firstFormConfig" [model]="this.model" class="col-24"></zx-form-loader>
+
+        <div zx-block-body class="row col-24">
+            <zx-form-loader zx-block-body [component]="secondFormConfig" [model]="this.model" class="col-10"></zx-form-loader>
+            <div zx-block-body class="row col-14 imageRow bodyContainer">
+                <div class="placeholder"></div>
+                <p class="">Cover image: </p>
+                <img class="imageContainer" *ngIf="this.model.coverImageData" [src]="this.model.coverImageData" alt="location cover image">
+                <img class="imageContainer" *ngIf="!this.model.coverImageData" [src]="this.firstUrl" alt="Default image">
+                <zx-form-loader [component]="imageFormConfig" [model]="this.model" class="col-8"></zx-form-loader>
+            </div>
+        </div>
+    
+        <div zx-block-footer class="footerContainer">
+            <zx-button zx-block-footer class="buttonContainer" [config]="saveButton"></zx-button>
+            <zx-button zx-block-footer class="buttonContainer" [config]="cancelButton"></zx-button>
+        </div>
+    </zx-block>
+
+
+    <zx-block zx-tab-item id="informationTab" [config]="informationBlock">
+
+        <div zx-block-footer class="footerContainer">
+            <zx-button zx-block-footer class="buttonContainer" [config]="saveButton"></zx-button>
+            <zx-button zx-block-footer class="buttonContainer" [config]="cancelButton"></zx-button>
+        </div>
+
+        <div zx-block-body>
+            <editor [init]="{height: 700}" [(ngModel)]="this.model.information"></editor>
+        </div>
+
+    </zx-block>
+
+</zx-tabs>

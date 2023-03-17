@@ -14,10 +14,15 @@ export class EraResponse {
   subgenres: SubGenres;
   audioUrl: string;
   artists: ArtistSongResponse[];
+  startDate: Date;
+  endDate: Date;
+  outlinetext: string;
 }
+
 interface SubGenres {
   [key: number]: string;
 }
+
 export class ArtistSongResponse {
   id: number;
   name: string;
@@ -31,17 +36,19 @@ export class ArtistSongResponse {
 
 export class GenreResponse {
   id: number;
-  name:string;
+  name: string;
 }
 
 export class AlbumResponse {
   id: number;
   name: string;
 }
+
 export class ArtistResponse {
   id: number;
   name: string;
 }
+
 export class EraSearchRequest {
   name: string;
   artistIds: number[];
@@ -68,4 +75,27 @@ export class EraSearchRequest {
     this.page = page;
     this.pageSize = pageSize;
   }
+}
+
+export class EraRequest {
+  era: number;
+}
+
+export class EraArtistResponse {
+  eraName: string;
+  soloCount: number;
+  groupCount: number;
+}
+
+export class EraCreateRequest {
+  id?: number;
+  name: string;
+  information: string;
+  startDate: Date;
+  endDate: Date;
+  scope: string;
+  outlinetext: string;
+  coverImageData: string | ArrayBuffer;
+  coverImage: string;
+  coverImage_files: File[];
 }

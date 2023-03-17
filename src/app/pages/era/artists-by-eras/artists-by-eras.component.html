@@ -1,0 +1,17 @@
+<zx-block [config]="searchBlockConfig">
+  <zx-form-loader
+    *ngIf="formConfig"
+    zx-block-body
+    [component]="formConfig"
+    [model]="model"
+  ></zx-form-loader>
+  <zx-button zx-block-action [config]="searchButton"></zx-button>
+</zx-block>
+
+<div class="chart-container">
+  <div *ngFor="let era of model.selectEra; let i = index" class="chart">
+    <div style="text-align: center">
+      <canvas id="pieChart{{ i }}"></canvas>
+    </div>
+  </div>
+</div>

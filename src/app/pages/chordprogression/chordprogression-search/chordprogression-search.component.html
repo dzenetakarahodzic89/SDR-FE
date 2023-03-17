@@ -1,0 +1,44 @@
+<div class="row mainContainer">
+  <zx-block [config]="chordProgressionsBlockConfig" class="col-16">
+    <zx-button zx-block-action [config]="newChordProgressionBtn"></zx-button>
+    <div zx-block-body class="row">
+      <zx-preloader *ngIf="loading"></zx-preloader>
+    </div>
+    <div
+      *ngIf="foundChordProgressions && foundChordProgressions.length > 0"
+      zx-block-body
+      class="searchResults"
+    >
+      <div class="gridContainer">
+        <div
+          class="divForBoxes"
+          *ngFor="let chordProgression of foundChordProgressions"
+        >
+          <app-box
+            [id]="chordProgression.id"
+            [type]="'chordProgression'"
+            [title]="chordProgression.name"
+            [description]="chordProgression.outlineText"
+            [imageUrl]="chordProgression.imageUrl"
+          >
+          </app-box>
+        </div>
+      </div>
+    </div>
+    <div zx-block-footer class="align-center">
+      <zx-button [config]="previousPageButton"> </zx-button>
+      <zx-button [config]="nextPageButton"></zx-button>
+    </div>
+  </zx-block>
+  <zx-block [config]="searchBlockConfig" class="col-8">
+    <zx-form-loader
+      *ngIf="formConfig"
+      zx-block-body
+      [component]="formConfig"
+      [model]="model"
+      class="col-24"
+    >
+    </zx-form-loader>
+    <zx-button zx-block-action [config]="searchButton"></zx-button>
+  </zx-block>
+</div>

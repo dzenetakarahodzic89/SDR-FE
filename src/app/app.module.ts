@@ -38,7 +38,7 @@ import { RouterModule } from '@angular/router';
 import { ZxGridModule } from '@zff/zx-grid';
 import { SharedModule } from './pages/shared/shared.module';
 import { HomeModule } from './pages/home/home.module';
-import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { GalleryModule } from './pages/gallery/gallery.module';
 import { PersonModule } from './pages/person/person.module';
 import { LabelModule } from './pages/label/label.module';
@@ -51,6 +51,11 @@ import { AlbumModule } from './pages/album/album.module';
 import { MultisearchModule } from './pages/multisearch/multisearch.module';
 import { EraModule } from './pages/era/era.module';
 import { NotesheetModule } from './pages/notesheet/notesheet.module';
+import { ChordProgressionModule } from './pages/chordprogression/chordprogression.module';
+import { ArtistModule } from './pages/artist/artist.module';
+import { EventModule } from './pages/event/event.module';
+import { DeezerModule } from './pages/deezer/deezer.module';
+import { MusicMatchModule } from './pages/music-match/music-match.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -95,6 +100,11 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     AlbumModule,
     MultisearchModule,
     EraModule,
+    ChordProgressionModule,
+    ArtistModule,
+    EventModule,
+    DeezerModule,
+    MusicMatchModule
     // use forRoot() in main app module only.
   ],
   providers: [
