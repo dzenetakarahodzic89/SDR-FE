@@ -225,4 +225,10 @@ export class MainGenreLoV {
 export class SubgenreLoV {
   id: number;
   name: string;
+  }
+  
+export class NotesheetResponse {
+  id: number;
+  songId: number;
+  instrumentId: number;
 }

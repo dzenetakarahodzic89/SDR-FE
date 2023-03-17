@@ -1,0 +1,57 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="noteSheetIsLoading"></zx-preloader>
+</div>
+<div class="row-5 bottomContainer w-auto">
+  <zx-block [config]="infoBlockConfig" class="col-14 w-auto">
+    <div zx-block-body>
+      <canvas id="output"></canvas>
+    </div>
+  </zx-block>
+  <div style="display: flex; flex-direction: column">
+    <zx-block [config]="staveBlockConfig">
+      <zx-form-loader
+        *ngIf="staveFormConfig"
+        zx-block-body
+        [component]="staveFormConfig"
+        [model]="staveModel"
+        class="col-24"
+      ></zx-form-loader>
+      <zx-button zx-block-action [config]="addStaveBtn">Add:</zx-button>
+    </zx-block>
+    <zx-block [config]="staveNoteBlockConfig">
+      <zx-form-loader
+        *ngIf="staveNoteFormConfig"
+        zx-block-body
+        [component]="staveNoteFormConfig"
+        [model]="staveNoteModel"
+        class="col-24"
+      ></zx-form-loader>
+      <zx-button zx-block-action [config]="addStaveNoteBtn">Add:</zx-button>
+      <zx-button zx-block-action [config]="showAll">Show all:</zx-button>
+    </zx-block>
+    <zx-block [config]="removeStaveBlockConfig">
+      <zx-form-loader
+        *ngIf="removeStaveFormConfig"
+        zx-block-body
+        [component]="removeStaveFormConfig"
+        [model]="staveModel"
+        class="col-24"
+      ></zx-form-loader>
+      <zx-button zx-block-action [config]="removeStaveBtn">Add:</zx-button>
+    </zx-block>
+    <zx-block [config]="removeStaveNoteBlockConfig">
+      <zx-form-loader
+        *ngIf="removeStaveNoteFormConfig"
+        zx-block-body
+        [component]="removeStaveNoteFormConfig"
+        [model]="staveNoteModel"
+        class="col-24"
+      ></zx-form-loader>
+      <zx-button zx-block-action [config]="filterStaveNoteBtn"
+        >Filter stave notes:</zx-button
+      >
+      <zx-button zx-block-action [config]="removeStaveNoteBtn">Add:</zx-button>
+    </zx-block>
+    <zx-button zx-block-action [config]="mainButtons"></zx-button>
+  </div>
+</div>
