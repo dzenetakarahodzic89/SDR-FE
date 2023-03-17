@@ -23,7 +23,7 @@ import {
   SongNameResponse,
   SubgenreLoV,
   LanguageNameResponse,
-  LyricResponseUpdate
+  LyricResponseUpdate,
 } from './song.model';
 import { SongCreateRequest } from './song.model';
 
@@ -198,18 +198,6 @@ export class SongService {
         map((response) => {
           const stories = response['payload'] as InstrumentResponse[];
           return stories;
-          
-                })
-      );
-  }
-
-  addInstrumentToSong(request: AddInstrumentToSongRequest): Observable<any> {
-    return this.api
-      .post(SongApi.POST_INSTRUMENTS_TO_SONG, { list: [request] })
-      .pipe(
-        map((response) => {
-          const stories = response['payload'] as InstrumentResponse[];
-          return stories;
         })
       );
   }
@@ -243,15 +231,21 @@ export class SongService {
   }
 
   createLyric(body: any): Observable<LyricResponseUpdate> {
-    return this.api.post(SongApi.POST_LYRIC, body).pipe(map((response) => response['payload']));
+    return this.api
+      .post(SongApi.POST_LYRIC, body)
+      .pipe(map((response) => response['payload']));
   }
 
   updateLyrics(body: LyricResponseUpdate): Observable<LyricResponseUpdate> {
-    return this.api.put(SongApi.PUT_LYRIC.replace("#", body.id.toString()), body).pipe(map((response) => response['payload']));
+    return this.api
+      .put(SongApi.PUT_LYRIC.replace('#', body.id.toString()), body)
+      .pipe(map((response) => response['payload']));
   }
 
   getLyricsByCriteria(criteria: any): Observable<LyricResponseUpdate[]> {
-    return this.api.get(SongApi.GET_LYRICS, criteria).pipe(map((response) => response['payload']));
+    return this.api
+      .get(SongApi.GET_LYRICS, criteria)
+      .pipe(map((response) => response['payload']));
   }
 
   getAllSongNames(): Observable<SongNameResponse[]> {
@@ -260,12 +254,12 @@ export class SongService {
         const songs: SongNameResponse[] = response['payload'];
         return songs;
       })
-    )
+    );
   }
 
   getAllLanguages(): Observable<LanguageNameResponse[]> {
-    return this.api.get(SongApi.GET_LANGUAGES).pipe(
-      map(response => response['payload'])
-    );
+    return this.api
+      .get(SongApi.GET_LANGUAGES)
+      .pipe(map((response) => response['payload']));
   }
 }
