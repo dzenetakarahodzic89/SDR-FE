@@ -55,6 +55,7 @@ import { ChordProgressionModule } from './pages/chordprogression/chordprogressio
 import { ArtistModule } from './pages/artist/artist.module';
 import { EventModule } from './pages/event/event.module';
 import { DeezerModule } from './pages/deezer/deezer.module';
+import { UrmModule } from './pages/urm/urm.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -103,6 +104,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     ArtistModule,
     EventModule,
     DeezerModule,
+    UrmModule
     // use forRoot() in main app module only.
   ],
   providers: [
@@ -142,7 +144,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
 
 export function createCompiler(compilerFactory: CompilerFactory) {
   return compilerFactory.createCompiler();
