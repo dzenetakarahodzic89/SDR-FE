@@ -23,6 +23,7 @@ import {
   SongResponse,
   SongInstrumentsResponse,
   FindNoteSheet,
+  NotesheetResponse,
 } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
 
@@ -34,6 +35,8 @@ import { SongService } from '../shared/song.service';
 export class SongOverviewComponent implements OnInit {
   type = ObjectType.SONG;
   songIsLoading = false;
+  private noteSheetId = null;
+  songIde = null;
   song: SongResponse;
   artists: ArtistSongResponse[];
   instruments: InstrumentResponse[];
@@ -72,6 +75,9 @@ export class SongOverviewComponent implements OnInit {
     name: 'instrumentId',
     label: 'Instrument name',
     validation: { required: true },
+    onSelect: () => {
+      this.getNoteSheet();
+    },
   });
 
   public setInstrumentPopUpFormConfig() {
@@ -102,13 +108,17 @@ export class SongOverviewComponent implements OnInit {
         class: 'classic primary',
         icon: 'fa fa-external-link',
         action: () => {
-          this.router.navigate([
-            './notesheet/' +
-              this.song.id +
-              '/' +
-              this.instrumentPopUpModel.instrumentId +
-              '/overview',
-          ]);
+          if (this.noteSheetId != null) {
+            this.router.navigate([
+              './notesheet/' +
+                this.song.id +
+                '/' +
+                this.instrumentPopUpModel.instrumentId +
+                '/overview',
+            ]);
+          } else {
+            this.toastr.error("Notesheet for that instrument doesn't exist");
+          }
         },
       },
       {
@@ -117,13 +127,23 @@ export class SongOverviewComponent implements OnInit {
         class: 'classic primary',
         icon: 'fa fa-plus-circle',
         action: () => {
-          this.router.navigate([
-            './notesheet/' +
-              this.song.id +
-              '/' +
-              this.instrumentPopUpModel.instrumentId +
-              '/create',
-          ]);
+          if (this.noteSheetId == null) {
+            this.router.navigate([
+              './notesheet/' +
+                this.song.id +
+                '/' +
+                this.instrumentPopUpModel.instrumentId +
+                '/create',
+            ]);
+          } else {
+            this.router.navigate([
+              './notesheet/' +
+                this.song.id +
+                '/' +
+                this.instrumentPopUpModel.instrumentId +
+                '/edit',
+            ]);
+          }
         },
       },
       {
@@ -564,6 +584,22 @@ export class SongOverviewComponent implements OnInit {
       );
     });
   }
+
+  getNoteSheet() {
+    const songIde = this.song.id;
+    const instrumentId = this.instrumentPopUpModel.instrumentId;
+    console.log(this.instrumentPopUpModel.instrumentId);
+    this.route.params.subscribe(() => {
+      this.songService
+        .getNoteSheet(songIde, instrumentId)
+        .subscribe((response: NotesheetResponse) => {
+          this.noteSheetId = response.id;
+          console.log(this.noteSheetId);
+          console.log(response);
+        });
+    });
+  }
+
   getInstruments() {
     this.songService.getAllInstruments().subscribe((response) => {
       this.instrumentsAreLoading = false;
@@ -683,6 +719,7 @@ export class SongOverviewComponent implements OnInit {
     this.addInstrumentModel = new AddInstrumentToSongRequest();
     this.similarityCreateRequest = new SimilarityCreateRequest();
     this.loadData();
+    this.getNoteSheet();
   }
 
   loadData(): void {

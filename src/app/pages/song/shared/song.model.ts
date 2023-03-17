@@ -154,3 +154,9 @@ export class SongSimilarityDetailRequest {
 export class SongSimilarityRequest {
   id: number;
 }
+
+export class NotesheetResponse {
+  id: number;
+  songId: number;
+  instrumentId: number;
+}

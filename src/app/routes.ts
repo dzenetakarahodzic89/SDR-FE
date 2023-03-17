@@ -14,7 +14,7 @@ import { PlaylistSearchComponent } from './pages/playlist/playlist-search/playli
 import { AlbumOverviewComponent } from './pages/album/album-overview/album-overview.component';
 
 import { SongOverviewComponent } from './pages/song/song-overview/song-overview.component';
-
+import { NoteSheetCreateComponent } from './pages/notesheet/notesheet-create/notesheet-create.component';
 import { AlbumSearchComponent } from './pages/album/album-search/album-search.component';
 import { NotesheetOverviewComponent } from './pages/notesheet/notesheet-overview/notesheet-overview.component';
 import { AlbumCreateComponent } from './pages/album/album-create/album-create.component';
@@ -48,6 +48,14 @@ export const appRoutes: Routes = [
   {
     path: 'notesheet/:songId/:instrumentId/overview',
     component: NotesheetOverviewComponent,
+  },
+  {
+    path: 'notesheet/:songId/:instrumentId/create',
+    component: NoteSheetCreateComponent,
+  },
+  {
+    path: 'notesheet/:songId/:instrumentId/edit',
+    component: NoteSheetCreateComponent,
   },
   { path: 'album/create', component: AlbumCreateComponent },
   { path: 'album/update/:id', component: AlbumCreateComponent },

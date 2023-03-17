@@ -31,10 +31,12 @@ export class SongService {
         const songs: SongResponseAll[] = response['payload'];
         return songs;
       })
-    )
+    );
   }
 
-  saveSimilarity(similarityCreateRequest: SimilarityCreateRequest): Observable<any> {
+  saveSimilarity(
+    similarityCreateRequest: SimilarityCreateRequest
+  ): Observable<any> {
     return this.api.post(SongApi.POST_SIMILARITY, similarityCreateRequest);
   }
 
@@ -125,15 +127,27 @@ export class SongService {
       })
     );
   }
-  addInstrumentToSong(request:AddInstrumentToSongRequest):Observable<any>{
-    return this.api.post(SongApi.POST_INSTRUMENTS_TO_SONG,{list:[request]}).pipe(
-      map((response) => {
-        const stories = response['payload'] as InstrumentResponse[];
-        return stories;
-      })
-    );
+  addInstrumentToSong(request: AddInstrumentToSongRequest): Observable<any> {
+    return this.api
+      .post(SongApi.POST_INSTRUMENTS_TO_SONG, { list: [request] })
+      .pipe(
+        map((response) => {
+          const stories = response['payload'] as InstrumentResponse[];
+          return stories;
+        })
+      );
   }
 
+  getNoteSheet(songId: number, instrumentId: number) {
+    return this.api
+      .get(SongApi.GET_NOTESHEETS.replace('#', `${songId}/${instrumentId}`))
+      .pipe(
+        map((response) => {
+          const message = response['payload'];
+          return message;
+        })
+      );
+  }
 
   getAllInstruments(): Observable<InstrumentResponse[]> {
     return this.api.get(SongApi.GET_INSTRUMENT_DROPDOWN).pipe(
