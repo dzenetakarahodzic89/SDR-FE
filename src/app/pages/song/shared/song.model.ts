@@ -25,23 +25,24 @@ export class SongResponse {
   subgenreId?: number;
   subgenres: SubGenres;
   audioUrl: string;
+  spotifyId: string;
   artists: ArtistSongResponse[];
   songInstruments: SongInstrumentSongResponse[];
   instrumentsNoteSheet: SongInstrumentsResponse;
-};
+}
 
 export class LyricPopupModel {
   id: number;
   languageId: number;
   lyrics: string;
-};
+}
 
 export class LyricResponseUpdate {
   id: number;
   songId: number;
   languageId: number;
   text: string;
-};
+}
 
 export class SongInstrumentsResponse {
   id: number;
@@ -61,7 +62,7 @@ export class Lyrics {
 export class LanguageNameResponse {
   id: number;
   name: string;
-};
+}
 
 export class FindNoteSheet {
   instrumentId: number;

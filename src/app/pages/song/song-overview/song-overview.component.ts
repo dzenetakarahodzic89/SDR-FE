@@ -1,5 +1,6 @@
 import { GridOptions } from '@ag-grid-community/all-modules';
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
@@ -36,6 +37,7 @@ import { SongService } from '../shared/song.service';
   styleUrls: ['./song-overview.component.scss'],
 })
 export class SongOverviewComponent implements OnInit {
+  srcUrl: string = '';
   showEditor: boolean = false;
   cachedLanguages: LanguageNameResponse[] = [];
   cachedLyrics: LyricPopupModel[] = [];
@@ -90,7 +92,7 @@ export class SongOverviewComponent implements OnInit {
     class: ['col-24'],
     type: 'textarea',
     name: 'lyrics',
-    label: 'Song lyrics'
+    label: 'Song lyrics',
   });
 
   public setInstrumentPopUpFormConfig() {
@@ -185,7 +187,7 @@ export class SongOverviewComponent implements OnInit {
           this.resetLyrics();
           this.lyricPopup.hide();
           window.location.reload();
-        }
+        },
       },
       {
         name: 'close',
@@ -196,8 +198,8 @@ export class SongOverviewComponent implements OnInit {
           this.resetLyrics();
           this.lyricPopup.hide();
           window.location.reload();
-        }
-      }
+        },
+      },
     ],
   });
 
@@ -210,32 +212,41 @@ export class SongOverviewComponent implements OnInit {
   onLanguageSelect() {
     let cachedLyric: LyricPopupModel = undefined;
 
-    this.cachedLyrics.forEach(lyric => {
-      if (lyric.languageId == this.lyricPopupModel.languageId) 
+    this.cachedLyrics.forEach((lyric) => {
+      if (lyric.languageId == this.lyricPopupModel.languageId)
         cachedLyric = lyric;
     });
 
     if (cachedLyric != undefined) {
-      this.lyricPopupModel = JSON.parse(JSON.stringify(cachedLyric)) as LyricPopupModel;
-    }
-    else {
-      this.songService.getLyricsByCriteria(this.makeLyricSearchRequest()).subscribe(lyricArray => {
-        if (lyricArray.length == 0) {
-          this.songService.createLyric({
-            languageId: this.lyricPopupModel.languageId,
-            text: '',
-            songId: this.song.id
-          }).subscribe(payload => {
-            this.lyricPopupModel.id = payload['id'];
-            this.lyricPopupModel.lyrics = payload['text'];
-            this.cachedLyrics.push(JSON.parse(JSON.stringify(this.lyricPopupModel)));
-          })
-        } else {
-          this.lyricPopupModel.id = lyricArray[0].id;
-          this.lyricPopupModel.lyrics = lyricArray[0].text;
-          this.cachedLyrics.push(JSON.parse(JSON.stringify(this.lyricPopupModel)));
-        }
-      });
+      this.lyricPopupModel = JSON.parse(
+        JSON.stringify(cachedLyric)
+      ) as LyricPopupModel;
+    } else {
+      this.songService
+        .getLyricsByCriteria(this.makeLyricSearchRequest())
+        .subscribe((lyricArray) => {
+          if (lyricArray.length == 0) {
+            this.songService
+              .createLyric({
+                languageId: this.lyricPopupModel.languageId,
+                text: '',
+                songId: this.song.id,
+              })
+              .subscribe((payload) => {
+                this.lyricPopupModel.id = payload['id'];
+                this.lyricPopupModel.lyrics = payload['text'];
+                this.cachedLyrics.push(
+                  JSON.parse(JSON.stringify(this.lyricPopupModel))
+                );
+              });
+          } else {
+            this.lyricPopupModel.id = lyricArray[0].id;
+            this.lyricPopupModel.lyrics = lyricArray[0].text;
+            this.cachedLyrics.push(
+              JSON.parse(JSON.stringify(this.lyricPopupModel))
+            );
+          }
+        });
     }
   }
 
@@ -245,16 +256,18 @@ export class SongOverviewComponent implements OnInit {
     body.languageId = this.lyricPopupModel.languageId;
     body.songId = this.song.id;
     body.text = this.lyricPopupModel.lyrics;
-    this.songService.updateLyrics(body).subscribe(lyric => {
-      this.cachedLyrics.find(el => el.id == lyric.id).lyrics = lyric.text;
-      this.toastr.success("Successfully updated lyrics for '" + this.song.name + "'!");
+    this.songService.updateLyrics(body).subscribe((lyric) => {
+      this.cachedLyrics.find((el) => el.id == lyric.id).lyrics = lyric.text;
+      this.toastr.success(
+        "Successfully updated lyrics for '" + this.song.name + "'!"
+      );
     });
-  } 
+  }
 
   makeLyricSearchRequest(): any {
     return {
       'language.id': this.lyricPopupModel.languageId,
-      'song.id': this.song.id
+      'song.id': this.song.id,
     };
   }
 
@@ -513,9 +526,9 @@ export class SongOverviewComponent implements OnInit {
     name: 'languageId',
     label: 'Select language',
     validation: {
-      required: true
+      required: true,
     },
-    onSelect: () => this.onLanguageSelect() 
+    onSelect: () => this.onLanguageSelect(),
   });
 
   linkInput = new Definition({
@@ -559,7 +572,7 @@ export class SongOverviewComponent implements OnInit {
       children: [this.songInput],
       model: this.similarityCreateRequest,
     });
-    this.linkPopupFormConfig.children[0].list=this.songTitles;
+    this.linkPopupFormConfig.children[0].list = this.songTitles;
   }
 
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
@@ -771,7 +784,8 @@ export class SongOverviewComponent implements OnInit {
     private route: ActivatedRoute,
     private songService: SongService,
     private connectedMediaService: ConnectedMediaService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private sanitizer: DomSanitizer
   ) {}
 
   saveAudioToSong = async () => {
@@ -852,6 +866,10 @@ export class SongOverviewComponent implements OnInit {
       this.songsAreLoading = true;
       this.getSongs();
       this.songService.getSong(params.id).subscribe((response) => {
+        this.srcUrl =
+          'https://open.spotify.com/embed/track/' +
+          response.spotifyId +
+          '?utm_source=generator&theme=0';
         this.song = response;
         this.setPopUpFormConfig();
         this.setLinkPopupConfig();
@@ -881,14 +899,14 @@ export class SongOverviewComponent implements OnInit {
   }
 
   getLanguages(): void {
-    if (this.cachedLanguages.length != 0) 
+    if (this.cachedLanguages.length != 0)
       this.lyricPopupFormConfig.children[0].list = this.cachedLanguages;
     else {
-      this.songService.getAllLanguages().subscribe(response => {
+      this.songService.getAllLanguages().subscribe((response) => {
         this.cachedLanguages = response;
         this.lyricPopupFormConfig.children[0].list = this.cachedLanguages;
       });
-    }      
+    }
   }
 
   getSubGenresText() {
@@ -943,13 +961,13 @@ export class SongOverviewComponent implements OnInit {
 
   getSongs() {
     this.route.params.subscribe((params) => {
-    this.songService.getAllSongNames().subscribe((response) => {
-      response = response.filter(s => s.id != params.id);
-      this.songTitles = response;
-      if(this.linkPopupBlockConfig!=undefined)
-        this.linkPopupFormConfig.children[0].list = response;
-      this.songsAreLoading = false;
+      this.songService.getAllSongNames().subscribe((response) => {
+        response = response.filter((s) => s.id != params.id);
+        this.songTitles = response;
+        if (this.linkPopupBlockConfig != undefined)
+          this.linkPopupFormConfig.children[0].list = response;
+        this.songsAreLoading = false;
+      });
     });
   }
-)}
 }

@@ -9,6 +9,7 @@ export class AlbumResponse {
   imageUrl: string;
   songs: SongResponse[];
   audioUrls: [];
+  spotifyId: string;
 }
 
 export class SongResponse {
