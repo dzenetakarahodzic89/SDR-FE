@@ -33,6 +33,7 @@ import { ArtistSearchComponent } from './pages/artist/artist-search/artist-searc
 import { EventSearchComponent } from './pages/event/event-search/event-search.component';
 import { EventOverviewComponent } from './pages/event/event-overview/event-overview.component';
 import { DeezerStatisticsComponent } from './pages/deezer/deezer-statistics/deezer-statistics.component';
+import { UrmComponent } from './pages/urm/urm-score-compare/urm.component';
 import { MusicMatchStatisticsComponent } from './pages/music-match/music-match-statistics/music-match-statistics.component';
 
 export const appRoutes: Routes = [
@@ -82,4 +83,5 @@ export const appRoutes: Routes = [
   { path: 'deezer-integration', component: DeezerStatisticsComponent },
   { path: 'music-match-integration', component: MusicMatchStatisticsComponent },
   { path: 'song/:id/overview/lyrics', component: SongOverviewComponent },
+  { path: 'compare-score', component: UrmComponent }
 ];
