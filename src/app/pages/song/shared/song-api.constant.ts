@@ -1,4 +1,8 @@
 export class SongApi {
+  public static PUT_LYRIC = '/sdrbe/lyric/#';
+  public static POST_LYRIC = '/sdrbe/lyric';
+  public static GET_LYRICS = '/sdrbe/lyric';
+  public static GET_LANGUAGES = '/sdrbe/language';
   public static GET_SONG = '/sdrbe/song/#';
   public static POST_SIMILARITY = '/sdrbe/song-similarity';
   public static SEARCH_SONGS = '/sdrbe/song/search';
@@ -21,4 +25,5 @@ export class SongApi {
   public static GET_SONG_NAMES = '/sdrbe/song/song-artist-titles'; 
   public static GET_INSTRUMENT_DROPDOWN = '/sdrbe/instrument/filter';
   public static GET_PERSON_LOV = '/sdrbe/person/lov';
+  public static GET_NOTESHEETS = '/sdrbe/notesheet/#';
 }

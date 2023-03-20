@@ -24,6 +24,36 @@ export class InstrumentService {
       return this.api.put(InstrumentApi.UPDATE_INSTRUMENT.replace("#", instrument.id.toString()), instrument);
     }
 
+    searchInstruments(name: String, sortBy: number): Observable<InstrumentResponse[]> {
+     
+      let query = "?"
+  
+      if (name != null)
+        query += "name=" + name;
+  
+      switch (sortBy) {
+        case 0:
+          query += "&sortBy=NoOfPersons";
+          break;
+        case 1:
+          query += "&sortBy=LastEdit";
+          break;
+        case 2:
+          query += "&sortBy=Alphabetical";
+          break;
+  
+      }
+  
+      query = query.replace("?&", "?");
+  
+      return this.api.get(InstrumentApi.SEARCH_INSTRUMENT + query).pipe(
+        map((response) => {
+          const instruments = response['payload'] as InstrumentResponse[];
+          return instruments;
+        })
+      )
+    }
+
     getSongInstruments(id: number): Observable<SongInstrumentResponse[]> {
         const filterRequest = new SongInstrumentSearchRequest(
             id

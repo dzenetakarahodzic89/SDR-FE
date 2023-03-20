@@ -9,15 +9,17 @@ import {
   GenreResponse,
   EraResponse,
   EraRequest,
-  EraRequestList,
+  EraCreateRequest,
+  EraRequestList
 } from './era.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EraService {
-  constructor(private api: ZxApi) {}
 
+  constructor(private api: ZxApi) { }
+  
   searchEras(searchParams): Observable<EraResponse[]> {
     return this.api.post(EraApi.SEARCH_ERAS, searchParams).pipe(
       map((response) => {
@@ -83,4 +85,32 @@ export class EraService {
       })
     );
   }
+
+  updateEra(era: EraCreateRequest, id: number) {
+    return this.api
+    .put(EraApi.UPDATE_ERA.replace('#', id.toString()), era)
+    .pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+    
+  createEra(era: EraCreateRequest) {
+    return this.api.post(EraApi.CREATE_ERA, era).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
+  getEra(id: number) {
+    return this.api.get(EraApi.GET_ERA.replace('#', id.toString())).pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
+  }
+
 }

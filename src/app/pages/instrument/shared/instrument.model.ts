@@ -3,6 +3,9 @@ export class InstrumentResponse {
     name: string;
     information: string;
     type: string;
+    userCode: string;
+    created: Date;
+    modified: Date;
     outlineText: string;
     imageUrl: string;
 };
@@ -20,9 +23,16 @@ export class InstrumentSearchRequest {
     type: string;
     outlineText: string;
 
+    objectifiedRequest: any = {};
+
     constructor (id: number) {
         this.id = id;
+        Object.assign(this.objectifiedRequest, {"id" : this.id})
     }
+
+    getObjectifiedRequest(): any {
+      return this.objectifiedRequest;
+   }
 };
 
 export class SongInstrumentSearchRequest {

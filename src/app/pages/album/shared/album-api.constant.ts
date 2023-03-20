@@ -1,5 +1,4 @@
 export class AlbumApi {
-
   public static GET_ALBUMS = '/sdrbe/album';
   public static GET_ALL_PERSON_LOVS = '/sdrbe/person/lov';
   public static SEARCH_ALBUMS = '/sdrbe/album/search';
@@ -13,4 +12,3 @@ export class AlbumApi {
   public static GET_ARTIST_LOVS = '/sdrbe/artist/lov';
   public static ADD_SONG = '/sdrbe/album/add-song';
 }
-

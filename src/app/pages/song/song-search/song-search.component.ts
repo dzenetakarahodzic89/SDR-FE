@@ -74,7 +74,7 @@ export class SongSearchComponent implements OnInit {
     ],
   });
 
-  songsAreLoading = false;
+  loading = false;
 
   public model: any = {};
 
@@ -192,6 +192,7 @@ export class SongSearchComponent implements OnInit {
     this.searchSongs();
   }
   searchSongs() {
+    this.loading = true;
     let searchRequest = new SongSearchRequest(
       this.model.songName,
       this.model.checkedRemix,
@@ -203,8 +204,11 @@ export class SongSearchComponent implements OnInit {
       this.paginationDetails.page,
       this.paginationDetails.totalPages
     );
+
     this.songService.searchSongs(searchRequest).subscribe(response => {
       this.foundSongs = response as unknown as AppBox[];
+      this.loading = false;
+
 
     });
   }
