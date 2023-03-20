@@ -1,0 +1,19 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="newsAreLoading"></zx-preloader>
+</div>
+<div *ngIf="news">
+  <div class="gridContainer">
+    <div class="divForBoxes" *ngFor="let article of news">
+      <div class="box" (click)="redirect(article)">
+        <div
+          class="image"
+          [ngStyle]="{ 'background-image': 'url(' + article.imageUrl + ')' }"
+        ></div>
+        <div class="textBox">
+          <p class="type">MUSIC</p>
+          <p class="link">{{ article.content }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
