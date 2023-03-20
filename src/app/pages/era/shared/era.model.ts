@@ -79,3 +79,22 @@ export class EraArtistResponse {
   soloCount: number;
   groupCount: number;
 }
+
+
+export class GenresEraOverview {
+  eraId: number;
+  eraName: string;
+  genreList: GenresEraPercentageResponse[];
+  labeldata: any[];
+  realdata: any[];
+}
+export class GenresEraPercentageResponse{
+   genrePercentage: number; 
+   genreName: string;
+}
+
+export class EraRequestList{
+  eras: any[]; 
+}
+
+
