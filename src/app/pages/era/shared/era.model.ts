@@ -99,3 +99,21 @@ export class EraCreateRequest {
   coverImage: string;
   coverImage_files: File[];
 }
+
+export class GenresEraOverview {
+  eraId: number;
+  eraName: string;
+  genreList: GenresEraPercentageResponse[];
+  labeldata: any[];
+  realdata: any[];
+}
+export class GenresEraPercentageResponse{
+   genrePercentage: number; 
+   genreName: string;
+}
+
+export class EraRequestList{
+  eras: any[]; 
+}
+
+

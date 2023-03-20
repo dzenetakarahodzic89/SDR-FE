@@ -9,7 +9,8 @@ import {
   GenreResponse,
   EraResponse,
   EraRequest,
-  EraCreateRequest
+  EraCreateRequest,
+  EraRequestList
 } from './era.model';
 
 @Injectable({
@@ -31,7 +32,9 @@ export class EraService {
   artistByEras(request: EraRequest) {
     return this.api.get(EraApi.GET_ARTIST_BY_ERAS, request).pipe(
       map((response) => {
+        console.log("Response: ", response);
         const message = response['payload'];
+        console.log("Message ", message);
         return message;
       })
     );
@@ -46,6 +49,16 @@ export class EraService {
     );
   }
 
+
+  getPieChartData(request: EraRequestList) {
+    return this.api.get(EraApi.GET_GENRE_ERA, request).pipe(
+        map(response => {
+            const message = response['payload'];
+            return message;
+        })
+    );
+}
+  
   getAllGenres(): Observable<GenreResponse[]> {
     return this.api.get(EraApi.GET_GENRES_DROPDOWN).pipe(
       map((response) => {

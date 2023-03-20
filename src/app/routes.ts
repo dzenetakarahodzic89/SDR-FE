@@ -36,6 +36,7 @@ import { EventOverviewComponent } from './pages/event/event-overview/event-overv
 import { DeezerStatisticsComponent } from './pages/deezer/deezer-statistics/deezer-statistics.component';
 import { UrmComponent } from './pages/urm/urm-score-compare/urm.component';
 import { MusicMatchStatisticsComponent } from './pages/music-match/music-match-statistics/music-match-statistics.component';
+import { GenresOverErasComponent } from './pages/era/genres-over-eras/genres-over-eras.component';
 import { NewsArticlesNewsComponent } from './pages/news-articles/news-articles-news/news-articles-news/news-articles-news.component';
 
 export const appRoutes: Routes = [
@@ -93,5 +94,6 @@ export const appRoutes: Routes = [
   { path: 'music-match-integration', component: MusicMatchStatisticsComponent },
   { path: 'song/:id/overview/lyrics', component: SongOverviewComponent },
   { path: 'compare-score', component: UrmComponent },
-  { path: 'news-articles/new', component: NewsArticlesNewsComponent },
+  { path: 'era/genres-over-eras', component: GenresOverErasComponent },
+  { path: 'news-articles/new', component: NewsArticlesNewsComponent }
 ];
