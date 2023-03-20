@@ -111,7 +111,7 @@ export class PersonCreateComponent implements OnInit {
       );
     }
   }
-  genderList = [{ code: "male", displayName: "Male" }, { code: "female", displayName: "Female" }, { code: "Other", displayName: "Other" }];
+  genderList = [{ code: "Male", displayName: "Male" }, { code: "Female", displayName: "Female" }, { code: "Other", displayName: "Other" }];
 
   public setFormChildren() {
     this.formConfig.addChildren = [
