@@ -57,6 +57,7 @@ import { EventModule } from './pages/event/event.module';
 import { DeezerModule } from './pages/deezer/deezer.module';
 import { MusicMatchModule } from './pages/music-match/music-match.module';
 import { UrmModule } from './pages/urm/urm.module';
+import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -106,7 +107,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     EventModule,
     DeezerModule,
     MusicMatchModule,
-    UrmModule
+    UrmModule,
+    NewsArticlesModule,
     // use forRoot() in main app module only.
   ],
   providers: [
@@ -146,7 +148,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
 
 export function createCompiler(compilerFactory: CompilerFactory) {
   return compilerFactory.createCompiler();
