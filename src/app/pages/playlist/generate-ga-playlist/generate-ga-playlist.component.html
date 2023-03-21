@@ -1,4 +1,4 @@
-<div class="row mainContainer">
+<div class="row mainContainer h-100">
     <zx-block [config]="songsBlockConfig" class="col-16">
       <div zx-block-body class="row">
         <zx-preloader *ngIf="songsAreLoading"></zx-preloader>
@@ -13,9 +13,9 @@
             <app-box
               [id]="song.songId"
               [type]="'song'"
-              [title]="song.songName"
-              [description]="'Scores: '+ song.serviceScores"
-              [imageUrl]="''"
+              [title]="song.songName + '(Genre: ' + song.genreName + ')'"
+              [description]="'Scores: '+ this.prettifyScores(song.serviceScores)"
+              [imageUrl]="'http://172.20.20.45:82//vigor//img/mario.jpg'"
             >
             </app-box>
           </div>

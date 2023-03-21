@@ -1,3 +1,56 @@
+export const SELECTION_TYPES: any[] = [
+    {
+        id: "TOURNAMENT",
+        name: "Tournament based selection"
+    },
+    {
+        id: "SUS",
+        name: "Stohastic universal sampling selection"
+    }
+];
+
+export const WEIGHT_GENERATOR_TYPES: any[] = [
+    {
+        id: "LINEAR",
+        name: "Linear generator"
+    },
+    {
+        id: "POWERS_OF_TWO",
+        name: "Powers of two generator"
+    }
+];
+
+export const SERVICE_TYPES: any[] = [
+    {
+        id: "SDR",
+        name: "Sound repository"
+    },
+    {
+        id: "SPOTIFY",
+        name: "Spotify"
+    },
+    {
+        id: "DEEZER",
+        name: "Deezer"
+    },
+    {
+        id: "YT_MUSIC",
+        name: "Youtube music"
+    },
+    {
+        id: "TIDAL",
+        name: "Tidal"
+    },
+    {
+        id: "ITUNES",
+        name: "I tunes"
+    },
+    {
+        id: "GOOGLE_PLAY",
+        name: "Google play"
+    }
+]
+
 export class PlaylistResponse {
     id:number;
     name: string;
