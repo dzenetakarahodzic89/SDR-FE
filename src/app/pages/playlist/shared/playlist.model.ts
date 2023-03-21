@@ -1,3 +1,56 @@
+export const SELECTION_TYPES: any[] = [
+    {
+        id: "TOURNAMENT",
+        name: "Tournament based selection"
+    },
+    {
+        id: "SUS",
+        name: "Stohastic universal sampling selection"
+    }
+];
+
+export const WEIGHT_GENERATOR_TYPES: any[] = [
+    {
+        id: "LINEAR",
+        name: "Linear generator"
+    },
+    {
+        id: "POWERS_OF_TWO",
+        name: "Powers of two generator"
+    }
+];
+
+export const SERVICE_TYPES: any[] = [
+    {
+        id: "SDR",
+        name: "Sound repository"
+    },
+    {
+        id: "SPOTIFY",
+        name: "Spotify"
+    },
+    {
+        id: "DEEZER",
+        name: "Deezer"
+    },
+    {
+        id: "YT_MUSIC",
+        name: "Youtube music"
+    },
+    {
+        id: "TIDAL",
+        name: "Tidal"
+    },
+    {
+        id: "ITUNES",
+        name: "I tunes"
+    },
+    {
+        id: "GOOGLE_PLAY",
+        name: "Google play"
+    }
+]
+
 export class PlaylistResponse {
     id:number;
     name: string;
@@ -18,7 +71,33 @@ export class CreatePlaylistRequest {
         this.name = name;
         this.songIds = songIds;
     }
-}
+};
+
+export class SongGAResponse {
+    songId: number;
+    songName: string;
+    serviceScores: any;
+    genreId: number;
+    genreName: string;
+    playtimeInSeconds: number;
+};
+
+export class PlaylistGARequest {
+    populationSize: number;
+    numberOfGenerations: number;
+    elitismSize: number;
+    numberOfParentChromosomes: number;
+    numberOfCrossPoints: number;
+    childrenRate: number;
+    mutationRate: number;
+    numberOfGenes: number;
+    selectionType: string;
+    tournamentSize: number;
+    tournamentRate: number;
+    servicePriorities: string[];
+    genrePriorities: number[];
+    totalPlaytime: number;
+};
 
 export class GeneratedSongsTableRow {
     songName: string;

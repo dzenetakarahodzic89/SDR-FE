@@ -9,6 +9,24 @@
     <zx-button id="addGrade" [config]="addGrade"></zx-button>
     <zx-button id="nextSong" [config]="nextSong"></zx-button>
     <zx-button id="linkSong" [config]="linkSong"></zx-button>
+    <zx-popup *ngIf="linkPopupConfig" [config]="linkPopupConfig">
+      <div zx-popup-body>
+        <zx-block *ngIf="linkPopupBlockConfig" [config]="linkPopupBlockConfig">
+          <zx-form-loader
+            *ngIf="linkPopupFormConfig && !songsAreLoading"
+            zx-block-body
+            [component]="linkPopupFormConfig"
+            [model]="similarityCreateRequest"
+            class="col-24"
+          ></zx-form-loader>
+        </zx-block>
+      </div>
+      <zx-button
+        zx-popup-footer
+        [config]="linkPopupFooterButtons"
+        class="align-right"
+      ></zx-button>
+    </zx-popup>
   </div>
 </div>
 

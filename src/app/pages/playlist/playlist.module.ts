@@ -5,13 +5,15 @@ import { PlaylistService } from './shared/playlist.service';
 import { PlaylistSearchComponent } from './playlist-search/playlist-search.component';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { GeneratePlaylistComponent } from './generate-playlist/generate-playlist.component';
+import { GenerateGaPlaylistComponent } from './generate-ga-playlist/generate-ga-playlist.component';
 
 
 
 @NgModule({
   declarations: [
     PlaylistSearchComponent,
-    GeneratePlaylistComponent
+    GeneratePlaylistComponent,
+    GenerateGaPlaylistComponent
   ],
   imports: [
     SharedModule,
