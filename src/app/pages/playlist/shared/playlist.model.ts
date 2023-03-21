@@ -18,7 +18,33 @@ export class CreatePlaylistRequest {
         this.name = name;
         this.songIds = songIds;
     }
-}
+};
+
+export class SongGAResponse {
+    songId: number;
+    songName: string;
+    serviceScores: any;
+    genreId: number;
+    genreName: string;
+    playtimeInSeconds: number;
+};
+
+export class PlaylistGARequest {
+    populationSize: number;
+    numberOfGenerations: number;
+    elitismSize: number;
+    numberOfParentChromosomes: number;
+    numberOfCrossPoints: number;
+    childrenRate: number;
+    mutationRate: number;
+    numberOfGenes: number;
+    selectionType: string;
+    tournamentSize: number;
+    tournamentRate: number;
+    servicePriorities: string[];
+    genrePriorities: number[];
+    totalPlaytime: number;
+};
 
 export class GeneratedSongsTableRow {
     songName: string;
