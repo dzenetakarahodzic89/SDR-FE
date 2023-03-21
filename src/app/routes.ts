@@ -38,6 +38,7 @@ import { UrmComponent } from './pages/urm/urm-score-compare/urm.component';
 import { MusicMatchStatisticsComponent } from './pages/music-match/music-match-statistics/music-match-statistics.component';
 import { GenresOverErasComponent } from './pages/era/genres-over-eras/genres-over-eras.component';
 import { NewsArticlesNewsComponent } from './pages/news-articles/news-articles-news/news-articles-news/news-articles-news.component';
+import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playlist/generate-ga-playlist.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -95,5 +96,6 @@ export const appRoutes: Routes = [
   { path: 'song/:id/overview/lyrics', component: SongOverviewComponent },
   { path: 'compare-score', component: UrmComponent },
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
-  { path: 'news-articles/new', component: NewsArticlesNewsComponent }
+  { path: 'news-articles/new', component: NewsArticlesNewsComponent }, 
+  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent}
 ];
