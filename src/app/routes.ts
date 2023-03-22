@@ -101,5 +101,5 @@ export const appRoutes: Routes = [
   { path: 'news-articles/new', component: NewsArticlesNewsComponent }, 
   { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
   { path: 'person-statistics', component: PersonStatisticsComponent },
-  { path: 'urm/urm-score-per-country', component: UrmScorePerCountryComponent}
+  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent}
 ];

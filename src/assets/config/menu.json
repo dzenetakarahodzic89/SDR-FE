@@ -145,11 +145,24 @@
         ]
       },
       {
-        "code": "HUB_SCORECOMPARE_STATIC",
-        "label": "Compare user score",
-        "url": "compare-score",
+        "code": "HUB_USER_RECOMMENDATION_STATIC",
+        "label": "User recommendation scores",
         "icon": "fa fa-star",
-        "attributes": {}
+        "attributes": {},
+        "children": [
+          {
+            "code": "HUB_SCORECOMPARE_STATIC",
+            "label": "Compare user score",
+            "url": "compare-score",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_AVG_SCORE_PER_COUNTRY_STATIC",
+            "label": "Average song recommendation score per country",
+            "url": "urm/avg-score-per-country",
+            "attributes": {}
+          }
+        ]
       }
     ]
   }
