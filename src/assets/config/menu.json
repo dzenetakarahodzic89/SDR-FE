@@ -135,6 +135,12 @@
             "label": "Music Match Statistics",
             "url": "music-match-integration",
             "attributes": {}
+          },
+          {
+            "code": "HUB_PERSONSTATISTICS_STATIC",
+            "label": "Person Country Statistics",
+            "url": "person-statistics",
+            "attributes": {}
           }
         ]
       },
