@@ -8,7 +8,7 @@ export class PersonApi {
   public static DELETE_PERSON = '/sdrbe/person/#';
   public static GET_PERSON = '/sdrbe/person/overview/#';
   public static GET_PERSONN = '/sdrbe/person/#';
-
+  public static GET_STATISTICS = '/sdrbe/person/person-statistics';
   public static GET_COUNTRIES = '/sdrbe/country/all';
   public static POST_ARTIST = '/sdrbe/artist/create-from-person/#';
 }
