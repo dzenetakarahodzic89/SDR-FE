@@ -90,7 +90,7 @@ export class UrmComponent implements OnInit {
     enableColResize: true,
   } as GridOptions;
 
-  constructor(private urmService: UrmService) { }
+  constructor(private urmService: UrmService) {}
 
   ngOnInit(): void {
     this.searchUsers();
@@ -179,15 +179,7 @@ export class UrmComponent implements OnInit {
         ],
       },
       options: {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-              },
-            },
-          ],
-        },
+        scales: {},
       },
     });
   }

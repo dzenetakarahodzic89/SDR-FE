@@ -9,7 +9,7 @@ import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ToastrService } from 'ngx-toastr';
 import { InstrumentResponse } from '../../instrument/shared/instrument.model';
 
-import {Location} from '@angular/common'; 
+import { Location } from '@angular/common';
 import {
   ConnectedMediaConnectionSource,
   ConnectedMediaConnectionType,
@@ -66,11 +66,11 @@ export class SongOverviewComponent implements OnInit {
   });
 
   audioList = [];
-  public showInstruments: ZxButtonModel = new ZxButtonModel({
+  public showNoteSheet: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         name: 'instrumentPopUp',
-        label: 'Show instruments',
+        label: 'Show notesheet',
         action: () => this.instrumentPopUp.show(),
       },
     ],
@@ -208,8 +208,8 @@ export class SongOverviewComponent implements OnInit {
           this.updateLyrics();
           this.resetLyrics();
           this.lyricPopup.hide();
-          if(this.router.url.includes("lyric"))
-            this.location.replaceState('/song/'+this.song.id+'/overview');
+          if (this.router.url.includes('lyric'))
+            this.location.replaceState('/song/' + this.song.id + '/overview');
           window.location.reload();
         },
       },
@@ -221,8 +221,8 @@ export class SongOverviewComponent implements OnInit {
         action: () => {
           this.resetLyrics();
           this.lyricPopup.hide();
-          if(this.router.url.includes("lyric"))
-            this.location.replaceState('/song/'+this.song.id+'/overview');
+          if (this.router.url.includes('lyric'))
+            this.location.replaceState('/song/' + this.song.id + '/overview');
           window.location.reload();
         },
       },
@@ -937,7 +937,7 @@ export class SongOverviewComponent implements OnInit {
         });
         this.getInstruments();
         this.getPersons();
-        if(this.router.url.includes('/lyric')) {
+        if (this.router.url.includes('/lyric')) {
           this.changeLyricAction();
         }
       });
