@@ -4,13 +4,10 @@ import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { AppBox } from '../../shared/box/box.model';
-import { Chart, ChartType } from 'chart.js';
-import { GeneratedTableRow, CompareUsersRequest } from '../shared/urm.model';
+import Chart from 'chart.js/auto';
+import { GeneratedTableRow, CompareScoreRequest } from '../shared/urm.model';
 import { UrmService } from '../shared/urm.service';
-import {
-  MultiSearchHistoryDataStructure,
-  MultiSearchHistoryResponse,
-} from '../../multisearch/shared/multisearch.model';
+import { MultiSearchHistoryResponse } from '../../multisearch/shared/multisearch.model';
 
 @Component({
   selector: 'app-generate-playlist',
@@ -58,13 +55,13 @@ export class UrmComponent implements OnInit {
       floatingFilter: false,
     },
     {
-      field: 'name',
+      field: 'genreName',
       headerName: 'Genre',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'userScore',
+      field: 'averageScore',
       headerName: 'Score',
       flex: 1,
       floatingFilter: false,
@@ -90,7 +87,7 @@ export class UrmComponent implements OnInit {
     enableColResize: true,
   } as GridOptions;
 
-  constructor(private urmService: UrmService) {}
+  constructor(private urmService: UrmService) { }
 
   ngOnInit(): void {
     this.searchUsers();
@@ -131,15 +128,15 @@ export class UrmComponent implements OnInit {
         new GeneratedTableRow(
           compareObject.songName,
           compareObject.userCode,
-          compareObject.userScore,
-          compareObject.name
+          compareObject.genreName,
+          compareObject.averageScore
         )
       );
     });
   }
   compareScores() {
     this.loading = true;
-    let searchRequest = new CompareUsersRequest(this.model.userIds);
+    let searchRequest = new CompareScoreRequest(this.model.userIds);
     this.urmService.compareScore(searchRequest).subscribe((response) => {
       this.updateTable(response);
       this.compareResponse = response;
@@ -147,8 +144,8 @@ export class UrmComponent implements OnInit {
       const chartData = response.map((compareObject) => {
         return {
           label: compareObject.userCode,
-          value: compareObject.userScore,
-          genre: compareObject.name,
+          value: compareObject.averageScore,
+          genre: compareObject.genreName,
         };
       });
 
@@ -158,19 +155,17 @@ export class UrmComponent implements OnInit {
       this.loading = false;
     });
   }
-
   chartData: any[] = [];
 
-  barChartType: ChartType = 'bar';
   barChart: Chart;
   public setBarChart() {
     this.barChart = new Chart('barChart', {
-      type: this.barChartType,
+      type: 'bar',
       data: {
         labels: [],
         datasets: [
           {
-            label: 'My Data',
+            label: 'Select users',
             data: [],
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 119, 132, 1)',
@@ -179,11 +174,15 @@ export class UrmComponent implements OnInit {
         ],
       },
       options: {
-        scales: {},
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+
       },
     });
   }
-
   updateBarChart() {
     const labels = [
       ...new Set(this.chartData.map((dataPoint) => dataPoint.label)),
