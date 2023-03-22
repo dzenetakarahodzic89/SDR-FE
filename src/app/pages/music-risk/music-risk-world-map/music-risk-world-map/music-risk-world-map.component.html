@@ -3,7 +3,7 @@
 </div>
 <h2 class="headline">Turn #34 - Normandy</h2>
 <div class="map">
-  <!-- <canvas #worldMap></canvas> -->
+  <canvas id="canvas"></canvas>
 </div>
 <div style="display: flex">
   <div style="width: 50%" class="box-one">
@@ -12,25 +12,38 @@
     <p>Total Countries: <span>12</span></p>
     <p>Rank: <span>1</span></p>
   </div>
-  <div
-    style="
-      width: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    "
-    class="box-one"
-  >
-    <zx-button id="attackBtn" zx-block-action [config]="attackBtn"></zx-button>
-    <zx-button
-      id="viewAndAlterRoasterBtn"
-      zx-block-action
-      [config]="viewAndAlterRoasterBtn"
-    ></zx-button>
-    <zx-button
-      id="viewStandingsBtn"
-      zx-block-action
-      [config]="viewStandingsBtn"
-    ></zx-button>
+  <div style="display: flex; flex-direction: column; width: 100%">
+    <div
+      style="
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+      class="box-one"
+    >
+      <zx-button
+        id="attackBtn"
+        zx-block-action
+        [config]="attackBtn"
+      ></zx-button>
+      <zx-button
+        id="viewAndAlterRoasterBtn"
+        zx-block-action
+        [config]="viewAndAlterRoasterBtn"
+      ></zx-button>
+      <zx-button
+        id="viewStandingsBtn"
+        zx-block-action
+        [config]="viewStandingsBtn"
+      ></zx-button>
+    </div>
+    <zx-grid
+      zx-block-body
+      [gridOptions]="infoGridOptions"
+      [source]="teamInfo"
+      domLayout="autoHeight"
+    >
+    </zx-grid>
   </div>
 </div>
