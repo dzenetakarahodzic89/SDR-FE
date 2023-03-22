@@ -4,12 +4,14 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { UrmComponent } from './urm-score-compare/urm.component';
 import { UrmService } from './shared/urm.service';
 import { ZxFormsModule } from '@zff/zx-forms';
+import { UrmScorePerCountryComponent } from './urm-score-per-country/urm-score-per-country.component';
 
 
 
 @NgModule({
   declarations: [
-    UrmComponent
+    UrmComponent,
+    UrmScorePerCountryComponent
   ],
   imports: [
     SharedModule,

@@ -46,8 +46,10 @@
     "@zff/zx-user": "^12.1.0",
     "ang-music-player": "^0.0.4",
     "angular-ng-autocomplete": "^2.0.8",
-    "chart.js": "^2.9.4",
+    "chart.js": "^4.1.2",
+    "chartjs-chart-geo": "^4.1.2",
     "chartjs-chart-matrix": "^1.1.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "flag-icons": "^6.4.4",
     "iso-3166-1-alpha-2": "^1.0.0",
     "moment": "^2.29.2",
@@ -58,6 +60,7 @@
     "ts-md5": "^1.2.11",
     "validator": "^13.5.2",
     "vexflow": "^4.1.0",
+    "world-atlas": "^2.0.2",
     "zone.js": "^0.11.5"
   },
   "devDependencies": {

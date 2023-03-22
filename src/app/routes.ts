@@ -39,6 +39,7 @@ import { MusicMatchStatisticsComponent } from './pages/music-match/music-match-s
 import { GenresOverErasComponent } from './pages/era/genres-over-eras/genres-over-eras.component';
 import { NewsArticlesNewsComponent } from './pages/news-articles/news-articles-news/news-articles-news/news-articles-news.component';
 import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playlist/generate-ga-playlist.component';
+import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -97,5 +98,6 @@ export const appRoutes: Routes = [
   { path: 'compare-score', component: UrmComponent },
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
   { path: 'news-articles/new', component: NewsArticlesNewsComponent }, 
-  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent}
+  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
+  { path: 'urm/urm-score-per-country', component: UrmScorePerCountryComponent}
 ];

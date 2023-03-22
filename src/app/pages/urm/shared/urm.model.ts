@@ -43,4 +43,27 @@ export class GetScore {
         this.userScore = userScore;
         this.songName = songName;
     }
+
+    
 }
+
+export enum RecommendationService {
+    SDR = "SDR",
+    SPOTIFY = "Spotify",
+    DEEZER = "Deezer",
+    TIDAL = "Tidal",
+    ITUNES = "iTunes",
+    YOUTUBE_MUSIC = "Youtube Music",
+    GOOGLE_PLAY = "Google Play"
+
+  }
+
+  export class AverageScorePerCountryRequest {
+    serviceId: number;
+    serviceName: string;
+  }
+
+  export class AverageScorePerCountryResponse {
+    country: string;
+    score: number;
+  }
