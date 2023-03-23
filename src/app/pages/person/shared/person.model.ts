@@ -108,3 +108,8 @@ export class SongInstrumentPersonResponse {
   id: number;
   name: string;
 }
+
+export class PersonStatisticsResponse {
+  name: string;
+  ratio: number;
+}

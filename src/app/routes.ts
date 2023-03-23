@@ -39,6 +39,8 @@ import { MusicMatchStatisticsComponent } from './pages/music-match/music-match-s
 import { GenresOverErasComponent } from './pages/era/genres-over-eras/genres-over-eras.component';
 import { NewsArticlesNewsComponent } from './pages/news-articles/news-articles-news/news-articles-news/news-articles-news.component';
 import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playlist/generate-ga-playlist.component';
+import { PersonStatisticsComponent } from './pages/person/person-statistics/person-statistics.component';
+import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
 
 export const appRoutes: Routes = [
@@ -99,5 +101,7 @@ export const appRoutes: Routes = [
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
   { path: 'news-articles/new', component: NewsArticlesNewsComponent }, 
   { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
+  { path: 'person-statistics', component: PersonStatisticsComponent },
+  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent},
   { path: 'music-risk/:id/world-map', component: MusicRiskWorldMapComponent }
 ];
