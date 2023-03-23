@@ -40,6 +40,7 @@ import { GenresOverErasComponent } from './pages/era/genres-over-eras/genres-ove
 import { NewsArticlesNewsComponent } from './pages/news-articles/news-articles-news/news-articles-news/news-articles-news.component';
 import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playlist/generate-ga-playlist.component';
 import { PersonStatisticsComponent } from './pages/person/person-statistics/person-statistics.component';
+import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -100,4 +101,5 @@ export const appRoutes: Routes = [
   { path: 'news-articles/new', component: NewsArticlesNewsComponent }, 
   { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
   { path: 'person-statistics', component: PersonStatisticsComponent },
+  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent}
 ];
