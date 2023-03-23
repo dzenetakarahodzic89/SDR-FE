@@ -11,7 +11,7 @@ import {
 
 @Injectable()
 export class PersonService {
-  constructor(private api: ZxApi) { }
+  constructor(private api: ZxApi) {}
 
   searchPersons(searchParams): Observable<PersonResponse[]> {
     return this.api.post(PersonApi.SEARCH_STORIES, searchParams).pipe(
@@ -67,6 +67,15 @@ export class PersonService {
 
   getPerson(id: number) {
     return this.api.get(PersonApi.GET_PERSON.replace('#', id.toString())).pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
+  }
+
+  getStatistics() {
+    return this.api.get(PersonApi.GET_STATISTICS).pipe(
       map((response) => {
         const message = response['payload'];
         return message;

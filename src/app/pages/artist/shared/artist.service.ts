@@ -3,6 +3,7 @@ import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ArtistApi } from './artist-api.constant';
+
 import {
   ArtistResponse,
   ArtistSingleResponse,
@@ -88,6 +89,23 @@ export class ArtistService {
   }
   getArtist(id:number): Observable<ArtistSingleResponse> {
     return this.api.get(ArtistApi.GET_ARTIST_BY_ID.replace('#',id.toString())).pipe(
+      map(response=>{
+        const message = response['payload'];
+        return message;
+      })
+    )
+  }
+  deleteArtist(id:number): Observable<String> {
+    return this.api.delete(ArtistApi.DELETE_ARTIST.replace('#',id.toString())).pipe(
+      map(response=>{
+        const message = response['payload'];
+        return message;
+      })
+    )
+  }
+
+  copyImagesToPersone(id:number): Observable<String> {
+    return this.api.post(ArtistApi.POST_COPY_IMAGE_TO_PERSON.replace('#',id.toString())).pipe(
       map(response=>{
         const message = response['payload'];
         return message;

@@ -34,7 +34,13 @@ import { ArtistSearchComponent } from './pages/artist/artist-search/artist-searc
 import { EventSearchComponent } from './pages/event/event-search/event-search.component';
 import { EventOverviewComponent } from './pages/event/event-overview/event-overview.component';
 import { DeezerStatisticsComponent } from './pages/deezer/deezer-statistics/deezer-statistics.component';
+import { UrmComponent } from './pages/urm/urm-score-compare/urm.component';
 import { MusicMatchStatisticsComponent } from './pages/music-match/music-match-statistics/music-match-statistics.component';
+import { GenresOverErasComponent } from './pages/era/genres-over-eras/genres-over-eras.component';
+import { NewsArticlesNewsComponent } from './pages/news-articles/news-articles-news/news-articles-news/news-articles-news.component';
+import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playlist/generate-ga-playlist.component';
+import { PersonStatisticsComponent } from './pages/person/person-statistics/person-statistics.component';
+import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -90,4 +96,10 @@ export const appRoutes: Routes = [
   { path: 'deezer-integration', component: DeezerStatisticsComponent },
   { path: 'music-match-integration', component: MusicMatchStatisticsComponent },
   { path: 'song/:id/overview/lyrics', component: SongOverviewComponent },
+  { path: 'compare-score', component: UrmComponent },
+  { path: 'era/genres-over-eras', component: GenresOverErasComponent },
+  { path: 'news-articles/new', component: NewsArticlesNewsComponent }, 
+  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
+  { path: 'person-statistics', component: PersonStatisticsComponent },
+  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent}
 ];

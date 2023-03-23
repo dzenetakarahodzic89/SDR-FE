@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { EraSearchComponent } from './era-search/era-search.component';
-
+import { GenresOverErasComponent } from './genres-over-eras/genres-over-eras.component';
 import { ArtistsByErasComponent } from './artists-by-eras/artists-by-eras.component';
 import { EraCreateComponent } from './era-create/era-create.component';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
@@ -14,7 +14,8 @@ import { EraOverviewComponent } from './era-overview/era-overview.component';
     EraSearchComponent, 
     EraCreateComponent,
     ArtistsByErasComponent,
-    EraOverviewComponent
+    EraOverviewComponent,
+    GenresOverErasComponent
   ],
   imports: [
     SharedModule, 

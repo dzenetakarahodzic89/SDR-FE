@@ -51,10 +51,13 @@ export class ArtistOverviewComponent implements OnInit {
   public copyImageButton: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        name: 'Copy Image From Person',
-        label: 'Copy Image From Person',
-
-        // action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/'])
+        name: 'Copy Image To Person',
+        label: 'Copy Image To Person',
+        action: () => {
+          this.artistService.copyImagesToPersone(this.artist.id).subscribe((response) => {
+            console.log('response',response);
+          });
+        },
       },
     ],
   });
@@ -66,6 +69,21 @@ export class ArtistOverviewComponent implements OnInit {
         name: 'Edit Artist',
         label: 'Edit Artist',
         action: () => this.router.navigate(['./artist/update/']),
+      },
+    ],
+  });
+
+  public deleteBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-delete',
+        name: 'Delete Artist',
+        label: 'Delete Artist',
+        action: () => {
+          this.artistService.deleteArtist(this.artist.id).subscribe((response) => {
+            this.router.navigate(['./artist/search/'])
+          });
+        },
       },
     ],
   });
