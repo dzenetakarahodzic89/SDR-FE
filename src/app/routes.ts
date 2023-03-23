@@ -42,6 +42,7 @@ import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playli
 import { PersonStatisticsComponent } from './pages/person/person-statistics/person-statistics.component';
 import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 
+import { SetupComponent } from './pages/music-risk/setup/setup.component';
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -63,6 +64,8 @@ export const appRoutes: Routes = [
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
   { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
+
+  { path: 'music-risk/setup', component: SetupComponent },
   {
     path: 'notesheet/:songId/:instrumentId/overview',
     component: NotesheetOverviewComponent,

@@ -1,0 +1,23 @@
+<div class="row" style="height: 40vh">
+  <zx-block [config]="generateBlockConfig" class="col-8">
+    <zx-form-loader
+      *ngIf="formConfig"
+      zx-block-body
+      [component]="formConfig"
+      [model]="model"
+    >
+    </zx-form-loader>
+    <zx-button zx-block-action [config]="generateBattle"></zx-button>
+  </zx-block>
+  <div class="col-16">
+    <zx-block [config]="BlockConfig">
+      <zx-grid
+        zx-block-body
+        [gridOptions]="gridOptions"
+        [source]="artistSongs"
+        domLayout="autoHeight"
+      >
+      </zx-grid>
+    </zx-block>
+  </div>
+</div>
