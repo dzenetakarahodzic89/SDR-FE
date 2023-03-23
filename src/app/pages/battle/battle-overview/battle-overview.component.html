@@ -1,0 +1,31 @@
+<div zx-body *ngIf="artist" class="w-auto">
+    <div class="row col-24 topContainer">
+        <div>
+
+        </div>
+        <div class="w-100 pl-10 pr-10">
+            <div class="row">
+                <!-- <h1>{{ artist.name + " " + artist.surname }}</h1> -->
+            </div>
+            <div class="row">
+                <div class="p-inline col-14">
+                    Battle
+                </div>
+                <div class="col-10">
+                    <zx-button id="copyImageButton" zx-block-action [config]="copyImageButton"></zx-button>
+                    <zx-button id="addSongBtn" zx-block-action [config]="editBtn"></zx-button>
+
+                 
+                </div>
+            </div>
+            <hr />
+            <zx-grid
+              zx-block-body
+              [gridOptions]="battleGridOptions"
+              [source]="battle"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+        </div>
+    </div>
+</div>
