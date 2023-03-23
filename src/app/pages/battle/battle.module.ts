@@ -5,10 +5,12 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { ZxFormsModule } from '@zff/zx-forms';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { AngMusicPlayerModule } from 'ang-music-player';
+import { BattleSearchComponent } from './battle-overview/battle-overview.component';
+import { BattleService } from './shared/battle.service';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [BattleSearchComponent],
   imports: [
     SharedModule,
     EditorModule,
@@ -17,8 +19,8 @@ import { AngMusicPlayerModule } from 'ang-music-player';
     ZxFormsModule,
     AngMusicPlayerModule
   ],
-  exports: [
-  ], providers: [
+  exports: [BattleSearchComponent
+  ], providers: [BattleService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
 })

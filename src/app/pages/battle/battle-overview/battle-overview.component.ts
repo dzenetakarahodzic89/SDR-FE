@@ -3,29 +3,28 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
-import { Definition } from '@zff/zx-forms';
-import { BoxComponent } from '../../shared/box/box.component';
-import { AppBox } from '../../shared/box/box.model';
-import { BattleOverviewSearchRequest } from '../shared/battle.model';
+import { BattleService } from '../shared/battle.service';
+import { BattleOverviewSearchRequest, BattleResponse } from '../shared/battle.model';
 
 @Component({
   selector: 'app-battle-overview',
   templateUrl: './battle-overview.component.html',
   styleUrls: ['./battle-overview.component.scss'],
 })
-export class AlbumSearchComponent implements OnInit {
+export class BattleSearchComponent implements OnInit {
   battleAreLoading: boolean;
-  battleService: any;
-  battlesAreLoading: boolean;
-  foundBattles: AppBox[];
   
-  constructor(private router: Router) {}
+  battlesAreLoading: boolean;
+  foundBattles: BattleResponse[];
+  
+  constructor(private router: Router,
+    private battleService:BattleService) {}
 
-  public copyImageButton: ZxButtonModel = new ZxButtonModel({
+  public newBattleButton: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        name: 'Copy Image From Person',
-        label: 'Copy Image From Person',
+        name: 'New Battle',
+        label: 'New Battle',
 
         // action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/'])
       },
@@ -35,23 +34,31 @@ export class AlbumSearchComponent implements OnInit {
 
   
 
-  public editBtn: ZxButtonModel = new ZxButtonModel({
+  public continueBattleBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        icon: 'fal fa-edit',
-        name: 'Edit Artist',
-        label: 'Edit Artist',
+        
+        name: 'Continue Battle',
+        label: 'Continue Battle',
+      },
+    ],
+  });
+
+  public finalBattleResponseBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        
+        name: 'Final Battle Response',
+        label: 'Final Battle Response',
       },
     ],
   });
 
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadBattles();
   }
-  loadData() {
-    
-  }
+  
 
   paginationDetails = {
     page: 1,
@@ -60,19 +67,19 @@ export class AlbumSearchComponent implements OnInit {
   battle = [];
   battleColumnDefs = [
     {
-      field: 'Battle Name ',
+      field: 'name',
       headerName: 'Battle Name',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'Turn',
+      field: 'turn',
       headerName: 'Turn',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'Winner',
+      field: 'countryName',
       headerName: 'Winner',
       flex: 1,
       floatingFilter: false,
@@ -96,8 +103,8 @@ export class AlbumSearchComponent implements OnInit {
     getParams.page = this.paginationDetails.page;
     getParams.size = 10;
 
-    this.battleService.searchBattles(getParams).subscribe(response => {
-      this.battle = response['payload'] as unknown as AppBox[];
+    this.battleService.getBattles(getParams).subscribe(response => {
+      this.battle = response['payload'] as unknown as BattleResponse[];
 
       this.paginationDetails.page = response['page'];
       this.paginationDetails.totalPages = response['numberOfPages'];

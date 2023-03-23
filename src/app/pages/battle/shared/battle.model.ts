@@ -14,5 +14,5 @@ export class BattleResponse {
     id: number;
     name: string;
     turn: string;
-    winner: string;
+    countryName: string;
   }
