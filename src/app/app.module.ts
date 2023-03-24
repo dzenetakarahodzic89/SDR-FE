@@ -56,6 +56,8 @@ import { ArtistModule } from './pages/artist/artist.module';
 import { EventModule } from './pages/event/event.module';
 import { DeezerModule } from './pages/deezer/deezer.module';
 import { MusicMatchModule } from './pages/music-match/music-match.module';
+import { BattleModule } from './pages/battle/battle.module';
+
 import { UrmModule } from './pages/urm/urm.module';
 import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
 import { BattleModule } from './pages/battle/battle.module';
@@ -108,6 +110,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     EventModule,
     DeezerModule,
     MusicMatchModule,
+    BattleModule,
     UrmModule,
     NewsArticlesModule,
     BattleModule

@@ -1,0 +1,32 @@
+<div zx-body *ngIf="battle" class="w-auto">
+    <div class="row col-24 topContainer">
+        <div>
+
+        </div>
+        <div class="w-100 pl-10 pr-10">
+            <div class="row">
+                
+            </div>
+            <div class="row">
+                <div class="p-inline col-14">
+                    <h1>Battle Overview</h1>
+                </div>
+                <div class="col-10">
+                    <zx-button id="finalBattleResponseBtn" zx-block-action [config]="finalBattleResponseBtn"></zx-button>
+                    <zx-button id="newBattleButton" zx-block-action [config]="newBattleButton"></zx-button>
+                    <zx-button id="continueBattleBtn" zx-block-action [config]="continueBattleBtn"></zx-button>
+                   
+                 
+                </div>
+            </div>
+            <hr />
+            <zx-grid
+              zx-block-body
+              [gridOptions]="battleGridOptions"
+              [source]="battle"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+        </div>
+    </div>
+</div>
