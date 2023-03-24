@@ -58,6 +58,7 @@ import { DeezerModule } from './pages/deezer/deezer.module';
 import { MusicMatchModule } from './pages/music-match/music-match.module';
 import { UrmModule } from './pages/urm/urm.module';
 import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
+import { BattleModule } from './pages/battle/battle.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -109,6 +110,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     MusicMatchModule,
     UrmModule,
     NewsArticlesModule,
+    BattleModule
     // use forRoot() in main app module only.
   ],
   providers: [
