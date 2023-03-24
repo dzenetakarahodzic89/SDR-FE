@@ -3,9 +3,8 @@ import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BattleApi } from './battle-api.constants';
 import { BattleOverviewSearchRequest } from './battle.model';
-import { BattleApi } from './battle-api.constant';
+import { BattleApi } from './battle-api.constants';
 import { Battle, EligibleArtistsInformation, Team, TeamInformation } from './battle.model';
 
 @Injectable()
@@ -21,7 +20,7 @@ export class BattleService {
   }
 
   public getBattle(battleId : number) : Observable<Battle> {
-    return this.api.get(BattleApi.GET_BATTLE.replace('#', battleId.toString()))
+    return this.api.get(BattleApi.GET_BATTLE_BY_ID.replace('#', battleId.toString()))
     .pipe( 
       map(response => {
         return response['payload'];
@@ -62,4 +61,4 @@ export class BattleService {
 }
  
   
-}
+

@@ -104,6 +104,7 @@ export const appRoutes: Routes = [
   { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
   { path: 'person-statistics', component: PersonStatisticsComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent},
-  { path : 'music-risk/battle-overview', component: BattleSearchComponent}
-  { path: 'battle/:id/create-roster', component: BattleRosterComponent}
+  { path : 'music-risk/battle-overview', component: BattleSearchComponent},
+  { path: 'battle/:id/create-roster', component: BattleRosterComponent},
+  { path: 'battle/:id/alter-roster', component: BattleRosterComponent}
 ];
