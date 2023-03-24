@@ -24,6 +24,7 @@ import { LabelCreateComponent } from './pages/label/label-create/label-create.co
 import { EraSearchComponent } from './pages/era/era-search/era-search.component';
 import { SongSimilarityOverviewComponent } from './pages/song/song-similarity-overview/song-similarity-overview.component';
 import { SongSearchComponent } from './pages/song/song-search/song-search.component';
+import { LabelSearchComponent } from './pages/label/label-search/label-search.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -55,4 +56,5 @@ export const appRoutes: Routes = [
   { path: 'label/create', component: LabelCreateComponent },
   { path: 'label/update/:id', component: LabelCreateComponent },
   { path: 'era/search', component: EraSearchComponent },
+  { path: 'label/search', component: LabelSearchComponent }
 ];
