@@ -8,11 +8,13 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { PersonSearchComponent } from './person-search/person-search.component';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { ZxFormsModule } from '@zff/zx-forms';
+import { PersonStatisticsComponent } from './person-statistics/person-statistics.component';
 @NgModule({
   declarations: [
     PersonSearchComponent,
     PersonOverviewComponent,
     PersonCreateComponent,
+    PersonStatisticsComponent,
   ],
   imports: [
     SharedModule,

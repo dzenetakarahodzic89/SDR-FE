@@ -4,9 +4,27 @@
 
 <div zx-body *ngIf="song" class="w-auto">
   <div class="row col-24 topContainer">
-    <zx-block [config]="containerBlockConfig">
-      <img zx-block-body [src]="song.imageUrl" class="width:300px" />
-    </zx-block>
+    <div>
+      <zx-block [config]="containerBlockConfig">
+        <img zx-block-body [src]="song.imageUrl" class="width:300px" />
+        <div
+          zx-block-body
+          *ngIf="srcUrl.length > 0"
+          style="padding-left: 5px; padding-top: 5px"
+        >
+          <iframe
+            style="border-radius: 12px"
+            [src]="srcUrl | safe : 'resourceUrl'"
+            width="300px"
+            height="100"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </zx-block>
+    </div>
     <div class="w-100 pl-10 pr-10">
       <div class="col-24">
         <strong>
@@ -59,9 +77,14 @@
                 [config]="uploadSongBtn"
               ></zx-button>
               <zx-button
+                id="changeLyric"
+                zx-block-action
+                [config]="changeLyricBtn"
+              ></zx-button>
+              <zx-button
                 id="showNoteSheetBtn"
                 zx-block-action
-                [config]="showInstruments"
+                [config]="showNoteSheet"
               ></zx-button>
               <zx-popup [config]="instrumentPopUp">
                 <div zx-popup-body>
@@ -79,6 +102,37 @@
                 <zx-button
                   zx-popup-footer
                   [config]="instrumentPopUpFooterButtons"
+                  class="align-right"
+                ></zx-button>
+              </zx-popup>
+              <zx-popup [config]="lyricPopup">
+                <div zx-popup-body>
+                  <zx-block [config]="lyricPopupBlockConfig">
+                    <zx-preloader *ngIf="songIsLoading"></zx-preloader>
+                    <zx-form-loader
+                      *ngIf="lyricPopupFormConfig && !songIsLoading"
+                      zx-block-body
+                      [component]="lyricPopupFormConfig"
+                      [model]="lyricPopupModel"
+                      class="col-24"
+                    ></zx-form-loader>
+                    <div
+                      zx-block-body
+                      *ngIf="
+                        lyricPopupFormConfig && !songIsLoading && showEditor
+                      "
+                    >
+                      <editor
+                        [init]="{ height: 300 }"
+                        [(ngModel)]="this.lyricPopupModel.lyrics"
+                      ></editor>
+                    </div>
+                  </zx-block>
+                </div>
+
+                <zx-button
+                  zx-popup-footer
+                  [config]="lyricPopupFooterButtons"
                   class="align-right"
                 ></zx-button>
               </zx-popup>
@@ -178,9 +232,15 @@
           <h5>{{ song.outlineText }}</h5>
         </div>
       </div>
-      <div class="row">
-        <div class="col-20">
-          <ang-music-player [audioList]="audioList"></ang-music-player>
+      <div style="display: flex">
+        <div class="row">
+          <div class="col-20">
+            <ang-music-player
+              [audioList]="audioList"
+              width="450px"
+              height="150px"
+            ></ang-music-player>
+          </div>
         </div>
       </div>
     </div>

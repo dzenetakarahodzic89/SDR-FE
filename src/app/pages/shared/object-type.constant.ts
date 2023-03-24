@@ -6,4 +6,5 @@ export class ObjectType {
   public static ALBUM = 'ALBUM';
   public static LABEL = 'LABEL';
   public static NOTESHEET = 'NOTESHEET';
+  public static ERA = 'ERA';
 }
