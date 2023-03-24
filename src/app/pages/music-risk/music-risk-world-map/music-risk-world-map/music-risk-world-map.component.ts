@@ -10,7 +10,9 @@ import {
 
 import { Chart } from 'chart.js';
 import { GridOptions } from '@ag-grid-community/all-modules';
-import { MapState } from '../../shared/music-risk.model';
+import { BattleTurn, MapState, TeamState } from '../../shared/music-risk.model';
+import { MusicRiskService } from '../../shared/music-risk.service';
+import { ZxBlockModel } from '@zff/zx-block';
 var ChartGeo = require('chartjs-chart-geo');
 Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
 @Component({
@@ -20,8 +22,14 @@ Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
 })
 export class MusicRiskWorldMapComponent implements OnInit {
   dataIsLoading = false;
-  constructor(private route: ActivatedRoute) {}
-  teamInfo: MapState[] = [new MapState(1, 2, 3, 4, 5)];
+  battleTurn: BattleTurn;
+  teamState: TeamState;
+  mapState: MapState;
+  constructor(
+    private route: ActivatedRoute,
+    private musicService: MusicRiskService
+  ) {}
+  teamInfo: MapState[] = [];
   artistColumnDefs = [
     {
       field: 'numberOfActivePlayerTeams',
@@ -87,20 +95,35 @@ export class MusicRiskWorldMapComponent implements OnInit {
       },
     ],
   });
+  public personsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+  scores = new Map();
   ngOnInit(): void {
     this.loadData();
   }
-  private getScore(country, scores) {
-    if (!scores.has(country)) return 0;
+  chart: Chart;
+  loadData() {
+    this.route.params.subscribe((params) => {
+      this.musicService.getLastTurn(params.id).subscribe((data: BattleTurn) => {
+        this.battleTurn = data;
+        console.log(data);
+        data.mapState.countries.forEach((r) =>
+          this.scores.set(r.countryName, r.mapValue)
+        );
+        this.mapState = data.mapState;
+        this.teamInfo.push(data.mapState);
+        this.teamState = data.teamState;
+        this.setupMap();
+      });
+    });
+  }
+  getValueForCountry(country: string, scores) {
+    if (!scores.has(country)) return -1;
 
     return scores.get(country);
   }
-  chart: Chart;
-  loadData() {
-    let scores = new Map();
-    this.route.params.subscribe((params) => {
-      console.log(params.id);
-    });
+  setupMap() {
     fetch('https://unpkg.com/world-atlas/countries-50m.json')
       .then((r) => r.json())
       .then((data) => {
@@ -119,7 +142,10 @@ export class MusicRiskWorldMapComponent implements OnInit {
                 label: 'Countries',
                 data: countries.map((d) => ({
                   feature: d,
-                  value: this.getScore(d.properties.name, scores),
+                  value: this.getValueForCountry(
+                    d.properties.name,
+                    this.scores
+                  ),
                 })),
               },
             ],
