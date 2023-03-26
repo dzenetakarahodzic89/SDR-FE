@@ -42,6 +42,7 @@ import { NewsArticlesNewsComponent } from './pages/news-articles/news-articles-n
 import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playlist/generate-ga-playlist.component';
 import { PersonStatisticsComponent } from './pages/person/person-statistics/person-statistics.component';
 import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
+import { BattleSearchComponent } from './pages/battle/battle-overview/battle-overview.component';
 import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 
 export const appRoutes: Routes = [
@@ -105,4 +106,6 @@ export const appRoutes: Routes = [
   { path: 'person-statistics', component: PersonStatisticsComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
   { path: 'country-relations/overview', component: CountryRelationsOverviewComponent },
+  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent},
+  { path : 'music-risk/battle-overview', component: BattleSearchComponent}
 ];
