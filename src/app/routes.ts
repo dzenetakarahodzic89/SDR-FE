@@ -7,6 +7,7 @@ import { PersonOverviewComponent } from './pages/person/person-overview/person-o
 import { PersonSearchComponent } from './pages/person/person-search/person-search.component';
 import { LabelOverviewComponent } from './pages/label/label-overview/label-overview.component';
 import { CountryOverviewComponent } from './pages/country/country-overview/country-overview.component';
+
 import { InstrumentOverviewComponent } from './pages/instrument/instrument-overview/instrument-overview.component';
 import { InstrumentCreateComponent } from './pages/instrument/instrument-create/instrument-create.component';
 import { InstrumentSearchComponent } from './pages/instrument/instrument-search/instrument-search.component';
@@ -41,6 +42,7 @@ import { NewsArticlesNewsComponent } from './pages/news-articles/news-articles-n
 import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playlist/generate-ga-playlist.component';
 import { PersonStatisticsComponent } from './pages/person/person-statistics/person-statistics.component';
 import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
+import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -98,8 +100,9 @@ export const appRoutes: Routes = [
   { path: 'song/:id/overview/lyrics', component: SongOverviewComponent },
   { path: 'compare-score', component: UrmComponent },
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
-  { path: 'news-articles/new', component: NewsArticlesNewsComponent }, 
-  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
+  { path: 'news-articles/new', component: NewsArticlesNewsComponent },
+  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent },
   { path: 'person-statistics', component: PersonStatisticsComponent },
-  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent}
+  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
+  { path: 'country-relations/overview', component: CountryRelationsOverviewComponent },
 ];
