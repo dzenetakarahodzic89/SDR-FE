@@ -77,11 +77,20 @@ export class MusicRiskWorldMapComponent implements OnInit {
       },
     ],
   });
-  public viewAndAlterRoasterBtn: ZxButtonModel = new ZxButtonModel({
+  public viewAndAlterSongRosterBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         icon: 'far fa-street-view',
-        label: 'View and Alter Roster',
+        label: 'View and Alter Song Roster',
+        action: () => {},
+      },
+    ],
+  });
+  public viewAndAlterArtistRosterBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'far fa-street-view',
+        label: 'View and Alter Artist Roster',
         action: () => {},
       },
     ],
