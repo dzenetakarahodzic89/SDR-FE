@@ -73,6 +73,15 @@ export class CreatePlaylistRequest {
     }
 };
 
+export class HistoryRecord {
+    id: number;
+    name: string;
+    populationSize: number;
+    numberOfIterations: number;
+    maxFitness: number;
+    fitnessProgress: string;
+}
+
 export class SongGAResponse {
     songId: number;
     songName: string;

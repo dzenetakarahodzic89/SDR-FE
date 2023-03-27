@@ -47,6 +47,7 @@ import { BattleRosterComponent } from './pages/battle/battle-roster/battle-roste
 import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
 import { ArtistCreateComponent } from './pages/artist/artist-create/artist-create.component';
+import { HistoryComponent } from './pages/playlist/history/history.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -123,4 +124,5 @@ export const appRoutes: Routes = [
 
   { path: 'artist/create', component: ArtistCreateComponent },
   { path: 'artist/update/:id', component: ArtistCreateComponent },
+  { path: 'playlist/history', component: HistoryComponent }
 ];

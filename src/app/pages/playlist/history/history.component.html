@@ -1,0 +1,15 @@
+<div class="offset">
+    <div>
+        <h5>Results history of Genetic Algorithm execution:</h5>
+    </div>
+    <hr />
+    <zx-block *ngIf="!recordsAreLoading" [config]="recordsBlockConfig">
+        <zx-grid
+            zx-block-body
+            [gridOptions]="songsGridOptions"
+            [source]="generatedHistory"
+            domLayout="autoHeight"
+        >
+        </zx-grid>
+    </zx-block>
+</div>
