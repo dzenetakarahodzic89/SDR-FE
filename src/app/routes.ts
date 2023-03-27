@@ -45,6 +45,7 @@ import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/u
 import { BattleSearchComponent } from './pages/battle/battle-overview/battle-overview.component';
 import { BattleRosterComponent } from './pages/battle/battle-roster/battle-roster.component';
 import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
+import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -110,5 +111,6 @@ export const appRoutes: Routes = [
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent},
   { path : 'music-risk/battle-overview', component: BattleSearchComponent},
   { path: 'battle/:id/create-roster', component: BattleRosterComponent},
-  { path: 'battle/:id/alter-roster', component: BattleRosterComponent}
+  { path: 'battle/:id/alter-roster', component: BattleRosterComponent},
+  { path: 'music-risk/:id/world-map', component: MusicRiskWorldMapComponent }
 ];
