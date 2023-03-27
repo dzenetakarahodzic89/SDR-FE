@@ -144,8 +144,6 @@ export class CountryRelationsOverviewComponent implements OnInit {
 
   loadData() {
     this.loading = true;
-    this.getCountriesSelect();
-
     this.countryService
       .getCountries()
       .subscribe((response: CountryResponse[]) => {
@@ -159,7 +157,7 @@ export class CountryRelationsOverviewComponent implements OnInit {
   relatedCountrySelect = {
     template: 'ZxSelect',
     class: ['col-24'],
-    type: 'select',
+    type: 'filter',
     name: 'relatedCountrySelect',
     label: 'Related Country Select',
     list: [],
@@ -173,7 +171,7 @@ export class CountryRelationsOverviewComponent implements OnInit {
   typeOfLink = {
     template: 'ZxSelect',
     class: ['col-24'],
-    type: 'select',
+    type: 'filter',
     name: 'typeOfLink',
     label: 'Type Of Link',
     list: this.typeOfLinkList,
