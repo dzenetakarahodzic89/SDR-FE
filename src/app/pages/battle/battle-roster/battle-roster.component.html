@@ -1,0 +1,41 @@
+<h1>Roster for {{battle?.name}} player team</h1>
+<div zx-block-body class="row">
+    <zx-preloader *ngIf="isLoading"></zx-preloader>
+</div>
+<div zx-body *ngIf="artistsExtended" class="w-auto">
+    <div class="row col-24 topContainer">
+        <zx-block [config]="blockConfig"  style="width:100%;">
+            <zx-grid zx-block-body [gridOptions]="artistGridOptions" [source]="artistsExtended" domLayout="autoHeight">
+            </zx-grid>
+        </zx-block>
+    </div>
+    <div zx-body [config]="blockConfig" class="col-24">
+        <div class=" col-24 bottomContainer">
+            <zx-block *ngIf="selectedArtist" [config]="blockConfig" class="col-24">
+                <zx-grid zx-block-body [gridOptions]="songGridOptions" [source]="this.selectedArtistSongsExtended" domLayout="autoHeight">
+                </zx-grid>
+            </zx-block>
+            <zx-form-loader *ngIf="selectedArtist" zx-block-body [component]="formConfig" [model]="model" class="col-24">
+            </zx-form-loader>
+            <zx-popup [config]="popup" *ngIf="eligibleArtists">
+                <div zx-popup-body>
+                    <zx-block [config]="popUpBlockConfig">
+                        <zx-form-loader *ngIf="popUpFormConfig && eligibleArtists" zx-block-body [component]="popUpFormConfig"
+                            [model]="addArtistModel" class="col-24"></zx-form-loader>
+                    </zx-block>
+                </div>
+                <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+            </zx-popup>
+            <div zx-block-footer style="padding-top: 2px;padding-bottom: 3px;" class="col-24">
+                <div class="col-24">
+                    <div style="float:right;" class="col-24">
+                        <zx-button zx-block-action [config]="alterButtons" style="float:right;" ></zx-button>
+                    </div>
+                    <div style="float:right;" class="col-3.5">
+                        <zx-button zx-block-action [config]="mainButtons" ></zx-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

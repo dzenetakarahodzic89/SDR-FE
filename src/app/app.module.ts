@@ -56,10 +56,10 @@ import { ArtistModule } from './pages/artist/artist.module';
 import { EventModule } from './pages/event/event.module';
 import { DeezerModule } from './pages/deezer/deezer.module';
 import { MusicMatchModule } from './pages/music-match/music-match.module';
-import { BattleModule } from './pages/battle/battle.module';
 
 import { UrmModule } from './pages/urm/urm.module';
 import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
+import { BattleModule } from './pages/battle/battle.module';
 import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
@@ -113,6 +113,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     BattleModule,
     UrmModule,
     NewsArticlesModule,
+    BattleModule
     // use forRoot() in main app module only.
   ],
   providers: [
