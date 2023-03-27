@@ -46,6 +46,7 @@ import { BattleSearchComponent } from './pages/battle/battle-overview/battle-ove
 import { BattleRosterComponent } from './pages/battle/battle-roster/battle-roster.component';
 import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
+import { ArtistCreateComponent } from './pages/artist/artist-create/artist-create.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -104,13 +105,22 @@ export const appRoutes: Routes = [
   { path: 'compare-score', component: UrmComponent },
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
   { path: 'news-articles/new', component: NewsArticlesNewsComponent },
-  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent },
+  {
+    path: 'playlist/generate-ga-playlist',
+    component: GenerateGaPlaylistComponent,
+  },
   { path: 'person-statistics', component: PersonStatisticsComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
-  { path: 'country-relations/overview', component: CountryRelationsOverviewComponent },
-  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent},
-  { path : 'music-risk/battle-overview', component: BattleSearchComponent},
-  { path: 'battle/:id/create-roster', component: BattleRosterComponent},
-  { path: 'battle/:id/alter-roster', component: BattleRosterComponent},
-  { path: 'music-risk/:id/world-map', component: MusicRiskWorldMapComponent }
+  {
+    path: 'country-relations/overview',
+    component: CountryRelationsOverviewComponent,
+  },
+  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
+  { path: 'music-risk/battle-overview', component: BattleSearchComponent },
+  { path: 'battle/:id/create-roster', component: BattleRosterComponent },
+  { path: 'battle/:id/alter-roster', component: BattleRosterComponent },
+  { path: 'music-risk/:id/world-map', component: MusicRiskWorldMapComponent },
+
+  { path: 'artist/create', component: ArtistCreateComponent },
+  { path: 'artist/update/:id', component: ArtistCreateComponent },
 ];

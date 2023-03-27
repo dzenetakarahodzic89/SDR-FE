@@ -144,7 +144,7 @@
           },
           {
             "code": "HUB_PERSONSTATISTICS_STATIC",
-            "label": "Person Country Statistics",
+            "label": "Person Distribution over Countries - World Map",
             "url": "person-statistics",
             "attributes": {}
           }
