@@ -7,6 +7,7 @@ import { PersonOverviewComponent } from './pages/person/person-overview/person-o
 import { PersonSearchComponent } from './pages/person/person-search/person-search.component';
 import { LabelOverviewComponent } from './pages/label/label-overview/label-overview.component';
 import { CountryOverviewComponent } from './pages/country/country-overview/country-overview.component';
+
 import { InstrumentOverviewComponent } from './pages/instrument/instrument-overview/instrument-overview.component';
 import { InstrumentCreateComponent } from './pages/instrument/instrument-create/instrument-create.component';
 import { InstrumentSearchComponent } from './pages/instrument/instrument-search/instrument-search.component';
@@ -43,6 +44,8 @@ import { PersonStatisticsComponent } from './pages/person/person-statistics/pers
 import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 import { BattleSearchComponent } from './pages/battle/battle-overview/battle-overview.component';
 import { BattleRosterComponent } from './pages/battle/battle-roster/battle-roster.component';
+import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
+import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -100,11 +103,14 @@ export const appRoutes: Routes = [
   { path: 'song/:id/overview/lyrics', component: SongOverviewComponent },
   { path: 'compare-score', component: UrmComponent },
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
-  { path: 'news-articles/new', component: NewsArticlesNewsComponent }, 
-  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
+  { path: 'news-articles/new', component: NewsArticlesNewsComponent },
+  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent },
   { path: 'person-statistics', component: PersonStatisticsComponent },
+  { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
+  { path: 'country-relations/overview', component: CountryRelationsOverviewComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent},
   { path : 'music-risk/battle-overview', component: BattleSearchComponent},
   { path: 'battle/:id/create-roster', component: BattleRosterComponent},
-  { path: 'battle/:id/alter-roster', component: BattleRosterComponent}
+  { path: 'battle/:id/alter-roster', component: BattleRosterComponent},
+  { path: 'music-risk/:id/world-map', component: MusicRiskWorldMapComponent }
 ];
