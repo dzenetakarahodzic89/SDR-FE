@@ -42,6 +42,7 @@ import { GenerateGaPlaylistComponent } from './pages/playlist/generate-ga-playli
 import { PersonStatisticsComponent } from './pages/person/person-statistics/person-statistics.component';
 import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 import { BattleSearchComponent } from './pages/battle/battle-overview/battle-overview.component';
+import { BattleRosterComponent } from './pages/battle/battle-roster/battle-roster.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -103,5 +104,7 @@ export const appRoutes: Routes = [
   { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent},
   { path: 'person-statistics', component: PersonStatisticsComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent},
-  { path : 'music-risk/battle-overview', component: BattleSearchComponent}
+  { path : 'music-risk/battle-overview', component: BattleSearchComponent},
+  { path: 'battle/:id/create-roster', component: BattleRosterComponent},
+  { path: 'battle/:id/alter-roster', component: BattleRosterComponent}
 ];

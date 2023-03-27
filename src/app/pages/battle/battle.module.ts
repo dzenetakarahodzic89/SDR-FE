@@ -6,11 +6,12 @@ import { ZxFormsModule } from '@zff/zx-forms';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { AngMusicPlayerModule } from 'ang-music-player';
 import { BattleSearchComponent } from './battle-overview/battle-overview.component';
+import { BattleRosterComponent } from './battle-roster/battle-roster.component';
 import { BattleService } from './shared/battle.service';
 
 
 @NgModule({
-  declarations: [BattleSearchComponent],
+  declarations: [BattleSearchComponent,BattleRosterComponent],
   imports: [
     SharedModule,
     EditorModule,
