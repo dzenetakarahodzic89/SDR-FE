@@ -4,7 +4,7 @@
 </div>
 <div zx-body *ngIf="artistsExtended" class="w-auto">
     <div class="row col-24 topContainer">
-        <zx-block [config]="blockConfig"  style="width:100%;">
+        <zx-block [config]="blockConfig" style="width:100%;">
             <zx-grid zx-block-body [gridOptions]="artistGridOptions" [source]="artistsExtended" domLayout="autoHeight">
             </zx-grid>
         </zx-block>
@@ -12,27 +12,40 @@
     <div zx-body [config]="blockConfig" class="col-24">
         <div class=" col-24 bottomContainer">
             <zx-block *ngIf="selectedArtist" [config]="blockConfig" class="col-24">
-                <zx-grid zx-block-body [gridOptions]="songGridOptions" [source]="this.selectedArtistSongsExtended" domLayout="autoHeight">
+                <zx-grid zx-block-body [gridOptions]="songGridOptions" [source]="this.selectedArtistSongsExtended"
+                    domLayout="autoHeight">
                 </zx-grid>
             </zx-block>
-            <zx-form-loader *ngIf="selectedArtist" zx-block-body [component]="formConfig" [model]="model" class="col-24">
+            <div zx-block-body *ngIf="srcUrl.length > 0" style="padding-left: 5px; padding-top: 5px">
+                <iframe style="border-radius: 12px;" [src]="srcUrl | safe : 'resourceUrl'" width="100%" height="100"
+                    frameBorder="0" allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"></iframe>
+            </div>
+            <zx-form-loader *ngIf="selectedArtist" zx-block-body [component]="formConfig" [model]="model"
+                class="col-24">
             </zx-form-loader>
             <zx-popup [config]="popup" *ngIf="eligibleArtists">
                 <div zx-popup-body>
                     <zx-block [config]="popUpBlockConfig">
-                        <zx-form-loader *ngIf="popUpFormConfig && eligibleArtists" zx-block-body [component]="popUpFormConfig"
-                            [model]="addArtistModel" class="col-24"></zx-form-loader>
+                        <zx-form-loader *ngIf="popUpFormConfig && eligibleArtists" zx-block-body
+                            [component]="popUpFormConfig" [model]="addArtistModel" class="col-24"></zx-form-loader>
+                        <zx-grid zx-block-body *ngIf="this.eligibleArtistSongs && this.addArtistModel.artistId"
+                            [gridOptions]="songGridOptions2" [source]="this.eligibleArtistSongs" domLayout="autoHeight">
+                        </zx-grid>
                     </zx-block>
                 </div>
                 <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
             </zx-popup>
             <div zx-block-footer style="padding-top: 2px;padding-bottom: 3px;" class="col-24">
                 <div class="col-24">
+                    <h5>Number of required songs per artist: {{battle.songSize}}, Number of required artists:
+                        {{battle.teamSize}}</h5>
                     <div style="float:right;" class="col-24">
-                        <zx-button zx-block-action [config]="alterButtons" style="float:right;" ></zx-button>
+                        <zx-button zx-block-action [config]="alterButtons" style="float:right;"></zx-button>
                     </div>
                     <div style="float:right;" class="col-3.5">
-                        <zx-button zx-block-action [config]="mainButtons" ></zx-button>
+                        <zx-button zx-block-action [config]="mainButtons"></zx-button>
                     </div>
                 </div>
             </div>
