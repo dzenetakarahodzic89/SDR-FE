@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BattleService } from '../shared/battle.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-battle-roster',
@@ -29,11 +28,12 @@ export class BattleRosterComponent implements OnInit {
   battle : Battle;
   eligibleCountries : any[];
   eligibleArtists : ArtistExtended[];
-  eligibleSongs : SongExtended[];
+  eligibleArtistSongs : SongExtended[];
   availableEligibleSongs : SongExtended[];
   artistToAdd : ArtistExtended[] = null;
   isLoading = false;
   addArtistModel : AddArtistModel;
+  srcUrl: string = '';
 
   public popUpBlockConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
@@ -86,6 +86,7 @@ export class BattleRosterComponent implements OnInit {
       this.selectedArtistSongsExtended = this.allSongs.filter(s => this.selectedArtist.teamArtist.songs.map(ss=>ss.songId).includes(s.id));
       this.availableSongs = this.allSongs.filter(s => s.artistId == this.selectedArtist.teamArtist.artistId && !this.selectedArtist.teamArtist.songs.map(ss=>ss.songId).includes(s.id));
       this.formConfig.children[0].list = this.availableSongs;
+      this.srcUrl = '';
     },
     onRowDoubleClicked: () => {
       if(this.selectedArtist!=null) {
@@ -93,6 +94,7 @@ export class BattleRosterComponent implements OnInit {
         this.team.teamArtists.push(this.selectedArtist.teamArtist);
         this.selectedArtist=null;
         this.selectedArtistSongsExtended = null;
+        this.srcUrl = '';
       }
     }
   } as GridOptions;
@@ -122,9 +124,22 @@ export class BattleRosterComponent implements OnInit {
     columnDefs: this.songColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
+    paginationPageSize: 5,
     onRowClicked: (event) => {
       this.selectedSong = event['data'];
+      this.srcUrl =
+          'https://open.spotify.com/embed/track/' +
+          this.selectedSong.song.spotifyId +
+          '?utm_source=generator&theme=0';
     },
+  } as GridOptions;
+
+  public songGridOptions2: GridOptions = {
+    columnDefs: this.songColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    paginationPageSize: 5,
+    paginationAutoPageSize:false,
   } as GridOptions;
 
   public alterButtons = new ZxButtonModel({
@@ -226,8 +241,10 @@ export class BattleRosterComponent implements OnInit {
         class: 'invert',
         label: 'Cancel',
         action: () => {
-          this.location.back();
-        },
+          this.router.navigate([
+            './battle/' + this.battle.id + '/world-map',
+          ])
+        }
       },
     ],
     
@@ -251,8 +268,7 @@ export class BattleRosterComponent implements OnInit {
       if(!this.addArtistModel.countryId) {
         this.popUpFormConfig.children[1].list = [];
       this.popUpFormConfig.children[1].disabled = true;
-      this.popUpFormConfig.children[2].list = [];
-      this.popUpFormConfig.children[2].disabled = true;
+      this.eligibleArtistSongs = undefined;
       }
 
     }
@@ -267,29 +283,11 @@ export class BattleRosterComponent implements OnInit {
     validation: { required: true },
     disabled: true,
     onSelect: () => { 
-      let songList = this.eligibleSongs.filter(a => a.artistId == this.addArtistModel.artistId);
-      this.popUpFormConfig.children[2].list = songList;
-      this.popUpFormConfig.children[2].disabled = false;
+      this.eligibleArtistSongs = this.allSongs.filter(a => a.artistId == this.addArtistModel.artistId);
     },
-    onChange: () => {
-      if(!this.addArtistModel.artistId) {
-        this.popUpFormConfig.children[2].list = [];
-        this.popUpFormConfig.children[2].disabled = true;
-      }
-
-    }
   });
 
-  songMultiSelect: Definition = new Definition({
-    template: 'ZxMultiselect',
-    class: ['col-24'],
-    type: 'filter',
-    name: 'songId',
-    label: 'Available Songs',
-    validation: { required: true },
-    disabled: true
   
-  });
 
   public setPopUpFormConfig() {
     this.popUpBlockConfig = new ZxBlockModel({
@@ -303,7 +301,6 @@ export class BattleRosterComponent implements OnInit {
       children: [
         this.countrySelect,
         this.artistSelect,
-        this.songMultiSelect
       ],
       model: this.addArtistModel
     });
@@ -314,7 +311,7 @@ export class BattleRosterComponent implements OnInit {
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
     hideCloseButton: false,
-    size: 'col-12',
+    size: 'col-20',
   });
 
   public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
@@ -339,7 +336,7 @@ export class BattleRosterComponent implements OnInit {
 
   constructor(private toastr: ToastrService, 
     private battleService : BattleService,
-    private location: Location,
+    private router: Router,
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -385,9 +382,9 @@ export class BattleRosterComponent implements OnInit {
       }else
         artists = eligibleInfo.eligibleArtists;
       this.eligibleArtists = artists.map(a => new ArtistExtended(a,new Country(a.countryName,getCode(a.countryName)!=null ? getCode(a.countryName).toLowerCase() : "")));
-      this.eligibleSongs = eligibleInfo.eligibleSongs.map(s => new SongExtended(s));
+      let eligibleSongs = eligibleInfo.eligibleSongs.map(s => new SongExtended(s));
       this.popUpFormConfig.children[0].list = this.eligibleCountries;
-      this.allSongs.push.apply(this.allSongs,this.eligibleSongs);
+      this.allSongs.push.apply(this.allSongs,eligibleSongs);
       this.allSongs = this.allSongs.filter(function({id}) {
         return !this.has(id) && this.add(id);
       }, new Set)
@@ -410,14 +407,7 @@ export class BattleRosterComponent implements OnInit {
 
   private addArtist() {
     if(this.popUpFormConfig.isValid) {
-        if(this.popUpFormConfig.children[2].list.length==0) {
-          this.addArtistModel.songId = [];
-          this.toastr.error("All values must be chosen!");
-          return;
-        }
         let newArtist = this.eligibleArtists.filter(ea => ea.teamArtist.artistId == this.addArtistModel.artistId)[0];
-        let selectedSongs = this.eligibleSongs.filter(es => this.addArtistModel.songId.includes(es.id));
-        newArtist.teamArtist.songs = selectedSongs.map(s => s.song);
         this.team.teamArtists.push(newArtist.teamArtist);
         this.artistsExtended.push(newArtist);
         this.artistGridOptions.api?.setRowData(this.artistsExtended);
@@ -431,11 +421,11 @@ export class BattleRosterComponent implements OnInit {
 
   private saveChanges() {
     let errors = "";
-    if(this.team.teamArtists.length > this.battle.teamSize) 
-      errors +="Team size is limited to " + this.battle.teamSize + " artists!\n";
+    if(this.team.teamArtists.length != this.battle.teamSize) 
+      errors +="Required number of artists in the team is " + this.battle.teamSize + " artists!\n";
 
-    if(this.team.teamArtists.map(t => t.songs.length > this.battle.songSize).includes(true)) 
-      errors +="Number of songs per artist is limited to " + this.battle.songSize + " songs!";
+    if(this.team.teamArtists.map(t => t.songs.length != this.battle.songSize).includes(true)) 
+      errors +="Required number of songs per artist is " + this.battle.songSize + " songs!";
 
     if(errors.length>1) {
       this.toastr.error(errors);
@@ -445,7 +435,9 @@ export class BattleRosterComponent implements OnInit {
     this.battleService.updateTeam(this.team,this.battle.id).subscribe((response)=> {
       if(response.responseDetail== "OK") {
         this.toastr.success("Player team succesfully updated!");
-        this.location.back();
+        this.router.navigate([
+          './battle/' + this.battle.id + '/world-map',
+        ]);
       } else {
         this.toastr.error("There has been an error updating the player team!");
       }
