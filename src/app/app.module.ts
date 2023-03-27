@@ -60,6 +60,7 @@ import { MusicMatchModule } from './pages/music-match/music-match.module';
 import { UrmModule } from './pages/urm/urm.module';
 import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
 import { BattleModule } from './pages/battle/battle.module';
+import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -152,7 +153,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
 
 export function createCompiler(compilerFactory: CompilerFactory) {
   return compilerFactory.createCompiler();
