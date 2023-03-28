@@ -76,6 +76,18 @@ export class ArtistOverviewComponent implements OnInit {
     ],
   });
 
+  public albumTimelineBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-hourglass',
+        name: 'Album Timeline',
+        label: 'Album Timeline',
+        action: () =>
+          this.router.navigate(['./artist/' + this.artist.id+ '/album-timeline']),
+      },
+    ],
+  });
+
   public deleteBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {

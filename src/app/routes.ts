@@ -126,5 +126,5 @@ export const appRoutes: Routes = [
   { path: 'artist/create', component: ArtistCreateComponent },
   { path: 'artist/update/:id', component: ArtistCreateComponent },
   { path: 'playlist/history', component: HistoryComponent }
-  { path: 'album/artist/:id/albums', component: AlbumTimelineComponent },
+  { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
 ];
