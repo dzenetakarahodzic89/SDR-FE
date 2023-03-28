@@ -9,27 +9,26 @@ export class AlbumResponse {
   imageUrl: string;
   songs: SongResponse[];
   audioUrls: [];
+  spotifyId: string;
 }
 
 export class SongResponse {
-
-    id: number;
-    name: string;
-    playtime: string;
-    genre: string;
+  id: number;
+  name: string;
+  playtime: string;
+  genre: string;
 }
 
 export class AlbumSearchRequest{
     eras: any[];
     genres : any[];
     artists : any [];
-    pageNumber: any;
-    pageSize:any;
+    page: any;
+    size:any;
     sort:string;
     name:string;
 
 }
-
 
 export class AlbumCreateRequest {
   id?: number;
@@ -46,11 +45,9 @@ export class LoV {
   name: string;
 }
 
-
 export class SongOfAlbumUpdateRequest {
   albumId: number;
   songId: number;
   artistId: number;
   labelId: number;
 }
-

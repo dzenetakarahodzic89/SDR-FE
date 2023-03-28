@@ -9,8 +9,8 @@ import {
   NotesheetResponse,
   StaveNoteResponse,
   StaveResponse,
-} from './shared/notesheet.model';
-import { NotesheetService } from './shared/notesheet.service';
+} from '../shared/notesheet.model';
+import { NotesheetService } from '../shared/notesheet.service';
 import { CountryResponse } from '../../country/shared/country.model';
 import * as Vex from 'vexflow';
 
@@ -80,11 +80,11 @@ export class NotesheetOverviewComponent implements OnInit, AfterViewInit {
     const { Factory, Stave, Accidental, StaveNote, Beam, Formatter, Dot } =
       Vex.Flow;
 
-    const vf = new Factory({
+    const vf = new Vex.Flow.Factory({
       renderer: {
         elementId: 'output',
         width: 1600,
-        height: 600,
+        height: 1400,
       },
     });
 

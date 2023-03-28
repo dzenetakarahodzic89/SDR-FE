@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
@@ -6,11 +7,7 @@ import { Definition } from '@zff/zx-forms';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ToastrService } from 'ngx-toastr';
 
-import {
-  AlbumCreateRequest,
-  AlbumResponse,
-  LoV,
-} from '../shared/album.model';
+import { AlbumCreateRequest, AlbumResponse, LoV } from '../shared/album.model';
 import { AlbumService } from '../shared/album.service';
 
 @Component({
@@ -19,6 +16,7 @@ import { AlbumService } from '../shared/album.service';
   styleUrls: ['./album-create.component.scss'],
 })
 export class AlbumCreateComponent implements OnInit {
+  albumIsLoading: boolean = false;
   private eraList: LoV[];
   private selectedEra: LoV;
   private albumId;
@@ -48,6 +46,7 @@ export class AlbumCreateComponent implements OnInit {
     hideExpand: true,
     label: 'Add album',
   });
+
   public informationBlock = new ZxBlockModel({
     hideExpand: true,
     label: 'Add information',
@@ -60,7 +59,9 @@ export class AlbumCreateComponent implements OnInit {
         layout: 'classic',
         label: 'Save',
         class: 'invert',
-        action: () => this.saveAlbum(),
+        action: () => {
+          this.saveAlbum();
+        },
       },
       {
         name: 'cancel',
@@ -102,6 +103,7 @@ export class AlbumCreateComponent implements OnInit {
     this.albumId = this.route.snapshot.paramMap.get('id');
 
     if (this.albumId != null) {
+      this.albumIsLoading = true;
       this.albumService.getAlbum(this.albumId).subscribe(
         (sty: AlbumResponse) => {
           this.overviewBlock.label = 'Edit album';
@@ -112,6 +114,7 @@ export class AlbumCreateComponent implements OnInit {
           this.model.dateOfRelease = sty.dateOfRelease;
           this.selectedEra = this.eraList.find((era) => era.name === sty.era);
           this.model.eraId = this.selectedEra.id;
+          this.albumIsLoading = false;
         },
         (errorMsg: string) => {
           this.toastr.error('Album could not be loaded!');
@@ -146,6 +149,7 @@ export class AlbumCreateComponent implements OnInit {
         label: 'Era',
         list: this.eraList,
         defaultValue: this.updateEra,
+        validation: { required: true },
       }),
     ];
   };
@@ -198,7 +202,8 @@ export class AlbumCreateComponent implements OnInit {
   };
 
   saveAlbum = async () => {
-    if (!this.formConfig.isValid) {
+    let newAlbum = new AlbumCreateRequest();
+    if (!this.formConfig.isValid || this.model.information === undefined) {
       this.toastr.error('Fill in required fields!');
       return;
     }
@@ -207,7 +212,6 @@ export class AlbumCreateComponent implements OnInit {
       await this.readFile();
     }
 
-    let newAlbum = new AlbumCreateRequest();
     newAlbum.name = this.model.name;
     newAlbum.information = this.model.information;
     newAlbum.eraId = this.model.eraId;
@@ -230,7 +234,7 @@ export class AlbumCreateComponent implements OnInit {
         }
       );
     } else {
-      newAlbum['id'] = +this.albumId;
+      newAlbum['id'] = this.albumId;
       this.albumService.updateAlbum(newAlbum, +this.albumId).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {

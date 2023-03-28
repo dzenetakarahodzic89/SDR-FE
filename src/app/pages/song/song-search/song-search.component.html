@@ -1,7 +1,9 @@
 <div class="row mainContainer">
   <zx-block [config]="songsBlockConfig" class="col-16">
     <zx-button zx-block-action [config]="newSongBtn"></zx-button>
-    <div zx-block-body class="row"></div>
+    <div zx-block-body class="row">
+      <zx-preloader *ngIf="loading"></zx-preloader>
+    </div>
     <div
       *ngIf="foundSongs && foundSongs.length > 0"
       zx-block-body

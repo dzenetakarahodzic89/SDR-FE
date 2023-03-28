@@ -1,0 +1,17 @@
+<div>
+<zx-block [config]="formBlockConfig" class="col-12 row-2" style="height:15%">
+    <zx-form-loader
+      *ngIf="formConfig"
+      zx-block-body
+      [component]="serviceSelect"
+      [model]="model"
+      class="col-24"
+    >
+    </zx-form-loader>
+    <zx-button zx-block-action [config]="compareButton"></zx-button>
+</zx-block>
+<zx-preloader *ngIf="isLoading"></zx-preloader>
+<div>
+  <canvas id="canvas" ></canvas>
+</div>
+</div>

@@ -1,0 +1,42 @@
+<div class="row mainContainer">
+    <zx-block [config]="eventsBlockConfig" class="col-16">
+        <div zx-block-body class="row">
+          <zx-preloader *ngIf="eventsAreLoading"></zx-preloader>
+        </div>
+        <div
+          *ngIf="events && events.length > 0"
+          zx-block-body
+          class="searchResults"
+        >
+          <div class="gridContainer">
+            <div class="divForBoxes" *ngFor="let event of events">
+              <app-box
+                [id]="event.id"
+                [type]="'event'"
+                [title]="event.name"
+                [description]="'Start date: ' + (event.startDate == undefined ? 'Not started' : event.startDate) + '\n End date: ' + (event.endDate == undefined ? 'Not ended': event.endDate)"
+                [imageUrl]="'https://images.pexels.com/photos/976866/pexels-photo-976866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
+              >
+              </app-box>
+            </div>
+          </div>
+        </div>
+        <div zx-block-footer class="align-center">
+          <zx-button [config]="previousPageButton"></zx-button>
+          <zx-button [config]="nextPageButton"></zx-button>
+        </div>
+      </zx-block>
+    <zx-block [config]="searchBlockConfig" class="col-8">
+        <div zx-block-footer class="footerContainer">
+            <zx-button [config]="searchButton"></zx-button>
+        </div>
+        <zx-form-loader
+          *ngIf="formConfig"
+          zx-block-body
+          [component]="formConfig"
+          [model]="model"
+          class="col-24"
+        >
+        </zx-form-loader>
+      </zx-block>
+</div>

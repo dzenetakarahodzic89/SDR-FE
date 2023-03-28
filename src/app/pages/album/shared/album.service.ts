@@ -9,7 +9,7 @@ import { AlbumCreateRequest, SongOfAlbumUpdateRequest } from './album.model';
 
 @Injectable()
 export class AlbumService {
-  constructor(private api: ZxApi) { }
+  constructor(private api: ZxApi) {}
 
   updateAlbum(person: AlbumCreateRequest, id: number) {
     return this.api
@@ -21,48 +21,40 @@ export class AlbumService {
       );
   }
 
-    getAlbum(id: number) {
-        return this.api.get(AlbumApi.GET_ALBUM.replace("#", id.toString())).pipe(
-            map(response => {
-                console.log("Response: ", response);
-                const message = response['payload'];
-                return message;
-            })
-        );
-    }
+  getAlbum(id: number) {
+    return this.api.get(AlbumApi.GET_ALBUM.replace('#', id.toString())).pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
+  }
 
-    searchAlbums(searchParams:AlbumSearchRequest) {
-        return this.api.get(AlbumApi.SEARCH_ALBUMS,searchParams).pipe(
-            map(response => {
-                console.log("Response: ", response);
-                const message = response['payload'];
-                return message;
-            })
-        );
-    }
+  searchAlbums(searchParams: AlbumSearchRequest) {
+    return this.api.get(AlbumApi.SEARCH_ALBUMS, searchParams).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
 
-    getGenres(){
-        return this.api.get('/sdrbe/genre').pipe(
-            map(response=>{
-                console.log("Response: ", response);
-                const message = response['payload'];
-                console.log("Message:" ,message)
-                return message;
-            })
-        )
-    }
+  getGenres() {
+    return this.api.get('/sdrbe/genre/subGenre-mainGenre').pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
+  }
 
-    getErasForFilter(){
-        return this.api.get('/sdrbe/era/lov').pipe(
-            map(response=>{
-                console.log("Response: ", response);
-                const message = response['payload'];
-                console.log("Message:" ,message)
-                return message;
-            })
-        )
-    }
-    
+  getErasForFilter() {
+    return this.api.get('/sdrbe/era/lov').pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
+  }
 
   createAlbum(person: AlbumCreateRequest) {
     return this.api.post(AlbumApi.CREATE_ALBUM, person).pipe(
@@ -81,21 +73,25 @@ export class AlbumService {
   }
 
   getSongsNotInAlbum(albumId) {
-    return this.api.get(AlbumApi.GET_SONG_LOVS.replace('#', albumId.toString())).pipe(
-      map((response) => {
-        const songs = response['payload'];
-        return songs;
-      })
-    );
+    return this.api
+      .get(AlbumApi.GET_SONG_LOVS.replace('#', albumId.toString()))
+      .pipe(
+        map((response) => {
+          const songs = response['payload'];
+          return songs;
+        })
+      );
   }
 
   getLabelsNotInAlbum(albumId) {
-    return this.api.get(AlbumApi.GET_LABEL_LOVS.replace('#', albumId.toString())).pipe(
-      map((response) => {
-        const labels = response['payload'];
-        return labels;
-      })
-    );
+    return this.api
+      .get(AlbumApi.GET_LABEL_LOVS.replace('#', albumId.toString()))
+      .pipe(
+        map((response) => {
+          const labels = response['payload'];
+          return labels;
+        })
+      );
   }
 
   getArtists() {
@@ -108,17 +104,10 @@ export class AlbumService {
   }
 
   addSong(request: SongOfAlbumUpdateRequest) {
-    return this.api
-      .put(AlbumApi.ADD_SONG, request)
-      .pipe(
-        map((response) => {
-          return response;
-        })
-      );
+    return this.api.put(AlbumApi.ADD_SONG, request).pipe(
+      map((response) => {
+        return response;
+      })
+    );
   }
 }
-
-
-
-
-

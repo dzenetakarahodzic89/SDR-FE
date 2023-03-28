@@ -25,9 +25,23 @@ export class SongResponse {
   subgenreId?: number;
   subgenres: SubGenres;
   audioUrl: string;
+  spotifyId: string;
   artists: ArtistSongResponse[];
   songInstruments: SongInstrumentSongResponse[];
   instrumentsNoteSheet: SongInstrumentsResponse;
+}
+
+export class LyricPopupModel {
+  id: number;
+  languageId: number;
+  lyrics: string;
+}
+
+export class LyricResponseUpdate {
+  id: number;
+  songId: number;
+  languageId: number;
+  text: string;
 }
 
 export class SongInstrumentsResponse {
@@ -36,6 +50,16 @@ export class SongInstrumentsResponse {
 }
 
 export class SongNameResponse {
+  id: number;
+  name: string;
+}
+
+export class Lyrics {
+  languageId: number;
+  lyrics: string;
+}
+
+export class LanguageNameResponse {
   id: number;
   name: string;
 }
@@ -201,4 +225,10 @@ export class MainGenreLoV {
 export class SubgenreLoV {
   id: number;
   name: string;
+  }
+  
+export class NotesheetResponse {
+  id: number;
+  songId: number;
+  instrumentId: number;
 }

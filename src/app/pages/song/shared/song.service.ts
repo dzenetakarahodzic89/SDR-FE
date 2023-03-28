@@ -21,7 +21,9 @@ import {
   SongSimilarityRequest,
   SongSimilarityResponse,
   SongNameResponse,
-  SubgenreLoV
+  SubgenreLoV,
+  LanguageNameResponse,
+  LyricResponseUpdate,
 } from './song.model';
 import { SongCreateRequest } from './song.model';
 
@@ -200,6 +202,17 @@ export class SongService {
       );
   }
 
+  getNoteSheet(songId: number, instrumentId: number) {
+    return this.api
+      .get(SongApi.GET_NOTESHEETS.replace('#', `${songId}/${instrumentId}`))
+      .pipe(
+        map((response) => {
+          const message = response['payload'];
+          return message;
+        })
+      );
+  }
+
   getAllInstruments(): Observable<InstrumentResponse[]> {
     return this.api.get(SongApi.GET_INSTRUMENT_DROPDOWN).pipe(
       map((response) => {
@@ -217,12 +230,36 @@ export class SongService {
     );
   }
 
+  createLyric(body: any): Observable<LyricResponseUpdate> {
+    return this.api
+      .post(SongApi.POST_LYRIC, body)
+      .pipe(map((response) => response['payload']));
+  }
+
+  updateLyrics(body: LyricResponseUpdate): Observable<LyricResponseUpdate> {
+    return this.api
+      .put(SongApi.PUT_LYRIC.replace('#', body.id.toString()), body)
+      .pipe(map((response) => response['payload']));
+  }
+
+  getLyricsByCriteria(criteria: any): Observable<LyricResponseUpdate[]> {
+    return this.api
+      .get(SongApi.GET_LYRICS, criteria)
+      .pipe(map((response) => response['payload']));
+  }
+
   getAllSongNames(): Observable<SongNameResponse[]> {
     return this.api.get(SongApi.GET_SONG_NAMES).pipe(
       map((response) => {
         const songs: SongNameResponse[] = response['payload'];
         return songs;
       })
-    )
+    );
+  }
+
+  getAllLanguages(): Observable<LanguageNameResponse[]> {
+    return this.api
+      .get(SongApi.GET_LANGUAGES)
+      .pipe(map((response) => response['payload']));
   }
 }

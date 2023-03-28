@@ -1,4 +1,6 @@
 export class PlaylistApi {
+    public static GET_HISTORY = '/sdrbe/playlist-ga/history';
+    public static SAVE_GA_PLAYLIST = '/sdrbe/playlist-ga';
     public static SEARCH_PLAYLISTS = '/sdrbe/playlist/search';
     public static GET_GENRE_NAMES = '/sdrbe/genre/subGenre-mainGenre';
     public static GET_GENRES = '/sdrbe/genre';
