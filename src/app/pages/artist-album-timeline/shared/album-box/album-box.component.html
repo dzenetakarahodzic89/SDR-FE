@@ -1,0 +1,24 @@
+<div>
+  <div (click)="this.showOverview(albumIds)" class="objects">
+    
+      <p class="title">{{title}}s - {{description}} Albums </p>
+      
+      
+
+      <div *ngFor="let objectAdditionalAttribute of objectAdditionalAttributes">
+        <p class="releaseRegionAndDate">{{objectAdditionalAttribute.releaseDate | date:'dd.MM.yyyy'}} - ({{objectAdditionalAttribute.region.name}})</p>
+      </div>
+      
+      <div class="mt-75">
+        <zx-button [config]="deleteBtn"></zx-button>
+        
+        <zx-popup [config]="popup">
+          <div zx-popup-body>
+            <p>Are you sure that you want to delete this image?</p>
+          </div>
+            <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+        </zx-popup>
+      </div>
+    </div>
+  
+</div>

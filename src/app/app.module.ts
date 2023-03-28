@@ -52,6 +52,7 @@ import { MultisearchModule } from './pages/multisearch/multisearch.module';
 import { EraModule } from './pages/era/era.module';
 import { NotesheetModule } from './pages/notesheet/notesheet-overview/notesheet.module';
 import { ChordProgressionModule } from './pages/chordprogression/chordprogression.module';
+import { ArtistAlbumTimelineModule } from './pages/artist-album-timeline/artist-album-timeline.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -96,7 +97,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     AlbumModule,
     MultisearchModule,
     EraModule,
-    ChordProgressionModule
+    ChordProgressionModule,
+    ArtistAlbumTimelineModule,
     // use forRoot() in main app module only.
   ],
   providers: [

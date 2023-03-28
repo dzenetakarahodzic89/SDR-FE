@@ -28,6 +28,7 @@ import { SongSearchComponent } from './pages/song/song-search/song-search.compon
 import { ArtistsByErasComponent } from './pages/era/artists-by-eras/artists-by-eras.component';
 import { ChordProgressionSearchComponent } from './pages/chordprogression/chordprogression-search/chordprogression-search.component';
 import { EraCreateComponent } from './pages/era/era-create/era-create.component';
+import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-timeline/album-timeline.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -65,4 +66,5 @@ export const appRoutes: Routes = [
   { path: 'chord-progress/search', component: ChordProgressionSearchComponent },
   { path: 'era/create', component: EraCreateComponent },
   { path: 'era/update/:id', component: EraCreateComponent },
+  { path: 'album/artist/:id/albums', component: AlbumTimelineComponent },
 ];
