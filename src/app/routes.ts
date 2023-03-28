@@ -48,6 +48,7 @@ import { CountryRelationsOverviewComponent } from './pages/country/country-relat
 import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
 import { ArtistCreateComponent } from './pages/artist/artist-create/artist-create.component';
 import { HistoryComponent } from './pages/playlist/history/history.component';
+import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-timeline/album-timeline.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -125,4 +126,5 @@ export const appRoutes: Routes = [
   { path: 'artist/create', component: ArtistCreateComponent },
   { path: 'artist/update/:id', component: ArtistCreateComponent },
   { path: 'playlist/history', component: HistoryComponent }
+  { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
 ];
