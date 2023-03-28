@@ -4,11 +4,13 @@ import { Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
+import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { CountryService } from '../../country/shared/country.service';
 import {
   ArtistsSongsResponse,
   CountryRequest,
+  GenerateBattleRequest,
 } from '../shared/music-risk.model';
 import { MusicRiskService } from '../shared/music-risk.service';
 
@@ -18,13 +20,12 @@ import { MusicRiskService } from '../shared/music-risk.service';
   styleUrls: ['./setup.component.scss'],
 })
 export class SetupComponent implements OnInit {
-  toastr: any;
   ngOnInit(): void {
     this.setFormConfig();
   }
 
   constructor(
-    private router: Router,
+    private toastr: ToastrService,
     private countryService: CountryService,
     private musicRiskService: MusicRiskService
   ) {}
@@ -54,6 +55,7 @@ export class SetupComponent implements OnInit {
     type: 'text',
     name: 'Name',
     label: 'Name',
+    validation: { required: true },
   };
 
   SizeOfTeams = {
@@ -65,6 +67,7 @@ export class SetupComponent implements OnInit {
     validation: {
       min: 1,
       max: 10,
+      required: true,
     },
   };
 
@@ -75,8 +78,8 @@ export class SetupComponent implements OnInit {
     name: 'selectNumber',
     label: 'Number of Songs for Battle',
     validation: {
-      min: 1,
-      max: 10,
+      pattern: '[13579]|10',
+      required: true,
     },
   };
 
@@ -90,6 +93,7 @@ export class SetupComponent implements OnInit {
     onChange: () => {
       this.getArtistAndSongs();
     },
+    validation: { required: true },
   };
 
   getAllCountries() {
@@ -103,6 +107,7 @@ export class SetupComponent implements OnInit {
       {
         name: 'generate',
         label: 'Generate Battle',
+        action: () => this.generate(),
       },
     ],
   });
@@ -160,9 +165,25 @@ export class SetupComponent implements OnInit {
             songs: response.songs,
           };
         });
-
-        console.log(this.artistSongs);
       });
     }
+  }
+
+  generate() {
+    if (!this.formConfig.isValid) {
+      this.toastr.error('Fill in required fields!');
+      return;
+    }
+
+    let battle = new GenerateBattleRequest();
+    battle.name = this.model.Name;
+    battle.songSize = this.model.selectNumber;
+    battle.teamSize = this.model.selectSize;
+    battle.countries = this.artistSongs.map((artistSong) => artistSong.id);
+    this.musicRiskService.generateBattle(battle).subscribe(() => {
+      this.toastr.success(
+        'You have successfully generated a battle ' + battle.name
+      );
+    });
   }
 }

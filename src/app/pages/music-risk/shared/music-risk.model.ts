@@ -8,3 +8,10 @@ export class ArtistsSongsResponse {
 export class CountryRequest {
   id: number;
 }
+
+export class GenerateBattleRequest {
+  name: string;
+  songSize: number;
+  teamSize: number;
+  countries: any[];
+}
