@@ -71,9 +71,7 @@ this.albumsSongs=songs;
       field: 'playTimeSum',
       headerName: 'Total runtime',
       flex: 1,
-      floatingFilter: false,
-      //type: 'time',
-      //filter: 'hh:MM:ss',
+      floatingFilter: false
     },
   ];
   public artistGridOptions: GridOptions = {
@@ -82,19 +80,13 @@ this.albumsSongs=songs;
    enableColResize: true,
    defaultColDef:50,
    refreshInterval:50,
-  //  onRowClicked: (event) => {
-      //this.router.navigate([
-        //'./artist/' + event['data']['artistId'] + '/overview',
-      //]);
-    //},
   } as GridOptions;
   public formConfig: Definition;
   public previousPageButton: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         name: 'previousPage',
-        icon: 'fas fa-angle-double-left',
-       // action: () => this.getPreviousPage(),
+        icon: 'fas fa-angle-double-left'
       },
     ],
   });
@@ -102,8 +94,7 @@ this.albumsSongs=songs;
     items: [
       {
         name: 'nextPage',
-        icon: 'fas fa-angle-double-right',
-        //action: () => this.getNextPage()
+        icon: 'fas fa-angle-double-right'
       },
     ],
   });
@@ -123,14 +114,6 @@ this.albumIsLoading = true;
       this.albumTimlineService.getAlbum(params.id).subscribe((response) => {
         this.foundAlbums = response as unknown as AppBox[];
           this.albums = response;
-   // response.forEach(element => {
-     // this.albumIds.push(...element.albums.map(x=> x.id));
-    //});
-   // this.albumTimlineService.searchAlbumsSongs(new AlbumSearchRequest(this.albumIds as []) ).subscribe(response=>{
-     // this.albumsSongs=response;
-      //console.log(this.albums);
-    //});
-     // console.log( this.albumIds );
         this.albumIsLoading = false;
     });
      
