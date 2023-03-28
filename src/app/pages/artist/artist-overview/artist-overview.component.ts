@@ -135,7 +135,6 @@ export class ArtistOverviewComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    // public confirmation: ZxConfirmation,
     private artistService: ArtistService
   ) {}
 
