@@ -50,6 +50,7 @@ import { ArtistCreateComponent } from './pages/artist/artist-create/artist-creat
 import { HistoryComponent } from './pages/playlist/history/history.component';
 import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-timeline/album-timeline.component';
 
+import { SetupComponent } from './pages/music-risk/setup/setup.component';
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -71,6 +72,8 @@ export const appRoutes: Routes = [
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
   { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
+
+  { path: 'battle/setup', component: SetupComponent },
   {
     path: 'notesheet/:songId/:instrumentId/overview',
     component: NotesheetOverviewComponent,
