@@ -38,10 +38,13 @@ export class TeamState {
   activePlayerTeam: Team;
   inactiveNpcTeams: Team;
 }
+interface CountryIds {
+  [key: string]: number;
+}
 export class Team {
   countryId: number;
   countryName: string;
-  eligibleCountryIds: number[];
+  eligibleCountryIds: CountryIds;
   id: number;
   lastActiveTurn: number;
   numberOfLoses: number;
@@ -61,4 +64,8 @@ export class Song {
   spotifyId: string;
   name: string;
   audioUrl: string;
+}
+export class AttackCountry {
+  attackingCountryId: number;
+  attackedCountryId: number;
 }

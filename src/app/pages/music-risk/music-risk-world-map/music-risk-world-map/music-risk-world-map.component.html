@@ -45,14 +45,9 @@
           [config]="attackBtn"
         ></zx-button>
         <zx-button
-          id="viewAndAlterSongRosterBtn"
+          id="viewAndAlterRosterBtn"
           zx-block-action
-          [config]="viewAndAlterSongRosterBtn"
-        ></zx-button>
-        <zx-button
-          id="viewAndAlterArtistRosterBtn"
-          zx-block-action
-          [config]="viewAndAlterArtistRosterBtn"
+          [config]="viewAndAlterRosterBtn"
         ></zx-button>
         <zx-button
           id="viewStandingsBtn"
@@ -71,4 +66,22 @@
       </zx-block>
     </div>
   </div>
+  <zx-popup [config]="popup">
+    <div zx-popup-body>
+      <zx-block [config]="popUpBlockConfig">
+        <zx-form-loader
+          *ngIf="popUpFormConfig"
+          zx-block-body
+          [component]="popUpFormConfig"
+          [model]="attackCountryModel"
+          class="col-24"
+        ></zx-form-loader>
+      </zx-block>
+      <zx-button
+        zx-popup-footer
+        [config]="linkPopupFooterButtons"
+        class="align-right"
+      ></zx-button>
+    </div>
+  </zx-popup>
 </div>

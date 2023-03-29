@@ -11,7 +11,26 @@ export class MusicRiskService {
 
   getLastTurn(battleId: number) {
     return this.api
-      .get(MusicRiskApi.GET_BATTLE_TURN.replace('#', battleId.toString()))
+      .get(MusicRiskApi.GET_LAST_BATTLE_TURN.replace('#', battleId.toString()))
+      .pipe(
+        map((response) => {
+          return response['payload'];
+        })
+      );
+  }
+  getCountryLovs(countryIds: number[]) {
+    var requestObject = { countryIds: countryIds };
+    return this.api.post(MusicRiskApi.GET_COUNTRY_LOVS, requestObject).pipe(
+      map((response) => {
+        return response['payload'];
+      })
+    );
+  }
+  getCountryRelationsLoV(countryId: number) {
+    return this.api
+      .get(
+        MusicRiskApi.GET_COUNTRY_RELATIONS.replace('#', countryId.toString())
+      )
       .pipe(
         map((response) => {
           return response['payload'];
