@@ -3,12 +3,22 @@ import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PlaylistApi } from './playlist-api.constant';
-import { GenreNameResponse, GenreResponse, PlaylistResponse, SongGAResponse, SongNameResponse} from './playlist.model';
+import { GenreNameResponse, GenreResponse, HistoryRecord, PlaylistResponse, PlaylistSong, SongGAResponse, SongNameResponse} from './playlist.model';
 
 @Injectable()
 export class PlaylistService {
 
   constructor(private api: ZxApi) { }
+
+  getHistory(): Observable<HistoryRecord[]> {
+    return this.api.get(PlaylistApi.GET_HISTORY).pipe(map(response => response['payload'] as HistoryRecord[]))
+  }
+
+  getPlaylist(playlistId: number): Observable<PlaylistSong[]> {
+    return this.api.get(PlaylistApi.GET_SONGS, {
+      "playlist.id:eq": playlistId
+    }).pipe(map(response => response['payload'] as PlaylistSong[]));
+  }
 
   searchPlaylists(name: String, songId: number, genreId: number, sortBy: number): Observable<PlaylistResponse[]> {
     let query = "?"

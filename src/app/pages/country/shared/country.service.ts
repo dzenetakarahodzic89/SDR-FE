@@ -3,7 +3,12 @@ import { ZxApi } from '@zff/zx-core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CountryApi } from './country-api.constant';
-import { CountryResponse, CountryUpdateRequest } from './country.model';
+import {
+  CountryRelationCreate,
+  CountryResponse,
+  CountrySelect,
+  CountryUpdateRequest,
+} from './country.model';
 
 @Injectable()
 export class CountryService {
@@ -38,5 +43,22 @@ export class CountryService {
           return response;
         })
       );
+  }
+
+  getCountriesSelect(searchParams): Observable<CountrySelect[]> {
+    return this.api.post(CountryApi.GET_COUNTRIES_SELECT, searchParams).pipe(
+      map((response) => {
+        const message = response['payload'];
+        return message;
+      })
+    );
+  }
+
+  createRelations(countryCreate: CountryRelationCreate) {
+    return this.api.post(CountryApi.CREATE_RELATION, countryCreate).pipe(
+      map((response) => {
+        return response;
+      })
+    );
   }
 }

@@ -5,6 +5,17 @@ export class ArtistResponse {
   outlineText: string;
   imageUrl: string;
 }
+
+export class Artists {
+  id: number;
+  name: string;
+  surname: string;
+  information: string;
+  dateOfBirth: Date;
+  dateOfDeath: Date;
+  outlineText: string;
+  imageUrl: string;
+}
 export class LoVResponse {
   id: number;
   name: string;
@@ -65,4 +76,24 @@ export class GenreResponse {
 export class GenreNameResponse {
   id: number;
   name: string;
+}
+
+export class ArtistCreateRequest {
+  id?: number;
+  name: string;
+  surname: string;
+  information: string;
+  dateOfBirth: Date;
+  dateOfDeath: Date;
+  outlineText: string;
+  personIds: [];
+  coverImageData: string | ArrayBuffer;
+  coverImage: string;
+  coverImage_files: File[];
+}
+
+export class PersonLoV {
+  id: number;
+  name: string;
+  surname: string;
 }

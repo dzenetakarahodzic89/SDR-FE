@@ -25,6 +25,7 @@ export class SetupComponent implements OnInit {
   }
 
   constructor(
+    private router: Router,
     private toastr: ToastrService,
     private countryService: CountryService,
     private musicRiskService: MusicRiskService
@@ -78,7 +79,9 @@ export class SetupComponent implements OnInit {
     name: 'selectNumber',
     label: 'Number of Songs for Battle',
     validation: {
-      pattern: '[13579]|10',
+      pattern: '[13579]',
+      min: 1,
+      max: 10,
       required: true,
     },
   };
@@ -180,10 +183,11 @@ export class SetupComponent implements OnInit {
     battle.songSize = this.model.selectNumber;
     battle.teamSize = this.model.selectSize;
     battle.countries = this.artistSongs.map((artistSong) => artistSong.id);
-    this.musicRiskService.generateBattle(battle).subscribe(() => {
+    this.musicRiskService.generateBattle(battle).subscribe((response) => {
       this.toastr.success(
         'You have successfully generated a battle ' + battle.name
       );
+      this.router.navigate(['./battle/' + response.id + '/create-roster']);
     });
   }
 }

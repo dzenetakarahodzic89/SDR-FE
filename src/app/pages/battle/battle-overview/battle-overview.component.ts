@@ -4,7 +4,10 @@ import { Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { BattleService } from '../shared/battle.service';
-import { BattleOverviewSearchRequest, BattleResponse } from '../shared/battle.model';
+import {
+  BattleOverviewSearchRequest,
+  BattleResponse,
+} from '../shared/battle.model';
 
 @Component({
   selector: 'app-battle-overview',
@@ -13,12 +16,11 @@ import { BattleOverviewSearchRequest, BattleResponse } from '../shared/battle.mo
 })
 export class BattleSearchComponent implements OnInit {
   battleAreLoading: boolean;
-  
+
   battlesAreLoading: boolean;
   foundBattles: BattleResponse[];
-  
-  constructor(private router: Router,
-    private battleService:BattleService) {}
+
+  constructor(private router: Router, private battleService: BattleService) {}
 
   public newBattleButton: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -26,18 +28,14 @@ export class BattleSearchComponent implements OnInit {
         name: 'New Battle',
         label: 'New Battle',
 
-        // action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/'])
+        action: () => this.router.navigate(['./battle/setup']),
       },
     ],
   });
 
-
-  
-
   public continueBattleBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        
         name: 'Continue Battle',
         label: 'Continue Battle',
       },
@@ -47,22 +45,19 @@ export class BattleSearchComponent implements OnInit {
   public finalBattleResponseBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        
         name: 'Final Battle Response',
         label: 'Final Battle Response',
       },
     ],
   });
 
-
   ngOnInit(): void {
     this.loadBattles();
   }
-  
 
   paginationDetails = {
     page: 1,
-    totalPages: 0
+    totalPages: 0,
   };
   battle = [];
   battleColumnDefs = [
@@ -93,24 +88,20 @@ export class BattleSearchComponent implements OnInit {
       this.router.navigate(['./album/' + event['data']['id'] + '/overview']);
     },
   } as GridOptions;
- 
 
   loadBattles() {
-
     this.battleAreLoading = true;
     let getParams = new BattleOverviewSearchRequest();
-  
+
     getParams.page = this.paginationDetails.page;
     getParams.size = 10;
 
-    this.battleService.getBattles(getParams).subscribe(response => {
+    this.battleService.getBattles(getParams).subscribe((response) => {
       this.battle = response['payload'] as unknown as BattleResponse[];
 
       this.paginationDetails.page = response['page'];
       this.paginationDetails.totalPages = response['numberOfPages'];
       this.battlesAreLoading = false;
     });
-
   }
-
 }
