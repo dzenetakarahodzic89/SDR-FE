@@ -84,4 +84,22 @@
       ></zx-button>
     </div>
   </zx-popup>
+  <zx-popup [config]="attackPopup">
+    <div zx-popup-body>
+      <zx-block [config]="attackBlockConfig">
+        <zx-form-loader
+          *ngIf="popUpAttackFormConfig"
+          zx-block-body
+          [component]="popUpAttackFormConfig"
+          [model]="attackCountryModel"
+          class="col-24"
+        ></zx-form-loader>
+      </zx-block>
+      <zx-button
+        zx-popup-footer
+        [config]="linkAttackPopupFooterBtn"
+        class="align-right"
+      ></zx-button>
+    </div>
+  </zx-popup>
 </div>

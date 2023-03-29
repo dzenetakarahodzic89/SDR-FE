@@ -13,13 +13,16 @@ import { GridOptions } from '@ag-grid-community/all-modules';
 import {
   AttackCountry,
   BattleTurn,
+  Country,
   MapState,
+  PreMoveBattleAttack,
   TeamState,
 } from '../../shared/music-risk.model';
 import { MusicRiskService } from '../../shared/music-risk.service';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { Definition } from '@zff/zx-forms';
+import { ToastrService } from 'ngx-toastr';
 var ChartGeo = require('chartjs-chart-geo');
 Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
 @Component({
@@ -28,6 +31,8 @@ Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
   styleUrls: ['./music-risk-world-map.component.scss'],
 })
 export class MusicRiskWorldMapComponent implements OnInit {
+  attackingCountryId: number;
+  attackedCountryId: number;
   callCountriesLovsNumber = 0;
   dataIsLoading = false;
   battleTurn: BattleTurn;
@@ -35,14 +40,23 @@ export class MusicRiskWorldMapComponent implements OnInit {
   mapState: MapState;
   battleId: number;
   eligibleCountryIds: number[];
+  attackObject: PreMoveBattleAttack = new PreMoveBattleAttack();
   constructor(
     private route: ActivatedRoute,
     private musicService: MusicRiskService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
   public popUpBlockConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
+  public attackBlockConfig: ZxBlockModel;
+  public popUpAttackFormConfig: Definition;
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public attackPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
     hideCloseButton: false,
     size: 'col-12',
@@ -59,10 +73,20 @@ export class MusicRiskWorldMapComponent implements OnInit {
       this.musicService
         .getCountryRelationsLoV(event.model.attackingCountryId)
         .subscribe((data) => {
-          this.popUpFormConfig.children[1].list = data;
+          const uniqueArr = [
+            ...data,
+            ...this.popUpFormConfig.children[0].list,
+          ].filter((obj, index, arr) => {
+            return !arr.some((otherObj, otherIndex) => {
+              return index !== otherIndex && obj.id === otherObj.id;
+            });
+          });
+          const subAr = uniqueArr.filter((c) => c.name.includes('('));
+          this.popUpFormConfig.children[1].list = subAr;
         });
     },
   });
+  isPrivate = false;
   public linkPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -71,7 +95,60 @@ export class MusicRiskWorldMapComponent implements OnInit {
         label: 'Attack',
         class: 'classic primary',
         icon: 'fal fa-check-circle',
-        action: () => {},
+        action: () => {
+          this.attackObject.attackedId =
+            this.attackCountryModel.attackedCountryId;
+          this.attackObject.attackerId =
+            this.attackCountryModel.attackingCountryId;
+          this.attackObject.attackerName = this.mapState.countries.find(
+            (c) => c.countryId == this.attackCountryModel.attackingCountryId
+          )?.countryName;
+          this.attackObject.attackedName = this.mapState.countries.find(
+            (c) => c.countryId == this.attackCountryModel.attackedCountryId
+          )?.countryName;
+          if (this.attackObject.attackerName == undefined) {
+            this.toastr.error('Country cannot attack.');
+            return;
+          }
+          if (this.attackObject.attackedName == undefined) {
+            this.toastr.error('Country cannot be attacked.');
+            return;
+          }
+          this.attackObject.battleId = this.battleId;
+          console.log(this.attackObject);
+          for (let country of this.mapState.countries) {
+            if (
+              country.countryStatus === 'Passive' &&
+              this.attackedCountryId === country.countryId
+            ) {
+              this.isPrivate = true;
+              this.attackObject.isAttackedPassive = true;
+              console.log(this.attackObject);
+              this.musicService
+                .preMoveAttack(this.attackObject)
+                .subscribe((response) => {
+                  console.log(response);
+                  this.toastr.success(response);
+                  this.popup.hide();
+                  this.loadData();
+                  return;
+                });
+            }
+          }
+          if (!this.isPrivate) {
+            this.attackObject.isAttackedPassive = false;
+            this.musicService
+              .preMoveAttack(this.attackObject)
+              .subscribe((response) => {
+                this.toastr.success(response);
+                this.attackPopup.show();
+                this.loadData();
+                this.popup.hide();
+                return;
+              });
+          }
+          this.isPrivate = false;
+        },
       },
       {
         name: 'cancel',
@@ -79,16 +156,30 @@ export class MusicRiskWorldMapComponent implements OnInit {
         label: 'Cancel',
         class: 'classic',
         icon: 'fal fa-times',
+        action: () => {
+          this.popup.hide();
+        },
+      },
+    ],
+  });
+  public linkAttackPopupFooterBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'finish',
+        description: 'finish',
+        label: 'Finish',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
         action: () => {},
       },
     ],
   });
-  attackCountryModel: AttackCountry;
+  attackCountryModel: AttackCountry = new AttackCountry();
   countryAttackedInput: Definition = new Definition({
     template: 'ZxSelect',
     class: ['col-13'],
     type: 'select',
-    name: 'connectionType',
+    name: 'attackedCountryId',
     label: 'Select country to be attacked',
     validation: { required: true },
   });
@@ -103,6 +194,19 @@ export class MusicRiskWorldMapComponent implements OnInit {
       disabled: false,
       model: this.attackCountryModel,
       children: [this.countryPlayerInput, this.countryAttackedInput],
+    });
+  }
+  public setAttackPopUpFormConfig() {
+    this.attackBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Attack country',
+    });
+    this.popUpAttackFormConfig = new Definition({
+      name: 'connectMedia',
+      template: 'ZxForm',
+      disabled: false,
+      model: this.attackCountryModel,
+      children: [],
     });
   }
   teamInfo: MapState[] = [];
@@ -188,6 +292,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
   scores = new Map();
   ngOnInit(): void {
     this.loadData();
+    this.setAttackPopUpFormConfig();
   }
   chart: Chart;
   loadData() {

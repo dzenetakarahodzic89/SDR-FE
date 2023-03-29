@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
 import { map } from 'rxjs/operators';
 import { MusicRiskApi } from './music-risk-api.constant';
+import { PreMoveBattleAttack } from './music-risk.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class MusicRiskService {
       );
   }
   getCountryLovs(countryIds: number[]) {
-    var requestObject = { countryIds: countryIds };
+    let requestObject = { countryIds: countryIds };
     return this.api.post(MusicRiskApi.GET_COUNTRY_LOVS, requestObject).pipe(
       map((response) => {
         return response['payload'];
@@ -36,5 +37,12 @@ export class MusicRiskService {
           return response['payload'];
         })
       );
+  }
+  preMoveAttack(preMoveReq: PreMoveBattleAttack) {
+    return this.api.post(MusicRiskApi.PRE_ATTACK_COUNTRY, preMoveReq).pipe(
+      map((response) => {
+        return response['payload'];
+      })
+    );
   }
 }

@@ -69,3 +69,11 @@ export class AttackCountry {
   attackingCountryId: number;
   attackedCountryId: number;
 }
+export class PreMoveBattleAttack{
+  attackerId:number;
+  attackedId:number;
+  attackerName:string;
+  attackedName:string;
+  isAttackedPassive:boolean;
+  battleId:number;
+}
