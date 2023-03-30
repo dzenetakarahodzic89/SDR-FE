@@ -18,21 +18,18 @@ export class SearchItem
 
 }
 
-export class AwardResponse
+export class TopTenSongsResponse
 {
-    uuid: string;
-    awardDate: Date;
-    created: Date;
-    createdBy: string;
-    information: string;
-    modified: Date;
-    modifiedBy: string;
-    name: string;
-    movieId: number;
-    personId: number;
-    awardFamilyId: number;
-    awardFamilyName: string;
-    recipient: string;
+    songName: string;
+    songScore: number;
+
+    constructor(songName: string, songScore: number)
+    {
+        this.songName=songName;
+        this.songScore=songScore;
+    }
+
+    
 }
 
 
@@ -95,5 +92,35 @@ export class VolumeItem
         this.imageUrl = imageUrl;
 
         this.outlineText = outlineText;
+    }
+   
+}
+export class RandomPlaylistResponse
+{
+    playlistId: number;
+    songId:number;
+    songName: string;
+    playtimeInSeconds: number;
+    audioUrl:string;
+
+    constructor(playlistId: number, songId:number,songName: string, playtimeInSeconds: number,audioUrl:string)
+    {
+        this.playlistId=playlistId;
+        this.songId=songId;
+        this.songName=songName;
+        this.playtimeInSeconds=playtimeInSeconds;
+        this.audioUrl=audioUrl
+        
+    }
+
+    
+}
+
+export class UserCodeResponse
+{
+    userCode:string
+    constructor(userCode:string)
+    {
+        this.userCode=userCode;
     }
 }

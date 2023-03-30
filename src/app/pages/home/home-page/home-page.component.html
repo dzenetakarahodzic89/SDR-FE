@@ -18,11 +18,20 @@
 
 <div id="gridAll">
     <zx-block [config]="gamesBlockConfig" id="gridBlock">
-        <zx-grid zx-block-body id="gridAward" [gridOptions]="gridAwardOptions" [source]="awardList">
+        <zx-grid zx-block-body id="gridTopTenPlaylist" [gridOptions]="gridTopTenSongsOptions" [source]="topSongsList">
         </zx-grid>
     </zx-block>
     <zx-block [config]="wikiBlockConfig" id="wikiBlock">
-        <zx-grid zx-block-body id="gridWiki" [gridOptions]="gridOptions" [source]="wikiData"></zx-grid>
+        <zx-grid zx-block-body id="gridWiki" [gridOptions]="gridOptions" [source]="wikiData"></zx-grid> 
     </zx-block>
 </div>
-<div>GREECE Static<span class="fi fi-gr"></span> Dynamic Bosnia<span class="{{testFlag}}"></span></div>
+<div id="bottomContainer">
+    <zx-block [config]="userRecommendedPlaylistConfig" id="bottomBlock" >
+     <zx-grid zx-block-body id="gridRecommnededPlaylist" [gridOptions]="gridRandomPlaylistOption" [source]="randomUserPlaylist"  >
+    </zx-grid>
+</zx-block>
+<div *ngIf="audioList && audioList.length > 0">
+<ang-music-player [audioList]="this.audioList"></ang-music-player>
+</div>
+
+ </div>

@@ -25,6 +25,8 @@
 #wikiBlock {
     width: 50%;
     margin-left: 2px;
+    
+    
 }
 
 #searchBlock {
@@ -34,4 +36,17 @@
 #weekRealeases {
     width: 100%;
     align-self: center;
+}
+#bottomContainer{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    
+    
+}
+#bottomBlock{
+    width: 50%;
+    margin-right: 120px;
+    
 }
