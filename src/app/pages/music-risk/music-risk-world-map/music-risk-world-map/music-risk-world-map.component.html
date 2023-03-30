@@ -1,0 +1,74 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="dataIsLoading"></zx-preloader>
+</div>
+<div *ngIf="battleTurn">
+  <h2 class="headline">Turn #{{ battleTurn.turn }} - {{ battleTurn.name }}</h2>
+  <div class="map">
+    <canvas id="canvas"></canvas>
+  </div>
+  <div style="display: flex">
+    <div style="width: 50%" class="box-one">
+      <p>
+        Current Team: <span>{{ teamState.activePlayerTeam.countryName }}</span>
+      </p>
+      <p>
+        Current Roster:
+        <span
+          *ngFor="
+            let artist of teamState.activePlayerTeam.teamArtists;
+            let i = index
+          "
+          >{{ artist.name }}
+          <span *ngIf="i < teamState.activePlayerTeam.teamArtists.length - 1"
+            >,</span
+          >
+        </span>
+      </p>
+      <p>
+        Total Player Countries:
+        <span>{{ teamState.activeNpcTeams.length }}</span>
+      </p>
+    </div>
+    <div style="display: flex; flex-direction: column; width: 100%">
+      <div
+        style="
+          width: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+        class="box-one"
+      >
+        <zx-button
+          id="attackBtn"
+          zx-block-action
+          [config]="attackBtn"
+        ></zx-button>
+        <zx-button
+          id="viewAndAlterSongRosterBtn"
+          zx-block-action
+          [config]="viewAndAlterSongRosterBtn"
+        ></zx-button>
+        <zx-button
+          id="viewAndAlterArtistRosterBtn"
+          zx-block-action
+          [config]="viewAndAlterArtistRosterBtn"
+        ></zx-button>
+        <zx-button
+          id="viewStandingsBtn"
+          zx-block-action
+          [config]="viewStandingsBtn"
+        ></zx-button>
+      </div>
+      <zx-block [config]="personsBlockConfig">
+        <zx-grid
+          zx-block-body
+          [gridOptions]="infoGridOptions"
+          [source]="teamInfo"
+          domLayout="autoHeight"
+        >
+        </zx-grid>
+      </zx-block>
+    </div>
+  </div>
+</div>

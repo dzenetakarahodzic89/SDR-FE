@@ -1,1 +1,43 @@
-<p>instrument-search works!</p>
+<div class="row mainContainer">
+    <zx-block [config]="instrumentsBlockConfig" class="col-16">
+      <zx-button zx-block-action [config]="newInstrumentBtn"></zx-button>
+      <div zx-block-body class="row">
+        <zx-preloader *ngIf="instrumentsAreLoading"></zx-preloader>
+      </div>
+      <div
+        *ngIf="foundInstruments && foundInstruments.length > 0"
+        zx-block-body
+        class="searchResults"
+      >
+        <div class="gridContainer">
+          <div class="divForBoxes" *ngFor="let instrument of foundInstruments">
+            <app-box
+              [id]="instrument.id"
+              [type]="'instrument'"
+              [title]="instrument.name"
+              [universalObjectName]="instrument.userCode"
+              [description]="instrument.outlineText"
+              [imageUrl]="instrument.imageUrl"
+            >
+            </app-box>
+          </div>
+        </div>
+      </div>
+      <div zx-block-footer class="align-center">
+        <zx-button [config]="previousPageButton"></zx-button>
+        <zx-button [config]="nextPageButton"></zx-button>
+      </div>
+    </zx-block>
+  
+    <zx-block [config]="searchBlockConfig" class="col-8">
+      <zx-button zx-block-action [config]="searchButton"></zx-button>
+      <zx-form-loader
+        *ngIf="formConfig"
+        zx-block-body
+        [component]="formConfig"
+        [model]="model"
+        class="col-24"
+      >
+      </zx-form-loader>
+    </zx-block>
+  </div>

@@ -30,7 +30,23 @@ export class PlaylistSearchComponent implements OnInit {
         name: 'newPlaylist',
         label: 'New Playlist',
         action: (btn: any, output: any) => {
-          this.router.navigate(['./playlist/create']);
+          this.router.navigate(['./playlist/generate-playlist']);
+        },
+      },
+      {
+        icon: 'fas fa-plus-square',
+        name: 'newPlaylistGA',
+        label: 'New Playlist from GA',
+        action: (btn: any, output: any) => {
+          this.router.navigate(['./playlist/generate-ga-playlist']);
+        },
+      },
+      {
+        icon: 'fad fa-save',
+        name: 'GAHistory',
+        label: 'GA Playlist History',
+        action: (btn: any, output: any) => {
+          this.router.navigate(['./playlist/history']);
         },
       },
     ],
@@ -131,19 +147,19 @@ export class PlaylistSearchComponent implements OnInit {
       ],
       model: this.model
     });
+    this.formConfig.children[3].list = [{ id: 0, name: "No of songs" }, { id: 1, name: "Last edit" }, { id: 2, name: "Alphabetical order" }]
   }
 
 
   constructor(private router: Router, private playlistService: PlaylistService) { }
 
   ngOnInit(): void {
+    this.setFormConfig();
     this.songsAreLoading = true;
     this.genresAreLoading = true;
     this.loadData();
     this.getGenres();
     this.getSongs();
-    this.sortInput.list = [{ id: 0, name: "No of songs" }, { id: 1, name: "Last edit" }, { id: 2, name: "Alphabetical order" }]
-    this.setFormConfig();
   }
 
   loadData() {
@@ -183,47 +199,15 @@ export class PlaylistSearchComponent implements OnInit {
   }
 
   getGenres() {
-    this.playlistService.getAllGenres().subscribe(response => {
-      let genres = response
-      genres.forEach(g => {
-        if (g.mainGenre != null)
-          g.name = g.name + " - " + g.mainGenre.name;
-
-      });
-      this.formConfig.children[2].list = genres;
+    this.playlistService.getAllGenreNames().subscribe(response => {
+      this.formConfig.children[2].list = response;
       this.genresAreLoading = false;
     });
   }
 
   getSongs() {
-    this.playlistService.getAllSongs().subscribe(response => {
-      let songsMap = new Map();
-      response.forEach(s => {
-        if (songsMap.has(s.songId)) {
-          let titleParts = songsMap.get(s.songId);
-          titleParts.push(s.artistName);
-          songsMap.set(s.songId, titleParts);
-        } else {
-          let titleParts = new Array();
-          titleParts.push(s.songName);
-          titleParts.push(s.artistName);
-          songsMap.set(s.songId, titleParts);
-        }
-      })
-      let songs = new Array(songsMap.size);
-      let i = 0;
-      songsMap.forEach((v, k) => {
-        let name = v[0] + " - ";
-        for (let j = 1; j < v.length; j++)
-          if (j < v.length - 1)
-            name += " " + v[j] + ",";
-          else
-            name += " " + v[j];
-        let song = { id: k, name: name };
-        songs[i] = song;
-        i++;
-      });
-      this.formConfig.children[1].list = songs;
+    this.playlistService.getAllSongNames().subscribe(response => {
+      this.formConfig.children[1].list = response;
       this.songsAreLoading = false;
 
     });

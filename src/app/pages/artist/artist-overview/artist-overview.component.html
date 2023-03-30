@@ -1,0 +1,148 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="artistIsLoading"></zx-preloader>
+</div>
+<div zx-body *ngIf="artist" class="w-auto">
+  <div class="row col-24 topContainer">
+    <div>
+      <zx-block [config]="containerBlockConfig">
+        <img zx-block-body [src]="artist.imageUrl" class="width:300px" />
+        <div
+          zx-block-body
+          *ngIf="srcUrl.length > 0"
+          style="padding-left: 5px; padding-top: 5px"
+        >
+          <iframe
+            [src]="srcUrl | safe : 'resourceUrl'"
+            style="border-radius: 12px"
+            width="300px"
+            height="100"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </zx-block>
+    </div>
+    <div class="w-100 pl-10 pr-10">
+      <div class="row">
+        <h1>{{ artist.name + " " + artist.surname }}</h1>
+      </div>
+      <div class="row">
+        <div class="p-inline col-14">
+          <p>Songs {{ artist.numberOfSongs }}</p>
+          <p>Albums {{ artist.albums.length }}</p>
+        </div>
+        <div class="col-10">
+          <zx-button
+            id="copyImageButton"
+            zx-block-action
+            [config]="copyImageButton"
+          ></zx-button>
+          <zx-button
+            id="addSongBtn"
+            zx-block-action
+            [config]="addSongBtn"
+          ></zx-button>
+
+          <zx-button
+            id="editBtn"
+            zx-block-action
+            [config]="editBtn"
+          ></zx-button>
+          
+          <zx-button
+            id="deleteBtn"
+            zx-block-action
+            [config]="deleteBtn"
+          ></zx-button>
+
+          <zx-button
+            id="connectMedia"
+            zx-block-action
+            [config]="connectMediaBtn"
+          ></zx-button>
+          <zx-button
+            id="albumTimeline"
+            zx-block-action
+            [config]="albumTimelineBtn"
+          ></zx-button>
+        </div>
+      </div>
+      <hr />
+      <p>{{ artist.outlineText }}</p>
+    </div>
+  </div>
+
+  <div class="row-5 bottomContainer">
+    <zx-block [config]="infoBlockConfig" class="col-14">
+      <div zx-block-body [innerHTML]="artist.information"></div>
+    </zx-block>
+    <zx-block [config]="detailsBlockConfig" class="col-10">
+      <div zx-block-body>
+        <div>
+          <span>
+            <h5 class="inlineLabel">Persons:</h5>
+            <span *ngFor="let person of this.artist.persons; last as isLast">
+              {{ person.name + " " + person.surname }} {{ isLast ? "" : ", " }}
+            </span>
+          </span>
+          <hr />
+          <span
+            *ngIf="
+              this.artist.persons.length == 1 &&
+              this.artist.persons[0].labels.length > 0
+            "
+          >
+            <h5 class="inlineLabel">Date of Birth:</h5>
+            <span>{{
+              this.artist.persons[0].dateOfBirth | date : "dd.MM.yyyy"
+            }}</span>
+          </span>
+          <hr />
+          <span *ngIf="this.artist.persons.length == 1">
+            <h5 class="inlineLabel">Labels:</h5>
+            <span
+              *ngFor="
+                let label of this.artist.persons[0].labels;
+                last as isLast
+              "
+            >
+              {{ label.labelName }} {{ isLast ? "" : ", " }}
+            </span>
+          </span>
+        </div>
+        <hr />
+        <zx-tabs class="h-100" [config]="tabConfig">
+          <zx-block zx-tab-item id="songsTab" [config]="songsBlockConfig">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="songGridOptions"
+              [source]="songs"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="albumsTab" [config]="albumsBlockConfig">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="albumGridOptions"
+              [source]="albums"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="labelsTab" [config]="labelsBlockConfig">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="labelGridOptions"
+              [source]="labels"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </zx-block>
+        </zx-tabs>
+      </div>
+    </zx-block>
+  </div>
+</div>

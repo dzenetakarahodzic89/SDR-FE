@@ -8,7 +8,7 @@
     </zx-block>
     <div class="w-100 pl-10 pr-10">
       <div class="row">
-        <h1>{{ person.fullName }}</h1>
+        <h1>{{ person.name }} {{ person.surname }}</h1>
         <span class="{{ testFlag }}"></span>
       </div>
       <div class="row">
@@ -28,10 +28,12 @@
         </zx-popup>
       </div>
       <hr />
-      {{ person.outlineText }}
+      <div *ngIf="person.outlineText; else defaultText"> {{ person.outlineText }} </div>
+      <ng-template #defaultText>
+        <p style="color: red; font-weight: bold;">No outline text available for this person.</p>
+      </ng-template>
     </div>
   </div>
-
   <div *ngIf="country">
     <zx-popup [config]="popup">
       <div zx-popup-body>
@@ -43,19 +45,42 @@
       </div>
     </zx-popup>
   </div>
-  <div class="row-5 bottomContainer">
-    <zx-block [config]="infoBlockConfig" class="col-14">
-      <div zx-block-body [innerHTML]="person.information"></div>
-    </zx-block>
+  <div class="row-5 bottomContainer" style="height: 475px">
+    <ng-container *ngIf="person.information; else defaultInformation">
+      <zx-block [config]="infoBlockConfig" class="col-14">
+        <div zx-block-body [innerHTML]="person.information"></div>
+      </zx-block>
+    </ng-container>
+    <ng-template #defaultInformation>
+      <zx-block [config]="infoBlockConfig" class="col-14">
+        <div zx-block-body>
+          <p style="color: red; font-weight: bold;">No information available for this person.</p>
+        </div>
+      </zx-block>
+    </ng-template>
     <zx-block [config]="detailsBlockConfig" class="col-10">
-      <div zx-block-body>
+      <div zx-block-body class="gh-350">
         <zx-tabs class="h-100" [config]="tabConfig">
-          <zx-block zx-tab-item id="artistsTab" [config]="artistsBlockConfig">
-            <zx-grid zx-block-body [gridOptions]="artistGridOptions" [source]="linkedArtists" domLayout="autoHeight">
+          <zx-block zx-tab-item id="songsTab" [config]="songsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="songGridOptions" [source]="songs" domLayout="autoHeight">
             </zx-grid>
           </zx-block>
           <zx-block zx-tab-item id="albumsTab" [config]="albumsBlockConfig">
-            <zx-grid zx-block-body [gridOptions]="albumGridOptions" [source]="linkedAlbums" domLayout="autoHeight">
+            <zx-grid zx-block-body [gridOptions]="albumGridOptions" [source]="albums" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="artistsTab" [config]="artistsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="artistGridOptions" [source]="artists" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="connectedMediasTab" [config]="connectedMediasBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="connectedMediaGridOptions" [source]="connectedMedias"
+              domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="songInstrumentsTab" [config]="songInstrumentsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="songInstrumentGridOptions" [source]="instruments"
+              domLayout="autoHeight">
             </zx-grid>
           </zx-block>
         </zx-tabs>

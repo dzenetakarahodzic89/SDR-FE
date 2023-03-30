@@ -1,0 +1,23 @@
+.mainContainer {
+    height: 100%;
+}
+
+.footerContainer {
+    text-align: end;
+}
+
+.searchResults {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.gridContainer,
+.divForBoxes {
+    display: inline-block;
+}
+  
+.pageNavigation {
+    display: inline-block;
+    margin: 0 auto;
+}
