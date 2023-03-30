@@ -122,10 +122,10 @@ export const appRoutes: Routes = [
     component: CountryRelationsOverviewComponent,
   },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
-  { path: 'music-risk/battle-overview', component: BattleSearchComponent },
+  { path: 'battle/overview', component: BattleSearchComponent },
   { path: 'battle/:id/create-roster', component: BattleRosterComponent },
   { path: 'battle/:id/alter-roster', component: BattleRosterComponent },
-  { path: 'music-risk/:id/world-map', component: MusicRiskWorldMapComponent },
+  { path: 'battle/:id/world-map', component: MusicRiskWorldMapComponent },
 
   { path: 'artist/create', component: ArtistCreateComponent },
   { path: 'artist/update/:id', component: ArtistCreateComponent },
