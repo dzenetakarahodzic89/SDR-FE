@@ -6,6 +6,7 @@ import { PlaylistSearchComponent } from './playlist-search/playlist-search.compo
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { GeneratePlaylistComponent } from './generate-playlist/generate-playlist.component';
 import { GenerateGaPlaylistComponent } from './generate-ga-playlist/generate-ga-playlist.component';
+import { HistoryComponent } from './history/history.component';
 
 
 
@@ -13,7 +14,8 @@ import { GenerateGaPlaylistComponent } from './generate-ga-playlist/generate-ga-
   declarations: [
     PlaylistSearchComponent,
     GeneratePlaylistComponent,
-    GenerateGaPlaylistComponent
+    GenerateGaPlaylistComponent,
+    HistoryComponent
   ],
   imports: [
     SharedModule,

@@ -47,8 +47,11 @@ import { BattleRosterComponent } from './pages/battle/battle-roster/battle-roste
 import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
 import { ArtistCreateComponent } from './pages/artist/artist-create/artist-create.component';
+import { HistoryComponent } from './pages/playlist/history/history.component';
+import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-timeline/album-timeline.component';
 import { EraOverviewComponent } from './pages/era/era-overview/era-overview.component';
 
+import { SetupComponent } from './pages/music-risk/setup/setup.component';
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -70,6 +73,8 @@ export const appRoutes: Routes = [
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
   { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
+
+  { path: 'battle/setup', component: SetupComponent },
   {
     path: 'notesheet/:songId/:instrumentId/overview',
     component: NotesheetOverviewComponent,
@@ -124,5 +129,6 @@ export const appRoutes: Routes = [
 
   { path: 'artist/create', component: ArtistCreateComponent },
   { path: 'artist/update/:id', component: ArtistCreateComponent },
-  { path: 'era/:id/overview', component: EraOverviewComponent },
+  { path: 'playlist/history', component: HistoryComponent },
+  { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
 ];

@@ -110,4 +110,14 @@ export class AlbumService {
       })
     );
   }
+
+  connectImagesToSongsInAlbum(id: number) {
+    return this.api
+      .put(AlbumApi.CONNECT_IMAGES_TO_SONGS.replace('#', id.toString()))
+      .pipe(
+        map((response) => {
+          return response['payload'];
+        })
+      );
+  }
 }
