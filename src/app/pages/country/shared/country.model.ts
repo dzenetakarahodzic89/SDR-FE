@@ -46,16 +46,20 @@ export class CountrySelect {
 }
 
 
+
+export class CountryRelation {
+  foreignCountryId: number;
+  foreignCountryName: string;
+  typeOfLink: string;
+}
+
 export class CountryRelationCreate {
   countryId: string;
-  countryRelation: string;
-  foreignCountry: string; // add this line
-  typeOfLink: string;
+  countryRelation: CountryRelation;
 
   constructor() {
     this.countryId = "";
-    this.countryRelation = "";
-    this.foreignCountry = "";
-    this.typeOfLink = "";
+    this.countryRelation = new CountryRelation();
   }
 }
+``
