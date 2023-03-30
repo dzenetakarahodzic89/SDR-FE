@@ -7,7 +7,7 @@ export class CountryResponse {
 
 export class ArtistSongResponse {
   id: number;
-  name: string;
+  fullName: string;
   personId: number;
   personName: string;
   dateOfBirth: Date;
@@ -27,7 +27,7 @@ export class CountryUpdateRequest {
 }
 export class AlbumResponse {
   id: number;
-  name: string;
+  fullName: string;
 }
 export class ArtistResponse {
   id: number;
@@ -38,13 +38,10 @@ export class CountrySelect {
   id: number;
   name: string;
 
-  constructor(
-    id: number,
-  ) {
+  constructor(id: number) {
     this.id = id;
   }
 }
-
 
 export class CountryRelationCreate {
   countryId: string;
@@ -53,9 +50,9 @@ export class CountryRelationCreate {
   typeOfLink: string;
 
   constructor() {
-    this.countryId = "";
-    this.countryRelation = "";
-    this.foreignCountry = "";
-    this.typeOfLink = "";
+    this.countryId = '';
+    this.countryRelation = '';
+    this.foreignCountry = '';
+    this.typeOfLink = '';
   }
 }
