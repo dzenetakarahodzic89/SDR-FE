@@ -7,14 +7,11 @@ import { AppBox } from '../../shared/box/box.model';
 import { SongSearchRequest } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
 
-
 @Component({
   selector: 'app-song-search',
   templateUrl: './song-search.component.html',
-  styleUrls: ['./song-search.component.scss']
+  styleUrls: ['./song-search.component.scss'],
 })
-
-
 export class SongSearchComponent implements OnInit {
   public songsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -38,7 +35,6 @@ export class SongSearchComponent implements OnInit {
       },
     ],
   });
-
 
   public searchButton: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -68,8 +64,7 @@ export class SongSearchComponent implements OnInit {
       {
         name: 'nextPage',
         icon: 'fas fa-angle-double-right',
-        action: () => this.getNextPage()
-
+        action: () => this.getNextPage(),
       },
     ],
   });
@@ -83,56 +78,65 @@ export class SongSearchComponent implements OnInit {
     class: ['col-24'],
     type: 'text',
     name: 'songName',
-    label: 'Name'
+    label: 'Name',
   };
-
 
   inputAlbum = {
     template: 'ZxMultiselect',
     class: ['col-24'],
-    type: "filter",
-    name: "selectAlbum",
-    label: "Album",
-    list: []
+    type: 'filter',
+    name: 'selectAlbum',
+    label: 'Album',
+    list: [],
   };
 
   inputGenre = {
     template: 'ZxMultiselect',
     class: ['col-24'],
-    type: "filter",
-    name: "selectGenre",
-    label: "Genre",
-    list: []
+    type: 'filter',
+    name: 'selectGenre',
+    label: 'Genre',
+    list: [],
   };
 
-  checkboxRemix =
-    { template: "ZxCheckbox", class: ["col-6"], type: "classic", valueType: "number", name: "checkedRemix", label: "Remix" }
-  checkboxCover =
-    { template: "ZxCheckbox", class: ["col-6"], type: "classic", valueType: "number", name: "checkedCover", label: "Cover" }
-
+  checkboxRemix = {
+    template: 'ZxCheckbox',
+    class: ['col-6'],
+    type: 'classic',
+    valueType: 'number',
+    name: 'checkedRemix',
+    label: 'Remix',
+  };
+  checkboxCover = {
+    template: 'ZxCheckbox',
+    class: ['col-6'],
+    type: 'classic',
+    valueType: 'number',
+    name: 'checkedCover',
+    label: 'Cover',
+  };
 
   inputArtist = {
     template: 'ZxMultiselect',
     class: ['col-24'],
-    type: "filter",
-    name: "selectArtist",
+    type: 'filter',
+    name: 'selectArtist',
     label: 'Artists',
     list: [],
-
-
   };
 
-  sortList = [{ code: "last_date", displayName: "Last edit" }, { code: "name", displayName: "Alphabetical order" }]
+  sortList = [
+    { code: 'last_date', displayName: 'Last edit' },
+    { code: 'name', displayName: 'Alphabetical order' },
+  ];
   sortByInput = {
     template: 'ZxSelect',
     class: ['col-24'],
-    type: "select",
-    name: "sortBy",
+    type: 'select',
+    name: 'sortBy',
     label: 'Sort by',
-    list: this.sortList
-
+    list: this.sortList,
   };
-
 
   public formConfig: Definition;
   foundSongs: AppBox[] = [];
@@ -140,7 +144,6 @@ export class SongSearchComponent implements OnInit {
     page: 1,
     totalPages: 12,
   };
-
 
   public submitBtn: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -155,9 +158,7 @@ export class SongSearchComponent implements OnInit {
     ],
   });
 
-
   public setFormConfig() {
-
     this.getAllGenres();
     this.getAllAlbums();
     this.getAllArtists();
@@ -174,14 +175,11 @@ export class SongSearchComponent implements OnInit {
         this.checkboxCover,
         this.inputArtist,
         this.sortByInput,
-
-
       ],
     });
   }
 
-
-  constructor(private router: Router, private songService: SongService) { }
+  constructor(private router: Router, private songService: SongService) {}
 
   ngOnInit(): void {
     this.setFormConfig();
@@ -205,31 +203,28 @@ export class SongSearchComponent implements OnInit {
       this.paginationDetails.totalPages
     );
 
-    this.songService.searchSongs(searchRequest).subscribe(response => {
+    this.songService.searchSongs(searchRequest).subscribe((response) => {
       this.foundSongs = response as unknown as AppBox[];
       this.loading = false;
-
-
     });
   }
   getAllAlbums() {
-    this.songService.getAllAlbums().subscribe(response => {
+    this.songService.getAllAlbums().subscribe((response) => {
       this.formConfig.children[1].list = response;
     });
   }
 
   getAllGenres() {
-    this.songService.getAllGenres().subscribe(response => {
+    this.songService.getAllGenres().subscribe((response) => {
       this.formConfig.children[2].list = response;
     });
   }
 
   getAllArtists() {
-    this.songService.getAllArtists().subscribe(response => {
+    this.songService.getAllArtists().subscribe((response) => {
       this.formConfig.children[5].list = response;
     });
   }
-
 
   getPreviousPage() {
     if (this.paginationDetails.page > 1) {
@@ -239,18 +234,9 @@ export class SongSearchComponent implements OnInit {
   }
 
   getNextPage() {
-    if
-      (
-      this.foundSongs.length >= this.paginationDetails.totalPages
-    ) {
+    if (this.foundSongs.length >= this.paginationDetails.totalPages) {
       this.paginationDetails.page++;
       this.searchSongs();
-
     }
-
-
-
-
   }
-
 }

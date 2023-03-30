@@ -49,6 +49,7 @@ import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-
 import { ArtistCreateComponent } from './pages/artist/artist-create/artist-create.component';
 import { HistoryComponent } from './pages/playlist/history/history.component';
 import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-timeline/album-timeline.component';
+import { EraOverviewComponent } from './pages/era/era-overview/era-overview.component';
 
 import { SetupComponent } from './pages/music-risk/setup/setup.component';
 export const appRoutes: Routes = [

@@ -455,7 +455,7 @@ export class SongOverviewComponent implements OnInit {
   });
   artistColumnDefs = [
     {
-      field: 'name',
+      field: 'fullName',
       headerName: 'Artist name',
       flex: 1,
       floatingFilter: false,

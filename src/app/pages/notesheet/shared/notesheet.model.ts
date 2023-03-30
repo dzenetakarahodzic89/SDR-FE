@@ -15,7 +15,7 @@ export class ArtistSheetResponse {
   countryId: number;
   flagAbbriviation: string;
   id: number;
-  name: string;
+  fullName: string;
   personId: number;
   personName: string;
 }
