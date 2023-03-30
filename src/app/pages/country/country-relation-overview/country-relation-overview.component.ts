@@ -76,25 +76,27 @@ export class CountryRelationsOverviewComponent implements OnInit {
         layout: 'classic',
         class: 'primary',
         label: 'Save Data',
-        action: () => {
+        action: async () => {
           const gridApi = this.currentLinks.api;
           const rowData = [];
           gridApi.forEachNode((node) => {
             const newData = node.data;
-            const countryRelation = { foreignCountryName: '', typeOfLink: '' };
+            const countryRelation = { foreignCountryId: '', foreignCountryName: '', typeOfLink: '' };
+            countryRelation.foreignCountryId = newData.foreignCountryId;
             countryRelation.foreignCountryName = newData.foreignCountryName;
-
             countryRelation.typeOfLink = newData.relation;
 
             const { relation, foreignCountryName, ...rest } = newData;
             rowData.push({
               ...rest,
-              countryRelation: JSON.stringify(countryRelation),
+              countryRelation: (countryRelation),
             });
           });
 
           for (const row of rowData) {
             this.saveData(row);
+            await new Promise(resolve => setTimeout(resolve, 100));
+
           }
         },
       },
@@ -192,7 +194,14 @@ export class CountryRelationsOverviewComponent implements OnInit {
     columnDefs: [
       {
         field: 'homeCountryId',
-        headerName: 'Home Country',
+        headerName: 'Home Country Id',
+        flex: 1,
+        floatingFilter: false,
+        hide: true,
+      },
+      {
+        field: 'foreignCountryId',
+        headerName: 'Foreign Country Id',
         flex: 1,
         floatingFilter: false,
         hide: true,
@@ -251,6 +260,7 @@ export class CountryRelationsOverviewComponent implements OnInit {
             this.getDisplayNameFromSelectedCountry(selectedCountryId);
           const homeCountryName = this.model.name;
           const homeCountryId = this.model.id;
+          const foreignCountryId = selectedCountryId;
           if (
             !homeCountryName ||
             !displayNameSelectedCountry ||
@@ -262,6 +272,7 @@ export class CountryRelationsOverviewComponent implements OnInit {
             let duplicateRow = false;
             this.currentLinks.api.forEachNode((node) => {
               if (
+                node.data.foreignCountryId === foreignCountryId &&
                 node.data.homeCountryId === homeCountryId &&
                 node.data.foreignCountryName === displayNameSelectedCountry &&
                 node.data.relation === displayNametypeOfLink
@@ -276,6 +287,7 @@ export class CountryRelationsOverviewComponent implements OnInit {
             }
 
             const newRowData = {
+              foreignCountryId: foreignCountryId,
               homeCountryId: homeCountryId,
               homeCountryName: homeCountryName,
               foreignCountryName: displayNameSelectedCountry,
@@ -301,18 +313,17 @@ export class CountryRelationsOverviewComponent implements OnInit {
     );
     return match ? match.displayName : null;
   }
-
-  async saveData(data) {
+  saveData(data) {
     let newCountryRelate = new CountryRelationCreate();
     newCountryRelate.countryId = data.homeCountryId;
     newCountryRelate.countryRelation = data.countryRelation;
 
-    this.countryService
-      .createRelations(newCountryRelate)
-      .subscribe((responseCode) => {
-        if (responseCode.hasOwnProperty('payload')) {
-          this.toastr.success('Relation is successfully created!');
-        }
-      });
+    this.countryService.createRelations(newCountryRelate).subscribe(
+      response => {
+        this.toastr.success('Relation is successfully created!');
+      }
+    );
   }
+
+
 }
