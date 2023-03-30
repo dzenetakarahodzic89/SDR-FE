@@ -102,14 +102,16 @@ export class RandomPlaylistResponse
     songName: string;
     playtimeInSeconds: number;
     audioUrl:string;
+    spotifyId:string
 
-    constructor(playlistId: number, songId:number,songName: string, playtimeInSeconds: number,audioUrl:string)
+    constructor(playlistId: number, songId:number,songName: string, playtimeInSeconds: number,audioUrl:string,spotifyId:string)
     {
         this.playlistId=playlistId;
         this.songId=songId;
         this.songName=songName;
         this.playtimeInSeconds=playtimeInSeconds;
-        this.audioUrl=audioUrl
+        this.audioUrl=audioUrl;
+        this.spotifyId=spotifyId
         
     }
 

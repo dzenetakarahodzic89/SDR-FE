@@ -37,16 +37,20 @@
     width: 100%;
     align-self: center;
 }
-#bottomContainer{
+#bottomGrid{
+    width: 100%;
+    height: 50%;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+#bottomBlock{
+    width: 100%;
+}
+#playeri{
     width: 100%;
     margin-bottom: 20px;
     display: flex;
     flex-direction: row;
-    
-    
-}
-#bottomBlock{
-    width: 50%;
-    margin-right: 120px;
-    
+    justify-content: space-around;
 }
