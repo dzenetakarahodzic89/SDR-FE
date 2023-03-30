@@ -69,11 +69,35 @@ export class AttackCountry {
   attackingCountryId: number;
   attackedCountryId: number;
 }
-export class PreMoveBattleAttack{
-  attackerId:number;
-  attackedId:number;
-  attackerName:string;
-  attackedName:string;
-  isAttackedPassive:boolean;
-  battleId:number;
+export class PreMoveBattleAttack {
+  attackerId: number;
+  attackedId: number;
+  attackerName: string;
+  attackedName: string;
+  isAttackedPassive: boolean;
+  battleId: number;
+}
+export class BattleTurnUpdateRequest {
+  battleTurnId: number;
+  attackerName: string;
+  attackedName: string;
+  attackerCountryId: number;
+  attackedCountryId: number;
+  songBattleExplained: string[];
+  songBattles: BattleLogEntry[];
+  wonCase: string;
+}
+
+export class BattleLogEntry {
+  playerASongId: number;
+  playerBSongId: number;
+  playerASongName: string;
+  playerBSongName: string;
+  songASpotifyId: string;
+  songBSpotifyId: string;
+  songAAudioUrl: string;
+  songBAudioUrl: string;
+  winnerSongId: number;
+  loserSongId: number;
+  userCodeOfDecider: string;
 }

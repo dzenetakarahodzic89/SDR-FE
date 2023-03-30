@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
 import { map } from 'rxjs/operators';
 import { MusicRiskApi } from './music-risk-api.constant';
-import { PreMoveBattleAttack } from './music-risk.model';
+import {
+  BattleTurnUpdateRequest,
+  PreMoveBattleAttack,
+} from './music-risk.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +47,17 @@ export class MusicRiskService {
         return response['payload'];
       })
     );
+  }
+  startBattle(turnObject: BattleTurnUpdateRequest, battleTurnId: number) {
+    return this.api
+      .put(
+        MusicRiskApi.START_BATTLE.replace('#', battleTurnId.toString()),
+        turnObject
+      )
+      .pipe(
+        map((response) => {
+          return response['payload'];
+        })
+      );
   }
 }

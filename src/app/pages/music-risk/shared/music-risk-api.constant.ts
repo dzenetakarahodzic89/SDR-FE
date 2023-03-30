@@ -4,4 +4,5 @@ export class MusicRiskApi {
   public static GET_COUNTRY_LOVS = '/sdrbe/country/get-by-ids';
   public static GET_COUNTRY_RELATIONS = '/sdrbe/country-relation/#';
   public static PRE_ATTACK_COUNTRY = '/sdrbe/battle/pre-battle';
+  public static START_BATTLE = '/sdrbe/battle/#/start-battle';
 }

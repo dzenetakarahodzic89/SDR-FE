@@ -87,13 +87,62 @@
   <zx-popup [config]="attackPopup">
     <div zx-popup-body>
       <zx-block [config]="attackBlockConfig">
-        <zx-form-loader
-          *ngIf="popUpAttackFormConfig"
-          zx-block-body
-          [component]="popUpAttackFormConfig"
-          [model]="attackCountryModel"
-          class="col-24"
-        ></zx-form-loader>
+        <div style="display: flex; gap: 20px" zx-block-body>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <img
+              src=""
+              alt=""
+              style="
+                border: 1px solid rgb(255, 197, 197);
+                width: 200px;
+                height: 250px;
+              "
+            />
+
+            <iframe
+              style="border-radius: 12px"
+              [src]="playerUrl | safe : 'resourceUrl'"
+              width="250px"
+              height="100"
+              frameBorder="0"
+              allowfullscreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              width: 500px;
+            "
+          >
+            <zx-form-loader
+              *ngIf="popUpAttackFormConfig"
+              [component]="popUpAttackFormConfig"
+              [model]="attackCountryModel"
+              class="col-24"
+            ></zx-form-loader>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <img
+              src=""
+              alt=""
+              style="border: 1px solid black; width: 200px; height: 250px"
+            />
+            <iframe
+              style="border-radius: 12px"
+              [src]="npcUrl | safe : 'resourceUrl'"
+              width="300px"
+              height="100"
+              frameBorder="0"
+              allowfullscreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
       </zx-block>
       <zx-button
         zx-popup-footer

@@ -12,10 +12,13 @@ import { Chart } from 'chart.js';
 import { GridOptions } from '@ag-grid-community/all-modules';
 import {
   AttackCountry,
+  BattleLogEntry,
   BattleTurn,
+  BattleTurnUpdateRequest,
   Country,
   MapState,
   PreMoveBattleAttack,
+  Song,
   TeamState,
 } from '../../shared/music-risk.model';
 import { MusicRiskService } from '../../shared/music-risk.service';
@@ -31,8 +34,15 @@ Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
   styleUrls: ['./music-risk-world-map.component.scss'],
 })
 export class MusicRiskWorldMapComponent implements OnInit {
-  attackingCountryId: number;
+  npcUrl = '';
+  playerUrl = '';
+  attackerCountryId: number;
+  songSize: number = 0;
+  artistSize: number = 0;
+  attackerName = '';
+  attackedName = '';
   attackedCountryId: number;
+  formCheckboxesForAttack: Definition[] = [];
   callCountriesLovsNumber = 0;
   dataIsLoading = false;
   battleTurn: BattleTurn;
@@ -59,7 +69,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
   public attackPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
     hideCloseButton: false,
-    size: 'col-12',
+    size: 'col-20',
   });
   countryPlayerInput: Definition = new Definition({
     template: 'ZxSelect',
@@ -86,7 +96,15 @@ export class MusicRiskWorldMapComponent implements OnInit {
         });
     },
   });
+  getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
   isPrivate = false;
+  playerSongs: Song[];
+  npcSongs: Song[];
+  checkBoxesMap: Map<number, number> = new Map();
+  battleTurnId: number;
+  songArray: Song[] = [];
   public linkPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -96,16 +114,20 @@ export class MusicRiskWorldMapComponent implements OnInit {
         class: 'classic primary',
         icon: 'fal fa-check-circle',
         action: () => {
+          this.attackerCountryId = this.attackCountryModel.attackingCountryId;
+          this.attackedCountryId = this.attackCountryModel.attackedCountryId;
           this.attackObject.attackedId =
             this.attackCountryModel.attackedCountryId;
           this.attackObject.attackerId =
             this.attackCountryModel.attackingCountryId;
-          this.attackObject.attackerName = this.mapState.countries.find(
+          this.attackerName = this.mapState.countries.find(
             (c) => c.countryId == this.attackCountryModel.attackingCountryId
           )?.countryName;
-          this.attackObject.attackedName = this.mapState.countries.find(
+          this.attackObject.attackerName = this.attackerName;
+          this.attackedName = this.mapState.countries.find(
             (c) => c.countryId == this.attackCountryModel.attackedCountryId
           )?.countryName;
+          this.attackObject.attackedName = this.attackedName;
           if (this.attackObject.attackerName == undefined) {
             this.toastr.error('Country cannot attack.');
             return;
@@ -136,16 +158,111 @@ export class MusicRiskWorldMapComponent implements OnInit {
             }
           }
           if (!this.isPrivate) {
+            const playerArtists =
+              this.teamState.activePlayerTeam.teamArtists.filter(
+                (c) => (c.countryId = this.attackerCountryId)
+              );
+            let npcArtists = [];
+            for (let i = 0; i < this.teamState.activeNpcTeams.length; i++) {
+              if (
+                this.teamState.activeNpcTeams[i].countryId ==
+                this.attackedCountryId
+              ) {
+                npcArtists = this.teamState.activeNpcTeams[i].teamArtists;
+              }
+            }
+            console.log('npc teams');
+            console.log(this.teamState.activeNpcTeams);
+            const npcArtist =
+              npcArtists[this.getRandomNumber(1, npcArtists.length) - 1];
+            const playerArtist =
+              playerArtists[this.getRandomNumber(1, playerArtists.length) - 1];
+            console.log('player');
+            console.log(playerArtist);
+            console.log('npc');
+            console.log(npcArtist);
+            // if (playerArtist == undefined || npcArtist == undefined) {
+            //   this.toastr.error('Artists not available for battle.');
+            //   return;
+            // }
+            this.playerSongs = playerArtist.songs;
+            this.npcSongs = npcArtist.songs;
+            this.playerUrl =
+              'https://open.spotify.com/embed/track/' +
+              this.playerSongs[0].spotifyId +
+              '?utm_source=generator&theme=0';
+            this.npcUrl =
+              'https://open.spotify.com/embed/track/' +
+              this.npcSongs[0]?.spotifyId +
+              '?utm_source=generator&theme=0';
+            console.log('npc url');
+            console.log(this.playerUrl);
+            console.log('player url');
+            console.log(this.npcUrl);
+            this.attackBlockConfig.label =
+              playerArtist?.name + ' vs ' + npcArtist?.name;
+            let i = 0;
+            while (i < this.songSize * 2) {
+              this.checkBoxesMap.set(i, i + 1);
+              this.checkBoxesMap.set(i + 1, i);
+              i += 2;
+            }
+            console.log('CHECKBOXES');
+            console.log(this.checkBoxesMap);
+
+            for (let i = 0; i < this.songSize * 2; i++) {
+              this.formCheckboxesForAttack.push(
+                new Definition({
+                  template: 'ZxCheckbox',
+                  class: ['col-12'],
+                  type: 'classic',
+                  name: 'song' + i,
+                  label: 'Classic checkbox',
+                })
+              );
+            }
+            /* Fill songs 0-x with mix of artists from npc and player */
+            let playerCount = 1;
+            let npcCount = 0;
+            this.songArray = [];
+            for (let i = 0; i < this.songSize * 2; i++) {
+              if (i == 0) this.songArray.push(this.playerSongs[0]);
+              else if (i % 2 == 1) {
+                this.songArray.push(this.npcSongs[npcCount]);
+                npcCount += 1;
+              } else if (i % 2 == 0) {
+                this.songArray.push(this.playerSongs[playerCount]);
+                playerCount += 1;
+              }
+            }
+            this.popUpAttackFormConfig.children = this.formCheckboxesForAttack;
+            for (
+              let j = 0;
+              j < this.popUpAttackFormConfig.children.length;
+              j++
+            ) {
+              this.popUpAttackFormConfig.children[j].label =
+                this.songArray[j].name;
+              this.popUpAttackFormConfig.children[j].onChange = () => {
+                this.popUpAttackFormConfig.children[
+                  this.checkBoxesMap.get(j)
+                ].disabled =
+                  !this.popUpAttackFormConfig.children[
+                    this.checkBoxesMap.get(j)
+                  ].disabled;
+              };
+            }
             this.attackObject.isAttackedPassive = false;
             this.musicService
               .preMoveAttack(this.attackObject)
               .subscribe((response) => {
-                this.toastr.success(response);
+                this.battleTurnId = +response;
                 this.attackPopup.show();
                 this.loadData();
                 this.popup.hide();
-                return;
               });
+            // this.attackPopup.show();
+            // this.popup.hide();
           }
           this.isPrivate = false;
         },
@@ -167,10 +284,69 @@ export class MusicRiskWorldMapComponent implements OnInit {
       {
         name: 'finish',
         description: 'finish',
-        label: 'Finish',
+        label: 'Finish Battle',
         class: 'classic primary',
         icon: 'fal fa-check-circle',
-        action: () => {},
+        action: () => {
+          const turnObject = new BattleTurnUpdateRequest();
+          turnObject.battleTurnId = this.battleTurnId;
+          turnObject.attackerCountryId = this.attackerCountryId;
+          turnObject.attackedCountryId = this.attackedCountryId;
+          turnObject.attackerName = this.attackerName;
+          turnObject.attackedName = this.attackedName;
+          turnObject.songBattles = [];
+          turnObject.songBattleExplained = [];
+          let i = 0;
+          let playerCount = 0;
+          let npcCount = 0;
+          while (i < this.songSize * 2) {
+            const playerWinObj = new BattleLogEntry();
+            playerWinObj.playerASongName = this.songArray[i].name;
+            playerWinObj.playerASongId = this.songArray[i].songId;
+            playerWinObj.songAAudioUrl = this.songArray[i].audioUrl;
+            playerWinObj.songASpotifyId = this.songArray[i].spotifyId;
+            playerWinObj.playerBSongName = this.songArray[i + 1].name;
+            playerWinObj.playerBSongId = this.songArray[i + 1].songId;
+            playerWinObj.songBSpotifyId = this.songArray[i + 1].spotifyId;
+            playerWinObj.songBAudioUrl = this.songArray[i + 1].audioUrl;
+
+            if (!this.popUpAttackFormConfig.children[i].disabled) {
+              playerCount += 1;
+              playerWinObj.winnerSongId = this.songArray[i].songId;
+              playerWinObj.loserSongId = this.songArray[i + 1].songId;
+
+              turnObject.songBattleExplained.push(
+                'Song ' +
+                  playerWinObj.playerASongName +
+                  ' wins over ' +
+                  playerWinObj.playerBSongName
+              );
+            } else if (!this.popUpAttackFormConfig.children[i + 1].disabled) {
+              npcCount += 1;
+              playerWinObj.winnerSongId = this.songArray[i + 1].songId;
+              playerWinObj.loserSongId = this.songArray[i].songId;
+              turnObject.songBattleExplained.push(
+                'Song ' +
+                  playerWinObj.playerBSongName +
+                  ' wins over ' +
+                  playerWinObj.playerASongName
+              );
+            } else {
+              this.toastr.error('Please fill all fields.');
+              return;
+            }
+            console.log(playerWinObj);
+            turnObject.songBattles.push(playerWinObj);
+            i += 2;
+          }
+          turnObject.wonCase = playerCount > npcCount ? 'PLAYER' : 'NPC';
+          this.musicService
+            .startBattle(turnObject, this.battleTurnId)
+            .subscribe((response) => {
+              this.toastr.success(response);
+              this.attackPopup.hide();
+            });
+        },
       },
     ],
   });
@@ -182,6 +358,9 @@ export class MusicRiskWorldMapComponent implements OnInit {
     name: 'attackedCountryId',
     label: 'Select country to be attacked',
     validation: { required: true },
+  });
+  songOneInput: Definition = new Definition({
+    template: 'ZxCheckbox',
   });
   public setPopUpFormConfig() {
     this.popUpBlockConfig = new ZxBlockModel({
@@ -198,7 +377,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
   }
   public setAttackPopUpFormConfig() {
     this.attackBlockConfig = new ZxBlockModel({
-      hideExpand: true,
       label: 'Attack country',
     });
     this.popUpAttackFormConfig = new Definition({
@@ -312,6 +490,9 @@ export class MusicRiskWorldMapComponent implements OnInit {
         data.mapState.countries.forEach((r) =>
           this.scores.set(r.countryName, r.mapValue)
         );
+        this.songSize =
+          data.teamState.activePlayerTeam.teamArtists[0].songs.length;
+        this.artistSize = data.teamState.activePlayerTeam.teamArtists.length;
         this.mapState = data.mapState;
         this.teamInfo.push(data.mapState);
         this.teamState = data.teamState;
