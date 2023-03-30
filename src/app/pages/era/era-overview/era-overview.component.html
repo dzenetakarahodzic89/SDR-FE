@@ -1,59 +1,93 @@
 <div zx-block-body class="row">
-    <zx-preloader *ngIf="eraIsLoading"></zx-preloader>
+  <zx-preloader *ngIf="eraIsLoading"></zx-preloader>
 </div>
 <div zx-body *ngIf="era" class="w-auto">
-    <div class="row col-24 topContainer">
-        <zx-block [config]="containerBlockConfig">
-            <img zx-block-body [src]="era.imageUrl" class="width:300px" />
-        </zx-block>
-        <div class="w-100 pl-10 pr-10">
-            <div class="row">
-                <h1>{{ era.name }}</h1>
-            </div>
-            <div class="row">
-                <div class="p-inline col-14">
-                    <p>{{ era.numberOfSongs | date: 'dd.MM.yyyy'}} -
-                        {{ artists[0]?.album }} </p>
-                </div>
-                <div class="col-10">
-                    <zx-button id="galleryBtn" zx-block-action [config]="galleryBtn"></zx-button>
-                    <zx-button id="addAlbumBtn" zx-block-action [config]="addAlbumBtn"></zx-button>
-                    <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
-                    
-                    <zx-popup [config]="addAlbumPopup">
-                        <div zx-popup-body>
-                            <zx-block [config]="addAlbumPopUpBlockConfig">
-                                <zx-preloader *ngIf="songsAreLoading || artistsAreLoading || albumsAreLoading"></zx-preloader>
-                                <zx-form-loader *ngIf="addAlbumPopUpFormConfig" zx-block-body [component]="addAlbumPopUpFormConfig"
-                                    [model]="addAlbumModel" class="col-24"></zx-form-loader>
-                            </zx-block>
-                        </div>
-                       
-                        <zx-button zx-popup-footer [config]="addAlbumPopupFooterButtons" class="align-right"></zx-button>
-                    </zx-popup>
-
-                    <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
-                    
-                </div>
-            </div>
-            <hr />
-            <p> {{ era.outlinetext }} </p>
+  <div class="row col-24 topContainer">
+    <zx-block [config]="containerBlockConfig">
+      <img zx-block-body [src]="era.imageUrl" class="width:300px" />
+    </zx-block>
+    <div class="w-100 pl-10 pr-10">
+      <div class="row">
+        <h1>{{ era.name }}</h1>
+      </div>
+      <div class="row">
+        <div class="p-inline col-14">
+          <p>
+            {{ era.numberOfSongs | date : "dd.MM.yyyy" }} -
+            {{ artists[0]?.album }}
+          </p>
         </div>
-    </div>
+        <div class="col-10">
+          <zx-button
+            id="galleryBtn"
+            zx-block-action
+            [config]="galleryBtn"
+          ></zx-button>
+          <zx-button
+            id="addAlbumBtn"
+            zx-block-action
+            [config]="addAlbumBtn"
+          ></zx-button>
+          <zx-button
+            id="editBtn"
+            zx-block-action
+            [config]="editBtn"
+          ></zx-button>
 
-    <div class="row-5 bottomContainer">
-        <zx-block [config]="infoBlockConfig" class="col-14">
-            <div zx-block-body [innerHTML]="era.information"></div>
-        </zx-block>
-
-        <zx-block [config]="detailsBlockConfig" class="col-10">
-            <div zx-block-body>
-                <zx-block zx-tab-item id="albumsTab" [config]="albumsBlockConfig">
-                    <zx-grid zx-block-body [gridOptions]="albumGridOptions" [source]="this.era.albums"
-                        domLayout="autoHeight">
-                    </zx-grid>
-                </zx-block>
+          <zx-popup [config]="addAlbumPopup">
+            <div zx-popup-body>
+              <zx-block [config]="addAlbumPopUpBlockConfig">
+                <zx-preloader
+                  *ngIf="
+                    songsAreLoading || artistsAreLoading || albumsAreLoading
+                  "
+                ></zx-preloader>
+                <zx-form-loader
+                  *ngIf="addAlbumPopUpFormConfig"
+                  zx-block-body
+                  [component]="addAlbumPopUpFormConfig"
+                  [model]="addAlbumModel"
+                  class="col-24"
+                ></zx-form-loader>
+              </zx-block>
             </div>
-        </zx-block>
+
+            <zx-button
+              zx-popup-footer
+              [config]="addAlbumPopupFooterButtons"
+              class="align-right"
+            ></zx-button>
+          </zx-popup>
+
+          <zx-button
+            id="editBtn"
+            zx-block-action
+            [config]="editBtn"
+          ></zx-button>
+        </div>
+      </div>
+      <hr />
+      <p>{{ era.outlinetext }}</p>
     </div>
+  </div>
+
+  <div class="row-5 bottomContainer">
+    <zx-block [config]="infoBlockConfig" class="col-14">
+      <div zx-block-body [innerHTML]="era.information"></div>
+    </zx-block>
+
+    <zx-block [config]="detailsBlockConfig" class="col-10">
+      <div zx-block-body>
+        <zx-block zx-tab-item id="albumsTab" [config]="albumsBlockConfig">
+          <zx-grid
+            zx-block-body
+            [gridOptions]="albumGridOptions"
+            [source]="this.era.albums"
+            domLayout="autoHeight"
+          >
+          </zx-grid>
+        </zx-block>
+      </div>
+    </zx-block>
+  </div>
 </div>

@@ -82,7 +82,6 @@ export class ArtistCreateComponent implements OnInit {
         type: 'text',
         name: 'name',
         label: 'Name',
-        validation: { required: true },
       }),
       new Definition({
         template: 'ZxInput',
@@ -90,7 +89,13 @@ export class ArtistCreateComponent implements OnInit {
         type: 'text',
         name: 'surname',
         label: 'Surname',
-        validation: { required: true },
+      }),
+      new Definition({
+        template: 'ZxInput',
+        class: ['col-24'],
+        type: 'text',
+        name: 'fullName',
+        label: 'Full name',
       }),
       new Definition({
         template: 'ZxTextarea',
@@ -98,7 +103,6 @@ export class ArtistCreateComponent implements OnInit {
         type: 'text',
         name: 'outlineText',
         label: 'Outline text',
-        validation: { required: true },
       }),
     ],
   });
@@ -113,7 +117,6 @@ export class ArtistCreateComponent implements OnInit {
         type: 'date',
         name: 'dateOfBirth',
         label: 'Date Of Birth',
-        validation: { required: true },
       }),
       new Definition({
         template: 'ZxDate',
@@ -121,7 +124,7 @@ export class ArtistCreateComponent implements OnInit {
         type: 'date',
         name: 'dateOfDeath',
         label: 'Date Of Death',
-        validation: { required: true },
+
         options: {
           dateFormat: 'yy',
         },
@@ -220,6 +223,7 @@ export class ArtistCreateComponent implements OnInit {
           this.artist = artist;
           this.model.name = artist.name;
           this.model.surname = artist.surname;
+          this.model.fullName = artist.fullName;
           this.model.information = artist.information;
           this.model.dateOfBirth = artist.dateOfBirth;
           this.model.dateOfDeath = artist.dateOfDeath;
@@ -243,8 +247,18 @@ export class ArtistCreateComponent implements OnInit {
     }
 
     let newArtist = new ArtistCreateRequest();
-    newArtist.name = this.model.name;
-    newArtist.surname = this.model.surname;
+
+    if (this.model.fullName == null) {
+      newArtist.name = this.model.name;
+      newArtist.surname = this.model.surname;
+      newArtist.fullName = this.model.name + ' ' + this.model.surname;
+    } else {
+      const fullNamePart = this.model.fullName.split(' ');
+      newArtist.name = fullNamePart[0];
+      newArtist.surname = fullNamePart[1];
+      newArtist.fullName = this.model.fullName;
+    }
+
     newArtist.information = this.model.information;
     newArtist.dateOfBirth = this.model.dateOfBirth;
     newArtist.dateOfDeath = this.model.dateOfDeath;
@@ -252,6 +266,8 @@ export class ArtistCreateComponent implements OnInit {
     newArtist.personIds = this.model.personIds;
     newArtist.coverImageData = this.model.coverImageData;
     newArtist.coverImage = this.model.coverImage;
+
+    console.log(newArtist);
     if (!this.artistId) {
       this.artistService.createArtist(newArtist).subscribe(
         (responseCode) => {

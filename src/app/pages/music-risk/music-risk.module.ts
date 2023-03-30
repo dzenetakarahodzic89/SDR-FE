@@ -8,8 +8,10 @@ import { SharedModule } from '../shared/shared.module';
 import { MusicRiskService } from './shared/music-risk.service';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { SetupComponent } from './setup/setup.component';
+
 @NgModule({
-  declarations: [MusicRiskWorldMapComponent],
+  declarations: [MusicRiskWorldMapComponent, SetupComponent],
   imports: [
     SharedModule,
     EditorModule,
@@ -21,6 +23,6 @@ import { BrowserModule } from '@angular/platform-browser';
     MusicRiskService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
-  exports: [MusicRiskWorldMapComponent],
+  exports: [MusicRiskWorldMapComponent, SetupComponent],
 })
 export class MusicRiskModule {}

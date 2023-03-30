@@ -17,24 +17,22 @@ export class LabelResponse {
 
 export class ArtistLabelResponse {
   id: number;
-  name: string;
+  fullName: string;
   personName: string;
   dateOfBirth: Date;
   album: string;
 }
-
 
 export class LabelCreateRequest {
   id?: number;
   labelName: string;
   information: string;
   outlineText: string;
-  foundingDate: Date; 
+  foundingDate: Date;
   founderId: number;
   coverImageData: string | ArrayBuffer;
   coverImage: string;
   coverImage_files: File[];
-  
 }
 export class PersonLoV {
   id: number;
