@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MusicRiskApi } from './music-risk-api.constant';
 import {
+  ArtistImageResponse,
   BattleTurnUpdateRequest,
   PreMoveBattleAttack,
 } from './music-risk.model';
@@ -54,6 +56,15 @@ export class MusicRiskService {
         MusicRiskApi.START_BATTLE.replace('#', battleTurnId.toString()),
         turnObject
       )
+      .pipe(
+        map((response) => {
+          return response['payload'];
+        })
+      );
+  }
+  getArtistImage(artistId: number): Observable<ArtistImageResponse> {
+    return this.api
+      .get(MusicRiskApi.GET_ARTIST_IMAGE.replace('#', artistId.toString()))
       .pipe(
         map((response) => {
           return response['payload'];

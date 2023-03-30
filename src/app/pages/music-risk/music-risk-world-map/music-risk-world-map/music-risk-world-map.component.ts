@@ -11,6 +11,8 @@ import {
 import { Chart } from 'chart.js';
 import { GridOptions } from '@ag-grid-community/all-modules';
 import {
+  Artist,
+  ArtistImageResponse,
   AttackCountry,
   BattleLogEntry,
   BattleTurn,
@@ -61,6 +63,8 @@ export class MusicRiskWorldMapComponent implements OnInit {
   public popUpFormConfig: Definition;
   public attackBlockConfig: ZxBlockModel;
   public popUpAttackFormConfig: Definition;
+  public artistImageOne: ArtistImageResponse;
+  public artistImageTwo: ArtistImageResponse;
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
     hideCloseButton: false,
@@ -79,7 +83,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
     label: 'Select attacking country',
     validation: { required: true },
     onChange: (event: any) => {
-      console.log(event.model.attackingCountryId);
       this.musicService
         .getCountryRelationsLoV(event.model.attackingCountryId)
         .subscribe((data) => {
@@ -137,7 +140,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
             return;
           }
           this.attackObject.battleId = this.battleId;
-          console.log(this.attackObject);
+
           for (let country of this.mapState.countries) {
             if (
               country.countryStatus === 'Passive' &&
@@ -145,11 +148,10 @@ export class MusicRiskWorldMapComponent implements OnInit {
             ) {
               this.isPrivate = true;
               this.attackObject.isAttackedPassive = true;
-              console.log(this.attackObject);
+
               this.musicService
                 .preMoveAttack(this.attackObject)
                 .subscribe((response) => {
-                  console.log(response);
                   this.toastr.success(response);
                   this.popup.hide();
                   this.loadData();
@@ -162,7 +164,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
               this.teamState.activePlayerTeam.teamArtists.filter(
                 (c) => (c.countryId = this.attackerCountryId)
               );
-            let npcArtists = [];
+            let npcArtists: Artist[] = [];
             for (let i = 0; i < this.teamState.activeNpcTeams.length; i++) {
               if (
                 this.teamState.activeNpcTeams[i].countryId ==
@@ -171,20 +173,25 @@ export class MusicRiskWorldMapComponent implements OnInit {
                 npcArtists = this.teamState.activeNpcTeams[i].teamArtists;
               }
             }
-            console.log('npc teams');
-            console.log(this.teamState.activeNpcTeams);
             const npcArtist =
               npcArtists[this.getRandomNumber(1, npcArtists.length) - 1];
             const playerArtist =
               playerArtists[this.getRandomNumber(1, playerArtists.length) - 1];
-            console.log('player');
-            console.log(playerArtist);
-            console.log('npc');
-            console.log(npcArtist);
-            // if (playerArtist == undefined || npcArtist == undefined) {
-            //   this.toastr.error('Artists not available for battle.');
-            //   return;
-            // }
+            this.musicService
+              .getArtistImage(npcArtist.artistId)
+              .subscribe((data) => {
+                this.artistImageTwo = data;
+              });
+            this.musicService
+              .getArtistImage(playerArtist.artistId)
+              .subscribe((data) => {
+                this.artistImageOne = data;
+              });
+
+            if (playerArtist == undefined || npcArtist == undefined) {
+              this.toastr.error('Artists not available for battle.');
+              return;
+            }
             this.playerSongs = playerArtist.songs;
             this.npcSongs = npcArtist.songs;
             this.playerUrl =
@@ -195,10 +202,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
               'https://open.spotify.com/embed/track/' +
               this.npcSongs[0]?.spotifyId +
               '?utm_source=generator&theme=0';
-            console.log('npc url');
-            console.log(this.playerUrl);
-            console.log('player url');
-            console.log(this.npcUrl);
+
             this.attackBlockConfig.label =
               playerArtist?.name + ' vs ' + npcArtist?.name;
             let i = 0;
@@ -207,8 +211,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
               this.checkBoxesMap.set(i + 1, i);
               i += 2;
             }
-            console.log('CHECKBOXES');
-            console.log(this.checkBoxesMap);
 
             for (let i = 0; i < this.songSize * 2; i++) {
               this.formCheckboxesForAttack.push(
@@ -236,6 +238,8 @@ export class MusicRiskWorldMapComponent implements OnInit {
               }
             }
             this.popUpAttackFormConfig.children = this.formCheckboxesForAttack;
+
+            /* checkbox manipulation (if one is checked other is not) */
             for (
               let j = 0;
               j < this.popUpAttackFormConfig.children.length;
@@ -250,6 +254,27 @@ export class MusicRiskWorldMapComponent implements OnInit {
                   !this.popUpAttackFormConfig.children[
                     this.checkBoxesMap.get(j)
                   ].disabled;
+                if (
+                  this.popUpAttackFormConfig.children[this.checkBoxesMap.get(j)]
+                    .disabled
+                ) {
+                  if (j == 0)
+                    this.playerUrl =
+                      'https://open.spotify.com/embed/track/' +
+                      this.songArray[0].spotifyId +
+                      '?utm_source=generator&theme=0';
+                  else if (j % 2 == 1) {
+                    this.npcUrl =
+                      'https://open.spotify.com/embed/track/' +
+                      this.songArray[j].spotifyId +
+                      '?utm_source=generator&theme=0';
+                  } else if (j % 2 == 0) {
+                    this.playerUrl =
+                      'https://open.spotify.com/embed/track/' +
+                      this.songArray[j].spotifyId +
+                      '?utm_source=generator&theme=0';
+                  }
+                }
               };
             }
             this.attackObject.isAttackedPassive = false;
@@ -335,7 +360,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
               this.toastr.error('Please fill all fields.');
               return;
             }
-            console.log(playerWinObj);
             turnObject.songBattles.push(playerWinObj);
             i += 2;
           }
@@ -345,6 +369,8 @@ export class MusicRiskWorldMapComponent implements OnInit {
             .subscribe((response) => {
               this.toastr.success(response);
               this.attackPopup.hide();
+              if (turnObject.wonCase === 'PLAYER')
+                this.eligibleCountryIds.push(this.attackedCountryId);
             });
         },
       },
@@ -432,13 +458,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
         icon: 'fal fa-swords',
         label: 'Attack Country',
         action: () => {
-          if (this.callCountriesLovsNumber == 0) {
-            this.musicService
-              .getCountryLovs(this.eligibleCountryIds)
-              .subscribe((data) => {
-                this.popUpFormConfig.children[0].list = data;
-              });
-          }
+          this.musicService
+            .getCountryLovs(this.eligibleCountryIds)
+            .subscribe((data) => {
+              this.popUpFormConfig.children[0].list = data;
+            });
           this.popup.show();
         },
       },
@@ -479,10 +503,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
         this.setPopUpFormConfig();
         this.battleId = +params.id;
         this.battleTurn = data;
-        console.log(data);
-        console.log(
-          Object.values(data.teamState.activePlayerTeam.eligibleCountryIds)
-        );
         const values = Object.values(
           data.teamState.activePlayerTeam.eligibleCountryIds
         );
