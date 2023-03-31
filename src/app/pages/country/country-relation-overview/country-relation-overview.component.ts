@@ -7,6 +7,7 @@ import {
   CountryRelationCreate,
   CountryResponse,
   CountrySelect,
+  Relation,
 } from '../shared/country.model';
 import { CountryService } from '../shared/country.service';
 import { ZxButtonModel } from '@zff/zx-button';
@@ -80,23 +81,35 @@ export class CountryRelationsOverviewComponent implements OnInit {
           const gridApi = this.currentLinks.api;
           const rowData = [];
           gridApi.forEachNode((node) => {
+
             const newData = node.data;
+            const homeCountryName = newData.homeCountryName;
+
             const countryRelation = { foreignCountryId: '', foreignCountryName: '', typeOfLink: '' };
             countryRelation.foreignCountryId = newData.foreignCountryId;
             countryRelation.foreignCountryName = newData.foreignCountryName;
             countryRelation.typeOfLink = newData.relation;
 
-            const { relation, foreignCountryName, ...rest } = newData;
-            rowData.push({
-              ...rest,
-              countryRelation: (countryRelation),
-            });
+            const { relation, foreignCountryName, homeCountryId, ...rest } = newData;
+            if (rowData.find(obj => obj.countryId === homeCountryId)) {
+              const index = rowData.findIndex(obj => obj.countryId === homeCountryId)
+              rowData[index].countryRelation = [...rowData[index].countryRelation, countryRelation]
+            } else {
+
+              rowData.push({
+                homeCountryName: homeCountryName,
+                countryId: homeCountryId,
+                countryRelation: [countryRelation],
+              });
+
+            }
           });
+          const uniqueRows = rowData.filter((row, index, self) =>
+            index === self.findIndex(r => r.countryId === row.countryId)
+          );
 
-          for (const row of rowData) {
-            this.saveData(row);
-            await new Promise(resolve => setTimeout(resolve, 100));
-
+          for (const row of uniqueRows) {
+            this.saveData([row], row.homeCountryName);
           }
         },
       },
@@ -253,13 +266,16 @@ export class CountryRelationsOverviewComponent implements OnInit {
           this.getCountriesSelect();
 
           const typeOfLinkId = this.model.typeOfLink;
-          const selectedCountryId = this.model.relatedCountrySelect;
           const displayNametypeOfLink =
             this.getDisplayNameFromSelectedTypeOfLink(typeOfLinkId);
+
+          const selectedCountryId = this.model.relatedCountrySelect;
           const displayNameSelectedCountry =
             this.getDisplayNameFromSelectedCountry(selectedCountryId);
+
           const homeCountryName = this.model.name;
           const homeCountryId = this.model.id;
+
           const foreignCountryId = selectedCountryId;
           if (
             !homeCountryName ||
@@ -313,17 +329,33 @@ export class CountryRelationsOverviewComponent implements OnInit {
     );
     return match ? match.displayName : null;
   }
-  saveData(data) {
-    let newCountryRelate = new CountryRelationCreate();
-    newCountryRelate.countryId = data.homeCountryId;
-    newCountryRelate.countryRelation = data.countryRelation;
 
-    this.countryService.createRelations(newCountryRelate).subscribe(
-      response => {
-        this.toastr.success('Relation is successfully created!');
-      }
-    );
+
+
+  saveData(data, homeCountryName: string) {
+    {
+
+
+
+      this.countryService.createRelations({ list: data }).subscribe(
+        response => {
+          if (response.payload === "The Data has been created successfully") {
+            this.toastr.success(`The data for: ${homeCountryName} has been created successfully`);
+
+          } else if (response.payload === "The data has been updated successfully") {
+            this.toastr.success(`The data for: ${homeCountryName} has been updated successfully`);
+          }
+          else {
+            this.toastr.info(`The data for: ${homeCountryName} already exists`);
+          }
+        },
+        error => {
+          this.toastr.error('An error occurred while updating the data.');
+        }
+      );
+
+
+    }
   }
-
 
 }

@@ -25,6 +25,8 @@
 #wikiBlock {
     width: 50%;
     margin-left: 2px;
+    
+    
 }
 
 #searchBlock {
@@ -34,4 +36,21 @@
 #weekRealeases {
     width: 100%;
     align-self: center;
+}
+#bottomGrid{
+    width: 100%;
+    height: 50%;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+#bottomBlock{
+    width: 100%;
+}
+#playeri{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }

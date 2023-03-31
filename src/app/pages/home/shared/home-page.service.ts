@@ -3,7 +3,7 @@ import { ZxApi } from "@zff/zx-core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { HomeApi } from "./home-page.constant";
-import { AwardResponse, CountItem, SearchItem, VolumeItem } from "./home-page.model";
+import { TopTenSongsResponse, CountItem, SearchItem, VolumeItem,RandomPlaylistResponse,UserCodeResponse } from "./home-page.model";
 
 
 @Injectable()
@@ -23,13 +23,13 @@ export class HomeService
         );
     }
 
-    getAllAwards()
+    getTopTenSongs()
     {
-        return this.api.get(HomeApi.GET_AWARDS).pipe(
+        return this.api.get(HomeApi.GET_TOP_TEN_SONGS).pipe(
             map((response) =>
             {
-                const awardList = response['payload'] as AwardResponse[];
-                return awardList;
+                const topTenSongsList = response['payload'] as TopTenSongsResponse[];
+                return topTenSongsList;
             })
         );
     }
@@ -55,4 +55,33 @@ export class HomeService
             })
         );
     }
+    getUserCode(): Observable<UserCodeResponse> {
+        return this.api.get(HomeApi.GET_USER_CODE).pipe(
+            map((response) => {
+                
+                return new UserCodeResponse(response['code']);
+            })
+        );
+
+    }
+
+    getRandomUserPlaylist(userCode: string): Observable<RandomPlaylistResponse[]> {
+        const url = HomeApi.GET_RANDOM_USER_PLAYLIST.replace("#", userCode);
+        return this.api.get(url).pipe(
+            map((response) => {
+                const playlistItems = response['payload'] as RandomPlaylistResponse[];
+                return playlistItems;
+            })
+        );
+    }
+    
+    
 }
+
+
+
+
+   
+
+
+
