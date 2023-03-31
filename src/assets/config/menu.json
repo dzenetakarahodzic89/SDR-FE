@@ -110,8 +110,13 @@
         "url": "song/similar-songs",
         "attributes": {}
       },
-      
-
+      {
+        "code": "HUB_BATTLE_OVERVIEW_STATIC",
+        "icon": "fad fa-swords",
+        "label": "Music Risk",
+        "url": "battle/overview",
+        "attributes": {}
+      },
       {
         "code": "HUB_STATISTICS_STATIC",
         "label": "Statistics",
