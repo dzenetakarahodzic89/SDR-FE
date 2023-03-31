@@ -52,14 +52,17 @@ export class CountryRelation {
   foreignCountryName: string;
   typeOfLink: string;
 }
+export class Relation {
+  countryId: number;
+  countryRelation: CountryRelation;
+}
 
 export class CountryRelationCreate {
-  countryId: string;
-  countryRelation: CountryRelation;
+
+  list: any[]
 
   constructor() {
-    this.countryId = "";
-    this.countryRelation = new CountryRelation();
+    this.list = [];
   }
 }
 ``
