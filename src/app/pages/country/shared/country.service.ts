@@ -54,8 +54,9 @@ export class CountryService {
     );
   }
 
-  createRelations(countryCreate: CountryRelationCreate) {
-    return this.api.post(CountryApi.CREATE_RELATION, countryCreate).pipe(
+  createRelations(countryCreate: any) {
+    console.log(countryCreate)
+    return this.api.post(CountryApi.CREATE_RELATION, { ...countryCreate }).pipe(
       map((response) => {
         return response;
       })
