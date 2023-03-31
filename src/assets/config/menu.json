@@ -110,13 +110,7 @@
         "url": "song/similar-songs",
         "attributes": {}
       },
-      {
-        "code": "HUB_ARTISTS_BY_ERAS_STATIC",
-        "icon": "fad fa-user-music",
-        "label": "Artists distribution over eras",
-        "url": "era/artists-over-eras",
-        "attributes": {}
-      },
+      
 
       {
         "code": "HUB_STATISTICS_STATIC",
@@ -146,6 +140,12 @@
             "code": "HUB_PERSONSTATISTICS_STATIC",
             "label": "Person Distribution over Countries - World Map",
             "url": "person-statistics",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_ARTISTS_BY_ERAS_STATIC",
+            "label": "Artists distribution over eras",
+            "url": "era/artists-over-eras",
             "attributes": {}
           }
         ]
