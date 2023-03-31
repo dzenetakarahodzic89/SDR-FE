@@ -21,9 +21,11 @@ export class SongApi {
   public static GET_SONG_SIMILARITY = '/sdrbe/song-similarity/one';
   public static GET_SONG_SIMILARITY_DETAILS =
     '/sdrbe/song-similarity-detail/all';
-  public static POST_INSTRUMENTS_TO_SONG = '/sdrbe/instrument/instrument-to-song'; 
-  public static GET_SONG_NAMES = '/sdrbe/song/song-artist-titles'; 
+  public static POST_INSTRUMENTS_TO_SONG =
+    '/sdrbe/instrument/instrument-to-song';
+  public static GET_SONG_NAMES = '/sdrbe/song/song-artist-titles';
   public static GET_INSTRUMENT_DROPDOWN = '/sdrbe/instrument/filter';
   public static GET_PERSON_LOV = '/sdrbe/person/lov';
   public static GET_NOTESHEETS = '/sdrbe/notesheet/#';
+  public static FIND_SONG_NAME = '/sdrbe/song/find-song?songName=#';
 }

@@ -52,6 +52,7 @@ import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-time
 import { EraOverviewComponent } from './pages/era/era-overview/era-overview.component';
 
 import { SetupComponent } from './pages/music-risk/setup/setup.component';
+import { EditPlaylistComponent } from './pages/playlist/edit-playlist/edit-playlist.component';
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -130,5 +131,6 @@ export const appRoutes: Routes = [
   { path: 'artist/create', component: ArtistCreateComponent },
   { path: 'artist/update/:id', component: ArtistCreateComponent },
   { path: 'playlist/history', component: HistoryComponent },
+  { path: 'playlist/:id/edit', component: EditPlaylistComponent },
   { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
 ];
