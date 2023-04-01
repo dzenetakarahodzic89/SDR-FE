@@ -12,10 +12,10 @@ import {
 
 @Injectable()
 export class CountryService {
-  constructor(private api: ZxApi) {}
+  constructor(private api: ZxApi) { }
 
   getCountries(): Observable<CountryResponse[]> {
-    return this.api.get(CountryApi.GET_COUNTRIES).pipe(
+    return this.api.get(CountryApi.GET_ALL_COUNTRIES).pipe(
       map((response) => {
         const message = response['payload'];
         return message;
