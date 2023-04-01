@@ -1,0 +1,21 @@
+<div zx-body class="mainContainer" style="padding: 5px">
+    <div>
+        <h1 style="font-weight: bold">Release search</h1>
+    </div>
+    <div>
+        <zx-block [config]="searchBlockConfig" class="col-24">
+            <zx-button zx-block-action [config]="searchButton"></zx-button>
+            <zx-form-loader *ngIf="formConfig" zx-block-body [component]="formConfig" [model]="model" class="col-24">
+            </zx-form-loader>
+        </zx-block>
+    </div>
+    <div class="gh-550 mt-20">
+        <zx-block [config]="releaseBlockConfig">
+            <div zx-block-body>
+                <zx-preloader *ngIf="responseLoading"></zx-preloader>
+            </div>
+            <zx-grid zx-block-body [gridOptions]="releaseGridOptions" domLayout="autoHeight">
+            </zx-grid>
+        </zx-block>
+    </div>
+</div>
