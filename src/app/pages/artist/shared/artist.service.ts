@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { ArtistApi } from './artist-api.constant';
 
 import {
+  ArtistCreateRequest,
   ArtistResponse,
   ArtistSingleResponse,
   GenreNameResponse,
@@ -87,29 +88,73 @@ export class ArtistService {
       })
     );
   }
-  getArtist(id:number): Observable<ArtistSingleResponse> {
-    return this.api.get(ArtistApi.GET_ARTIST_BY_ID.replace('#',id.toString())).pipe(
-      map(response=>{
-        const message = response['payload'];
-        return message;
-      })
-    )
-  }
-  deleteArtist(id:number): Observable<String> {
-    return this.api.delete(ArtistApi.DELETE_ARTIST.replace('#',id.toString())).pipe(
-      map(response=>{
-        const message = response['payload'];
-        return message;
-      })
-    )
+  getArtist(id: number): Observable<ArtistSingleResponse> {
+    return this.api
+      .get(ArtistApi.GET_ARTIST_BY_ID.replace('#', id.toString()))
+      .pipe(
+        map((response) => {
+          const message = response['payload'];
+          return message;
+        })
+      );
   }
 
-  copyImagesToPersone(id:number): Observable<String> {
-    return this.api.post(ArtistApi.POST_COPY_IMAGE_TO_PERSON.replace('#',id.toString())).pipe(
-      map(response=>{
+  getArtists(id: number) {
+    return this.api
+      .get(ArtistApi.GET_ARTIST_BY_ID.replace('#', id.toString()))
+      .pipe(
+        map((response) => {
+          const message = response['payload'];
+          return message;
+        })
+      );
+  }
+
+  getPerson() {
+    return this.api.get(ArtistApi.GET_PERSON).pipe(
+      map((response) => {
         const message = response['payload'];
         return message;
       })
-    )
+    );
+  }
+  deleteArtist(id: number): Observable<String> {
+    return this.api
+      .delete(ArtistApi.DELETE_ARTIST.replace('#', id.toString()))
+      .pipe(
+        map((response) => {
+          const message = response['payload'];
+          return message;
+        })
+      );
+  }
+
+  copyImagesToPersone(id: number): Observable<String> {
+    return this.api
+      .post(ArtistApi.POST_COPY_IMAGE_TO_PERSON.replace('#', id.toString()))
+      .pipe(
+        map((response) => {
+          const message = response['payload'];
+          return message;
+        })
+      );
+  }
+
+  updateArtist(artist: ArtistCreateRequest, id: number) {
+    return this.api
+      .put(ArtistApi.UPDATE_ARTIST.replace('#', id.toString()), artist)
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
+  }
+
+  createArtist(artist: ArtistCreateRequest) {
+    return this.api.post(ArtistApi.CREATE_ARTIST, artist).pipe(
+      map((response) => {
+        return response;
+      })
+    );
   }
 }

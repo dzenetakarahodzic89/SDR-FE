@@ -31,6 +31,12 @@
             "attributes": {}
           },
           {
+            "code": "HUB_COUNTRY_STATIC",
+            "label": "Country Relations",
+            "url": "country-relations/overview",
+            "attributes": {}
+          },
+          {
             "code": "HUB_PLAYLIST_STATIC",
             "label": "Playlists",
             "icon": "fad fa-list-music",
@@ -145,7 +151,7 @@
           },
           {
             "code": "HUB_PERSONSTATISTICS_STATIC",
-            "label": "Person Country Statistics",
+            "label": "Person Distribution over Countries - World Map",
             "url": "person-statistics",
             "attributes": {}
           }

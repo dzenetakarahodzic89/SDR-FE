@@ -1,0 +1,63 @@
+<div class="row mainContainer">
+    <zx-block [config]="blockConfig" class="col-12">   
+      <div zx-block-body class="row">
+        <zx-preloader *ngIf="albumIsLoading"></zx-preloader>
+      </div>     
+            <div *ngIf="foundAlbums && foundAlbums.length > 0"
+              zx-block-body
+              class="searchAlbumsSongs"
+            >
+              <div class="gridContainer">
+
+                <div class="divForBoxes" *ngFor="let album of foundAlbums" >
+                <album-box   
+                  (retrieveSongs)="populateAlbumGrid($event)"
+                  [id]="album.id"
+                  [type]="'album'"
+                  [description]="album.albums.length"              
+                  [title]="album.decade"    
+                  [albumIds]="album.albumIds"
+                  
+                  
+                  >
+                </album-box>
+                
+              </div>
+           
+              </div>
+            </div>
+            <div zx-block-footer class="align-center">
+              <zx-button [config]="previousPageButton"></zx-button>
+              <zx-button [config]="nextPageButton"></zx-button>
+            </div>
+      </zx-block>
+
+    <zx-block [config]="blockDesnokConfig" class="col-12">
+      <div zx-block-body>
+        <div class="container" *ngIf="artist" >
+          <img zx-block-body [src]="artist.imageUrl"  />
+          <h5  >Name: {{ artist.name}}
+         <hr/>
+         <br/>DOB: {{ artist.dateOfBirth | date : "dd.MM.yyyy"}}
+          
+          <hr/>
+          <br/>
+          No of Albums: {{ artist.albumCount}}
+          <hr/></h5>
+        
+        </div>
+        <div zx-body style="height: 370px; margin-top: 23px; margin-left: 20px; margin-right: 20px;">
+          <zx-block  [config]="artistBlockConfig" >
+              <zx-grid 
+              zx-block-body
+              [gridOptions]="artistGridOptions"
+              [source]="albumsSongs"
+              domLayout="autoHeight"
+
+              >
+            </zx-grid>
+          </zx-block> 
+     
+    
+
+</div>

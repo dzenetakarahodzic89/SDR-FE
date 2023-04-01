@@ -1,0 +1,68 @@
+.objects{
+  width      : 98%;
+    height     : 125px;
+    background : white;
+    border     : 1px solid var(--border-color);
+   
+    position   : relative;
+    transition : all .3s ease;
+    padding    : 20px;
+  
+    overflow-y: auto;
+  
+    float: left;
+  
+    &:before,
+    &:after {
+      content   : "";
+      position  : absolute;
+      top       : 0;
+      bottom    : 0;
+      width     : 0;
+      background: var(--primary-color);
+      transition: all .3s ease;
+    }
+  
+    &:before {
+      left : unset;
+      right: 0;
+    }
+    &:hover:before,
+    &:hover:after {
+      width  : 10px;
+      opacity: 1;
+    }
+    &:hover {
+      border: 1px solid var(--primary-color-8);
+      cursor: pointer;
+    }
+    margin: 5px;
+    overflow: hidden;
+    
+  }
+  
+ 
+  .objectDescription{
+    grid-area: d;
+  }
+  
+  .title{
+    font-size: 25px;
+    color: black;
+    white-space: nowrap;
+    width: 100%;
+  }
+  
+ 
+  
+  .releaseRegionAndDate{
+    margin:0;
+  }
+  
+  .gameReleaseDates {
+    margin-left: 10px;
+    font-size: calc(var(--normal-font) + 7px);
+    font-weight: 500;
+  }
+  
+  
