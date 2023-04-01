@@ -33,7 +33,7 @@
           {
             "code": "HUB_COUNTRY_STATIC",
             "label": "Country Relations",
-            "url": "country-relations/overview",
+            "url": "country-relations/create",
             "attributes": {}
           },
           {

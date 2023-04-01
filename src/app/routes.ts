@@ -44,7 +44,6 @@ import { PersonStatisticsComponent } from './pages/person/person-statistics/pers
 import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 import { BattleSearchComponent } from './pages/battle/battle-overview/battle-overview.component';
 import { BattleRosterComponent } from './pages/battle/battle-roster/battle-roster.component';
-import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
 import { ArtistCreateComponent } from './pages/artist/artist-create/artist-create.component';
 import { HistoryComponent } from './pages/playlist/history/history.component';
@@ -52,6 +51,7 @@ import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-time
 import { EraOverviewComponent } from './pages/era/era-overview/era-overview.component';
 
 import { SetupComponent } from './pages/music-risk/setup/setup.component';
+import { CountryRelationsCreateComponent } from './pages/country/country-relation-create/country-relation-create.component';
 import { EditPlaylistComponent } from './pages/playlist/edit-playlist/edit-playlist.component';
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -112,10 +112,10 @@ export const appRoutes: Routes = [
   { path: 'compare-score', component: UrmComponent },
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
   { path: 'news-articles/new', component: NewsArticlesNewsComponent },
-  { path: 'playlist/generate-ga-playlist',component: GenerateGaPlaylistComponent,},
+  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent, },
   { path: 'person-statistics', component: PersonStatisticsComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
-  { path: 'country-relations/overview', component: CountryRelationsOverviewComponent},
+  { path: 'country-relations/create', component: CountryRelationsCreateComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
   { path: 'battle/overview', component: BattleSearchComponent },
   { path: 'battle/:id/create-roster', component: BattleRosterComponent },
