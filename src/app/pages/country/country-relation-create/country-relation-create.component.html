@@ -1,0 +1,53 @@
+<h1>Country Relation</h1>
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="loading"></zx-preloader>
+</div>
+<div zx-body *ngIf="countries" class="w-auto">
+  <div class="row col-24 topContainer gh-350">
+    <zx-block [config]="countriesBlockConfig" style="width: 100%">
+      <zx-grid
+        zx-block-body
+        [gridOptions]="homeCountryGridOptions"
+        [source]="countries"
+      >
+      </zx-grid>
+    </zx-block>
+  </div>
+  <div>
+    <div class="row col-24 bottomContainer">
+      <zx-block [config]="countriesBlockConfig" class="col-24">
+        <zx-form-loader
+          zx-block-body
+          [component]="formConfig"
+          [model]="model"
+          class="col-12"
+        >
+        </zx-form-loader>
+        <div zx-block-footer style="padding-top: 3px; padding-bottom: 3px">
+          <div style="float: right">
+            <span
+              zx-block-action
+              style="margin-right: 5px"
+              class="{{ flag }}"
+            ></span>
+          </div>
+        </div>
+      </zx-block>
+    </div>
+
+    <zx-button zx-block-action [config]="addLinkBtn"></zx-button>
+    <br /><br />
+    <zx-button zx-block-action [config]="mainButtons"></zx-button>
+
+    <div class="row col-24 topContainer gh-350">
+      <zx-block [config]="countriesBlockConfig" style="width: 100%">
+        <zx-grid
+          zx-block-body
+          [gridOptions]="currentLinks"
+          domLayout="autoHeight"
+        >
+        </zx-grid>
+      </zx-block>
+    </div>
+  </div>
+</div>

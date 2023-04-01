@@ -54,9 +54,11 @@ export class ArtistOverviewComponent implements OnInit {
         name: 'Copy Image To Person',
         label: 'Copy Image To Person',
         action: () => {
-          this.artistService.copyImagesToPersone(this.artist.id).subscribe((response) => {
-            console.log('response',response);
-          });
+          this.artistService
+            .copyImagesToPersone(this.artist.id)
+            .subscribe((response) => {
+              console.log('response', response);
+            });
         },
       },
     ],
@@ -68,7 +70,20 @@ export class ArtistOverviewComponent implements OnInit {
         icon: 'fal fa-edit',
         name: 'Edit Artist',
         label: 'Edit Artist',
-        action: () => this.router.navigate(['./artist/update/']),
+        action: () =>
+          this.router.navigate(['./artist/update/' + this.artist.id]),
+      },
+    ],
+  });
+
+  public albumTimelineBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-hourglass',
+        name: 'Album Timeline',
+        label: 'Album Timeline',
+        action: () =>
+          this.router.navigate(['./artist/' + this.artist.id+ '/album-timeline']),
       },
     ],
   });
@@ -80,9 +95,11 @@ export class ArtistOverviewComponent implements OnInit {
         name: 'Delete Artist',
         label: 'Delete Artist',
         action: () => {
-          this.artistService.deleteArtist(this.artist.id).subscribe((response) => {
-            this.router.navigate(['./artist/search/'])
-          });
+          this.artistService
+            .deleteArtist(this.artist.id)
+            .subscribe((response) => {
+              this.router.navigate(['./artist/search/']);
+            });
         },
       },
     ],
@@ -118,7 +135,6 @@ export class ArtistOverviewComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    // public confirmation: ZxConfirmation,
     private artistService: ArtistService
   ) {}
 

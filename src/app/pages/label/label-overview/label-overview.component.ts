@@ -7,7 +7,11 @@ import { Definition } from '@zff/zx-forms';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ZxTabModel } from '@zff/zx-tab-layout';
 import { ToastrService } from 'ngx-toastr';
-import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
+import {
+  ConnectedMediaConnectionSource,
+  ConnectedMediaConnectionType,
+  ConnectedMediaDetailCreateRequest,
+} from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 import { ObjectType } from '../../shared/object-type.constant';
 import { LabelResponse, ArtistLabelResponse } from '../shared/label.model';
@@ -99,7 +103,7 @@ export class LabelOverviewComponent implements OnInit {
       {
         name: 'connectMedia',
         label: 'Connect Media',
-        action: () => this.popup.show()
+        action: () => this.popup.show(),
       },
     ],
   });
@@ -114,7 +118,7 @@ export class LabelOverviewComponent implements OnInit {
     type: 'select',
     name: 'connectionSource',
     label: 'Connection Source',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   typeInput: Definition = new Definition({
@@ -123,7 +127,7 @@ export class LabelOverviewComponent implements OnInit {
     type: 'select',
     name: 'connectionType',
     label: 'Connection Type',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   linkInput = new Definition({
@@ -132,9 +136,12 @@ export class LabelOverviewComponent implements OnInit {
     type: 'text',
     name: 'connectionLink',
     label: 'Link',
-    validation: { required: true, pattern: '((http|https):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9@:%_\+.~#?&/=]*)' }
+    validation: {
+      required: true,
+      pattern:
+        '((http|https)://)?(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,6}([-a-zA-Z0-9@:%_+.~#?&/=]*)',
+    },
   });
-
 
   public setPopUpFormConfig() {
     this.popUpBlockConfig = new ZxBlockModel({
@@ -145,14 +152,10 @@ export class LabelOverviewComponent implements OnInit {
       name: 'connectMedia',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        this.sourceInput,
-        this.typeInput,
-        this.linkInput
-      ],
-      model: this.connectedMediaModel
+      children: [this.sourceInput, this.typeInput, this.linkInput],
+      model: this.connectedMediaModel,
     });
-  };
+  }
 
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
@@ -163,24 +166,33 @@ export class LabelOverviewComponent implements OnInit {
   public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        name: 'save', description: 'Save', label: 'Save',
-        class: 'classic primary', icon: 'fal fa-check-circle',
+        name: 'save',
+        description: 'Save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
         action: () => {
-          this.popup.hide()
-          this.addConnectedMedia()
-        }
+          this.popup.hide();
+          this.addConnectedMedia();
+        },
       },
       {
-        name: 'cancel', description: 'Cancel', label: 'Cancel',
-        class: 'classic', icon: 'fal fa-times', action: () => { this.popup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest(); }
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.popup.hide();
+          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+        },
       },
-
-    ]
+    ],
   });
 
   labelsColumnDefs = [
     {
-      field: 'name',
+      field: 'fullName',
       headerName: 'Artist',
       flex: 1,
       floatingFilter: false,
@@ -227,7 +239,7 @@ export class LabelOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     let id = 1;
-    Object.values(ConnectedMediaConnectionSource).forEach(t => {
+    Object.values(ConnectedMediaConnectionSource).forEach((t) => {
       let sourceObject = { id: id, name: t };
       this.connectionSources.push(sourceObject);
       id++;
@@ -235,7 +247,7 @@ export class LabelOverviewComponent implements OnInit {
     this.sourceInput.list = this.connectionSources;
 
     id = 1;
-    Object.values(ConnectedMediaConnectionType).forEach(t => {
+    Object.values(ConnectedMediaConnectionType).forEach((t) => {
       let typeObject = { id: id, name: t };
       this.connectionTypes.push(typeObject);
       id++;
@@ -266,27 +278,30 @@ export class LabelOverviewComponent implements OnInit {
 
     this.connectedMediaModel.objectId = this.label.id;
     this.connectedMediaModel.objectType = this.type;
-    this.connectedMediaModel.connectionSource = Object.keys(ConnectedMediaConnectionSource)[parseInt(this.connectedMediaModel.connectionSource) - 1];
-    this.connectedMediaModel.connectionType = Object.keys(ConnectedMediaConnectionType)[parseInt(this.connectedMediaModel.connectionType) - 1];
+    this.connectedMediaModel.connectionSource = Object.keys(
+      ConnectedMediaConnectionSource
+    )[parseInt(this.connectedMediaModel.connectionSource) - 1];
+    this.connectedMediaModel.connectionType = Object.keys(
+      ConnectedMediaConnectionType
+    )[parseInt(this.connectedMediaModel.connectionType) - 1];
     this.createConnectedMediaDetail();
-
-
   }
 
   createConnectedMediaDetail() {
-
-    this.connectedMediaService.createConnectedMediaDetail(this.connectedMediaModel).subscribe(
-      (responseCode) => {
-        if (responseCode.hasOwnProperty('payload')) {
-          this.toastr.success('Connected media successfully added!');
-          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
-        } else {
+    this.connectedMediaService
+      .createConnectedMediaDetail(this.connectedMediaModel)
+      .subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Connected media successfully added!');
+            this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+          } else {
+            this.toastr.error('Failed to add connected media!');
+          }
+        },
+        (errorMsg: string) => {
           this.toastr.error('Failed to add connected media!');
         }
-      },
-      (errorMsg: string) => {
-        this.toastr.error('Failed to add connected media!');
-      }
-    );
+      );
   }
 }
