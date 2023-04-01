@@ -48,14 +48,6 @@ export class SongService {
     return this.api.post(SongApi.POST_SIMILARITY, similarityCreateRequest);
   }
 
-  getSongByName(songName: string): Observable<SongLoV> {
-    return this.api.get(SongApi.FIND_SONG_NAME.replace('#', songName)).pipe(
-      map((response) => {
-        const message = response['payload'];
-        return message;
-      })
-    );
-  }
   getSong(id: number) {
     return this.api.get(SongApi.GET_SONG.replace('#', id.toString())).pipe(
       map((response) => {

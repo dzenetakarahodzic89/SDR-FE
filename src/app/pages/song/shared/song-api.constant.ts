@@ -27,5 +27,4 @@ export class SongApi {
   public static GET_INSTRUMENT_DROPDOWN = '/sdrbe/instrument/filter';
   public static GET_PERSON_LOV = '/sdrbe/person/lov';
   public static GET_NOTESHEETS = '/sdrbe/notesheet/#';
-  public static FIND_SONG_NAME = '/sdrbe/song/find-song?songName=#';
 }

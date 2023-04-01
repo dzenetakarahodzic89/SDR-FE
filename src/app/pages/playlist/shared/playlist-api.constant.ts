@@ -8,7 +8,7 @@ export class PlaylistApi {
   public static GET_SONG_NAMES = '/sdrbe/song/song-artist-titles';
   public static GENERATE_PLAYLIST = '/sdrbe/playlist-generate';
   public static SAVE_PLAYLIST = '/sdrbe/playlist-generate';
-  public static GET_PLAYLIST = '/sdrbe/playlist/#';
+  public static GET_PLAYLIST = '/sdrbe/playlist/get/#';
   public static UPDATE_PLAYLIST = '/sdrbe/song-playlist';
   public static DELETE = '/sdrbe/playlist/#';
 }

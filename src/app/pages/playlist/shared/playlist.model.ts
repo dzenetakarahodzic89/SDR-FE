@@ -169,9 +169,9 @@ export class PlayListResponsee {
   playlistName: string;
   numberOfPlays: number;
   numberOfShares: number;
-  songAudioUrl: string;
   playtime: string;
   outlineText: string;
+  spotifyId: string;
 }
 
 export class SongPlaylistReq {

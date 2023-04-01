@@ -21,6 +21,7 @@ import { PlaylistService } from '../shared/playlist.service';
   styleUrls: ['./edit-playlist.component.scss'],
 })
 export class EditPlaylistComponent implements OnInit {
+  srcUrl: string = '';
   constructor(
     private router: Router,
     private toastr: ToastrService,
@@ -44,7 +45,7 @@ export class EditPlaylistComponent implements OnInit {
         name: 'Popup Test',
         label: 'Delete playlist',
         action: () => {
-          this.delete();
+          this.popupDelete.show();
         },
       },
     ],
@@ -112,6 +113,12 @@ export class EditPlaylistComponent implements OnInit {
     columnDefs: this.playlistColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
+    onRowClicked: (event) => {
+      this.srcUrl =
+        'https://open.spotify.com/embed/track/' +
+        event['data']['spotifyId'] +
+        '?utm_source=generator&theme=0';
+    },
   } as GridOptions;
 
   playlistDetail: PlayListResponsee[];
@@ -133,8 +140,11 @@ export class EditPlaylistComponent implements OnInit {
     this.playlistService
       .getPlaylists(id)
       .subscribe((response: PlayListResponsee[]) => {
+        this.srcUrl =
+          'https://open.spotify.com/embed/track/' +
+          response[0].spotifyId +
+          '?utm_source=generator&theme=0';
         this.playlistDetail = response;
-        console.log(this.playlistDetail);
         this.calculateTotalTime();
         this.getSongs();
       });
@@ -182,7 +192,7 @@ export class EditPlaylistComponent implements OnInit {
 
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     label: 'Add song to playlist',
-    size: 'col-12',
+    size: 'col-8',
     visible: true,
     hideCloseButton: false,
   });
@@ -208,6 +218,10 @@ export class EditPlaylistComponent implements OnInit {
   }
 
   save() {
+    if (!this.popUpFormConfig.isValid) {
+      this.toastr.error('Fill in required fields!');
+      return;
+    }
     this.songPlaylistRequest.songId = this.model.songName;
     this.playlistService
       .updatePlaylist(this.songPlaylistRequest)
@@ -226,6 +240,36 @@ export class EditPlaylistComponent implements OnInit {
         this.router.navigateByUrl('/playlist/search');
       });
   }
+
+  public popupDelete: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-8',
+  });
+
+  public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => this.popupDelete.hide(),
+      },
+      {
+        name: 'confirm',
+        description: 'Confirm',
+        label: 'Confirm',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.popupDelete.hide(), this.delete();
+        },
+      },
+    ],
+  });
+
   ngOnInit(): void {
     this.loadData();
   }
