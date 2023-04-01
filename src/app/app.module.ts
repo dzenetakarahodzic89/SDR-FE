@@ -62,6 +62,7 @@ import { UrmModule } from './pages/urm/urm.module';
 import { MusicRiskModule } from './pages/music-risk/music-risk.module';
 import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
 import { BattleModule } from './pages/battle/battle.module';
+import { ReleaseModule } from './pages/release/release.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -116,7 +117,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     NewsArticlesModule,
     MusicRiskModule,
     ArtistAlbumTimelineModule,
-
+    ReleaseModule,
     // use forRoot() in main app module only.
   ],
   providers: [

@@ -92,6 +92,13 @@
             "label": "Event search",
             "url": "event/search",
             "attributes": {}
+          },
+          {
+            "code": "HUB_RELEASE_STATIC",
+            "icon": "fad fa-record-vinyl",
+            "label": "Releases",
+            "url": "release/search",
+            "attributes": {}
           }
         ]
       },
