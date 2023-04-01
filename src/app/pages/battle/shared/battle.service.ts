@@ -4,7 +4,7 @@ import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BattleApi } from './battle-api.constants';
-import { BattleOverviewSearchRequest } from './battle.model';
+import { BattleOverviewSearchRequest, BattleSingleOverviewModel } from './battle.model';
 
 @Injectable()
 export class BattleService {
@@ -16,6 +16,14 @@ export class BattleService {
     return this.api.get(BattleApi.GET_BATTLE, getParams).pipe(
       map((response) => {
         return response;
+      })
+    );
+  }
+
+  getSingleBattle (id: number):Observable<BattleSingleOverviewModel> {
+    return this.api.get(BattleApi.GET_SINGLE_OVERVIEW.replace('#',id.toString())).pipe(
+      map((response) => {
+        return response['payload'] as BattleSingleOverviewModel ;
       })
     );
   }

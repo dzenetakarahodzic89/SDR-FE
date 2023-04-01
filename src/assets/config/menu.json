@@ -67,6 +67,13 @@
             "attributes": {}
           },
           {
+            "code": "HUB_BATTLE_STATIC",
+            "icon": "fad fa-battle",
+            "label": "Battles",
+            "url": "music-risk/battle-overview",
+            "attributes": {}
+          },
+          {
             "code": "HUB_CHORD_PROGRESSION_STATIC",
             "icon": "far fa-music",
             "label": "Chord Progressions",

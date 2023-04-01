@@ -1,10 +1,12 @@
-import { GridOptions } from '@ag-grid-community/all-modules';
+import {  GridOptions } from '@ag-grid-community/all-modules';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { BattleService } from '../shared/battle.service';
-import { BattleOverviewSearchRequest, BattleResponse } from '../shared/battle.model';
+import { BattleOverviewSearchRequest, BattleResponse, BattleSingleOverviewModel, TeamBattleState } from '../shared/battle.model';
+import { Chart, registerables } from 'node_modules/chart.js';
+import { ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-battle-overview',
@@ -13,6 +15,8 @@ import { BattleOverviewSearchRequest, BattleResponse } from '../shared/battle.mo
 })
 export class BattleSearchComponent implements OnInit {
   battleAreLoading: boolean;
+  selectedBattleOverview:BattleSingleOverviewModel;
+  selectedCountryName = '';
   
   battlesAreLoading: boolean;
   foundBattles: BattleResponse[];
@@ -31,6 +35,92 @@ export class BattleSearchComponent implements OnInit {
     ],
   });
 
+  selectBattle(id){
+    this.battleService.getSingleBattle(id).subscribe(response=>{
+      this.selectedBattleOverview = response;
+      setTimeout(()=>{
+        if(this.pieChart)
+        this.pieChart.destroy()
+      this.setPieChart(
+        'pieChart',
+        response.numberOfSongsWon,
+        response.numberOfSongsLost,
+        'Songs Won',
+        'Wongs Lost'
+      );
+      if(this.lineChart)
+        this.lineChart.destroy();
+        this.setLineChart(response.teamBattleStates)
+
+      },1000)
+
+    })
+
+  }
+  public lineChartType : ChartType = 'line';
+  lineChart:Chart;
+  setLineChart(teamsData){
+    console.log(teamsData)
+    let minLength =1000
+     Object.values(teamsData).forEach((td:any) =>{
+      if(td.availableArtistsByTurn.length<minLength){
+        minLength = td.availableArtistsByTurn.length
+      }
+
+    })
+    var datasets = Object.values(teamsData).map((teamBattleState:any)=>{
+      console.log('data',teamBattleState.availableArtistsByTurn)
+      return {
+        label:teamBattleState.countryName,
+        data:teamBattleState.availableArtistsByTurn.slice(0,minLength),
+      };
+    })
+
+   this.lineChart = new Chart(
+    'lineChartTeam',
+    {
+      type:'line',
+      data:{
+        labels:Array.from(Array(minLength).keys()),
+        datasets:datasets
+      }
+    }
+   );
+  }
+
+  public pieChartType: ChartType = 'pie';
+  pieChart: Chart;
+  setPieChart(
+    pieName: string,
+    dataFirst: number,
+    dataSecond: number,
+    labelOne: string,
+    labelTwo: string
+  ) {
+    this.pieChart = new Chart(pieName, {
+      type: this.pieChartType,
+      data: {
+        labels: [labelOne, labelTwo],
+        datasets: [
+          {
+            data: [dataFirst, dataSecond],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+            ],
+            borderWidth: 1,
+            hoverOffset: 4,
+          },
+        ],
+      },
+    });
+  }
 
   
 
@@ -57,6 +147,7 @@ export class BattleSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBattles();
+    Chart.register(...registerables);
   }
   
 
@@ -73,8 +164,20 @@ export class BattleSearchComponent implements OnInit {
       floatingFilter: false,
     },
     {
-      field: 'turn',
-      headerName: 'Turn',
+      field: 'lastTurn',
+      headerName: 'Last Turn',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'songSize',
+      headerName: 'Song Size',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'teamSize',
+      headerName: 'Team Size',
       flex: 1,
       floatingFilter: false,
     },
@@ -90,8 +193,38 @@ export class BattleSearchComponent implements OnInit {
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) => {
-      this.router.navigate(['./album/' + event['data']['id'] + '/overview']);
+      this.selectedCountryName = event['data']['countryName'];
+      this.selectBattle(event['data']['id']);
+
     },
+  } as GridOptions;
+  
+
+  artistColumnDefs = [
+    {
+      field: 'name',
+      headerName: 'Artist Name',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'numberOfSongsWon',
+      headerName: 'Wins',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'numberOfSongsLost',
+      headerName: 'Win %',
+      flex: 1,
+      floatingFilter: false,
+    },
+  ];
+  public artistGridOptions: GridOptions = {
+    columnDefs: this.artistColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+
   } as GridOptions;
  
 
