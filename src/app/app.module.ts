@@ -116,6 +116,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     NewsArticlesModule,
     MusicRiskModule,
     ArtistAlbumTimelineModule,
+
     // use forRoot() in main app module only.
   ],
   providers: [
