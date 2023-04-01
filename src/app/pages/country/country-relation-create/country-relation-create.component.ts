@@ -7,6 +7,7 @@ import {
   CountryRelationCreate,
   CountryResponse,
   CountrySelect,
+  Relation,
 } from '../shared/country.model';
 import { CountryService } from '../shared/country.service';
 import { ZxButtonModel } from '@zff/zx-button';
@@ -15,10 +16,10 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-country-overview',
-  templateUrl: './country-relation-overview.component.html',
-  styleUrls: ['./country-relation-overview.component.scss'],
+  templateUrl: './country-relation-create.component.html',
+  styleUrls: ['./country-relation-create.component.scss'],
 })
-export class CountryRelationsOverviewComponent implements OnInit {
+export class CountryRelationsCreateComponent implements OnInit {
   loading = false;
 
   public countriesBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -76,25 +77,39 @@ export class CountryRelationsOverviewComponent implements OnInit {
         layout: 'classic',
         class: 'primary',
         label: 'Save Data',
-        action: () => {
+        action: async () => {
           const gridApi = this.currentLinks.api;
           const rowData = [];
           gridApi.forEachNode((node) => {
-            const newData = node.data;
-            const countryRelation = { foreignCountryName: '', typeOfLink: '' };
-            countryRelation.foreignCountryName = newData.foreignCountryName;
 
+            const newData = node.data;
+            const homeCountryName = newData.homeCountryName;
+
+            const countryRelation = { foreignCountryId: '', foreignCountryName: '', typeOfLink: '' };
+            countryRelation.foreignCountryId = newData.foreignCountryId;
+            countryRelation.foreignCountryName = newData.foreignCountryName;
             countryRelation.typeOfLink = newData.relation;
 
-            const { relation, foreignCountryName, ...rest } = newData;
-            rowData.push({
-              ...rest,
-              countryRelation: JSON.stringify(countryRelation),
-            });
-          });
+            const { relation, foreignCountryName, homeCountryId, ...rest } = newData;
+            if (rowData.find(obj => obj.countryId === homeCountryId)) {
+              const index = rowData.findIndex(obj => obj.countryId === homeCountryId)
+              rowData[index].countryRelation = [...rowData[index].countryRelation, countryRelation]
+            } else {
 
-          for (const row of rowData) {
-            this.saveData(row);
+              rowData.push({
+                homeCountryName: homeCountryName,
+                countryId: homeCountryId,
+                countryRelation: [countryRelation],
+              });
+
+            }
+          });
+          const uniqueRows = rowData.filter((row, index, self) =>
+            index === self.findIndex(r => r.countryId === row.countryId)
+          );
+
+          for (const row of uniqueRows) {
+            this.saveData([row], row.homeCountryName);
           }
         },
       },
@@ -192,7 +207,14 @@ export class CountryRelationsOverviewComponent implements OnInit {
     columnDefs: [
       {
         field: 'homeCountryId',
-        headerName: 'Home Country',
+        headerName: 'Home Country Id',
+        flex: 1,
+        floatingFilter: false,
+        hide: true,
+      },
+      {
+        field: 'foreignCountryId',
+        headerName: 'Foreign Country Id',
         flex: 1,
         floatingFilter: false,
         hide: true,
@@ -244,13 +266,17 @@ export class CountryRelationsOverviewComponent implements OnInit {
           this.getCountriesSelect();
 
           const typeOfLinkId = this.model.typeOfLink;
-          const selectedCountryId = this.model.relatedCountrySelect;
           const displayNametypeOfLink =
             this.getDisplayNameFromSelectedTypeOfLink(typeOfLinkId);
+
+          const selectedCountryId = this.model.relatedCountrySelect;
           const displayNameSelectedCountry =
             this.getDisplayNameFromSelectedCountry(selectedCountryId);
+
           const homeCountryName = this.model.name;
           const homeCountryId = this.model.id;
+
+          const foreignCountryId = selectedCountryId;
           if (
             !homeCountryName ||
             !displayNameSelectedCountry ||
@@ -262,6 +288,7 @@ export class CountryRelationsOverviewComponent implements OnInit {
             let duplicateRow = false;
             this.currentLinks.api.forEachNode((node) => {
               if (
+                node.data.foreignCountryId === foreignCountryId &&
                 node.data.homeCountryId === homeCountryId &&
                 node.data.foreignCountryName === displayNameSelectedCountry &&
                 node.data.relation === displayNametypeOfLink
@@ -276,6 +303,7 @@ export class CountryRelationsOverviewComponent implements OnInit {
             }
 
             const newRowData = {
+              foreignCountryId: foreignCountryId,
               homeCountryId: homeCountryId,
               homeCountryName: homeCountryName,
               foreignCountryName: displayNameSelectedCountry,
@@ -302,17 +330,32 @@ export class CountryRelationsOverviewComponent implements OnInit {
     return match ? match.displayName : null;
   }
 
-  async saveData(data) {
-    let newCountryRelate = new CountryRelationCreate();
-    newCountryRelate.countryId = data.homeCountryId;
-    newCountryRelate.countryRelation = data.countryRelation;
 
-    this.countryService
-      .createRelations(newCountryRelate)
-      .subscribe((responseCode) => {
-        if (responseCode.hasOwnProperty('payload')) {
-          this.toastr.success('Relation is successfully created!');
+
+  saveData(data, homeCountryName: string) {
+    {
+
+
+
+      this.countryService.createRelations({ list: data }).subscribe(
+        response => {
+          if (response.payload === "The Data has been created successfully") {
+            this.toastr.success(`The data for: ${homeCountryName} has been created successfully`);
+
+          } else if (response.payload === "The data has been updated successfully") {
+            this.toastr.success(`The data for: ${homeCountryName} has been updated successfully`);
+          }
+          else {
+            this.toastr.info(`The data for: ${homeCountryName} already exists`);
+          }
+        },
+        error => {
+          this.toastr.error('An error occurred while updating the data.');
         }
-      });
+      );
+
+
+    }
   }
+
 }

@@ -15,24 +15,21 @@ import { ArtistResponse } from '../shared/era.model';
 @Component({
   selector: 'app-era-overview',
   templateUrl: './era-overview.component.html',
-  styleUrls: ['./era-overview.component.scss']
+  styleUrls: ['./era-overview.component.scss'],
 })
-
 export class EraOverviewComponent implements OnInit {
-
   type = ObjectType.ERA;
   eraIsLoading: Boolean;
   songsAreLoading: Boolean;
   albumsAreLoading: Boolean;
   artistsAreLoading: Boolean;
   artists: ArtistResponse[];
-  era : EraResponse;
-  album : string[];
+  era: EraResponse;
+  album: string[];
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     hideHeader: true,
-
   });
 
   public infoBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -55,7 +52,8 @@ export class EraOverviewComponent implements OnInit {
         icon: 'fal fa-images',
         name: 'Gallery',
         label: 'Gallery',
-        action: () => this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/'])
+        action: () =>
+          this.router.navigate(['./gallery/' + this.type.toLowerCase() + '/']),
       },
     ],
   });
@@ -66,7 +64,7 @@ export class EraOverviewComponent implements OnInit {
         icon: 'fal fa-edit',
         name: 'Edit button',
         label: 'Edit Era',
-        action: () => this.router.navigate(['./era/update/'])
+        action: () => this.router.navigate(['./era/update/']),
       },
     ],
   });
@@ -85,7 +83,7 @@ export class EraOverviewComponent implements OnInit {
         icon: 'fal fa-plus',
         name: 'addAlbum',
         label: 'Add album',
-        action: () => this.addAlbumPopup.show()
+        action: () => this.addAlbumPopup.show(),
       },
     ],
   });
@@ -142,14 +140,12 @@ export class EraOverviewComponent implements OnInit {
     this.albumsAreLoading = true;
     this.eraService.getAllAlbums().subscribe((response) => {
       this.albumsAreLoading = false;
-      this.addAlbumPopUpFormConfig.children[1].list = response.map(
-        (album) => {
-          return {
-            code: album.id,
-            displayName: album.name,
-          };
-        }
-      );
+      this.addAlbumPopUpFormConfig.children[1].list = response.map((album) => {
+        return {
+          code: album.id,
+          displayName: album.name,
+        };
+      });
     });
   }
   getArtists() {
@@ -161,7 +157,7 @@ export class EraOverviewComponent implements OnInit {
     });
   }
 
- // public addAlbumModel : ;
+  // public addAlbumModel : ;
   public setAddAlbumPopUpFormConfig() {
     this.addAlbumPopUpBlockConfig = new ZxBlockModel({
       hideExpand: true,
@@ -171,15 +167,12 @@ export class EraOverviewComponent implements OnInit {
       name: 'addAlbum',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        this.albumInput,
-        this.artistInput
-      ],
+      children: [this.albumInput, this.artistInput],
       //model: this.addAlbumModel,
     });
     //this.addAlbumPopUpFormConfig.children[0].list = this.albumsPopUp;
     //this.addAlbumPopUpFormConfig.children[1].list = this.artistsPopUp;
-  };
+  }
 
   /*addAlbumToEra() {
     this.addAlbumModel.eraId = this.era.id;
@@ -236,7 +229,7 @@ export class EraOverviewComponent implements OnInit {
       headerName: 'Playtime',
       flex: 1,
       floatingFilter: false,
-    }
+    },
   ];
 
   public albumGridOptions: GridOptions = {
@@ -244,14 +237,12 @@ export class EraOverviewComponent implements OnInit {
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) => {
-      this.router.navigate([
-        './album/' + event['data']['id'] + '/overview',
-      ]);
+      this.router.navigate(['./album/' + event['data']['id'] + '/overview']);
     },
   } as GridOptions;
 
   erasAreLoading = false;
-/*
+  /*
   getEras() {
     this.route.params.subscribe((params) => {
     this.eraService.getAllEras().subscribe((response) => {
@@ -282,15 +273,15 @@ export class EraOverviewComponent implements OnInit {
     });
   }
 
-  constructor(private eraService: EraService,
+  constructor(
+    private eraService: EraService,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
-    public confirmation: ZxConfirmation) { }
+    public confirmation: ZxConfirmation
+  ) {}
 
   ngOnInit(): void {
-
     this.loadData();
   }
-
 }

@@ -3,7 +3,7 @@
   <zx-preloader *ngIf="loading"></zx-preloader>
 </div>
 <div zx-body *ngIf="countries" class="w-auto">
-  <div class="row col-24 topContainer">
+  <div class="row col-24 topContainer gh-350">
     <zx-block [config]="countriesBlockConfig" style="width: 100%">
       <zx-grid
         zx-block-body
@@ -34,9 +34,12 @@
         </div>
       </zx-block>
     </div>
-    <zx-button zx-block-action [config]="addLinkBtn"></zx-button>
 
-    <div class="row col-24 topContainer">
+    <zx-button zx-block-action [config]="addLinkBtn"></zx-button>
+    <br /><br />
+    <zx-button zx-block-action [config]="mainButtons"></zx-button>
+
+    <div class="row col-24 topContainer gh-350">
       <zx-block [config]="countriesBlockConfig" style="width: 100%">
         <zx-grid
           zx-block-body
@@ -46,6 +49,5 @@
         </zx-grid>
       </zx-block>
     </div>
-    <zx-button zx-block-action [config]="mainButtons"></zx-button>
   </div>
 </div>

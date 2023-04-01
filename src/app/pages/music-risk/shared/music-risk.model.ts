@@ -38,10 +38,13 @@ export class TeamState {
   activePlayerTeam: Team;
   inactiveNpcTeams: Team;
 }
+interface CountryIds {
+  [key: string]: number;
+}
 export class Team {
   countryId: number;
   countryName: string;
-  eligibleCountryIds: number[];
+  eligibleCountryIds: CountryIds;
   id: number;
   lastActiveTurn: number;
   numberOfLoses: number;
@@ -61,4 +64,63 @@ export class Song {
   spotifyId: string;
   name: string;
   audioUrl: string;
+}
+
+export class ArtistsSongsResponse {
+  id: number;
+  name: string;
+  artists: number;
+  songs: number;
+}
+
+export class CountryRequest {
+  id: number;
+}
+
+export class GenerateBattleRequest {
+  name: string;
+  songSize: number;
+  teamSize: number;
+  countries: any[];
+}
+export class AttackCountry {
+  attackingCountryId: number;
+  attackedCountryId: number;
+}
+export class PreMoveBattleAttack {
+  attackerId: number;
+  attackedId: number;
+  attackerName: string;
+  attackedName: string;
+  isAttackedPassive: boolean;
+  battleId: number;
+}
+export class BattleTurnUpdateRequest {
+  battleTurnId: number;
+  attackerName: string;
+  attackedName: string;
+  attackerCountryId: number;
+  attackedCountryId: number;
+  songBattleExplained: string[];
+  songBattles: BattleLogEntry[];
+  wonCase: string;
+}
+
+export class BattleLogEntry {
+  playerASongId: number;
+  playerBSongId: number;
+  playerASongName: string;
+  playerBSongName: string;
+  songASpotifyId: string;
+  songBSpotifyId: string;
+  songAAudioUrl: string;
+  songBAudioUrl: string;
+  winnerSongId: number;
+  loserSongId: number;
+  userCodeOfDecider: string;
+}
+export class ArtistImageResponse {
+  id: number;
+  name: string;
+  imageUrl: string;
 }

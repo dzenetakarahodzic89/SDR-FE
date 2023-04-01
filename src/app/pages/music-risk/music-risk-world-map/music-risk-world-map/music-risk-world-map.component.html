@@ -45,14 +45,9 @@
           [config]="attackBtn"
         ></zx-button>
         <zx-button
-          id="viewAndAlterSongRosterBtn"
+          id="viewAndAlterRosterBtn"
           zx-block-action
-          [config]="viewAndAlterSongRosterBtn"
-        ></zx-button>
-        <zx-button
-          id="viewAndAlterArtistRosterBtn"
-          zx-block-action
-          [config]="viewAndAlterArtistRosterBtn"
+          [config]="viewAndAlterRosterBtn"
         ></zx-button>
         <zx-button
           id="viewStandingsBtn"
@@ -71,4 +66,89 @@
       </zx-block>
     </div>
   </div>
+  <zx-popup [config]="popup">
+    <div zx-popup-body>
+      <zx-block [config]="popUpBlockConfig">
+        <zx-form-loader
+          *ngIf="popUpFormConfig"
+          zx-block-body
+          [component]="popUpFormConfig"
+          [model]="attackCountryModel"
+          class="col-24"
+        ></zx-form-loader>
+      </zx-block>
+      <zx-button
+        zx-popup-footer
+        [config]="linkPopupFooterButtons"
+        class="align-right"
+      ></zx-button>
+    </div>
+  </zx-popup>
+  <zx-popup [config]="attackPopup">
+    <div zx-popup-body>
+      <zx-block [config]="attackBlockConfig">
+        <div style="display: flex; gap: 20px" zx-block-body>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <div *ngIf="artistImageOne">
+              <img
+                [src]="artistImageOne.imageUrl"
+                alt=""
+                style="width: 250px; height: 250px"
+              />
+            </div>
+            <iframe
+              style="border-radius: 12px"
+              [src]="playerUrl | safe : 'resourceUrl'"
+              width="250px"
+              height="100"
+              frameBorder="0"
+              allowfullscreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              width: 500px;
+            "
+          >
+            <zx-form-loader
+              *ngIf="popUpAttackFormConfig"
+              [component]="popUpAttackFormConfig"
+              [model]="attackCountryModel"
+              class="col-24"
+            ></zx-form-loader>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <div *ngIf="artistImageTwo">
+              <img
+                [src]="artistImageTwo.imageUrl"
+                alt=""
+                style="width: 250px; height: 250px"
+              />
+            </div>
+
+            <iframe
+              style="border-radius: 12px"
+              [src]="npcUrl | safe : 'resourceUrl'"
+              width="250px"
+              height="100"
+              frameBorder="0"
+              allowfullscreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </zx-block>
+      <zx-button
+        zx-popup-footer
+        [config]="linkAttackPopupFooterBtn"
+        class="align-right"
+      ></zx-button>
+    </div>
+  </zx-popup>
 </div>

@@ -83,6 +83,7 @@ interface SubGenres {
 }
 export class ArtistSongResponse {
   id: number;
+  fullName: string;
   name: string;
   personId: number;
   personName: string;
@@ -102,6 +103,7 @@ export class AlbumResponse {
 }
 export class ArtistResponse {
   id: number;
+  fullName: string;
   name: string;
 }
 export class SongSearchRequest {
@@ -225,8 +227,8 @@ export class MainGenreLoV {
 export class SubgenreLoV {
   id: number;
   name: string;
-  }
-  
+}
+
 export class NotesheetResponse {
   id: number;
   songId: number;
