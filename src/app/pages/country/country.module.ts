@@ -4,12 +4,12 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { CountryService } from './shared/country.service';
 import { CountryOverviewComponent } from './country-overview/country-overview.component';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
-import { CountryRelationsOverviewComponent } from './country-relation-overview/country-relation-overview.component';
+import { CountryRelationsCreateComponent } from './country-relation-create/country-relation-create.component';
 
 @NgModule({
   declarations: [
     CountryOverviewComponent,
-    CountryRelationsOverviewComponent
+    CountryRelationsCreateComponent
   ],
   imports: [
     SharedModule,
@@ -18,7 +18,7 @@ import { CountryRelationsOverviewComponent } from './country-relation-overview/c
   ],
   exports: [
     CountryOverviewComponent,
-    CountryRelationsOverviewComponent
+    CountryRelationsCreateComponent
   ], providers: [
     CountryService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

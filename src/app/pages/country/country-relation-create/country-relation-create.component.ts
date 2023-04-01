@@ -16,10 +16,10 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-country-overview',
-  templateUrl: './country-relation-overview.component.html',
-  styleUrls: ['./country-relation-overview.component.scss'],
+  templateUrl: './country-relation-create.component.html',
+  styleUrls: ['./country-relation-create.component.scss'],
 })
-export class CountryRelationsOverviewComponent implements OnInit {
+export class CountryRelationsCreateComponent implements OnInit {
   loading = false;
 
   public countriesBlockConfig: ZxBlockModel = new ZxBlockModel({
