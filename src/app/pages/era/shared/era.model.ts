@@ -25,7 +25,7 @@ interface SubGenres {
 
 export class ArtistSongResponse {
   id: number;
-  name: string;
+  fullName: string;
   personId: number;
   personName: string;
   dateOfBirth: Date;
@@ -46,7 +46,7 @@ export class AlbumResponse {
 
 export class ArtistResponse {
   id: number;
-  name: string;
+  fullName: string;
 }
 
 export class EraSearchRequest {
@@ -98,4 +98,20 @@ export class EraCreateRequest {
   coverImageData: string | ArrayBuffer;
   coverImage: string;
   coverImage_files: File[];
+}
+
+export class GenresEraOverview {
+  eraId: number;
+  eraName: string;
+  genreList: GenresEraPercentageResponse[];
+  labeldata: any[];
+  realdata: any[];
+}
+export class GenresEraPercentageResponse {
+  genrePercentage: number;
+  genreName: string;
+}
+
+export class EraRequestList {
+  eras: any[];
 }

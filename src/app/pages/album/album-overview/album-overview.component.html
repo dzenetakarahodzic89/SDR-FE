@@ -1,65 +1,130 @@
 <div zx-block-body class="row">
-    <zx-preloader *ngIf="albumIsLoading"></zx-preloader>
+  <zx-preloader *ngIf="albumIsLoading"></zx-preloader>
 </div>
 <div zx-body *ngIf="album" class="w-auto">
-    <div class="row col-24 topContainer">
-        <zx-block [config]="containerBlockConfig">
-            <img zx-block-body [src]="album.imageUrl" class="width:300px" />
-        </zx-block>
-        <div class="w-100 pl-10 pr-10">
-            <div class="row">
-                <h1>{{ album.name }}</h1>
-            </div>
-            <div class="row">
-                <div class="p-inline col-14">
-                    <p>{{ album.dateOfRelease | date: 'dd.MM.yyyy'}} </p>
-                    <p *ngFor="let artist of this.album.albumArtists"> - {{ artist }}</p>
-                </div>
-                <div class="col-10">
-                    <zx-button id="galleryBtn" zx-block-action [config]="galleryButton"></zx-button>
-                    <zx-button id="addSongBtn" zx-block-action [config]="addSongBtn"></zx-button>
-                    <zx-popup [config]="addSongPopup">
-                        <div zx-popup-body>
-                            <zx-block [config]="addSongPopUpBlockConfig">
-                                <zx-preloader *ngIf="songsAreLoading || artistsAreLoading || labelsAreLoading"></zx-preloader>
-                                <zx-form-loader *ngIf="addSongPopUpFormConfig" zx-block-body [component]="addSongPopUpFormConfig"
-                                    [model]="addSongModel" class="col-24"></zx-form-loader>
-                            </zx-block>
-                        </div>
-                        <zx-button zx-popup-footer [config]="addSongPopupFooterButtons" class="align-right"></zx-button>
-                    </zx-popup>
-                    <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
-                    <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
-                    <zx-popup [config]="connectMediaPopup">
-                        <div zx-popup-body>
-                            <zx-block [config]="connectMediaPopUpBlockConfig">
-                                <zx-form-loader *ngIf="connectMediaPopUpFormConfig" zx-block-body [component]="connectMediaPopUpFormConfig"
-                                    [model]="connectedMediaModel" class="col-24"></zx-form-loader>
-                            </zx-block>
-                        </div>
-                        <zx-button zx-popup-footer [config]="connectMediaPopupFooterButtons" class="align-right"></zx-button>
-                    </zx-popup>
-                </div>
-            </div>
-            <hr />
-            <p> {{ album.era }} </p>
-            <ang-music-player [audioList]="this.album.audioUrls"></ang-music-player>
+  <div class="row col-24 topContainer">
+    <div>
+      <zx-block [config]="containerBlockConfig">
+        <img zx-block-body [src]="album.imageUrl" class="width:300px" />
+
+        <div
+          zx-block-body
+          *ngIf="srcUrl.length > 0"
+          style="padding-left: 5px; padding-top: 5px"
+        >
+          <iframe
+            style="border-radius: 12px"
+            [src]="srcUrl | safe : 'resourceUrl'"
+            width="300px"
+            height="100"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
         </div>
+      </zx-block>
     </div>
-
-
-    <div class="row-5 bottomContainer">
-        <zx-block [config]="infoBlockConfig" class="col-14">
-            <div zx-block-body [innerHTML]="album.information"></div>
-        </zx-block>
-        <zx-block [config]="detailsBlockConfig" class="col-10">
-            <div zx-block-body>
-                <zx-block zx-tab-item id="songsTab" [config]="songsBlockConfig">
-                    <zx-grid zx-block-body [gridOptions]="songGridOptions" [source]="this.album.songs"
-                        domLayout="autoHeight">
-                    </zx-grid>
-                </zx-block>
+    <div class="w-100 pl-10 pr-10">
+      <div class="row">
+        <h1>{{ album.name }}</h1>
+      </div>
+      <div class="row">
+        <div class="p-inline col-14">
+          <p>{{ album.dateOfRelease | date : "dd.MM.yyyy" }}</p>
+          <p *ngFor="let artist of this.album.albumArtists">- {{ artist }}</p>
+        </div>
+        <div class="col-10">
+          <zx-button
+            id="galleryBtn"
+            zx-block-action
+            [config]="galleryButton"
+          ></zx-button>
+          <zx-button
+            id="addSongBtn"
+            zx-block-action
+            [config]="addSongBtn"
+          ></zx-button>
+          <zx-popup [config]="addSongPopup">
+            <div zx-popup-body>
+              <zx-block [config]="addSongPopUpBlockConfig">
+                <zx-preloader
+                  *ngIf="
+                    songsAreLoading || artistsAreLoading || labelsAreLoading
+                  "
+                ></zx-preloader>
+                <zx-form-loader
+                  *ngIf="addSongPopUpFormConfig"
+                  zx-block-body
+                  [component]="addSongPopUpFormConfig"
+                  [model]="addSongModel"
+                  class="col-24"
+                ></zx-form-loader>
+              </zx-block>
             </div>
-        </zx-block>
+            <zx-button
+              zx-popup-footer
+              [config]="addSongPopupFooterButtons"
+              class="align-right"
+            ></zx-button>
+          </zx-popup>
+          <zx-button
+            id="editBtn"
+            zx-block-action
+            [config]="editBtn"
+          ></zx-button>
+          <zx-button
+            id="connectMedia"
+            zx-block-action
+            [config]="connectMediaBtn"
+          ></zx-button>
+          <zx-button
+            id="linkImagesToSongs"
+            zx-block-action
+            [config]="linkImagesToSongsBtn"
+          ></zx-button>
+          <zx-popup [config]="connectMediaPopup">
+            <div zx-popup-body>
+              <zx-block [config]="connectMediaPopUpBlockConfig">
+                <zx-form-loader
+                  *ngIf="connectMediaPopUpFormConfig"
+                  zx-block-body
+                  [component]="connectMediaPopUpFormConfig"
+                  [model]="connectedMediaModel"
+                  class="col-24"
+                ></zx-form-loader>
+              </zx-block>
+            </div>
+            <zx-button
+              zx-popup-footer
+              [config]="connectMediaPopupFooterButtons"
+              class="align-right"
+            ></zx-button>
+          </zx-popup>
+        </div>
+      </div>
+      <hr />
+      <p>{{ album.era }}</p>
+      <ang-music-player [audioList]="this.album.audioUrls"></ang-music-player>
     </div>
+  </div>
+
+  <div class="row-5 bottomContainer">
+    <zx-block [config]="infoBlockConfig" class="col-14">
+      <div zx-block-body [innerHTML]="album.information"></div>
+    </zx-block>
+    <zx-block [config]="detailsBlockConfig" class="col-10">
+      <div zx-block-body>
+        <zx-block zx-tab-item id="songsTab" [config]="songsBlockConfig">
+          <zx-grid
+            zx-block-body
+            [gridOptions]="songGridOptions"
+            [source]="this.album.songs"
+            domLayout="autoHeight"
+          >
+          </zx-grid>
+        </zx-block>
+      </div>
+    </zx-block>
+  </div>
 </div>

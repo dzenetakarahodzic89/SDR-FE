@@ -3,46 +3,70 @@ import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PlaylistApi } from './playlist-api.constant';
-import { GenreNameResponse, GenreResponse, PlaylistResponse, SongNameResponse} from './playlist.model';
+import {
+  GenreNameResponse,
+  GenreResponse,
+  HistoryRecord,
+  PlaylistResponse,
+  PlayListResponsee,
+  PlaylistSong,
+  SongGAResponse,
+  SongNameResponse,
+  SongPlaylistReq,
+} from './playlist.model';
 
 @Injectable()
 export class PlaylistService {
+  constructor(private api: ZxApi) {}
 
-  constructor(private api: ZxApi) { }
+  getHistory(): Observable<HistoryRecord[]> {
+    return this.api
+      .get(PlaylistApi.GET_HISTORY)
+      .pipe(map((response) => response['payload'] as HistoryRecord[]));
+  }
 
-  searchPlaylists(name: String, songId: number, genreId: number, sortBy: number): Observable<PlaylistResponse[]> {
-    let query = "?"
+  getPlaylist(playlistId: number): Observable<PlaylistSong[]> {
+    return this.api
+      .get(PlaylistApi.GET_SONGS, {
+        'playlist.id:eq': playlistId,
+      })
+      .pipe(map((response) => response['payload'] as PlaylistSong[]));
+  }
 
-    if (name != null)
-      query += "name=" + name;
+  searchPlaylists(
+    name: String,
+    songId: number,
+    genreId: number,
+    sortBy: number
+  ): Observable<PlaylistResponse[]> {
+    let query = '?';
 
-    if (songId != null)
-      query += "&songId=" + songId;
+    if (name != null) query += 'name=' + name;
 
-    if (genreId != null)
-      query += "&genreId=" + genreId;
+    if (songId != null) query += '&songId=' + songId;
+
+    if (genreId != null) query += '&genreId=' + genreId;
 
     switch (sortBy) {
       case 0:
-        query += "&sortBy=NoOfSongs";
+        query += '&sortBy=NoOfSongs';
         break;
       case 1:
-        query += "&sortBy=LastEdit";
+        query += '&sortBy=LastEdit';
         break;
       case 2:
-        query += "&sortBy=Alphabetical";
+        query += '&sortBy=Alphabetical';
         break;
-
     }
 
-    query = query.replace("?&", "?");
+    query = query.replace('?&', '?');
 
     return this.api.get(PlaylistApi.SEARCH_PLAYLISTS + query).pipe(
       map((response) => {
         const playlists = response['payload'] as PlaylistResponse[];
         return playlists;
       })
-    )
+    );
   }
 
   getAllGenres(): Observable<GenreResponse[]> {
@@ -51,7 +75,7 @@ export class PlaylistService {
         const genres: GenreResponse[] = response['payload'];
         return genres;
       })
-    )
+    );
   }
 
   getAllGenreNames(): Observable<GenreNameResponse[]> {
@@ -60,7 +84,7 @@ export class PlaylistService {
         const genres: GenreResponse[] = response['payload'];
         return genres;
       })
-    )
+    );
   }
 
   getAllSongNames(): Observable<SongNameResponse[]> {
@@ -69,17 +93,50 @@ export class PlaylistService {
         const songs: SongNameResponse[] = response['payload'];
         return songs;
       })
-    )
+    );
   }
 
-
   getGeneratedPlaylist(criteria: any): Observable<any[]> {
-    return this.api.get(PlaylistApi.GENERATE_PLAYLIST, criteria).pipe(map(response => {
-      return response['payload'];
-    }));
+    return this.api.get(PlaylistApi.GENERATE_PLAYLIST, criteria).pipe(
+      map((response) => {
+        return response['payload'];
+      })
+    );
   }
 
   postPlaylist(body: any): Observable<any> {
-    return this.api.post(PlaylistApi.SAVE_PLAYLIST, body).pipe(map(response => response['payload']));
+    return this.api
+      .post(PlaylistApi.SAVE_PLAYLIST, body)
+      .pipe(map((response) => response['payload']));
+  }
+
+  postGAPlaylist(body: any): Observable<SongGAResponse[]> {
+    return this.api
+      .post(PlaylistApi.SAVE_GA_PLAYLIST, body)
+      .pipe(map((response) => response['payload']));
+  }
+
+  getPlaylists(playlistId: number): Observable<PlayListResponsee[]> {
+    return this.api
+      .get(PlaylistApi.GET_PLAYLIST.replace('#', playlistId.toString()))
+      .pipe(map((response) => response['payload']));
+  }
+
+  deletePlayList(playlistId: number) {
+    return this.api
+      .delete(PlaylistApi.DELETE.replace('#', playlistId.toString()))
+      .pipe(
+        map((response) => {
+          const deleteResponse = response['payload'] as string;
+          return deleteResponse;
+        })
+      );
+  }
+  updatePlaylist(songPlaylistReq: SongPlaylistReq) {
+    return this.api.post(PlaylistApi.UPDATE_PLAYLIST, songPlaylistReq).pipe(
+      map((response) => {
+        return response['payload'];
+      })
+    );
   }
 }

@@ -50,11 +50,19 @@ import { AngMusicPlayerModule } from 'ang-music-player';
 import { AlbumModule } from './pages/album/album.module';
 import { MultisearchModule } from './pages/multisearch/multisearch.module';
 import { EraModule } from './pages/era/era.module';
-import { NotesheetModule } from './pages/notesheet/notesheet-overview/notesheet.module';
+import { NotesheetModule } from './pages/notesheet/notesheet.module';
 import { ChordProgressionModule } from './pages/chordprogression/chordprogression.module';
 import { ArtistModule } from './pages/artist/artist.module';
 import { EventModule } from './pages/event/event.module';
 import { DeezerModule } from './pages/deezer/deezer.module';
+import { MusicMatchModule } from './pages/music-match/music-match.module';
+import { ArtistAlbumTimelineModule } from './pages/artist-album-timeline/artist-album-timeline.module';
+
+import { UrmModule } from './pages/urm/urm.module';
+import { MusicRiskModule } from './pages/music-risk/music-risk.module';
+import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
+import { BattleModule } from './pages/battle/battle.module';
+import { ReleaseModule } from './pages/release/release.module';
 import { SpotifyModule } from './pages/spotify/spotify.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
@@ -104,6 +112,13 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     ArtistModule,
     EventModule,
     DeezerModule,
+    MusicMatchModule,
+    BattleModule,
+    UrmModule,
+    NewsArticlesModule,
+    MusicRiskModule,
+    ArtistAlbumTimelineModule,
+    ReleaseModule,
     SpotifyModule
     // use forRoot() in main app module only.
   ],

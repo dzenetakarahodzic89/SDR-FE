@@ -1,0 +1,40 @@
+<div zx-block-body class="row">
+    <zx-preloader *ngIf="integrationIsLoading"></zx-preloader>
+</div>
+<div zx-body class="w-auto" style="padding: 5px">
+    <div *ngIf="songLyricData" class="row col-24 headContainer">
+        <h1 style="font-weight: bold">Music Match Integration</h1>
+        <zx-button id="refreshBtn" zx-block-action [config]="refreshBtn" style="padding-left: auto"></zx-button>
+    </div>
+    <div *ngIf="songLyricData" style="height: 200px">
+        <zx-block [config]="musicMatchBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="musicMatchTableTypeGridOptions" [source]="songLyricData"
+                domLayout="autoHeight">
+            </zx-grid>
+        </zx-block>
+    </div>
+    <div style="margin-top: 10px; display: flex; height: 300px">
+        <div class="col-12">
+            <div style="display: flex; justify-content: space-evenly">
+                <div>
+                    <div class="pie">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="pie">
+                        <canvas id="pieChartTwo"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div *ngIf="musicMatchData" class="col-12">
+            <zx-block [config]="musicMatchDataTypeConfigBlock">
+                <zx-grid zx-block-body [gridOptions]="musicMatchTableDataTypeGridOptions" [source]="musicMatchData"
+                    domLayout="autoHeight">
+                </zx-grid>
+            </zx-block>
+        </div>
+    </div>
+</div>

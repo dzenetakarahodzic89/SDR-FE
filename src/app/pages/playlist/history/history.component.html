@@ -1,0 +1,33 @@
+<div class="offset">
+    <div>
+        <h5>Results history of Genetic Algorithm execution:</h5>
+    </div>
+    <hr />
+    <zx-block *ngIf="!recordsAreLoading" [config]="recordsBlockConfig">
+        <zx-grid
+            zx-block-body
+            [gridOptions]="songsGridOptions"
+            [source]="generatedHistory"
+            domLayout="autoHeight"
+        >
+        </zx-grid>
+    </zx-block>
+</div>
+<div class="row" style="padding-top: 70px;">
+    <div  class="col-14">
+        <canvas id="lineChart"></canvas>
+    </div>
+    <zx-block [config]="detailsBlockConfig" class="col-10">
+      <div zx-block-body>
+        <zx-block zx-tab-item id="songsTab" [config]="songsBlockConfig">
+          <zx-grid
+            zx-block-body
+            [gridOptions]="songGridOptions"
+            [source]="this.generatedSongs"
+            domLayout="autoHeight"
+          >
+          </zx-grid>
+        </zx-block>
+      </div>
+    </zx-block>
+</div>

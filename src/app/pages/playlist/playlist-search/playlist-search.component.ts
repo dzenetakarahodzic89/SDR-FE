@@ -30,7 +30,23 @@ export class PlaylistSearchComponent implements OnInit {
         name: 'newPlaylist',
         label: 'New Playlist',
         action: (btn: any, output: any) => {
-          this.router.navigate(['./playlist/create']);
+          this.router.navigate(['./playlist/generate-playlist']);
+        },
+      },
+      {
+        icon: 'fas fa-plus-square',
+        name: 'newPlaylistGA',
+        label: 'New Playlist from GA',
+        action: (btn: any, output: any) => {
+          this.router.navigate(['./playlist/generate-ga-playlist']);
+        },
+      },
+      {
+        icon: 'fad fa-save',
+        name: 'GAHistory',
+        label: 'GA Playlist History',
+        action: (btn: any, output: any) => {
+          this.router.navigate(['./playlist/history']);
         },
       },
     ],

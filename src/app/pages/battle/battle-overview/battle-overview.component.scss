@@ -1,0 +1,31 @@
+img {
+    width: 300px;
+    height: 350px;
+    object-fit: contain;
+}
+.chartSection{
+  padding:16px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.pie {
+  max-height: 300px;
+}
+.lineChart{
+  width: 550px;
+}
+.tableWrapper{
+  height: 600px;
+  overflow: auto;
+}
+
+.p-inline p {
+  display: inline;
+
+}
+.inlineLabel {
+  display: inline;
+
+}

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
 import { map } from 'rxjs/operators';
 import { NotesheetApi } from './notesheet-api.constant';
+import { NoteSheetCreateRequest } from './notesheet.model';
 
 @Injectable()
 export class NotesheetService {
@@ -27,5 +28,23 @@ export class NotesheetService {
         return message;
       })
     );
+  }
+
+  createNoteSheet(request: NoteSheetCreateRequest) {
+    return this.api.post(NotesheetApi.CREATE_CREATENOTESHEET, request).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
+  updateNoteSheet(request: NoteSheetCreateRequest, id: number) {
+    return this.api
+      .put(NotesheetApi.UPDATE_NOTESHEET.replace('#', id.toString()), request)
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
   }
 }

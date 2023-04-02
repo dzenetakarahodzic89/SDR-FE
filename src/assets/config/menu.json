@@ -4,45 +4,109 @@
     "type": "MODULE",
     "children": [
       {
-        "code": "HUB_PERSONS_STATIC",
-        "icon": "fad fa-comment-music",
-        "label": "Songs",
-        "url": "song/search",
-        "attributes": {}
+        "code": "HUB_SEARCH_STATIC",
+        "label": "Search",
+        "icon": "far fa-search",
+        "attributes": {},
+        "children": [
+          {
+            "code": "HUB_PERSONS_STATIC",
+            "icon": "fad fa-comment-music",
+            "label": "Songs",
+            "url": "song/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_PERSONS_STATIC",
+            "icon": "fad fa-user",
+            "label": "Persons",
+            "url": "person/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_COUNTRY_STATIC",
+            "icon": "fad fa-globe",
+            "label": "Countries",
+            "url": "country/overview",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_COUNTRY_STATIC",
+            "label": "Country Relations",
+            "url": "country-relations/create",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_PLAYLIST_STATIC",
+            "label": "Playlists",
+            "icon": "fad fa-list-music",
+            "url": "playlist/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_INSTRUMENT_STATIC",
+            "icon": "fad fa-violin",
+            "label": "Instruments",
+            "url": "instrument/search",
+            "attributes": {}
+          },
+
+          {
+            "code": "HUB_ERA_STATIC",
+            "icon": "far fa-hourglass",
+            "label": "Eras",
+            "url": "era/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_ARTIST_STATIC",
+            "icon": "far fa-palette",
+            "label": "Artists",
+            "url": "artist/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_ALBUM_STATIC",
+            "icon": "fad fa-album",
+            "label": "Albums",
+            "url": "album/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_BATTLE_STATIC",
+            "icon": "fad fa-battle",
+            "label": "Battles",
+            "url": "music-risk/battle-overview",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_CHORD_PROGRESSION_STATIC",
+            "icon": "far fa-music",
+            "label": "Chord Progressions",
+            "url": "chord-progress/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_EVENT_SEARCH_STATIC",
+            "icon": "fad fa-calendar-star",
+            "label": "Event search",
+            "url": "event/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_RELEASE_STATIC",
+            "icon": "fad fa-record-vinyl",
+            "label": "Releases",
+            "url": "release/search",
+            "attributes": {}
+          }
+        ]
       },
       {
-        "code": "HUB_PERSONS_STATIC",
-        "icon": "fad fa-user",
-        "label": "Persons",
-        "url": "person/search",
-        "attributes": {}
-      },
-      {
-        "code": "HUB_COUNTRY_STATIC",
-        "icon": "fad fa-globe",
-        "label": "Countries",
-        "url": "country/overview",
-        "attributes": {}
-      },
-      {
-        "code": "HUB_PLAYLIST_STATIC",
-        "label": "Playlists",
-        "icon": "fad fa-list-music",
-        "url": "playlist/search",
-        "attributes": {}
-      },
-      {
-        "code": "HUB_INSTRUMENT_STATIC",
-        "icon": "fad fa-violin",
-        "label": "Instruments",
-        "url": "instrument/search",
-        "attributes": {}
-      },
-      {
-        "code": "HUB_ERA_STATIC",
-        "icon": "far fa-hourglass",
-        "label": "Eras",
-        "url": "era/search",
+        "code": "HUB_NEWS_STATIC",
+        "icon": "fas fa-newspaper",
+        "label": "News",
+        "url": "news-articles/new",
         "attributes": {}
       },
       {
@@ -54,20 +118,6 @@
       },
 
       {
-        "code": "HUB_ARTIST_STATIC",
-        "icon": "far fa-palette",
-        "label": "Artists",
-        "url": "artist/search",
-        "attributes": {}
-      },
-      {
-        "code": "HUB_ALBUM_STATIC",
-        "icon": "fad fa-album",
-        "label": "Albums",
-        "url": "album/search",
-        "attributes": {}
-      },
-      {
         "code": "HUB_SONGSIMILARITY_STATIC",
         "icon": "fad fa-music",
         "label": "Similar songs",
@@ -75,24 +125,10 @@
         "attributes": {}
       },
       {
-        "code": "HUB_ARTISTS_BY_ERAS_STATIC",
-        "icon": "fad fa-user-music",
-        "label": "Artists distribution over eras",
-        "url": "era/artists-over-eras",
-        "attributes": {}
-      },
-      {
-        "code": "HUB_CHORD_PROGRESSION_STATIC",
-        "icon": "far fa-music",
-        "label": "Chord Progressions",
-        "url": "chord-progress/search",
-        "attributes": {}
-      },
-      {
-        "code": "HUB_EVENT_SEARCH_STATIC",
-        "icon": "fad fa-calendar-star",
-        "label": "Event search",
-        "url": "event/search",
+        "code": "HUB_BATTLE_OVERVIEW_STATIC",
+        "icon": "fad fa-swords",
+        "label": "Music Risk",
+        "url": "battle/overview",
         "attributes": {}
       },
       {
@@ -114,9 +150,41 @@
             "attributes": {}
           },
           {
-            "code": "HUB_SPOTIFY_STATIC",
-            "label": "Spotify Statistics",
-            "url": "spotify-integration",
+            "code": "HUB_MUSICMATCH_STATIC",
+            "label": "Music Match Statistics",
+            "url": "music-match-integration",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_PERSONSTATISTICS_STATIC",
+            "label": "Person Distribution over Countries - World Map",
+            "url": "person-statistics",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_ARTISTS_BY_ERAS_STATIC",
+            "label": "Artists distribution over eras",
+            "url": "era/artists-over-eras",
+            "attributes": {}
+          }
+        ]
+      },
+      {
+        "code": "HUB_USER_RECOMMENDATION_STATIC",
+        "label": "User recommendation scores",
+        "icon": "fa fa-star",
+        "attributes": {},
+        "children": [
+          {
+            "code": "HUB_SCORECOMPARE_STATIC",
+            "label": "Compare user score",
+            "url": "compare-score",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_AVG_SCORE_PER_COUNTRY_STATIC",
+            "label": "Average song recommendation score per country",
+            "url": "urm/avg-score-per-country",
             "attributes": {}
           }
         ]

@@ -28,6 +28,8 @@ import { AlbumService } from '../shared/album.service';
   styleUrls: ['./album-overview.component.scss'],
 })
 export class AlbumOverviewComponent implements OnInit {
+
+  srcUrl: string = '';
   type = ObjectType.ALBUM;
   testFlag: string = 'fi fi-';
   albumIsLoading: Boolean;
@@ -109,6 +111,16 @@ export class AlbumOverviewComponent implements OnInit {
         name: 'connectMedia',
         label: 'Connect Media',
         action: () => this.connectMediaPopup.show(),
+      },
+    ],
+  });
+
+  public linkImagesToSongsBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'linkImagesToSongs',
+        label: 'Link Images To Songs In Album',
+        action: () => this.connectImagesToSongsInAlbum()
       },
     ],
   });
@@ -348,7 +360,11 @@ export class AlbumOverviewComponent implements OnInit {
     this.artistsAreLoading = true;
     this.route.params.subscribe((params) => {
       this.albumService.getAlbum(params.id).subscribe((response) => {
-        console.log('Response: ', response);
+        console.log(response);
+        this.srcUrl =
+          'https://open.spotify.com/embed/album/' +
+          response.spotifyId +
+          '?utm_source=generator&theme=0';
         this.album = response;
         this.setConnectMediaPopUpFormConfig();
         this.setAddSongPopUpFormConfig();
@@ -387,7 +403,7 @@ export class AlbumOverviewComponent implements OnInit {
           }
         },
         (errorMsg: string) => {
-          this.toastr.error('Failed to add connected media!');
+          this.toastr.error(errorMsg);
         }
       );
   }
@@ -446,7 +462,18 @@ export class AlbumOverviewComponent implements OnInit {
         }
       },
       (errorMsg: string) => {
-        this.toastr.error('Failed to add song!');
+        this.toastr.error(errorMsg);
+      }
+    );
+  }
+
+  connectImagesToSongsInAlbum() {
+    this.albumService.connectImagesToSongsInAlbum(this.album.id).subscribe(
+      (response) => {
+        this.toastr.success(response);
+      },
+      (errorMsg: string) => {
+        this.toastr.error(errorMsg);
       }
     );
   }

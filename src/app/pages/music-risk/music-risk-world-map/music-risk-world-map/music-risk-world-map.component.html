@@ -1,0 +1,154 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="dataIsLoading"></zx-preloader>
+</div>
+<div *ngIf="battleTurn">
+  <h2 class="headline">Turn #{{ battleTurn.turn }} - {{ battleTurn.name }}</h2>
+  <div class="map">
+    <canvas id="canvas"></canvas>
+  </div>
+  <div style="display: flex">
+    <div style="width: 50%" class="box-one">
+      <p>
+        Current Team: <span>{{ teamState.activePlayerTeam.countryName }}</span>
+      </p>
+      <p>
+        Current Roster:
+        <span
+          *ngFor="
+            let artist of teamState.activePlayerTeam.teamArtists;
+            let i = index
+          "
+          >{{ artist.name }}
+          <span *ngIf="i < teamState.activePlayerTeam.teamArtists.length - 1"
+            >,</span
+          >
+        </span>
+      </p>
+      <p>
+        Total Player Countries:
+        <span>{{ teamState.activeNpcTeams.length }}</span>
+      </p>
+    </div>
+    <div style="display: flex; flex-direction: column; width: 100%">
+      <div
+        style="
+          width: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+        class="box-one"
+      >
+        <zx-button
+          id="attackBtn"
+          zx-block-action
+          [config]="attackBtn"
+        ></zx-button>
+        <zx-button
+          id="viewAndAlterRosterBtn"
+          zx-block-action
+          [config]="viewAndAlterRosterBtn"
+        ></zx-button>
+        <zx-button
+          id="viewStandingsBtn"
+          zx-block-action
+          [config]="viewStandingsBtn"
+        ></zx-button>
+      </div>
+      <zx-block [config]="personsBlockConfig">
+        <zx-grid
+          zx-block-body
+          [gridOptions]="infoGridOptions"
+          [source]="teamInfo"
+          domLayout="autoHeight"
+        >
+        </zx-grid>
+      </zx-block>
+    </div>
+  </div>
+  <zx-popup [config]="popup">
+    <div zx-popup-body>
+      <zx-block [config]="popUpBlockConfig">
+        <zx-form-loader
+          *ngIf="popUpFormConfig"
+          zx-block-body
+          [component]="popUpFormConfig"
+          [model]="attackCountryModel"
+          class="col-24"
+        ></zx-form-loader>
+      </zx-block>
+      <zx-button
+        zx-popup-footer
+        [config]="linkPopupFooterButtons"
+        class="align-right"
+      ></zx-button>
+    </div>
+  </zx-popup>
+  <zx-popup [config]="attackPopup">
+    <div zx-popup-body>
+      <zx-block [config]="attackBlockConfig">
+        <div style="display: flex; gap: 20px" zx-block-body>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <div *ngIf="artistImageOne">
+              <img
+                [src]="artistImageOne.imageUrl"
+                alt=""
+                style="width: 250px; height: 250px"
+              />
+            </div>
+            <iframe
+              style="border-radius: 12px"
+              [src]="playerUrl | safe : 'resourceUrl'"
+              width="250px"
+              height="100"
+              frameBorder="0"
+              allowfullscreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              width: 500px;
+            "
+          >
+            <zx-form-loader
+              *ngIf="popUpAttackFormConfig"
+              [component]="popUpAttackFormConfig"
+              [model]="attackCountryModel"
+              class="col-24"
+            ></zx-form-loader>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <div *ngIf="artistImageTwo">
+              <img
+                [src]="artistImageTwo.imageUrl"
+                alt=""
+                style="width: 250px; height: 250px"
+              />
+            </div>
+
+            <iframe
+              style="border-radius: 12px"
+              [src]="npcUrl | safe : 'resourceUrl'"
+              width="250px"
+              height="100"
+              frameBorder="0"
+              allowfullscreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </zx-block>
+      <zx-button
+        zx-popup-footer
+        [config]="linkAttackPopupFooterBtn"
+        class="align-right"
+      ></zx-button>
+    </div>
+  </zx-popup>
+</div>
