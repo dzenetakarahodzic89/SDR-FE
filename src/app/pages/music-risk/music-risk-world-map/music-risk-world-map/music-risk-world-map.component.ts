@@ -14,6 +14,7 @@ import {
   Artist,
   ArtistImageResponse,
   AttackCountry,
+  BattleLogBattleResult,
   BattleLogEntry,
   BattleTurn,
   BattleTurnUpdateRequest,
@@ -22,6 +23,7 @@ import {
   PreMoveBattleAttack,
   Song,
   TeamState,
+  TurnHistoryGrid,
 } from '../../shared/music-risk.model';
 import { MusicRiskService } from '../../shared/music-risk.service';
 import { ZxBlockModel } from '@zff/zx-block';
@@ -36,6 +38,9 @@ Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
   styleUrls: ['./music-risk-world-map.component.scss'],
 })
 export class MusicRiskWorldMapComponent implements OnInit {
+  npcStandingUrl: string = '';
+  playerStandingUrl: string = '';
+  turnHistory: BattleLogEntry[];
   npcUrl = '';
   playerUrl = '';
   attackerCountryId: number;
@@ -60,6 +65,8 @@ export class MusicRiskWorldMapComponent implements OnInit {
     private toastr: ToastrService
   ) {}
   public popUpBlockConfig: ZxBlockModel;
+  public popUpStandingsConfig: ZxBlockModel;
+  public popUpStandingsTurnConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
   public attackBlockConfig: ZxBlockModel;
   public popUpAttackFormConfig: Definition;
@@ -69,6 +76,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
     hideHeader: true,
     hideCloseButton: false,
     size: 'col-12',
+  });
+  public viewStandingsPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-20',
   });
   public attackPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
@@ -108,6 +120,18 @@ export class MusicRiskWorldMapComponent implements OnInit {
   checkBoxesMap: Map<number, number> = new Map();
   battleTurnId: number;
   songArray: Song[] = [];
+  public linkPopupStandingsFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'attack',
+        description: 'attack',
+        label: 'Attack',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {},
+      },
+    ],
+  });
   public linkPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -388,6 +412,31 @@ export class MusicRiskWorldMapComponent implements OnInit {
   songOneInput: Definition = new Definition({
     template: 'ZxCheckbox',
   });
+  public popUpStandingFormConfig: Definition;
+  public setViewStandingsPopup() {
+    this.popUpStandingsConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Recent standings',
+    });
+    for (let i = 0; i < this.songSize * 2; i++) {
+      this.formCheckboxesForAttack.push(
+        new Definition({
+          template: 'ZxCheckbox',
+          class: ['col-12'],
+          type: 'classic',
+          name: 'song' + i,
+          label: 'Classic checkbox',
+        })
+      );
+    }
+    this.popUpStandingFormConfig = new Definition({
+      name: 'connectMedia',
+      template: 'ZxForm',
+      disabled: false,
+      model: this.attackCountryModel,
+      children: [...this.formCheckboxesForAttack],
+    });
+  }
   public setPopUpFormConfig() {
     this.popUpBlockConfig = new ZxBlockModel({
       hideExpand: true,
@@ -414,6 +463,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
     });
   }
   teamInfo: MapState[] = [];
+
   artistColumnDefs = [
     {
       field: 'numberOfActivePlayerTeams',
@@ -468,6 +518,73 @@ export class MusicRiskWorldMapComponent implements OnInit {
       },
     ],
   });
+  standingsHistoryDefs = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'text',
+      headerName: 'Description',
+      flex: 5,
+      floatingFilter: false,
+    },
+  ];
+  battleLogs: TurnHistoryGrid[] = [];
+  public standingsGridOptions: GridOptions = {
+    columnDefs: this.standingsHistoryDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {},
+  } as GridOptions;
+  standingsTurnDefs = [
+    {
+      field: 'turnNumber',
+      headerName: 'Turn number',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'winnerTeamId',
+      headerName: 'Winner team',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'loserTeamId',
+      headerName: 'Loser Team',
+      flex: 1,
+      floatingFilter: false,
+    },
+  ];
+  battleTurns: BattleLogBattleResult[];
+  isAnyRowClicked = false;
+  public standingsTurnGridOptions: GridOptions = {
+    columnDefs: this.standingsTurnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.isAnyRowClicked = true;
+      console.log(event);
+      let elements: BattleLogEntry[] = [];
+      for (let turn of this.turnHistory) {
+        if (turn.battleResultId === +event['data']['id']) {
+          console.log(turn);
+          elements.push(turn);
+        }
+      }
+      this.npcStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        elements[0].songASpotifyId +
+        '?utm_source=generator&theme=0';
+      this.playerStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        elements[0].songASpotifyId +
+        '?utm_source=generator&theme=0';
+    },
+  } as GridOptions;
   public viewAndAlterRosterBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -484,7 +601,9 @@ export class MusicRiskWorldMapComponent implements OnInit {
       {
         icon: 'far fa-layer-group',
         label: 'View Standings',
-        action: () => {},
+        action: () => {
+          this.viewStandingsPopup.show();
+        },
       },
     ],
   });
@@ -495,11 +614,25 @@ export class MusicRiskWorldMapComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.setAttackPopUpFormConfig();
+    this.setViewStandingsPopup();
   }
   chart: Chart;
   loadData() {
     this.route.params.subscribe((params) => {
       this.musicService.getLastTurn(params.id).subscribe((data: BattleTurn) => {
+        Object.keys(data.turnCombatState.battleLogs[0].textHistory).forEach(
+          (key, index) => {
+            this.battleLogs.push(
+              new TurnHistoryGrid(
+                key,
+                data.turnCombatState.battleLogs[0].textHistory[key]
+              )
+            );
+          }
+        );
+        this.battleTurns = data.turnCombatState.battleLogs[0].battleResults;
+        this.turnHistory = data.turnCombatState.battleLogs[0].turnHistory;
+
         this.setPopUpFormConfig();
         this.battleId = +params.id;
         this.battleTurn = data;
@@ -525,6 +658,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
 
     return scores.get(country);
   }
+
   setupMap() {
     fetch('https://unpkg.com/world-atlas/countries-50m.json')
       .then((r) => r.json())
