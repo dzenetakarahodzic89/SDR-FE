@@ -103,4 +103,10 @@ export class MusicRiskService {
         })
       );
   }
+  getFlags(countryIds: number[]) {
+    const obj = { countryIds };
+    return this.api
+      .post(MusicRiskApi.GET_FLAGS, obj)
+      .pipe(map((res) => res['payload']));
+  }
 }

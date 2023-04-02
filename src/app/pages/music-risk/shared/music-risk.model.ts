@@ -37,7 +37,7 @@ export class BattleTurn {
 export class TeamState {
   activeNpcTeams: Team[];
   activePlayerTeam: Team;
-  inactiveNpcTeams: Team;
+  inactiveNpcTeams: Team[];
 }
 interface CountryIds {
   [key: string]: number;

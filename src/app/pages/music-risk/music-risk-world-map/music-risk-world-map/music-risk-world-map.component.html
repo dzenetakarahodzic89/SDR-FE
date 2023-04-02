@@ -115,6 +115,10 @@
                       style="width: 250px; height: 250px"
                     />
                   </div> -->
+                  <span
+                    style="margin-right: 5px; margin-left: 5px; font-size: 18px"
+                    class="{{ flagWinner }}"
+                  ></span>
                   <iframe
                     style="border-radius: 12px"
                     [src]="playerStandingUrl | safe : 'resourceUrl'"
@@ -125,6 +129,28 @@
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     loading="lazy"
                   ></iframe>
+                  <div
+                    *ngFor="let song of this.playerStandingSongs; let i = index"
+                    style="display: flex; flex-direction: column; gap: 5px"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        gap: 15px;
+                        align-items: center;
+                        cursor: pointer;
+                      "
+                      (click)="playSong('PLAYER', i)"
+                    >
+                      <i
+                        class="far fa-play fa-sm"
+                        style="color: #000000; cursor: pointer"
+                      ></i>
+                      <p style="font-size: 12px; cursor: pointer">
+                        {{ song.name }}
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div
                   style="
@@ -137,7 +163,7 @@
                   <zx-form-loader
                     *ngIf="popUpStandingFormConfig"
                     [component]="popUpStandingFormConfig"
-                    [model]="attackCountryModel"
+                    [model]="someModal"
                     class="col-24"
                   ></zx-form-loader>
                 </div>
@@ -149,6 +175,10 @@
                       style="width: 250px; height: 250px"
                     />
                   </div> -->
+                  <span
+                    style="margin-right: 5px; margin-left: 5px; font-size: 18px"
+                    class="{{ flagLoser }}"
+                  ></span>
                   <iframe
                     style="border-radius: 12px"
                     [src]="npcStandingUrl | safe : 'resourceUrl'"
@@ -159,6 +189,27 @@
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     loading="lazy"
                   ></iframe>
+                  <div
+                    *ngFor="let song of this.npcStandingSongs; let i = index"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        gap: 15px;
+                        align-items: center;
+                        cursor: pointer;
+                      "
+                      (click)="playSong('NPC', i)"
+                    >
+                      <i
+                        class="far fa-play fa-sm"
+                        style="color: #000000; cursor: pointer"
+                      ></i>
+                      <p style="font-size: 12px; cursor: pointer">
+                        {{ song.name }}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </zx-block>

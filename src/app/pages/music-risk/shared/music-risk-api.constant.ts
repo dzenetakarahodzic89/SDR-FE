@@ -9,4 +9,5 @@ export class MusicRiskApi {
   public static START_BATTLE = '/sdrbe/battle/#/start-battle';
   public static GET_ARTIST_IMAGE = '/sdrbe/artist/get-picture/#';
   public static GET_STANDINGS = '/sdrbe/battle-turn/get-log/#';
+  public static GET_FLAGS = '/sdrbe/country/get-flags';
 }
