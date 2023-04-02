@@ -112,6 +112,12 @@
             "label": "Artists over eras",
             "url": "era/artists-over-eras",
             "attributes": {}
+          },
+          {
+            "code": "HUB_SPOTIFY_STATIC",
+            "label": "Spotify Statistics",
+            "url": "spotify-integration",
+            "attributes": {}
           }
         ]
       }
