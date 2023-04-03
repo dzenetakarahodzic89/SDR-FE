@@ -6,6 +6,7 @@ import { GalleryCreateComponent } from './pages/gallery/gallery-create/gallery-c
 import { PersonOverviewComponent } from './pages/person/person-overview/person-overview.component';
 import { PersonSearchComponent } from './pages/person/person-search/person-search.component';
 import { LabelOverviewComponent } from './pages/label/label-overview/label-overview.component';
+import { LabelSearchComponent } from './pages/label/label-search/label-search.component';
 import { CountryOverviewComponent } from './pages/country/country-overview/country-overview.component';
 
 import { InstrumentOverviewComponent } from './pages/instrument/instrument-overview/instrument-overview.component';
@@ -76,6 +77,7 @@ export const appRoutes: Routes = [
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
   { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
+  { path: 'label/search', component: LabelSearchComponent },
 
   { path: 'battle/setup', component: SetupComponent },
   {
