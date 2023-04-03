@@ -10,33 +10,35 @@
 
   <div style="height: 200px">
     <zx-block [config]="spotifyBlockConfig">
-      <zx-grid zx-block-body [gridOptions]="spotifyTableTypeGridOptions" [source]="dataTypes" domLayout="autoHeight"></zx-grid>
+      <zx-grid zx-block-body [gridOptions]="spotifyTableTypeGridOptions" [source]="dataTypes" 
+      domLayout="autoHeight"></zx-grid>
     </zx-block>
   </div>
 
-  <div style="margin-top: 10px; display: flex; height: 300px">
+  <div style="margin-top: 10px; display: flex; height: 400px">
     <div class="col-12">
       <div style="display: flex; justify-content: space-evenly">
         <div>
-          <div class="pie">
-            <canvas id="pieChart"></canvas>
+          <div class="pieChart">
+            <canvas id="songPieChart"></canvas>
           </div>
         </div>
         <div>
-          <div class="pie">
-            <canvas id="pieChartTwo"></canvas>
+          <div class="pieChart">
+            <canvas id="artistPieChart"></canvas>
           </div>
         </div>
         <div>
-          <div class="pie">
-            <canvas id="pieChartThree"></canvas>
+          <div class="pieChart">
+            <canvas id="albumPieChart"></canvas>
           </div>
         </div>
       </div>
     </div>
     <div class="col-12">
       <zx-block [config]="spotifyDataTypeConfigBlock">
-        <zx-grid zx-block-body [gridOptions]="spotifyTableDataTypeGridOptions" [source]="spotifyData" domLayout="autoHeight"></zx-grid>
+        <zx-grid zx-block-body [gridOptions]="spotifyTableDataTypeGridOptions" [source]="spotifyData" 
+        domLayout="autoHeight"></zx-grid>
       </zx-block>
     </div>
   </div>

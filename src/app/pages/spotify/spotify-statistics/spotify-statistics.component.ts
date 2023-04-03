@@ -7,9 +7,9 @@ import { SpotifyStatistics, SpotifyTableTypes, SpotifyTableTypesData } from "../
 import { SpotifyService } from "../shared/spotify.service";
 
 @Component({
-    selector: 'app-spotify-statistics',
-    templateUrl: './spotify-statistics.component.html',
-    styleUrls: ['./spotify-statistics.component.scss'],
+  selector: 'app-spotify-statistics',
+  templateUrl: './spotify-statistics.component.html',
+  styleUrls: ['./spotify-statistics.component.scss'],
 })
 export class SpotifyStatisticsComponent implements OnInit {
   integrationIsLoading = false;
@@ -168,7 +168,7 @@ export class SpotifyStatisticsComponent implements OnInit {
     if (this.integrationIsLoading) {
       setTimeout(() => {
         this.setPieChart(
-          'pieChart',
+          'songPieChart',
           this.linkedRowsSong,
           this.unlinkedRowsSong,
           'Linked song rows',
@@ -177,7 +177,7 @@ export class SpotifyStatisticsComponent implements OnInit {
       }, 1000);
       setTimeout(() => {
         this.setPieChart(
-          'pieChartTwo',
+          'artistPieChart',
           this.linkedRowsArtist,
           this.unlinkedRowsArtist,
           'Linked artist rows',
@@ -186,7 +186,7 @@ export class SpotifyStatisticsComponent implements OnInit {
       }, 1000);
       setTimeout(() => {
         this.setPieChart(
-          'pieChartThree',
+          'albumPieChart',
           this.linkedRowsAlbum,
           this.unlinkedRowsAlbum,
           'Linked album rows',
