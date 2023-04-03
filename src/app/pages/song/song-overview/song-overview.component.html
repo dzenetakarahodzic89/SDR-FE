@@ -28,7 +28,9 @@
     <div class="w-100 pl-10 pr-10">
       <div class="col-24">
         <strong>
-          <h1 class="text-bold">{{ song.name }} - {{ artists[0]?.name }}</h1>
+          <h1 class="text-bold">
+            {{ song.name }} - {{ artists[0]?.fullName }}
+          </h1>
         </strong>
         <div class="container">
           <div class="row">
@@ -203,8 +205,6 @@
                     [config]="addInstrumentPopUpBlockConfig"
                   >
                     <zx-preloader *ngIf="instrumentsAreLoading"></zx-preloader>
-                    <!-- *ngIf="addInstrumentPopupFormConfig && !instrumentsAreLoading"  -->
-
                     <zx-form-loader
                       *ngIf="addInstrumentPopUpFormConfig"
                       zx-block-body

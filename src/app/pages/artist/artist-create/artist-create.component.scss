@@ -1,0 +1,23 @@
+.footerContainer {
+  text-align: end;
+}
+
+.buttonContainer {
+  padding: 5px;
+}
+
+img {
+  width: 350px;
+  height: 350px;
+  margin-top: 5px;
+}
+
+.imageContainer {
+  border: 1px solid black;
+}
+
+.bodyContainer {
+  column-gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+}

@@ -8,9 +8,10 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { SharedModule } from '../shared/shared.module';
 import { ArtistService } from './shared/artist.service';
 import { ArtistOverviewComponent } from './artist-overview/artist-overview.component';
+import { ArtistCreateComponent } from './artist-create/artist-create.component';
 
 @NgModule({
-  declarations: [ArtistSearchComponent,ArtistOverviewComponent],
+  declarations: [ArtistSearchComponent,ArtistOverviewComponent, ArtistCreateComponent],
   imports: [
     CommonModule,
     SharedModule,

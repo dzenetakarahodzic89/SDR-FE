@@ -38,7 +38,7 @@ export class PersonStatisticsComponent implements OnInit {
 
         const ratios = {};
         Object.values(this.statistics).forEach((country) => {
-          ratios[country.name] = country.ratio;
+          ratios[country.name] = country.ratio * 100.0;
         });
 
         const countryValues = countries.map((d) => ({

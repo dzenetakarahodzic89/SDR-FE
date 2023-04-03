@@ -26,11 +26,12 @@
     </div>
     <div class="w-100 pl-10 pr-10">
       <div class="row">
-        <h1>{{ artist.name + " " + artist.surname }}</h1>
+        <h1>{{ artist.fullName }}</h1>
       </div>
       <div class="row">
         <div class="p-inline col-14">
-          <p>Songs {{ artist.numberOfSongs }}</p>
+          <p>Songs {{ artist.numberOfSongs + " " }}</p>
+
           <p>Albums {{ artist.albums.length }}</p>
         </div>
         <div class="col-10">
@@ -39,18 +40,13 @@
             zx-block-action
             [config]="copyImageButton"
           ></zx-button>
-          <zx-button
-            id="addSongBtn"
-            zx-block-action
-            [config]="addSongBtn"
-          ></zx-button>
 
           <zx-button
             id="editBtn"
             zx-block-action
             [config]="editBtn"
           ></zx-button>
-          
+
           <zx-button
             id="deleteBtn"
             zx-block-action
@@ -61,6 +57,11 @@
             id="connectMedia"
             zx-block-action
             [config]="connectMediaBtn"
+          ></zx-button>
+          <zx-button
+            id="albumTimeline"
+            zx-block-action
+            [config]="albumTimelineBtn"
           ></zx-button>
         </div>
       </div>
