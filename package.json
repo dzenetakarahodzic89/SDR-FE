@@ -28,6 +28,7 @@
     "@fortawesome/fontawesome-pro": "^5.15.4",
     "@tinymce/tinymce-angular": "^4.0.1",
     "@types/geojson": "^7946.0.10",
+    "@zff-common/cx-list-layout": "^12.0.1",
     "@zff/zx-app-header": "^12.1.0",
     "@zff/zx-block": "^12.1.0",
     "@zff/zx-block-layout": "^12.1.0",
