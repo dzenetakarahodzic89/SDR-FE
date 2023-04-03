@@ -14,6 +14,7 @@ import {
   Artist,
   ArtistImageResponse,
   AttackCountry,
+  BattleLogBattleResult,
   BattleLogEntry,
   BattleTurn,
   BattleTurnUpdateRequest,
@@ -22,11 +23,12 @@ import {
   PreMoveBattleAttack,
   Song,
   TeamState,
+  TurnHistoryGrid,
 } from '../../shared/music-risk.model';
 import { MusicRiskService } from '../../shared/music-risk.service';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
-import { Definition } from '@zff/zx-forms';
+import { Definition, Depend, Dependency } from '@zff/zx-forms';
 import { ToastrService } from 'ngx-toastr';
 var ChartGeo = require('chartjs-chart-geo');
 Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
@@ -36,6 +38,12 @@ Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
   styleUrls: ['./music-risk-world-map.component.scss'],
 })
 export class MusicRiskWorldMapComponent implements OnInit {
+  flags: { id: number; name: string }[] = [];
+  flagWinner = '';
+  flagLoser = '';
+  npcStandingUrl = '';
+  playerStandingUrl = '';
+  turnHistory: BattleLogEntry[];
   npcUrl = '';
   playerUrl = '';
   attackerCountryId: number;
@@ -51,6 +59,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
   teamState: TeamState;
   mapState: MapState;
   battleId: number;
+  indx = 0;
   eligibleCountryIds: number[];
   attackObject: PreMoveBattleAttack = new PreMoveBattleAttack();
   constructor(
@@ -60,6 +69,8 @@ export class MusicRiskWorldMapComponent implements OnInit {
     private toastr: ToastrService
   ) {}
   public popUpBlockConfig: ZxBlockModel;
+  public popUpStandingsConfig: ZxBlockModel;
+  public popUpStandingsTurnConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
   public attackBlockConfig: ZxBlockModel;
   public popUpAttackFormConfig: Definition;
@@ -69,6 +80,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
     hideHeader: true,
     hideCloseButton: false,
     size: 'col-12',
+  });
+  public viewStandingsPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-20',
   });
   public attackPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
@@ -108,6 +124,19 @@ export class MusicRiskWorldMapComponent implements OnInit {
   checkBoxesMap: Map<number, number> = new Map();
   battleTurnId: number;
   songArray: Song[] = [];
+  public linkPopupStandingsFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'close',
+        description: 'attack',
+        label: 'Close',
+        class: 'classic primary',
+        action: () => {
+          this.viewStandingsPopup.hide();
+        },
+      },
+    ],
+  });
   public linkPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -117,6 +146,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
         class: 'classic primary',
         icon: 'fal fa-check-circle',
         action: () => {
+          this.formCheckboxesForAttack = [];
           this.attackerCountryId = this.attackCountryModel.attackingCountryId;
           this.attackedCountryId = this.attackCountryModel.attackedCountryId;
           this.attackObject.attackedId =
@@ -211,18 +241,22 @@ export class MusicRiskWorldMapComponent implements OnInit {
               this.checkBoxesMap.set(i + 1, i);
               i += 2;
             }
-
+            console.log('SONG SIZE');
+            console.log(this.songSize * 2);
             for (let i = 0; i < this.songSize * 2; i++) {
+              console.log(i);
               this.formCheckboxesForAttack.push(
                 new Definition({
                   template: 'ZxCheckbox',
                   class: ['col-12'],
                   type: 'classic',
-                  name: 'song' + i,
+                  name: 'song' + this.indx,
                   label: 'Classic checkbox',
                 })
               );
+              this.indx += 1;
             }
+            console.log(this.formCheckboxesForAttack);
             /* Fill songs 0-x with mix of artists from npc and player */
             let playerCount = 1;
             let npcCount = 0;
@@ -238,7 +272,8 @@ export class MusicRiskWorldMapComponent implements OnInit {
               }
             }
             this.popUpAttackFormConfig.children = this.formCheckboxesForAttack;
-
+            console.log('CHILDREN FFS');
+            console.log(this.popUpAttackFormConfig.children.length);
             /* checkbox manipulation (if one is checked other is not) */
             for (
               let j = 0;
@@ -246,7 +281,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
               j++
             ) {
               this.popUpAttackFormConfig.children[j].label =
-                this.songArray[j].name;
+                this.songArray[j]?.name;
               this.popUpAttackFormConfig.children[j].onChange = () => {
                 this.popUpAttackFormConfig.children[
                   this.checkBoxesMap.get(j)
@@ -371,6 +406,8 @@ export class MusicRiskWorldMapComponent implements OnInit {
               this.attackPopup.hide();
               if (turnObject.wonCase === 'PLAYER')
                 this.eligibleCountryIds.push(this.attackedCountryId);
+              this.chart.destroy();
+              this.loadData();
             });
         },
       },
@@ -388,6 +425,20 @@ export class MusicRiskWorldMapComponent implements OnInit {
   songOneInput: Definition = new Definition({
     template: 'ZxCheckbox',
   });
+  public popUpStandingFormConfig: Definition;
+  public setViewStandingsPopup() {
+    this.popUpStandingsConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Recent standings',
+    });
+    this.popUpStandingFormConfig = new Definition({
+      name: 'connectMedia',
+      template: 'ZxForm',
+      disabled: false,
+      model: this.attackCountryModel,
+      children: [...this.formCheckboxesForAttack],
+    });
+  }
   public setPopUpFormConfig() {
     this.popUpBlockConfig = new ZxBlockModel({
       hideExpand: true,
@@ -414,6 +465,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
     });
   }
   teamInfo: MapState[] = [];
+
   artistColumnDefs = [
     {
       field: 'numberOfActivePlayerTeams',
@@ -468,6 +520,165 @@ export class MusicRiskWorldMapComponent implements OnInit {
       },
     ],
   });
+  standingsHistoryDefs = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'text',
+      headerName: 'Description',
+      flex: 5,
+      floatingFilter: false,
+    },
+  ];
+  battleLogs: TurnHistoryGrid[] = [];
+  public standingsGridOptions: GridOptions = {
+    columnDefs: this.standingsHistoryDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {},
+  } as GridOptions;
+  standingsTurnDefs = [
+    {
+      field: 'turnNumber',
+      headerName: 'Turn number',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'winnerTeamId',
+      headerName: 'Winner team',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'loserTeamId',
+      headerName: 'Loser Team',
+      flex: 1,
+      floatingFilter: false,
+    },
+  ];
+  public playSong(who: string, id: number) {
+    if (who === 'PLAYER') {
+      this.playerStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        this.turnHistory[this.playerStandingSongs[id].id].songASpotifyId +
+        '?utm_source=generator&theme=0';
+    } else {
+      this.npcStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        this.turnHistory[this.npcStandingSongs[id].id].songBSpotifyId +
+        '?utm_source=generator&theme=0';
+    }
+  }
+
+  battleTurns: BattleLogBattleResult[];
+  isAnyRowClicked = false;
+  standingsSongsArray = [];
+  playerStandingSongs = [];
+  npcStandingSongs = [];
+  songsForm: Definition[] = [];
+  public someModal: any;
+  public standingsTurnGridOptions: GridOptions = {
+    columnDefs: this.standingsTurnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.standingsSongsArray = [];
+      this.playerStandingSongs = [];
+      this.npcStandingSongs = [];
+      this.songsForm = [];
+      this.popUpStandingFormConfig.children = null;
+      this.popUpStandingFormConfig.model = null;
+      this.isAnyRowClicked = true;
+      let elements: BattleLogEntry[] = [];
+      const winnerTeamID = +event['data']['winnerTeamId'];
+      const loserTeamID = +event['data']['loserTeamId'];
+      let wonCase = 'PLAYER';
+      let playerFlagId = 0;
+      let npcFlagId = 0;
+      if (this.teamState.activePlayerTeam.id == winnerTeamID) {
+        playerFlagId = this.teamState.activePlayerTeam.countryId;
+        for (let team of this.teamState.inactiveNpcTeams) {
+          if (team.id === loserTeamID) npcFlagId = team.countryId;
+        }
+      } else {
+        playerFlagId = this.teamState.activePlayerTeam.countryId;
+        for (let team of this.teamState.activeNpcTeams) {
+          if (team.id === loserTeamID) npcFlagId = team.countryId;
+        }
+      }
+      for (let flag of this.flags) {
+        if (npcFlagId == flag.id)
+          this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
+        if (playerFlagId == flag.id)
+          this.flagWinner = 'fi fi-' + flag.name.toLowerCase();
+      }
+
+      for (let i = 0; i < this.turnHistory.length; i++) {
+        let turn = this.turnHistory[i];
+        if (turn.battleResultId === +event['data']['id']) {
+          elements.push(turn);
+          const playerSong = {
+            name: turn.playerASongName,
+            spotifyId: turn.songASpotifyId,
+            checked: turn.winnerSongId === turn.playerASongId,
+            id: i,
+          };
+          const npcSong = {
+            name: turn.playerBSongName,
+            spotifyId: turn.songBSpotifyId,
+            checked: turn.winnerSongId === turn.playerBSongId,
+            id: i,
+          };
+          this.standingsSongsArray.push(playerSong);
+          this.playerStandingSongs.push(playerSong);
+          this.standingsSongsArray.push(npcSong);
+          this.npcStandingSongs.push(npcSong);
+          this.songsForm.push(
+            new Definition({
+              template: 'ZxCheckbox',
+              class: ['col-12'],
+              type: 'classic',
+              name: 'song' + this.indx,
+              label: 'Classic checkbox',
+            })
+          );
+          this.songsForm.push(
+            new Definition({
+              template: 'ZxCheckbox',
+              class: ['col-12'],
+              type: 'classic',
+              name: 'song' + (this.indx + 1),
+              label: 'Classic checkbox',
+            })
+          );
+          this.indx += 2;
+        }
+      }
+      this.popUpStandingFormConfig.updateListModel();
+      this.popUpStandingFormConfig.children = this.songsForm;
+      let inx = 0;
+      for (let song of this.standingsSongsArray) {
+        this.popUpStandingFormConfig.children[inx].label = song.name;
+        this.popUpStandingFormConfig.children[inx].disabled = true;
+        this.popUpStandingFormConfig.children[inx].defaultValue = song.checked;
+        inx += 1;
+      }
+      console.log(elements);
+      this.npcStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        elements[0].songASpotifyId +
+        '?utm_source=generator&theme=0';
+      this.playerStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        elements[1].songASpotifyId +
+        '?utm_source=generator&theme=0';
+    },
+  } as GridOptions;
   public viewAndAlterRosterBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -479,12 +690,33 @@ export class MusicRiskWorldMapComponent implements OnInit {
       },
     ],
   });
+  searchedFor = false;
   public viewStandingsBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         icon: 'far fa-layer-group',
         label: 'View Standings',
-        action: () => {},
+        action: () => {
+          if (!this.searchedFor) {
+            //GET FLAGS
+            console.log('ZOVEM FLAGS');
+            this.viewStandingsPopup.show();
+            const countryIds = [];
+            countryIds.push(this.teamState.activePlayerTeam.countryId);
+            for (let team of this.battleTurns) {
+              countryIds.push(...team.loserEligibleCountryIds);
+              countryIds.push(...team.winnerEligibleCountryIds);
+            }
+            const uniquesOnly = [...new Set(countryIds)];
+            this.musicService.getFlags(uniquesOnly).subscribe((data) => {
+              this.flags = data;
+              console.log(uniquesOnly);
+              console.log('FLAGS');
+              console.log(this.flags);
+            });
+            this.searchedFor = true;
+          }
+        },
       },
     ],
   });
@@ -500,6 +732,19 @@ export class MusicRiskWorldMapComponent implements OnInit {
   loadData() {
     this.route.params.subscribe((params) => {
       this.musicService.getLastTurn(params.id).subscribe((data: BattleTurn) => {
+        Object.keys(data.turnCombatState.battleLogs[0].textHistory).forEach(
+          (key, index) => {
+            this.battleLogs.push(
+              new TurnHistoryGrid(
+                key,
+                data.turnCombatState.battleLogs[0].textHistory[key]
+              )
+            );
+          }
+        );
+        this.battleTurns = data.turnCombatState.battleLogs[0].battleResults;
+        this.turnHistory = data.turnCombatState.battleLogs[0].turnHistory;
+
         this.setPopUpFormConfig();
         this.battleId = +params.id;
         this.battleTurn = data;
@@ -516,6 +761,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
         this.mapState = data.mapState;
         this.teamInfo.push(data.mapState);
         this.teamState = data.teamState;
+        this.setViewStandingsPopup();
         this.setupMap();
       });
     });
@@ -525,6 +771,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
 
     return scores.get(country);
   }
+
   setupMap() {
     fetch('https://unpkg.com/world-atlas/countries-50m.json')
       .then((r) => r.json())

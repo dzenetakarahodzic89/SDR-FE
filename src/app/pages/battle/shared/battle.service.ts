@@ -3,9 +3,11 @@ import { Injectable } from '@angular/core';
 import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BattleOverviewSearchRequest } from './battle.model';
+
+import { BattleOverviewSearchRequest, BattleSingleOverviewModel } from './battle.model';
 import { BattleApi } from './battle-api.constants';
 import { Battle, EligibleArtistsInformation, Team, TeamInformation } from './battle.model';
+
 
 @Injectable()
 export class BattleService {
@@ -19,6 +21,13 @@ export class BattleService {
     );
   }
 
+  getSingleBattle (id: number):Observable<BattleSingleOverviewModel> {
+    return this.api.get(BattleApi.GET_SINGLE_OVERVIEW.replace('#',id.toString())).pipe(
+      map((response) => {
+        return response['payload'] as BattleSingleOverviewModel ;
+      })
+    )
+  }
   public getBattle(battleId : number) : Observable<Battle> {
     return this.api.get(BattleApi.GET_BATTLE_BY_ID.replace('#', battleId.toString()))
     .pipe( 

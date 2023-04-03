@@ -49,6 +49,8 @@ import { ArtistCreateComponent } from './pages/artist/artist-create/artist-creat
 import { HistoryComponent } from './pages/playlist/history/history.component';
 import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-timeline/album-timeline.component';
 import { EraOverviewComponent } from './pages/era/era-overview/era-overview.component';
+import { ReleaseSearchComponent } from './pages/release/release-search/release-search.component';
+import { SpotifyStatisticsComponent } from './pages/spotify/spotify-statistics/spotify-statistics.component';
 
 import { SetupComponent } from './pages/music-risk/setup/setup.component';
 import { CountryRelationsCreateComponent } from './pages/country/country-relation-create/country-relation-create.component';
@@ -126,4 +128,6 @@ export const appRoutes: Routes = [
   { path: 'playlist/history', component: HistoryComponent },
   { path: 'playlist/:id/edit', component: EditPlaylistComponent },
   { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
+  { path: 'release/search', component: ReleaseSearchComponent },
+  { path: 'spotify-integration', component: SpotifyStatisticsComponent }
 ];

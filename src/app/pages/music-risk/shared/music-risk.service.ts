@@ -3,7 +3,11 @@ import { ZxApi } from '@zff/zx-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MusicRiskApi } from './music-risk-api.constant';
-import { CountryRequest, GenerateBattleRequest } from './music-risk.model';
+import {
+  BattleLogs,
+  CountryRequest,
+  GenerateBattleRequest,
+} from './music-risk.model';
 import {
   ArtistImageResponse,
   BattleTurnUpdateRequest,
@@ -89,5 +93,20 @@ export class MusicRiskService {
         return message;
       })
     );
+  }
+  getStandings(turnId: number): Observable<BattleLogs> {
+    return this.api
+      .get(MusicRiskApi.GET_STANDINGS.replace('#', turnId.toString()))
+      .pipe(
+        map((response) => {
+          return response['payload'];
+        })
+      );
+  }
+  getFlags(countryIds: number[]) {
+    const obj = { countryIds };
+    return this.api
+      .post(MusicRiskApi.GET_FLAGS, obj)
+      .pipe(map((res) => res['payload']));
   }
 }
