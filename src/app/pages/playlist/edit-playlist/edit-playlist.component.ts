@@ -51,6 +51,106 @@ export class EditPlaylistComponent implements OnInit {
     ],
   });
 
+  public deleteSong: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'Popup Test',
+        label: 'Delete song from playlist',
+        action: () => {
+          this.popupDeleteSong.show();
+        },
+      },
+    ],
+  });
+
+  public popupDelete: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-8',
+  });
+
+  public popupDeleteSong: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-8',
+  });
+
+  public popupDeleteFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => this.popupDeleteSong.hide(),
+      },
+      {
+        name: 'confirm',
+        description: 'Confirm',
+        label: 'Confirm',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.popupDeleteSong.hide(), this.deleteSongFromPlaylist();
+        },
+      },
+    ],
+  });
+
+  public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => this.popupDelete.hide(),
+      },
+      {
+        name: 'confirm',
+        description: 'Confirm',
+        label: 'Confirm',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.popupDelete.hide(), this.delete();
+        },
+      },
+    ],
+  });
+
+  delete() {
+    this.playlistService
+      .deletePlayList(this.songPlaylistRequest.playlistId)
+      .subscribe(() => {
+        this.router.navigateByUrl('/playlist/search');
+      });
+  }
+
+  deleteSongFromPlaylist() {
+    if (this.songId === undefined) {
+      this.toastr.error('Select the song you want to delete!');
+    }
+    this.songService
+      .deleteSongFromPlaylist(this.songPlaylistRequest.playlistId, this.songId)
+      .subscribe(() => {
+        if (this.playlistDetail.length != 1) {
+          console.log(this.playlistDetail.length);
+          this.toastr.success(
+            'The song has been successfully deleted from the playlist!'
+          );
+          location.reload();
+        } else {
+          this.toastr.success(
+            'The song has been successfully deleted from the playlist!'
+          );
+          this.router.navigateByUrl('/playlist/search');
+        }
+      });
+  }
+
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     hideHeader: true,
@@ -109,6 +209,7 @@ export class EditPlaylistComponent implements OnInit {
     ],
   });
 
+  songId: number;
   public playlistGridOptions: GridOptions = {
     columnDefs: this.playlistColumnDefs,
     rowModelType: 'clientSide',
@@ -118,6 +219,8 @@ export class EditPlaylistComponent implements OnInit {
         'https://open.spotify.com/embed/track/' +
         event['data']['spotifyId'] +
         '?utm_source=generator&theme=0';
+      this.songId = event['data']['songId'];
+      console.log(this.songId);
     },
   } as GridOptions;
 
@@ -128,13 +231,6 @@ export class EditPlaylistComponent implements OnInit {
     playlistId: null,
     songId: null,
   };
-  loadData() {
-    this.route.params.subscribe((params) => {
-      this.getPlaylistDetails(params.id);
-      this.songPlaylistRequest.playlistId = params.id;
-    });
-    this.setPopUpFormConfig();
-  }
 
   getPlaylistDetails(id: number) {
     this.playlistService
@@ -144,6 +240,7 @@ export class EditPlaylistComponent implements OnInit {
           'https://open.spotify.com/embed/track/' +
           response[0].spotifyId +
           '?utm_source=generator&theme=0';
+
         this.playlistDetail = response;
         this.calculateTotalTime();
         this.getSongs();
@@ -233,42 +330,13 @@ export class EditPlaylistComponent implements OnInit {
       });
   }
 
-  delete() {
-    this.playlistService
-      .deletePlayList(this.songPlaylistRequest.playlistId)
-      .subscribe(() => {
-        this.router.navigateByUrl('/playlist/search');
-      });
+  loadData() {
+    this.route.params.subscribe((params) => {
+      this.getPlaylistDetails(params.id);
+      this.songPlaylistRequest.playlistId = params.id;
+    });
+    this.setPopUpFormConfig();
   }
-
-  public popupDelete: ZxPopupLayoutModel = new ZxPopupLayoutModel({
-    hideHeader: true,
-    hideCloseButton: false,
-    size: 'col-8',
-  });
-
-  public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
-    items: [
-      {
-        name: 'cancel',
-        description: 'Cancel',
-        label: 'Cancel',
-        class: 'classic',
-        icon: 'fal fa-times',
-        action: () => this.popupDelete.hide(),
-      },
-      {
-        name: 'confirm',
-        description: 'Confirm',
-        label: 'Confirm',
-        class: 'classic primary',
-        icon: 'fal fa-check-circle',
-        action: () => {
-          this.popupDelete.hide(), this.delete();
-        },
-      },
-    ],
-  });
 
   ngOnInit(): void {
     this.loadData();
