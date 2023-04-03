@@ -84,6 +84,145 @@
       ></zx-button>
     </div>
   </zx-popup>
+  <zx-popup [config]="viewStandingsPopup">
+    <div zx-popup-body>
+      <zx-block [config]="popUpStandingsConfig">
+        <div zx-block-body>
+          <div style="display: flex; height: 250px">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="standingsGridOptions"
+              [source]="battleLogs"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+            <zx-grid
+              zx-block-body
+              [gridOptions]="standingsTurnGridOptions"
+              [source]="battleTurns"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </div>
+          <div zx-popup-body *ngIf="isAnyRowClicked">
+            <zx-block [config]="attackBlockConfig">
+              <div style="display: flex; gap: 20px" zx-block-body>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <!-- <div *ngIf="artistImageOne">
+                    <img
+                      [src]="artistImageOne.imageUrl"
+                      alt=""
+                      style="width: 250px; height: 250px"
+                    />
+                  </div> -->
+                  <span
+                    style="margin-right: 5px; margin-left: 5px; font-size: 18px"
+                    class="{{ flagWinner }}"
+                  ></span>
+                  <iframe
+                    style="border-radius: 12px"
+                    [src]="playerStandingUrl | safe : 'resourceUrl'"
+                    width="250px"
+                    height="100"
+                    frameBorder="0"
+                    allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  ></iframe>
+                  <div
+                    *ngFor="let song of this.playerStandingSongs; let i = index"
+                    style="display: flex; flex-direction: column; gap: 5px"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        gap: 15px;
+                        align-items: center;
+                        cursor: pointer;
+                      "
+                      (click)="playSong('PLAYER', i)"
+                    >
+                      <i
+                        class="far fa-play fa-sm"
+                        style="color: #000000; cursor: pointer"
+                      ></i>
+                      <p style="font-size: 12px; cursor: pointer">
+                        {{ song.name }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    width: 500px;
+                  "
+                >
+                  <zx-form-loader
+                    *ngIf="popUpStandingFormConfig"
+                    [component]="popUpStandingFormConfig"
+                    [model]="someModal"
+                    class="col-24"
+                  ></zx-form-loader>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <!-- <div *ngIf="artistImageTwo">
+                    <img
+                      [src]="artistImageTwo.imageUrl"
+                      alt=""
+                      style="width: 250px; height: 250px"
+                    />
+                  </div> -->
+                  <span
+                    style="margin-right: 5px; margin-left: 5px; font-size: 18px"
+                    class="{{ flagLoser }}"
+                  ></span>
+                  <iframe
+                    style="border-radius: 12px"
+                    [src]="npcStandingUrl | safe : 'resourceUrl'"
+                    width="250px"
+                    height="100"
+                    frameBorder="0"
+                    allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  ></iframe>
+                  <div
+                    *ngFor="let song of this.npcStandingSongs; let i = index"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        gap: 15px;
+                        align-items: center;
+                        cursor: pointer;
+                      "
+                      (click)="playSong('NPC', i)"
+                    >
+                      <i
+                        class="far fa-play fa-sm"
+                        style="color: #000000; cursor: pointer"
+                      ></i>
+                      <p style="font-size: 12px; cursor: pointer">
+                        {{ song.name }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </zx-block>
+          </div>
+        </div>
+      </zx-block>
+    </div>
+    <zx-button
+      zx-popup-footer
+      [config]="linkPopupStandingsFooterButtons"
+      class="align-right"
+    ></zx-button>
+  </zx-popup>
   <zx-popup [config]="attackPopup">
     <div zx-popup-body>
       <zx-block [config]="attackBlockConfig">
