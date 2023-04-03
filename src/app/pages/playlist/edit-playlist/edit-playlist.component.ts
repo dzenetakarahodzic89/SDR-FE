@@ -39,18 +39,6 @@ export class EditPlaylistComponent implements OnInit {
     ],
   });
 
-  public deletePlaylist: ZxButtonModel = new ZxButtonModel({
-    items: [
-      {
-        name: 'Popup Test',
-        label: 'Delete playlist',
-        action: () => {
-          this.popupDelete.show();
-        },
-      },
-    ],
-  });
-
   public deleteSong: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -61,12 +49,6 @@ export class EditPlaylistComponent implements OnInit {
         },
       },
     ],
-  });
-
-  public popupDelete: ZxPopupLayoutModel = new ZxPopupLayoutModel({
-    hideHeader: true,
-    hideCloseButton: false,
-    size: 'col-8',
   });
 
   public popupDeleteSong: ZxPopupLayoutModel = new ZxPopupLayoutModel({
@@ -93,29 +75,6 @@ export class EditPlaylistComponent implements OnInit {
         icon: 'fal fa-check-circle',
         action: () => {
           this.popupDeleteSong.hide(), this.deleteSongFromPlaylist();
-        },
-      },
-    ],
-  });
-
-  public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
-    items: [
-      {
-        name: 'cancel',
-        description: 'Cancel',
-        label: 'Cancel',
-        class: 'classic',
-        icon: 'fal fa-times',
-        action: () => this.popupDelete.hide(),
-      },
-      {
-        name: 'confirm',
-        description: 'Confirm',
-        label: 'Confirm',
-        class: 'classic primary',
-        icon: 'fal fa-check-circle',
-        action: () => {
-          this.popupDelete.hide(), this.delete();
         },
       },
     ],

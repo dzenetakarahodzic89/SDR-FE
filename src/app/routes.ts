@@ -55,6 +55,7 @@ import { SpotifyStatisticsComponent } from './pages/spotify/spotify-statistics/s
 import { SetupComponent } from './pages/music-risk/setup/setup.component';
 import { CountryRelationsCreateComponent } from './pages/country/country-relation-create/country-relation-create.component';
 import { EditPlaylistComponent } from './pages/playlist/edit-playlist/edit-playlist.component';
+import { PlaylistOverviewComponent } from './pages/playlist/playlist-overview/playlist-overview.component';
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -114,10 +115,16 @@ export const appRoutes: Routes = [
   { path: 'compare-score', component: UrmComponent },
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
   { path: 'news-articles/new', component: NewsArticlesNewsComponent },
-  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent, },
+  {
+    path: 'playlist/generate-ga-playlist',
+    component: GenerateGaPlaylistComponent,
+  },
   { path: 'person-statistics', component: PersonStatisticsComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
-  { path: 'country-relations/create', component: CountryRelationsCreateComponent },
+  {
+    path: 'country-relations/create',
+    component: CountryRelationsCreateComponent,
+  },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
   { path: 'battle/overview', component: BattleSearchComponent },
   { path: 'battle/:id/create-roster', component: BattleRosterComponent },
@@ -126,8 +133,9 @@ export const appRoutes: Routes = [
   { path: 'artist/create', component: ArtistCreateComponent },
   { path: 'artist/update/:id', component: ArtistCreateComponent },
   { path: 'playlist/history', component: HistoryComponent },
+  { path: 'playlist/:id/overview', component: PlaylistOverviewComponent },
   { path: 'playlist/:id/edit', component: EditPlaylistComponent },
   { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
   { path: 'release/search', component: ReleaseSearchComponent },
-  { path: 'spotify-integration', component: SpotifyStatisticsComponent }
+  { path: 'spotify-integration', component: SpotifyStatisticsComponent },
 ];

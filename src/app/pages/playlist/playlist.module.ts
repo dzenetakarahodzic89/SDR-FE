@@ -8,6 +8,8 @@ import { GeneratePlaylistComponent } from './generate-playlist/generate-playlist
 import { GenerateGaPlaylistComponent } from './generate-ga-playlist/generate-ga-playlist.component';
 import { HistoryComponent } from './history/history.component';
 import { EditPlaylistComponent } from './edit-playlist/edit-playlist.component';
+import { PlaylistOverviewComponent } from './playlist-overview/playlist-overview.component';
+import { AngMusicPlayerModule } from 'ang-music-player';
 
 @NgModule({
   declarations: [
@@ -16,12 +18,19 @@ import { EditPlaylistComponent } from './edit-playlist/edit-playlist.component';
     GenerateGaPlaylistComponent,
     HistoryComponent,
     EditPlaylistComponent,
+    PlaylistOverviewComponent,
   ],
-  imports: [SharedModule, EditorModule, AutocompleteLibModule],
+  imports: [
+    SharedModule,
+    EditorModule,
+    AutocompleteLibModule,
+    AngMusicPlayerModule,
+  ],
   exports: [
     PlaylistSearchComponent,
     GeneratePlaylistComponent,
     EditPlaylistComponent,
+    PlaylistOverviewComponent,
   ],
   providers: [
     PlaylistService,

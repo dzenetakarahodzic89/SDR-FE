@@ -9,6 +9,7 @@ import {
   HistoryRecord,
   PlaylistResponse,
   PlayListResponsee,
+  PlayListResponseOverview,
   PlaylistSong,
   SongGAResponse,
   SongNameResponse,
@@ -119,6 +120,16 @@ export class PlaylistService {
   getPlaylists(playlistId: number): Observable<PlayListResponsee[]> {
     return this.api
       .get(PlaylistApi.GET_PLAYLIST.replace('#', playlistId.toString()))
+      .pipe(map((response) => response['payload']));
+  }
+
+  getPlaylistsOverview(
+    playlistId: number
+  ): Observable<PlayListResponseOverview[]> {
+    return this.api
+      .get(
+        PlaylistApi.GET_PLAYLIST_OVERVIEW.replace('#', playlistId.toString())
+      )
       .pipe(map((response) => response['payload']));
   }
 
