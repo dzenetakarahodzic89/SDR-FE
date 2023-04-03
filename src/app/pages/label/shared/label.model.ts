@@ -38,13 +38,13 @@ export class LabelCreateRequest {
 }
 
 export class LabelSearchRequest{
-  name:string;
   founders: any[];
+  name : string;
+  page: any;
+  size:any;
   sort:string;
-  pageNumber: any;
-  pageSize:any;
-
 }
+
 
 export class PersonLoV {
   id: number;

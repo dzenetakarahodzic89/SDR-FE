@@ -2,7 +2,7 @@
     <zx-block [config]="labelsBlockConfig" class="col-16">
       <zx-button zx-block-action [config]="newLabelBtn"></zx-button>
       <div zx-block-body class="row">
-        <zx-preloader *ngIf="labelsareLoading || foundersareLoading"></zx-preloader>
+        <zx-preloader *ngIf="labelsAreLoading"></zx-preloader>
       </div>
       <div
         *ngIf="foundLabels && foundLabels.length > 0"

@@ -79,6 +79,13 @@
             "label": "Event search",
             "url": "event/search",
             "attributes": {}
+          },
+          {
+            "code" : "HUB_LABEL_SEARCH_STATIC",
+            "icon" : "far fa-music",
+            "label" : "Labels",
+            "url" : "label/search",
+            "attributes" : {}
           }
         ]
       },

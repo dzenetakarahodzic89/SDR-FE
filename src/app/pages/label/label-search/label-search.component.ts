@@ -13,7 +13,6 @@ import { LabelService } from '../shared/label.service';
   styleUrls: ['./label-search.component.scss']
 })
 export class LabelSearchComponent implements OnInit {
-
   public labelsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     label: 'Labels',
@@ -66,87 +65,140 @@ export class LabelSearchComponent implements OnInit {
       {
         name: 'nextPage',
         icon: 'fas fa-angle-double-right',
-        action: () => this.getNextPage()
+        action: () => this.getNextPage(),
       },
     ],
   });
 
-  labelsareLoading = false;
-  foundersareLoading = false;
+  labelsAreLoading = false;
 
   public model: any = {};
+  founderOptions: any[] = [];
+  sortByOptions: any[] = [
 
-  nameInput = {
-    template: 'ZxInput',
-    class: ['col-24'],
-    type: 'text',
-    name: 'name',
-    label: 'Name',
-  };
+    {
+      code: "last_edit",
+      displayName: "Last edit"
+    },
 
-  founderInput: Definition = new Definition({
-    template: 'ZxSelect',
-    class: ['col-24'],
-    type: 'filter',
-    name: 'founderId',
-    label: 'Founder',
-  });
+    {
+      code: "alphabetical",
+      displayName: "Alphabetical order"
 
-  sortInput: Definition = new Definition({
-    template: 'ZxSelect',
-    class: ['col-24'],
-    type: 'filter',
-    name: 'sortBy',
-    label: 'Sort By',
+    },
 
-  });
+    {
+
+      code: "no_of_artists",
+      displayName: "No of artists"
+    }
+  ];
+
+
+
+
 
   public formConfig: Definition;
   foundLabels: AppBox[] = [];
-
   paginationDetails = {
     page: 1,
     totalPages: 0
   };
 
   public setFormConfig() {
+
+
+    let nameInput = {
+      template: 'ZxInput',
+      class: ['col-24'],
+      type: 'text',
+      name: 'name',
+      label: 'Name',
+    };
+
+    let founderInput = {
+      template: 'ZxMultiselect',
+      class: ['col-24'],
+      type: 'filter',
+      name: 'founder',
+      label: 'Founder',
+      list: this.founderOptions,
+    };
+
+
+    let sortByInput = {
+      template: 'ZxMultiselect',
+      class: ['col-24'],
+      type: 'filter',
+      name: 'sortBy',
+      label: 'SortBy',
+      list: this.sortByOptions
+
+    };
+
     this.formConfig = new Definition({
       label: 'Search Labels',
       name: 'labelSearch',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        this.nameInput,
-        this.founderInput,
-        this.sortInput
-      ],
-      model: this.model
+      children: [nameInput, founderInput, sortByInput],
     });
   }
 
+  constructor(private router: Router, private labelService: LabelService) {}
 
-  constructor(private router: Router, private labelService: LabelService) { }
 
   ngOnInit(): void {
-    this.foundersareLoading = true;
     this.loadData();
-    this.getFounders();
-    this.sortInput.list = [{ id: 0, name: "No of artists" }, { id: 1, name: "Last edit" }, { id: 2, name: "Alphabetical order" }]
     this.setFormConfig();
   }
-
   loadData() {
+    this.loadFounders();
     this.searchLabels();
   }
 
-  searchLabels() {
-    this.labelsareLoading = true;
+  loadFounders() {
+    this.labelService.getPerson().subscribe((response) => {
+      let listOfOptions: any = [];
+      for (let i = 0; i < response.length; i++) {
+        let founder = response[i];
+        let newOption = {
+          code: founder.id,
+          displayName: founder.name,
+        };
+        listOfOptions.push(newOption);
+        console.log(newOption);
+      }
 
-    this.labelService.searchLabels(this.model.name, this.model.founderId, this.model.sortBy).subscribe(response => {
-      this.foundLabels = response as unknown as AppBox[];
+      this.founderOptions = listOfOptions;
+      if (this.formConfig != null && this.formConfig != undefined) {
+        console.log('Form', this.formConfig);
+        this.formConfig.children[1].list = listOfOptions;
+      } else {
+        this.setFormConfig();
+      }
+
+    })
+
+
+  }
+
+  searchLabels() {
+
+    this.labelsAreLoading = true;
+    let searchParams = new LabelSearchRequest();
+    searchParams.founders = this.model.founder;
+    searchParams.sort = this.model.sortBy;
+    searchParams.page = this.paginationDetails.page;
+    searchParams.name = this.model.name;
+    searchParams.size = 10;
+
+    this.labelService.searchLabels(searchParams).subscribe(response => {
+      this.foundLabels = response['payload'] as unknown as AppBox[];
+
       this.paginationDetails.page = response['page'];
       this.paginationDetails.totalPages = response['numberOfPages'];
-      this.labelsareLoading = false;
+      this.labelsAreLoading = false;
     });
 
   }
@@ -159,6 +211,7 @@ export class LabelSearchComponent implements OnInit {
   }
 
   getNextPage() {
+
     if (
       (
         this.paginationDetails.totalPages >
@@ -167,16 +220,7 @@ export class LabelSearchComponent implements OnInit {
     ) {
       this.paginationDetails.page++;
       this.searchLabels();
-
     }
   }
-
-  getFounders() {
-    this.labelService.getPerson().subscribe(response => {
-      this.formConfig.children[1].list = response;
-      this.foundersareLoading = false;
-    });
-  }
-
-  }
+}
 
