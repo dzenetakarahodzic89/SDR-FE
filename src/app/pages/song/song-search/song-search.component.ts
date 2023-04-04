@@ -219,7 +219,7 @@ export class SongSearchComponent implements OnInit {
     });
   }
 
-  constructor(private router: Router, private songService: SongService) { }
+  constructor(private router: Router, private songService: SongService) {}
 
   ngOnInit(): void {
     this.setFormConfig();
@@ -264,7 +264,13 @@ export class SongSearchComponent implements OnInit {
 
   getAllArtists() {
     this.songService.getAllArtists().subscribe((response) => {
-      this.formConfig.children[5].list = response;
+      this.formConfig.children[5].list = response.map((artist) => {
+        return {
+          code: artist.id,
+          displayName:
+            artist.name + (artist.surname ? ' ' + artist.surname : ''),
+        };
+      });
     });
   }
 

@@ -105,6 +105,7 @@ export class ArtistResponse {
   id: number;
   fullName: string;
   name: string;
+  surname: string;
 }
 export class SongSearchRequest {
   name: string;
