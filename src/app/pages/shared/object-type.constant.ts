@@ -8,4 +8,5 @@ export class ObjectType {
   public static NOTESHEET = 'NOTESHEET';
   public static ERA = 'ERA';
   public static ARTIST = 'ARTIST';
+  public static CHORDPROGRESSION = 'CHORDPROGRESSION';
 }
