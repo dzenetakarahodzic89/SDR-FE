@@ -12,81 +12,56 @@
       </div>
       <div class="row">
         <div class="p-inline col-14">
-          <p>
-            {{ era.numberOfSongs | date : "dd.MM.yyyy" }} -
-            {{ artists[0]?.album }}
-          </p>
+          <p> {{ era.numberOfSongs | date : "dd.MM.yyyy" }} - {{ artists[0]?.album }} </p>
         </div>
         <div class="col-10">
-          <zx-button
-            id="galleryBtn"
-            zx-block-action
-            [config]="galleryBtn"
-          ></zx-button>
-          <zx-button
-            id="addAlbumBtn"
-            zx-block-action
-            [config]="addAlbumBtn"
-          ></zx-button>
-          <zx-button
-            id="editBtn"
-            zx-block-action
-            [config]="editBtn"
-          ></zx-button>
-
+          <zx-button id="galleryBtn" zx-block-action [config]="galleryBtn"></zx-button>
+          <zx-button id="addAlbumBtn" zx-block-action [config]="addAlbumBtn"></zx-button>
+          <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
+          <zx-button id="addCommentBtn" zx-block-action [config]="addCommentBtn"></zx-button>
           <zx-popup [config]="addAlbumPopup">
             <div zx-popup-body>
               <zx-block [config]="addAlbumPopUpBlockConfig">
-                <zx-preloader
-                  *ngIf="
+                <zx-preloader *ngIf="
                     songsAreLoading || artistsAreLoading || albumsAreLoading
-                  "
-                ></zx-preloader>
-                <zx-form-loader
-                  *ngIf="addAlbumPopUpFormConfig"
-                  zx-block-body
-                  [component]="addAlbumPopUpFormConfig"
-                  [model]="addAlbumModel"
-                  class="col-24"
-                ></zx-form-loader>
+                  "></zx-preloader>
+                <zx-form-loader *ngIf="addAlbumPopUpFormConfig" zx-block-body [component]="addAlbumPopUpFormConfig"
+                  [model]="addAlbumModel" class="col-24"></zx-form-loader>
               </zx-block>
             </div>
-
-            <zx-button
-              zx-popup-footer
-              [config]="addAlbumPopupFooterButtons"
-              class="align-right"
-            ></zx-button>
+            <zx-button zx-popup-footer [config]="addAlbumPopupFooterButtons" class="align-right"></zx-button>
           </zx-popup>
-
-          <zx-button
-            id="editBtn"
-            zx-block-action
-            [config]="editBtn"
-          ></zx-button>
+          <zx-popup [config]="addCommentPopup">
+            <div zx-popup-body>
+              <zx-block *ngIf="addCommentPopupBlockConfig" [config]="addCommentPopupBlockConfig">
+                <zx-form-loader *ngIf="addCommentPopupFormConfig" zx-block-body [component]="addCommentPopupFormConfig"
+                  [model]="addCommentModel" class="col-24"></zx-form-loader>
+              </zx-block>
+            </div>
+            <zx-button zx-popup-footer [config]="addCommentPopupFooterButtons" class="align-right"></zx-button>
+          </zx-popup>
         </div>
       </div>
       <hr />
       <p>{{ era.outlinetext }}</p>
     </div>
   </div>
-
   <div class="row-5 bottomContainer">
     <zx-block [config]="infoBlockConfig" class="col-14">
       <div zx-block-body [innerHTML]="era.information"></div>
     </zx-block>
-
     <zx-block [config]="detailsBlockConfig" class="col-10">
       <div zx-block-body>
-        <zx-block zx-tab-item id="albumsTab" [config]="albumsBlockConfig">
-          <zx-grid
-            zx-block-body
-            [gridOptions]="albumGridOptions"
-            [source]="this.era.albums"
-            domLayout="autoHeight"
-          >
-          </zx-grid>
-        </zx-block>
+        <zx-tabs [config]="tabConfig">
+          <zx-block zx-tab-item id="albumsTab" [config]="albumsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="albumGridOptions" [source]="this.era.albums" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="commentsTab" [config]="commentsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="commentGridOptions" [source]="comments" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+        </zx-tabs>
       </div>
     </zx-block>
   </div>

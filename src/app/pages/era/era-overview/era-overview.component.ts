@@ -11,6 +11,13 @@ import { ObjectType } from '../../shared/object-type.constant';
 import { EraService } from '../shared/era.service';
 import { EraResponse } from '../shared/era.model';
 import { ArtistResponse } from '../shared/era.model';
+import { ZxTabModel } from '@zff/zx-tab-layout';
+import {
+  AddCommentRequest,
+  CommentsFetchRequest,
+} from '../../shared/comment/comment.model';
+import { CommentService } from '../../shared/comment/comment.service';
+import { HomeService } from '../../home/shared/home-page.service';
 
 @Component({
   selector: 'app-era-overview',
@@ -25,7 +32,28 @@ export class EraOverviewComponent implements OnInit {
   artistsAreLoading: Boolean;
   artists: ArtistResponse[];
   era: EraResponse;
+  comments: Comment[];
   album: string[];
+
+  public tabConfig: ZxTabModel = new ZxTabModel({
+    orientation: 'portrait',
+    hideExpand: false,
+    items: [
+      {
+        name: 'Albums',
+        id: 'albumsTab',
+        label: 'Albums',
+        icon: 'fal fa-film',
+      },
+
+      {
+        name: 'Comments',
+        id: 'commentsTab',
+        label: 'Comments',
+        icon: 'fal fa-comments',
+      },
+    ],
+  });
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -43,6 +71,10 @@ export class EraOverviewComponent implements OnInit {
   });
 
   public albumsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+
+  public commentsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
@@ -232,6 +264,30 @@ export class EraOverviewComponent implements OnInit {
     },
   ];
 
+  commentColumnDefs = [
+    {
+      field: 'createdBy',
+      headerName: 'User',
+      maxWidth: 125,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Date of creation(mm/dd/yy)',
+      maxWidth: 200,
+      floatingFilter: false,
+      type: 'datetime',
+    },
+    {
+      field: 'content',
+      headerName: 'Content',
+      flex: 1,
+      floatingFilter: false,
+      autoHeight: true,
+      wrapText: true,
+    },
+  ];
+
   public albumGridOptions: GridOptions = {
     columnDefs: this.albumColumnDefs,
     rowModelType: 'clientSide',
@@ -240,6 +296,77 @@ export class EraOverviewComponent implements OnInit {
       this.router.navigate(['./album/' + event['data']['id'] + '/overview']);
     },
   } as GridOptions;
+
+  public commentGridOptions: GridOptions = {
+    columnDefs: this.commentColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    sideBar: null,
+  } as GridOptions;
+
+  public addCommentBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-comment-plus fa-flip-horizontal',
+        name: 'addComment',
+        label: 'Add comment',
+        action: () => this.addCommentPopup.show(),
+      },
+    ],
+  });
+  public addCommentPopupBlockConfig: ZxBlockModel;
+  public addCommentPopupFormConfig: Definition;
+  public addCommentPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public addCommentPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.addCommentToEra();
+        },
+      },
+      {
+        name: 'cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.addCommentPopup.hide();
+          this.addCommentModel = new AddCommentRequest();
+        },
+      },
+    ],
+  });
+  public addCommentModel: AddCommentRequest;
+  public setAddCommentPopUpFormConfig() {
+    this.addCommentPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add Comment to Era',
+    });
+    this.addCommentPopupFormConfig = new Definition({
+      name: 'addComment',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        new Definition({
+          template: 'ZxTextarea',
+          class: ['col-24', 'span-3'],
+          type: 'textarea',
+          name: 'content',
+          label: 'Content of the comment:',
+          validation: { required: true },
+        }),
+      ],
+      model: this.addCommentModel,
+    });
+  }
 
   erasAreLoading = false;
   /*
@@ -263,10 +390,12 @@ export class EraOverviewComponent implements OnInit {
       this.eraService.getEra(params.id).subscribe((response) => {
         this.era = response;
         this.setAddAlbumPopUpFormConfig();
+        this.setAddCommentPopUpFormConfig();
         //this.loadAlbums();
         //this.setAlbumPopUpFormConfig();
         this.artists = response.artists;
         this.eraIsLoading = false;
+        this.getCommentsForEra(this.type, this.era.id);
         this.getAlbums();
         this.getArtists();
       });
@@ -278,10 +407,50 @@ export class EraOverviewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
+    private commentService: CommentService,
+    private homeService: HomeService,
     public confirmation: ZxConfirmation
   ) {}
 
+  addCommentToEra() {
+    if (!this.addCommentPopupFormConfig.isValid) {
+      this.toastr.error('Fill in required comment content!');
+      return;
+    }
+
+    this.addCommentPopup.hide();
+
+    this.homeService.getUserCode().subscribe((response) => {
+      this.addCommentModel.createdBy = response.userCode;
+      this.addCommentModel.objectId = this.era.id;
+      this.addCommentModel.objectType = this.type;
+      this.addCommentModel.status = 'Active';
+
+      this.commentService.createComment(this.addCommentModel).subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Comment successfully added to era!');
+            this.addCommentModel = new AddCommentRequest();
+            this.getCommentsForEra(this.type, this.era.id);
+          } else {
+            this.toastr.error('Failed to add comment to era!');
+          }
+        },
+        (errorMsg: string) => {
+          this.toastr.error('Failed to add comment to era!');
+        }
+      );
+    });
+  }
+
   ngOnInit(): void {
+    this.addCommentModel = new AddCommentRequest();
     this.loadData();
+  }
+
+  getCommentsForEra(objectType: string, objectId: number) {
+    this.commentService
+      .fetchComments(new CommentsFetchRequest(objectType, objectId))
+      .subscribe((response) => (this.comments = response));
   }
 }

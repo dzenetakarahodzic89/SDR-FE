@@ -6,22 +6,36 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 import { ToastrService } from 'ngx-toastr';
-import { ConnectedMediaConnectionSource, ConnectedMediaConnectionType, ConnectedMediaDetailCreateRequest } from '../../shared/connected-media/connected-media.model';
+import {
+  ConnectedMediaConnectionSource,
+  ConnectedMediaConnectionType,
+  ConnectedMediaDetailCreateRequest,
+} from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
 import { ObjectType } from '../../shared/object-type.constant';
-import { InstrumentResponse, SongInstrumentResponse } from '../shared/instrument.model';
+import {
+  InstrumentResponse,
+  SongInstrumentResponse,
+} from '../shared/instrument.model';
 import { InstrumentService } from '../shared/instrument.service';
+import { ZxTabModel } from '@zff/zx-tab-layout';
+import {
+  AddCommentRequest,
+  CommentsFetchRequest,
+} from '../../shared/comment/comment.model';
+import { CommentService } from '../../shared/comment/comment.service';
+import { HomeService } from '../../home/shared/home-page.service';
 
 @Component({
   selector: 'app-instrument-overview',
   templateUrl: './instrument-overview.component.html',
-  styleUrls: ['./instrument-overview.component.scss']
+  styleUrls: ['./instrument-overview.component.scss'],
 })
 export class InstrumentOverviewComponent implements OnInit {
-
   type = ObjectType.INSTRUMENT;
   instrumentIsLoading = false;
   instrument: InstrumentResponse;
+  comments: Comment[];
   linkedMusicians: SongInstrumentResponse[];
   numOfSongs: number;
   connectionSources = [];
@@ -32,13 +46,34 @@ export class InstrumentOverviewComponent implements OnInit {
     hideHeader: true,
   });
 
+  public tabConfig: ZxTabModel = new ZxTabModel({
+    orientation: 'portrait',
+    hideExpand: false,
+    items: [
+      {
+        name: 'Musicians',
+        id: 'musiciansTab',
+        label: 'Musicians',
+        icon: 'fal fa-users',
+      },
+
+      {
+        name: 'Comments',
+        id: 'commentsTab',
+        label: 'Comments',
+        icon: 'fal fa-comments',
+      },
+    ],
+  });
+
   public editBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         icon: 'fal fa-edit',
         name: 'Edit button',
         label: 'Edit instrument',
-        action: () => this.router.navigate(['./instrument/update/' + this.instrument.id])
+        action: () =>
+          this.router.navigate(['./instrument/update/' + this.instrument.id]),
       },
     ],
   });
@@ -49,8 +84,11 @@ export class InstrumentOverviewComponent implements OnInit {
         icon: 'fal fa-solid fa-music',
         name: 'Add song button',
         label: 'Add song',
-        action: () => this.router.navigate(['./instrument/' + this.instrument.id + '/add-song'])
-      }
+        action: () =>
+          this.router.navigate([
+            './instrument/' + this.instrument.id + '/add-song',
+          ]),
+      },
     ],
   });
 
@@ -72,7 +110,30 @@ export class InstrumentOverviewComponent implements OnInit {
       headerName: 'Song',
       flex: 1,
       floatingFilter: false,
-    }
+    },
+  ];
+  commentColumnDefs = [
+    {
+      field: 'createdBy',
+      headerName: 'User',
+      maxWidth: 125,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Date of creation(mm/dd/yy)',
+      maxWidth: 200,
+      floatingFilter: false,
+      type: 'datetime',
+    },
+    {
+      field: 'content',
+      headerName: 'Content',
+      flex: 1,
+      floatingFilter: false,
+      autoHeight: true,
+      wrapText: true,
+    },
   ];
 
   public musiciansGridOptions: GridOptions = {
@@ -81,7 +142,14 @@ export class InstrumentOverviewComponent implements OnInit {
     enableColResize: true,
     onRowClicked: (event) => {
       this.router.navigate(['./person/' + event['data']['id'] + '/overview']);
-    }
+    },
+  } as GridOptions;
+
+  public commentGridOptions: GridOptions = {
+    columnDefs: this.commentColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    sideBar: null,
   } as GridOptions;
 
   public infoBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -90,7 +158,7 @@ export class InstrumentOverviewComponent implements OnInit {
   });
 
   public ratingBtnConfig: ZxBlockModel = new ZxBlockModel({
-    hideExpand: true
+    hideExpand: true,
   });
 
   public detailsBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -102,12 +170,16 @@ export class InstrumentOverviewComponent implements OnInit {
     hideExpand: true,
   });
 
+  public commentsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+
   public connectMediaBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         name: 'connectMedia',
         label: 'Connect Media',
-        action: () => this.popup.show()
+        action: () => this.popup.show(),
       },
     ],
   });
@@ -122,7 +194,7 @@ export class InstrumentOverviewComponent implements OnInit {
     type: 'select',
     name: 'connectionSource',
     label: 'Connection Source',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   typeInput: Definition = new Definition({
@@ -131,7 +203,7 @@ export class InstrumentOverviewComponent implements OnInit {
     type: 'select',
     name: 'connectionType',
     label: 'Connection Type',
-    validation: { required: true }
+    validation: { required: true },
   });
 
   linkInput = new Definition({
@@ -140,9 +212,12 @@ export class InstrumentOverviewComponent implements OnInit {
     type: 'text',
     name: 'connectionLink',
     label: 'Link',
-    validation: { required: true, pattern: '((http|https):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9@:%_\+.~#?&/=]*)' }
+    validation: {
+      required: true,
+      pattern:
+        '((http|https)://)?(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,6}([-a-zA-Z0-9@:%_+.~#?&/=]*)',
+    },
   });
-
 
   public setPopUpFormConfig() {
     this.popUpBlockConfig = new ZxBlockModel({
@@ -153,14 +228,10 @@ export class InstrumentOverviewComponent implements OnInit {
       name: 'connectMedia',
       template: 'ZxForm',
       disabled: false,
-      children: [
-        this.sourceInput,
-        this.typeInput,
-        this.linkInput
-      ],
-      model: this.connectedMediaModel
+      children: [this.sourceInput, this.typeInput, this.linkInput],
+      model: this.connectedMediaModel,
     });
-  };
+  }
 
   public popup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
@@ -171,30 +242,138 @@ export class InstrumentOverviewComponent implements OnInit {
   public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
-        name: 'save', description: 'Save', label: 'Save',
-        class: 'classic primary', icon: 'fal fa-check-circle',
+        name: 'save',
+        description: 'Save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
         action: () => {
-          this.popup.hide()
-          this.addConnectedMedia()
-        }
+          this.popup.hide();
+          this.addConnectedMedia();
+        },
       },
       {
-        name: 'cancel', description: 'Cancel', label: 'Cancel',
-        class: 'classic', icon: 'fal fa-times', action: () => { this.popup.hide(); this.connectedMediaModel = new ConnectedMediaDetailCreateRequest(); }
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.popup.hide();
+          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+        },
       },
-
-    ]
+    ],
   });
 
-  constructor(private router: Router,
+  public addCommentBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-comment-plus fa-flip-horizontal',
+        name: 'addComment',
+        label: 'Add comment',
+        action: () => this.addCommentPopup.show(),
+      },
+    ],
+  });
+  public addCommentPopupBlockConfig: ZxBlockModel;
+  public addCommentPopupFormConfig: Definition;
+  public addCommentPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public addCommentPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.addCommentToInstrument();
+        },
+      },
+      {
+        name: 'cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.addCommentPopup.hide();
+          this.addCommentModel = new AddCommentRequest();
+        },
+      },
+    ],
+  });
+  public addCommentModel: AddCommentRequest;
+  public setAddCommentPopUpFormConfig() {
+    this.addCommentPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add Comment to Instrument',
+    });
+    this.addCommentPopupFormConfig = new Definition({
+      name: 'addComment',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        new Definition({
+          template: 'ZxTextarea',
+          class: ['col-24', 'span-3'],
+          type: 'textarea',
+          name: 'content',
+          label: 'Content of the comment:',
+          validation: { required: true },
+        }),
+      ],
+      model: this.addCommentModel,
+    });
+  }
+
+  constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private instrumentService: InstrumentService,
     private connectedMediaService: ConnectedMediaService,
-    private toastr: ToastrService) { }
+    private commentService: CommentService,
+    private homeService: HomeService,
+    private toastr: ToastrService
+  ) {}
+
+  addCommentToInstrument() {
+    if (!this.addCommentPopupFormConfig.isValid) {
+      this.toastr.error('Fill in required comment content!');
+      return;
+    }
+
+    this.addCommentPopup.hide();
+
+    this.homeService.getUserCode().subscribe((response) => {
+      this.addCommentModel.createdBy = response.userCode;
+      this.addCommentModel.objectId = this.instrument.id;
+      this.addCommentModel.objectType = this.type;
+      this.addCommentModel.status = 'Active';
+
+      this.commentService.createComment(this.addCommentModel).subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Comment successfully added to instrument!');
+            this.addCommentModel = new AddCommentRequest();
+            this.getCommentsForInstrument(this.type, this.instrument.id);
+          } else {
+            this.toastr.error('Failed to add comment to instrument!');
+          }
+        },
+        (errorMsg: string) => {
+          this.toastr.error('Failed to add comment to instrument!');
+        }
+      );
+    });
+  }
 
   ngOnInit(): void {
     let id = 1;
-    Object.values(ConnectedMediaConnectionSource).forEach(t => {
+    Object.values(ConnectedMediaConnectionSource).forEach((t) => {
       let sourceObject = { id: id, name: t };
       this.connectionSources.push(sourceObject);
       id++;
@@ -202,7 +381,7 @@ export class InstrumentOverviewComponent implements OnInit {
     this.sourceInput.list = this.connectionSources;
 
     id = 1;
-    Object.values(ConnectedMediaConnectionType).forEach(t => {
+    Object.values(ConnectedMediaConnectionType).forEach((t) => {
       let typeObject = { id: id, name: t };
       this.connectionTypes.push(typeObject);
       id++;
@@ -210,32 +389,37 @@ export class InstrumentOverviewComponent implements OnInit {
     this.typeInput.list = this.connectionTypes;
 
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+    this.addCommentModel = new AddCommentRequest();
     this.loadData();
   }
-
 
   loadData(): void {
     this.instrumentIsLoading = true;
 
-    this.route.params.subscribe(params => {
-      this.instrumentService.getInstrument(params.id).subscribe(response => {
+    this.route.params.subscribe((params) => {
+      this.instrumentService.getInstrument(params.id).subscribe((response) => {
         this.instrument = response;
         if (!this.instrument.imageUrl)
-          this.instrument.imageUrl = "http://172.20.20.45:82//vigor//img/mario.jpg";
-        
+          this.instrument.imageUrl =
+            'http://172.20.20.45:82//vigor//img/mario.jpg';
+
         this.setPopUpFormConfig();
-        
-        this.instrumentService.getSongInstruments(params.id).subscribe(response => {
-          this.linkedMusicians = response;
-          this.numOfSongs = this.calculateNumOfSongs(this.linkedMusicians);
-          this.instrumentIsLoading = false;
-        });
+        this.setAddCommentPopUpFormConfig();
+        this.getCommentsForInstrument(this.type, this.instrument.id);
+
+        this.instrumentService
+          .getSongInstruments(params.id)
+          .subscribe((response) => {
+            this.linkedMusicians = response;
+            this.numOfSongs = this.calculateNumOfSongs(this.linkedMusicians);
+            this.instrumentIsLoading = false;
+          });
       });
     });
   }
 
   calculateNumOfSongs(musiciansArray: any[]): number {
-    return new Set(musiciansArray.map(element => element.songId)).size;
+    return new Set(musiciansArray.map((element) => element.songId)).size;
   }
 
   addConnectedMedia() {
@@ -246,29 +430,36 @@ export class InstrumentOverviewComponent implements OnInit {
 
     this.connectedMediaModel.objectId = this.instrument.id;
     this.connectedMediaModel.objectType = this.type;
-    this.connectedMediaModel.connectionSource = Object.keys(ConnectedMediaConnectionSource)[parseInt(this.connectedMediaModel.connectionSource) - 1];
-    this.connectedMediaModel.connectionType = Object.keys(ConnectedMediaConnectionType)[parseInt(this.connectedMediaModel.connectionType) - 1];
+    this.connectedMediaModel.connectionSource = Object.keys(
+      ConnectedMediaConnectionSource
+    )[parseInt(this.connectedMediaModel.connectionSource) - 1];
+    this.connectedMediaModel.connectionType = Object.keys(
+      ConnectedMediaConnectionType
+    )[parseInt(this.connectedMediaModel.connectionType) - 1];
     this.createConnectedMediaDetail();
+  }
 
-
+  getCommentsForInstrument(objectType: string, objectId: number) {
+    this.commentService
+      .fetchComments(new CommentsFetchRequest(objectType, objectId))
+      .subscribe((response) => (this.comments = response));
   }
 
   createConnectedMediaDetail() {
-
-    this.connectedMediaService.createConnectedMediaDetail(this.connectedMediaModel).subscribe(
-      (responseCode) => {
-        if (responseCode.hasOwnProperty('payload')) {
-          this.toastr.success('Connected media successfully added!');
-          this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
-        } else {
+    this.connectedMediaService
+      .createConnectedMediaDetail(this.connectedMediaModel)
+      .subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Connected media successfully added!');
+            this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+          } else {
+            this.toastr.error('Failed to add connected media!');
+          }
+        },
+        (errorMsg: string) => {
           this.toastr.error('Failed to add connected media!');
         }
-      },
-      (errorMsg: string) => {
-        this.toastr.error('Failed to add connected media!');
-      }
-    );
+      );
   }
 }
-
-

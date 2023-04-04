@@ -11,6 +11,16 @@ import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { GridOptions } from '@ag-grid-enterprise/all-modules';
 import { ZxTabModel } from '@zff/zx-tab-layout';
+import { Definition } from '@zff/zx-forms';
+import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
+import {
+  AddCommentRequest,
+  CommentsFetchRequest,
+} from '../../shared/comment/comment.model';
+import { HomeService } from '../../home/shared/home-page.service';
+import { CommentService } from '../../shared/comment/comment.service';
+import { ObjectType } from '../../shared/object-type.constant';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-artist-overview',
@@ -19,6 +29,8 @@ import { ZxTabModel } from '@zff/zx-tab-layout';
 })
 export class ArtistOverviewComponent implements OnInit {
   srcUrl: string = '';
+  comments: Comment[];
+  type = ObjectType.ARTIST;
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     hideHeader: true,
@@ -46,6 +58,9 @@ export class ArtistOverviewComponent implements OnInit {
     hideExpand: true,
   });
   public labelsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+  public commentsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
   public copyImageButton: ZxButtonModel = new ZxButtonModel({
@@ -83,7 +98,9 @@ export class ArtistOverviewComponent implements OnInit {
         name: 'Album Timeline',
         label: 'Album Timeline',
         action: () =>
-          this.router.navigate(['./artist/' + this.artist.id+ '/album-timeline']),
+          this.router.navigate([
+            './artist/' + this.artist.id + '/album-timeline',
+          ]),
       },
     ],
   });
@@ -101,6 +118,17 @@ export class ArtistOverviewComponent implements OnInit {
               this.router.navigate(['./artist/search/']);
             });
         },
+      },
+    ],
+  });
+
+  public addCommentBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-comment-plus fa-flip-horizontal',
+        name: 'addComment',
+        label: 'Add comment',
+        action: () => this.addCommentPopup.show(),
       },
     ],
   });
@@ -129,16 +157,111 @@ export class ArtistOverviewComponent implements OnInit {
         label: 'Labels',
         icon: 'fal fa-film',
       },
+      {
+        name: 'Comments',
+        id: 'commentsTab',
+        label: 'Comments',
+        icon: 'fal fa-comments',
+      },
     ],
   });
+
+  public addCommentPopupBlockConfig: ZxBlockModel;
+  public addCommentPopupFormConfig: Definition;
+  public addCommentPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public addCommentPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.addCommentToArtist();
+        },
+      },
+      {
+        name: 'cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.addCommentPopup.hide();
+          this.addCommentModel = new AddCommentRequest();
+        },
+      },
+    ],
+  });
+  public addCommentModel: AddCommentRequest;
+  public setAddCommentPopUpFormConfig() {
+    this.addCommentPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add Comment to Artist',
+    });
+    this.addCommentPopupFormConfig = new Definition({
+      name: 'addComment',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        new Definition({
+          template: 'ZxTextarea',
+          class: ['col-24', 'span-3'],
+          type: 'textarea',
+          name: 'content',
+          label: 'Content of the comment:',
+          validation: { required: true },
+        }),
+      ],
+      model: this.addCommentModel,
+    });
+  }
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private artistService: ArtistService
+    private commentService: CommentService,
+    private homeService: HomeService,
+    private artistService: ArtistService,
+    private toastr: ToastrService
   ) {}
 
+  addCommentToArtist() {
+    if (!this.addCommentPopupFormConfig.isValid) {
+      this.toastr.error('Fill in required comment content!');
+      return;
+    }
+
+    this.addCommentPopup.hide();
+
+    this.homeService.getUserCode().subscribe((response) => {
+      this.addCommentModel.createdBy = response.userCode;
+      this.addCommentModel.objectId = this.artist.id;
+      this.addCommentModel.objectType = this.type;
+      this.addCommentModel.status = 'Active';
+
+      this.commentService.createComment(this.addCommentModel).subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Comment successfully added to artist!');
+            this.addCommentModel = new AddCommentRequest();
+            this.getCommentsForArtist(this.type, this.artist.id);
+          } else {
+            this.toastr.error('Failed to add comment to artist!');
+          }
+        },
+        (errorMsg: string) => {
+          this.toastr.error('Failed to add comment to artist!');
+        }
+      );
+    });
+  }
+
   ngOnInit(): void {
+    this.addCommentModel = new AddCommentRequest();
     this.loadData();
   }
   artistIsLoading: boolean;
@@ -210,6 +333,30 @@ export class ArtistOverviewComponent implements OnInit {
     },
   ];
 
+  commentColumnDefs = [
+    {
+      field: 'createdBy',
+      headerName: 'User',
+      maxWidth: 125,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Date of creation(mm/dd/yy)',
+      maxWidth: 200,
+      floatingFilter: false,
+      type: 'datetime',
+    },
+    {
+      field: 'content',
+      headerName: 'Content',
+      flex: 1,
+      floatingFilter: false,
+      autoHeight: true,
+      wrapText: true,
+    },
+  ];
+
   public songGridOptions: GridOptions = {
     columnDefs: this.songsColumnDefs,
     rowModelType: 'clientSide',
@@ -237,6 +384,13 @@ export class ArtistOverviewComponent implements OnInit {
     },
   } as GridOptions;
 
+  public commentGridOptions: GridOptions = {
+    columnDefs: this.commentColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    sideBar: null,
+  } as GridOptions;
+
   loadData() {
     this.artistIsLoading = true;
     this.route.params.subscribe((params) => {
@@ -250,8 +404,16 @@ export class ArtistOverviewComponent implements OnInit {
         this.albums = this.artist.albums;
         this.songs = this.artist.recentsSong;
         this.labels = this.artist.labels;
+        this.setAddCommentPopUpFormConfig();
+        this.getCommentsForArtist(this.type, this.artist.id);
         console.log('Artist', this.artist);
       });
     });
+  }
+
+  getCommentsForArtist(objectType: string, objectId: number) {
+    this.commentService
+      .fetchComments(new CommentsFetchRequest(objectType, objectId))
+      .subscribe((response) => (this.comments = response));
   }
 }

@@ -27,6 +27,12 @@ import {
   ConnectedMediaDetailCreateRequest,
 } from '../../shared/connected-media/connected-media.model';
 import { ConnectedMediaService } from '../../shared/connected-media/connected-media.service';
+import {
+  AddCommentRequest,
+  CommentsFetchRequest,
+} from '../../shared/comment/comment.model';
+import { CommentService } from '../../shared/comment/comment.service';
+import { HomeService } from '../../home/shared/home-page.service';
 
 @Component({
   selector: 'app-person-overview',
@@ -42,6 +48,7 @@ export class PersonOverviewComponent implements OnInit {
   artists: ArtistPersonResponse[];
   songs: SongPersonResponse[];
   albums: AlbumPersonResponse[];
+  comments: Comment[];
   connectedMedias: ConnectedMediaPersonResponse[];
   instruments: SongInstrumentPersonResponse[];
 
@@ -85,6 +92,12 @@ export class PersonOverviewComponent implements OnInit {
         label: 'Song Involvement',
         icon: 'fal fa-guitar',
       },
+      {
+        name: 'Comments',
+        id: 'commentsTab',
+        label: 'Comments',
+        icon: 'fal fa-comments',
+      },
     ],
   });
 
@@ -116,6 +129,9 @@ export class PersonOverviewComponent implements OnInit {
   });
 
   public songInstrumentsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+  public commentsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
@@ -163,6 +179,17 @@ export class PersonOverviewComponent implements OnInit {
         name: 'createArtistFromPerson',
         label: 'Create artist from person',
         action: () => this.createArtistFromPerson(),
+      },
+    ],
+  });
+
+  public addCommentBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-comment-plus fa-flip-horizontal',
+        name: 'addComment',
+        label: 'Add comment',
+        action: () => this.addCommentPopup.show(),
       },
     ],
   });
@@ -372,6 +399,30 @@ export class PersonOverviewComponent implements OnInit {
     },
   ];
 
+  commentColumnDefs = [
+    {
+      field: 'createdBy',
+      headerName: 'User',
+      maxWidth: 125,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Date of creation(mm/dd/yy)',
+      maxWidth: 200,
+      floatingFilter: false,
+      type: 'datetime',
+    },
+    {
+      field: 'content',
+      headerName: 'Content',
+      flex: 1,
+      floatingFilter: false,
+      autoHeight: true,
+      wrapText: true,
+    },
+  ];
+
   public songGridOptions: GridOptions = {
     columnDefs: this.songsColumnDefs,
     rowModelType: 'clientSide',
@@ -419,12 +470,75 @@ export class PersonOverviewComponent implements OnInit {
     },
   } as GridOptions;
 
+  public commentGridOptions: GridOptions = {
+    columnDefs: this.commentColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    sideBar: null,
+  } as GridOptions;
+
   person: PersonResponse;
+
+  public addCommentPopupBlockConfig: ZxBlockModel;
+  public addCommentPopupFormConfig: Definition;
+  public addCommentPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public addCommentPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.addCommentToPerson();
+        },
+      },
+      {
+        name: 'cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.addCommentPopup.hide();
+          this.addCommentModel = new AddCommentRequest();
+        },
+      },
+    ],
+  });
+  public addCommentModel: AddCommentRequest;
+  public setAddCommentPopUpFormConfig() {
+    this.addCommentPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add Comment to Person',
+    });
+    this.addCommentPopupFormConfig = new Definition({
+      name: 'addComment',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        new Definition({
+          template: 'ZxTextarea',
+          class: ['col-24', 'span-3'],
+          type: 'textarea',
+          name: 'content',
+          label: 'Content of the comment:',
+          validation: { required: true },
+        }),
+      ],
+      model: this.addCommentModel,
+    });
+  }
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private personService: PersonService,
+    private commentService: CommentService,
+    private homeService: HomeService,
     public confirmation: ZxConfirmation,
     private connectedMediaService: ConnectedMediaService,
     private toastr: ToastrService
@@ -490,6 +604,37 @@ export class PersonOverviewComponent implements OnInit {
     }
   }
 
+  addCommentToPerson() {
+    if (!this.addCommentPopupFormConfig.isValid) {
+      this.toastr.error('Fill in required comment content!');
+      return;
+    }
+
+    this.addCommentPopup.hide();
+
+    this.homeService.getUserCode().subscribe((response) => {
+      this.addCommentModel.createdBy = response.userCode;
+      this.addCommentModel.objectId = this.person.id;
+      this.addCommentModel.objectType = this.type;
+      this.addCommentModel.status = 'Active';
+
+      this.commentService.createComment(this.addCommentModel).subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Comment successfully added to person!');
+            this.addCommentModel = new AddCommentRequest();
+            this.getCommentsForPerson(this.type, this.person.id);
+          } else {
+            this.toastr.error('Failed to add comment to person!');
+          }
+        },
+        (errorMsg: string) => {
+          this.toastr.error('Failed to add comment to person!');
+        }
+      );
+    });
+  }
+
   ngOnInit(): void {
     let id = 1;
     Object.values(ConnectedMediaConnectionSource).forEach((t) => {
@@ -508,6 +653,7 @@ export class PersonOverviewComponent implements OnInit {
     this.typeInput.list = this.connectionTypes;
 
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+    this.addCommentModel = new AddCommentRequest();
     this.loadData();
     this.selectedCountry = new CountryResponse();
     this.country = new CountryResponse();
@@ -524,7 +670,9 @@ export class PersonOverviewComponent implements OnInit {
         this.songs = response.songs;
         this.instruments = response.instruments;
         this.setPopUpFormConfig();
+        this.setAddCommentPopUpFormConfig();
         this.personIsLoading = false;
+        this.getCommentsForPerson(this.type, this.person.id);
 
         this.testFlag = this.testFlag
           .concat(this.person.flagAbbreviation)
@@ -591,6 +739,12 @@ export class PersonOverviewComponent implements OnInit {
         ],
       });
     });
+  }
+
+  getCommentsForPerson(objectType: string, objectId: number) {
+    this.commentService
+      .fetchComments(new CommentsFetchRequest(objectType, objectId))
+      .subscribe((response) => (this.comments = response));
   }
 
   addConnectedMedia() {

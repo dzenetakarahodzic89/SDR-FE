@@ -6,22 +6,10 @@
     <div>
       <zx-block [config]="containerBlockConfig">
         <img zx-block-body [src]="album.imageUrl" class="width:300px" />
-
-        <div
-          zx-block-body
-          *ngIf="srcUrl.length > 0"
-          style="padding-left: 5px; padding-top: 5px"
-        >
-          <iframe
-            style="border-radius: 12px"
-            [src]="srcUrl | safe : 'resourceUrl'"
-            width="300px"
-            height="100"
-            frameBorder="0"
-            allowfullscreen=""
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-          ></iframe>
+        <div zx-block-body *ngIf="srcUrl.length > 0" style="padding-left: 5px; padding-top: 5px">
+          <iframe style="border-radius: 12px" [src]="srcUrl | safe : 'resourceUrl'" width="300px" height="100"
+            frameBorder="0" allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
       </zx-block>
     </div>
@@ -35,71 +23,42 @@
           <p *ngFor="let artist of this.album.albumArtists">- {{ artist }}</p>
         </div>
         <div class="col-10">
-          <zx-button
-            id="galleryBtn"
-            zx-block-action
-            [config]="galleryButton"
-          ></zx-button>
-          <zx-button
-            id="addSongBtn"
-            zx-block-action
-            [config]="addSongBtn"
-          ></zx-button>
+          <zx-button id="galleryBtn" zx-block-action [config]="galleryButton"></zx-button>
+          <zx-button id="addSongBtn" zx-block-action [config]="addSongBtn"></zx-button>
           <zx-popup [config]="addSongPopup">
             <div zx-popup-body>
               <zx-block [config]="addSongPopUpBlockConfig">
-                <zx-preloader
-                  *ngIf="
+                <zx-preloader *ngIf="
                     songsAreLoading || artistsAreLoading || labelsAreLoading
-                  "
-                ></zx-preloader>
-                <zx-form-loader
-                  *ngIf="addSongPopUpFormConfig"
-                  zx-block-body
-                  [component]="addSongPopUpFormConfig"
-                  [model]="addSongModel"
-                  class="col-24"
-                ></zx-form-loader>
+                  "></zx-preloader>
+                <zx-form-loader *ngIf="addSongPopUpFormConfig" zx-block-body [component]="addSongPopUpFormConfig"
+                  [model]="addSongModel" class="col-24"></zx-form-loader>
               </zx-block>
             </div>
-            <zx-button
-              zx-popup-footer
-              [config]="addSongPopupFooterButtons"
-              class="align-right"
-            ></zx-button>
+            <zx-button zx-popup-footer [config]="addSongPopupFooterButtons" class="align-right"></zx-button>
           </zx-popup>
-          <zx-button
-            id="editBtn"
-            zx-block-action
-            [config]="editBtn"
-          ></zx-button>
-          <zx-button
-            id="connectMedia"
-            zx-block-action
-            [config]="connectMediaBtn"
-          ></zx-button>
-          <zx-button
-            id="linkImagesToSongs"
-            zx-block-action
-            [config]="linkImagesToSongsBtn"
-          ></zx-button>
+          <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
+          <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
+          <zx-button id="linkImagesToSongs" zx-block-action [config]="linkImagesToSongsBtn"></zx-button>
+          <zx-button id="addCommentBtn" zx-block-action [config]="addCommentBtn"></zx-button>
           <zx-popup [config]="connectMediaPopup">
             <div zx-popup-body>
               <zx-block [config]="connectMediaPopUpBlockConfig">
-                <zx-form-loader
-                  *ngIf="connectMediaPopUpFormConfig"
-                  zx-block-body
-                  [component]="connectMediaPopUpFormConfig"
-                  [model]="connectedMediaModel"
-                  class="col-24"
-                ></zx-form-loader>
+                <zx-form-loader *ngIf="connectMediaPopUpFormConfig" zx-block-body
+                  [component]="connectMediaPopUpFormConfig" [model]="connectedMediaModel"
+                  class="col-24"></zx-form-loader>
               </zx-block>
             </div>
-            <zx-button
-              zx-popup-footer
-              [config]="connectMediaPopupFooterButtons"
-              class="align-right"
-            ></zx-button>
+            <zx-button zx-popup-footer [config]="connectMediaPopupFooterButtons" class="align-right"></zx-button>
+          </zx-popup>
+          <zx-popup [config]="addCommentPopup">
+            <div zx-popup-body>
+              <zx-block *ngIf="addCommentPopupBlockConfig" [config]="addCommentPopupBlockConfig">
+                <zx-form-loader *ngIf="addCommentPopupFormConfig" zx-block-body [component]="addCommentPopupFormConfig"
+                  [model]="addCommentModel" class="col-24"></zx-form-loader>
+              </zx-block>
+            </div>
+            <zx-button zx-popup-footer [config]="addCommentPopupFooterButtons" class="align-right"></zx-button>
           </zx-popup>
         </div>
       </div>
@@ -108,22 +67,22 @@
       <ang-music-player [audioList]="this.album.audioUrls"></ang-music-player>
     </div>
   </div>
-
   <div class="row-5 bottomContainer">
     <zx-block [config]="infoBlockConfig" class="col-14">
       <div zx-block-body [innerHTML]="album.information"></div>
     </zx-block>
     <zx-block [config]="detailsBlockConfig" class="col-10">
       <div zx-block-body>
-        <zx-block zx-tab-item id="songsTab" [config]="songsBlockConfig">
-          <zx-grid
-            zx-block-body
-            [gridOptions]="songGridOptions"
-            [source]="this.album.songs"
-            domLayout="autoHeight"
-          >
-          </zx-grid>
-        </zx-block>
+        <zx-tabs [config]="tabConfig">
+          <zx-block zx-tab-item id="songsTab" [config]="songsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="songGridOptions" [source]="this.album.songs" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="commentsTab" [config]="commentsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="commentGridOptions" [source]="comments" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+        </zx-tabs>
       </div>
     </zx-block>
   </div>

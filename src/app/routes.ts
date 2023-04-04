@@ -147,5 +147,5 @@ export const appRoutes: Routes = [
 
   { path: 'release/search', component: ReleaseSearchComponent },
   { path: 'spotify-integration', component: SpotifyStatisticsComponent },
-
+  { path: 'era/:id/overview', component: EraOverviewComponent },
 ];

@@ -16,6 +16,12 @@ import { ConnectedMediaService } from '../../shared/connected-media/connected-me
 import { ObjectType } from '../../shared/object-type.constant';
 import { LabelResponse, ArtistLabelResponse } from '../shared/label.model';
 import { LabelService } from '../shared/label.service';
+import {
+  AddCommentRequest,
+  CommentsFetchRequest,
+} from '../../shared/comment/comment.model';
+import { CommentService } from '../../shared/comment/comment.service';
+import { HomeService } from '../../home/shared/home-page.service';
 
 @Component({
   selector: 'app-label-overview',
@@ -27,6 +33,7 @@ export class LabelOverviewComponent implements OnInit {
   labelIsLoading = false;
   connectionSources = [];
   connectionTypes = [];
+  comments: Comment[];
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -37,7 +44,18 @@ export class LabelOverviewComponent implements OnInit {
     orientation: 'portrait',
     hideExpand: false,
     items: [
-      { name: 'Labels', id: 'labelsTab', label: 'Labels', icon: 'fal fa-film' },
+      {
+        name: 'Artists',
+        id: 'artistsTab',
+        label: 'Artists',
+        icon: 'fal fa-users',
+      },
+      {
+        name: 'Comments',
+        id: 'commentsTab',
+        label: 'Comments',
+        icon: 'fal fa-comments',
+      },
     ],
   });
 
@@ -56,6 +74,10 @@ export class LabelOverviewComponent implements OnInit {
   });
 
   public labelsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+
+  public commentsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
@@ -104,6 +126,17 @@ export class LabelOverviewComponent implements OnInit {
         name: 'connectMedia',
         label: 'Connect Media',
         action: () => this.popup.show(),
+      },
+    ],
+  });
+
+  public addCommentBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-comment-plus fa-flip-horizontal',
+        name: 'addComment',
+        label: 'Add comment',
+        action: () => this.addCommentPopup.show(),
       },
     ],
   });
@@ -216,6 +249,29 @@ export class LabelOverviewComponent implements OnInit {
       floatingFilter: false,
     },
   ];
+  commentColumnDefs = [
+    {
+      field: 'createdBy',
+      headerName: 'User',
+      maxWidth: 125,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Date of creation(mm/dd/yy)',
+      maxWidth: 200,
+      floatingFilter: false,
+      type: 'datetime',
+    },
+    {
+      field: 'content',
+      headerName: 'Content',
+      flex: 1,
+      floatingFilter: false,
+      autoHeight: true,
+      wrapText: true,
+    },
+  ];
 
   public labelGridOptions: GridOptions = {
     columnDefs: this.labelsColumnDefs,
@@ -226,16 +282,110 @@ export class LabelOverviewComponent implements OnInit {
     },
   } as GridOptions;
 
+  public commentGridOptions: GridOptions = {
+    columnDefs: this.commentColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    sideBar: null,
+  } as GridOptions;
+
   label: LabelResponse;
   artistsLabel: ArtistLabelResponse[];
+
+  public addCommentPopupBlockConfig: ZxBlockModel;
+  public addCommentPopupFormConfig: Definition;
+  public addCommentPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public addCommentPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.addCommentToLabel();
+        },
+      },
+      {
+        name: 'cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.addCommentPopup.hide();
+          this.addCommentModel = new AddCommentRequest();
+        },
+      },
+    ],
+  });
+  public addCommentModel: AddCommentRequest;
+  public setAddCommentPopUpFormConfig() {
+    this.addCommentPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add Comment to Label',
+    });
+    this.addCommentPopupFormConfig = new Definition({
+      name: 'addComment',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        new Definition({
+          template: 'ZxTextarea',
+          class: ['col-24', 'span-3'],
+          type: 'textarea',
+          name: 'content',
+          label: 'Content of the comment:',
+          validation: { required: true },
+        }),
+      ],
+      model: this.addCommentModel,
+    });
+  }
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private labelService: LabelService,
     private connectedMediaService: ConnectedMediaService,
+    private commentService: CommentService,
+    private homeService: HomeService,
     private toastr: ToastrService
   ) {}
+
+  addCommentToLabel() {
+    if (!this.addCommentPopupFormConfig.isValid) {
+      this.toastr.error('Fill in required comment content!');
+      return;
+    }
+
+    this.addCommentPopup.hide();
+
+    this.homeService.getUserCode().subscribe((response) => {
+      this.addCommentModel.createdBy = response.userCode;
+      this.addCommentModel.objectId = this.label.id;
+      this.addCommentModel.objectType = this.type;
+      this.addCommentModel.status = 'Active';
+
+      this.commentService.createComment(this.addCommentModel).subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Comment successfully added to label!');
+            this.addCommentModel = new AddCommentRequest();
+            this.getCommentsForLabel(this.type, this.label.id);
+          } else {
+            this.toastr.error('Failed to add comment to label!');
+          }
+        },
+        (errorMsg: string) => {
+          this.toastr.error('Failed to add comment to label!');
+        }
+      );
+    });
+  }
 
   ngOnInit(): void {
     let id = 1;
@@ -255,6 +405,7 @@ export class LabelOverviewComponent implements OnInit {
     this.typeInput.list = this.connectionTypes;
 
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
+    this.addCommentModel = new AddCommentRequest();
     this.loadData();
   }
 
@@ -265,7 +416,9 @@ export class LabelOverviewComponent implements OnInit {
         this.label = response;
         this.artistsLabel = response.artists;
         this.setPopUpFormConfig();
+        this.setAddCommentPopUpFormConfig();
         this.labelIsLoading = false;
+        this.getCommentsForLabel(this.type, this.label.id);
       });
     });
   }
@@ -303,5 +456,11 @@ export class LabelOverviewComponent implements OnInit {
           this.toastr.error('Failed to add connected media!');
         }
       );
+  }
+
+  getCommentsForLabel(objectType: string, objectId: number) {
+    this.commentService
+      .fetchComments(new CommentsFetchRequest(objectType, objectId))
+      .subscribe((response) => (this.comments = response));
   }
 }

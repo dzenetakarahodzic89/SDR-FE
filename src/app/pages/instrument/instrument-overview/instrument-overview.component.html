@@ -7,35 +7,36 @@
       <img zx-block-body [src]="instrument.imageUrl" class="width:300px" />
     </zx-block>
     <div class="w-100 pl-10 pr-10">
-      <strong
-        ><h1>{{ instrument.name }}</h1></strong
-      >
-
+      <strong>
+        <h1>{{ instrument.name }}</h1>
+      </strong>
       <div class="container">
         <div>
           <h3>{{ this.numOfSongs }} Songs</h3>
         </div>
         <div class="row">
-          <zx-button
-            id="addSongBtn"
-            zx-block-action
-            [config]="addSongBtn"
-          ></zx-button>
-          <zx-button
-            id="editBtn"
-            zx-block-action
-            [config]="editBtn"
-          ></zx-button>
+          <zx-button id="addSongBtn" zx-block-action [config]="addSongBtn"></zx-button>
+          <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
           <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
-                    <zx-popup [config]="popup">
-                        <div zx-popup-body>
-                            <zx-block [config]="popUpBlockConfig">
-                                <zx-form-loader *ngIf="popUpFormConfig" zx-block-body [component]="popUpFormConfig"
-                                    [model]="connectedMediaModel" class="col-24"></zx-form-loader>
-                            </zx-block>
-                        </div>
-                        <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
-                    </zx-popup>
+          <zx-button id="addCommentBtn" zx-block-action [config]="addCommentBtn"></zx-button>
+          <zx-popup [config]="popup">
+            <div zx-popup-body>
+              <zx-block [config]="popUpBlockConfig">
+                <zx-form-loader *ngIf="popUpFormConfig" zx-block-body [component]="popUpFormConfig"
+                  [model]="connectedMediaModel" class="col-24"></zx-form-loader>
+              </zx-block>
+            </div>
+            <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+          </zx-popup>
+          <zx-popup [config]="addCommentPopup">
+            <div zx-popup-body>
+              <zx-block *ngIf="addCommentPopupBlockConfig" [config]="addCommentPopupBlockConfig">
+                <zx-form-loader *ngIf="addCommentPopupFormConfig" zx-block-body [component]="addCommentPopupFormConfig"
+                  [model]="addCommentModel" class="col-24"></zx-form-loader>
+              </zx-block>
+            </div>
+            <zx-button zx-popup-footer [config]="addCommentPopupFooterButtons" class="align-right"></zx-button>
+          </zx-popup>
         </div>
       </div>
       <hr />
@@ -53,15 +54,17 @@
           <h5>Type: {{ instrument.type }}</h5>
         </div>
         <hr />
-        <zx-block [config]="personsBlockConfig">
-          <zx-grid
-            zx-block-body
-            [gridOptions]="musiciansGridOptions"
-            [source]="linkedMusicians"
-            domLayout="autoHeight"
-          >
-          </zx-grid>
-        </zx-block>
+        <zx-tabs [config]="tabConfig">
+          <zx-block zx-tab-item id="musiciansTab" [config]="personsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="musiciansGridOptions" [source]="linkedMusicians"
+              domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="commentsTab" [config]="commentsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="commentGridOptions" [source]="comments" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+        </zx-tabs>
       </div>
     </zx-block>
   </div>
