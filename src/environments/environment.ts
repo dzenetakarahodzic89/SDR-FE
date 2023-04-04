@@ -20,5 +20,5 @@ export const environment = {
   	{name:"German", id:'de', locale:de},
   	/////////////// Localization list end here ////////////////////////////
   ],
-  appId: 'GAME-REPOSITORY'
+  appId: 'SDR'
 };

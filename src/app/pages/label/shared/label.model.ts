@@ -34,6 +34,16 @@ export class LabelCreateRequest {
   coverImage: string;
   coverImage_files: File[];
 }
+
+export class LabelSearchRequest{
+  founders: any[];
+  name : string;
+  page: any;
+  size:any;
+  sort:string;
+}
+
+
 export class PersonLoV {
   id: number;
   name: string;

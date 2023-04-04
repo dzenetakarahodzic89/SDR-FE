@@ -11,7 +11,7 @@ import { SongSimilarityOverviewComponent } from './song-similarity-overview/song
 import { SongCreateComponent } from './song-create/song-create.component';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { ZxFormsModule } from '@zff/zx-forms';
-
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 @NgModule({
   declarations: [
     SongOverviewComponent,
@@ -23,9 +23,10 @@ import { ZxFormsModule } from '@zff/zx-forms';
     SharedModule,
     EditorModule,
     AutocompleteLibModule,
-    AngMusicPlayerModule,    
+    AngMusicPlayerModule,
     ZxPopupLayoutModule,
-    ZxFormsModule
+    ZxFormsModule,
+    CxListLayoutModule,
   ],
   exports: [
     SongOverviewComponent,
@@ -38,4 +39,4 @@ import { ZxFormsModule } from '@zff/zx-forms';
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
 })
-export class SongModule {}
+export class SongModule { }
