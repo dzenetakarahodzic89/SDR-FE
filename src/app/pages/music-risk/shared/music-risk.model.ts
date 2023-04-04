@@ -156,3 +156,25 @@ export class TurnHistoryGrid {
     (this.id = id), (this.text = text);
   }
 }
+export class GridOfCountries {
+  id: number;
+  countryName: string;
+  belongsTo: string;
+  flag: string;
+  ownedFlags: string[];
+  ownedFlagsIds: number[];
+  status: string;
+  constructor(
+    id: number,
+    country: string,
+    belongs: string,
+    status: string,
+    ownedFlagsIds: number[]
+  ) {
+    this.id = id;
+    this.countryName = country;
+    this.belongsTo = belongs;
+    this.status = status;
+    this.ownedFlagsIds = ownedFlagsIds;
+  }
+}
