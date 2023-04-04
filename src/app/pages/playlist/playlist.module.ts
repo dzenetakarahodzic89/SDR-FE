@@ -7,27 +7,34 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { GeneratePlaylistComponent } from './generate-playlist/generate-playlist.component';
 import { GenerateGaPlaylistComponent } from './generate-ga-playlist/generate-ga-playlist.component';
 import { HistoryComponent } from './history/history.component';
-
-
+import { EditPlaylistComponent } from './edit-playlist/edit-playlist.component';
+import { PlaylistOverviewComponent } from './playlist-overview/playlist-overview.component';
+import { AngMusicPlayerModule } from 'ang-music-player';
 
 @NgModule({
   declarations: [
     PlaylistSearchComponent,
     GeneratePlaylistComponent,
     GenerateGaPlaylistComponent,
-    HistoryComponent
+    HistoryComponent,
+    EditPlaylistComponent,
+    PlaylistOverviewComponent,
   ],
   imports: [
     SharedModule,
     EditorModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    AngMusicPlayerModule,
   ],
   exports: [
     PlaylistSearchComponent,
-    GeneratePlaylistComponent
-  ], providers: [
+    GeneratePlaylistComponent,
+    EditPlaylistComponent,
+    PlaylistOverviewComponent,
+  ],
+  providers: [
     PlaylistService,
-    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
-  ]
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
+  ],
 })
-export class PlaylistModule { }
+export class PlaylistModule {}

@@ -1,0 +1,88 @@
+<div zx-block-body class="row">
+  <zx-preloader *ngIf="songIsLoading"></zx-preloader>
+</div>
+<div *ngIf="playlistDetail">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="title">{{ playlistDetail[0]?.playlistName }}</h1>
+      <h3>{{ playlistDetail?.length }} Songs - {{ totalTime }}</h3>
+      <h3>{{ playlistDetail[0]?.outlineText }}</h3>
+    </div>
+    <div class="col-12" style="margin-top: 120px; text-align: end">
+      <zx-button id="addSong" [config]="addSong"></zx-button>
+      <zx-button id="deleteSong" [config]="deleteSong"></zx-button>
+    </div>
+  </div>
+  <zx-popup [config]="popupDeleteSong">
+    <div zx-popup-body>
+      <p>Are you sure that you want to delete this song from the playlist?</p>
+    </div>
+    <zx-button
+      zx-popup-footer
+      [config]="popupDeleteFooterButtons"
+      class="align-right"
+    ></zx-button>
+  </zx-popup>
+  <zx-popup [config]="popupDelete">
+    <div zx-popup-body>
+      <p>Are you sure that you want to delete this playlist?</p>
+    </div>
+    <zx-button
+      zx-popup-footer
+      [config]="popupFooterButtons"
+      class="align-right"
+    ></zx-button>
+  </zx-popup>
+  <div>
+    <zx-popup [config]="popup">
+      <div zx-popup-body>
+        <zx-block [config]="popUpBlockConfig">
+          <zx-form-loader
+            *ngIf="popUpFormConfig && !songIsLoading"
+            zx-block-body
+            [component]="popUpFormConfig"
+            class="col-12"
+            [model]="model"
+          ></zx-form-loader>
+        </zx-block>
+        <div class="col-24" style="text-align: end">
+          <zx-button zx-popup-footer [config]="mainButtons"></zx-button>
+        </div>
+      </div>
+    </zx-popup>
+  </div>
+  <div class="row-5">
+    <div class="col-24">
+      <zx-block [config]="containerBlockConfig">
+        <zx-grid
+          zx-block-body
+          [gridOptions]="playlistGridOptions"
+          [source]="playlistDetail"
+          domLayout="autoHeight"
+        >
+        </zx-grid>
+      </zx-block>
+    </div>
+  </div>
+  <div
+    style="
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    "
+  >
+    <div>
+      <iframe
+        style="border-radius: 12px"
+        [src]="srcUrl | safe : 'resourceUrl'"
+        width="450px"
+        height="155px"
+        frameBorder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>

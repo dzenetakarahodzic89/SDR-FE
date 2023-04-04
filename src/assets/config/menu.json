@@ -73,6 +73,13 @@
             "attributes": {}
           },
           {
+            "code": "HUB_LABEL_STATIC",
+            "icon": "fad fa-music",
+            "label": "Labels",
+            "url": "label/search",
+            "attributes": {}
+          },
+          {
             "code": "HUB_BATTLE_STATIC",
             "icon": "fad fa-battle",
             "label": "Battles",
@@ -91,6 +98,13 @@
             "icon": "fad fa-calendar-star",
             "label": "Event search",
             "url": "event/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_RELEASE_STATIC",
+            "icon": "fad fa-record-vinyl",
+            "label": "Releases",
+            "url": "release/search",
             "attributes": {}
           }
         ]
@@ -158,6 +172,12 @@
             "code": "HUB_ARTISTS_BY_ERAS_STATIC",
             "label": "Artists distribution over eras",
             "url": "era/artists-over-eras",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_SPOTIFY_STATIC",
+            "label": "Spotify Statistics",
+            "url": "spotify-integration",
             "attributes": {}
           }
         ]

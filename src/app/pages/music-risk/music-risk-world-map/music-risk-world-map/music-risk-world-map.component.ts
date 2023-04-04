@@ -14,19 +14,22 @@ import {
   Artist,
   ArtistImageResponse,
   AttackCountry,
+  BattleLogBattleResult,
   BattleLogEntry,
   BattleTurn,
   BattleTurnUpdateRequest,
   Country,
+  GridOfCountries,
   MapState,
   PreMoveBattleAttack,
   Song,
   TeamState,
+  TurnHistoryGrid,
 } from '../../shared/music-risk.model';
 import { MusicRiskService } from '../../shared/music-risk.service';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
-import { Definition } from '@zff/zx-forms';
+import { Definition, Depend, Dependency } from '@zff/zx-forms';
 import { ToastrService } from 'ngx-toastr';
 var ChartGeo = require('chartjs-chart-geo');
 Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
@@ -36,7 +39,18 @@ Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
   styleUrls: ['./music-risk-world-map.component.scss'],
 })
 export class MusicRiskWorldMapComponent implements OnInit {
+  countriesInfo: GridOfCountries[] = [];
+  clickedGridCountry: GridOfCountries;
+  countryArtists: Artist[];
+  countrySongs: Song[];
+  flags: { id: number; name: string }[] = [];
+  flagWinner = '';
+  flagLoser = '';
+  npcStandingUrl = '';
+  playerStandingUrl = '';
+  turnHistory: BattleLogEntry[];
   npcUrl = '';
+  activePlayerTeamArtists: { name: string; flag: string }[];
   playerUrl = '';
   attackerCountryId: number;
   songSize: number = 0;
@@ -51,6 +65,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
   teamState: TeamState;
   mapState: MapState;
   battleId: number;
+  indx = 0;
   eligibleCountryIds: number[];
   attackObject: PreMoveBattleAttack = new PreMoveBattleAttack();
   constructor(
@@ -60,8 +75,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
     private toastr: ToastrService
   ) {}
   public popUpBlockConfig: ZxBlockModel;
+  public popUpStandingsConfig: ZxBlockModel;
+  public popUpStandingsTurnConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
   public attackBlockConfig: ZxBlockModel;
+  public teamPopupBlockConfig: ZxBlockModel;
   public popUpAttackFormConfig: Definition;
   public artistImageOne: ArtistImageResponse;
   public artistImageTwo: ArtistImageResponse;
@@ -70,10 +88,20 @@ export class MusicRiskWorldMapComponent implements OnInit {
     hideCloseButton: false,
     size: 'col-12',
   });
+  public viewStandingsPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-20',
+  });
   public attackPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
     hideCloseButton: false,
     size: 'col-20',
+  });
+  public teamPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-14',
   });
   countryPlayerInput: Definition = new Definition({
     template: 'ZxSelect',
@@ -108,6 +136,19 @@ export class MusicRiskWorldMapComponent implements OnInit {
   checkBoxesMap: Map<number, number> = new Map();
   battleTurnId: number;
   songArray: Song[] = [];
+  public linkPopupStandingsFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'close',
+        description: 'attack',
+        label: 'Close',
+        class: 'classic primary',
+        action: () => {
+          this.viewStandingsPopup.hide();
+        },
+      },
+    ],
+  });
   public linkPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -117,6 +158,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
         class: 'classic primary',
         icon: 'fal fa-check-circle',
         action: () => {
+          this.formCheckboxesForAttack = [];
           this.attackerCountryId = this.attackCountryModel.attackingCountryId;
           this.attackedCountryId = this.attackCountryModel.attackedCountryId;
           this.attackObject.attackedId =
@@ -153,6 +195,9 @@ export class MusicRiskWorldMapComponent implements OnInit {
                 .preMoveAttack(this.attackObject)
                 .subscribe((response) => {
                   this.toastr.success(response);
+                  setTimeout(() => {
+                    location.reload();
+                  }, 1000);
                   this.popup.hide();
                   this.loadData();
                   return;
@@ -211,17 +256,17 @@ export class MusicRiskWorldMapComponent implements OnInit {
               this.checkBoxesMap.set(i + 1, i);
               i += 2;
             }
-
             for (let i = 0; i < this.songSize * 2; i++) {
               this.formCheckboxesForAttack.push(
                 new Definition({
                   template: 'ZxCheckbox',
                   class: ['col-12'],
                   type: 'classic',
-                  name: 'song' + i,
+                  name: 'song' + this.indx,
                   label: 'Classic checkbox',
                 })
               );
+              this.indx += 1;
             }
             /* Fill songs 0-x with mix of artists from npc and player */
             let playerCount = 1;
@@ -238,7 +283,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
               }
             }
             this.popUpAttackFormConfig.children = this.formCheckboxesForAttack;
-
             /* checkbox manipulation (if one is checked other is not) */
             for (
               let j = 0;
@@ -246,7 +290,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
               j++
             ) {
               this.popUpAttackFormConfig.children[j].label =
-                this.songArray[j].name;
+                this.songArray[j]?.name;
               this.popUpAttackFormConfig.children[j].onChange = () => {
                 this.popUpAttackFormConfig.children[
                   this.checkBoxesMap.get(j)
@@ -300,6 +344,19 @@ export class MusicRiskWorldMapComponent implements OnInit {
         icon: 'fal fa-times',
         action: () => {
           this.popup.hide();
+        },
+      },
+    ],
+  });
+  public teamPopupFooterBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'close',
+        description: 'close',
+        label: 'Close',
+        class: 'classic primary',
+        action: () => {
+          this.teamPopup.hide();
         },
       },
     ],
@@ -371,6 +428,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
               this.attackPopup.hide();
               if (turnObject.wonCase === 'PLAYER')
                 this.eligibleCountryIds.push(this.attackedCountryId);
+              this.chart.destroy();
+              this.loadData();
+              setTimeout(() => {
+                location.reload();
+              }, 1000);
             });
         },
       },
@@ -388,6 +450,20 @@ export class MusicRiskWorldMapComponent implements OnInit {
   songOneInput: Definition = new Definition({
     template: 'ZxCheckbox',
   });
+  public popUpStandingFormConfig: Definition;
+  public setViewStandingsPopup() {
+    this.popUpStandingsConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Recent standings',
+    });
+    this.popUpStandingFormConfig = new Definition({
+      name: 'connectMedia',
+      template: 'ZxForm',
+      disabled: false,
+      model: this.attackCountryModel,
+      children: [...this.formCheckboxesForAttack],
+    });
+  }
   public setPopUpFormConfig() {
     this.popUpBlockConfig = new ZxBlockModel({
       hideExpand: true,
@@ -399,6 +475,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
       disabled: false,
       model: this.attackCountryModel,
       children: [this.countryPlayerInput, this.countryAttackedInput],
+    });
+  }
+  public setTeamPopupFormConfig() {
+    this.teamPopupBlockConfig = new ZxBlockModel({
+      label: 'Team info',
     });
   }
   public setAttackPopUpFormConfig() {
@@ -414,43 +495,147 @@ export class MusicRiskWorldMapComponent implements OnInit {
     });
   }
   teamInfo: MapState[] = [];
+
   artistColumnDefs = [
     {
-      field: 'numberOfActivePlayerTeams',
-      headerName: 'Active player teams',
+      field: 'countryName',
+      headerName: 'Country name',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfActiveNpcTeams',
-      headerName: 'Active npc teams',
+      field: 'belongsTo',
+      headerName: 'Belongs to',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfActiveCountries',
-      headerName: 'Active countries',
+      field: 'flag',
+      headerName: 'Country flag',
+      flex: 1,
+      floatingFilter: false,
+      cellRenderer: function (params) {
+        return (
+          '<span>' +
+          '<span style="" class="fi fi-' +
+          params.data.flag +
+          '">' +
+          '</span>' +
+          '</span>'
+        );
+      },
+    },
+    {
+      field: 'ownedFlags',
+      headerName: 'Owned flags',
+      flex: 1,
+      floatingFilter: false,
+      cellRenderer: function (params) {
+        let startString = '<span>';
+        const endString = '</span>';
+        for (let flag of params.data.ownedFlags) {
+          startString += '<span style="" class="fi fi-' + flag + '">';
+          startString +=
+            '<span style="padding-left:20px; padding-right:20px; width:40px">';
+        }
+
+        startString += endString;
+        return startString;
+      },
+    },
+  ];
+  teamColumnDefs = [
+    {
+      field: 'name',
+      headerName: 'Artist name',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfInactiveCountries',
-      headerName: 'Inactive countries',
+      field: 'countryName',
+      headerName: 'Country name',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfPassiveCountries',
-      headerName: 'Passive countries',
+      field: 'flag',
+      headerName: 'Flag',
+      flex: 1,
+      floatingFilter: false,
+      cellRenderer: function (params) {
+        return (
+          '<span>' +
+          '<span class="fi fi-' +
+          params.data.flag.toLowerCase() +
+          '">' +
+          '</span>' +
+          '</span>'
+        );
+      },
+    },
+  ];
+  public teamGridOptions: GridOptions = {
+    columnDefs: this.teamColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.countrySongs = event.data.songs;
+    },
+  } as GridOptions;
+  songTeamColumnDefs = [
+    {
+      field: 'name',
+      headerName: 'Song name',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'spotifyId',
+      headerName: 'Spotify Id',
       flex: 1,
       floatingFilter: false,
     },
   ];
+  public songTeamGridOptions: GridOptions = {
+    columnDefs: this.songTeamColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {},
+  } as GridOptions;
   public infoGridOptions: GridOptions = {
     columnDefs: this.artistColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
-    onRowClicked: (event) => {},
+    onRowClicked: (event) => {
+      this.clickedGridCountry = event.data;
+      if (
+        this.clickedGridCountry.id == this.teamState.activePlayerTeam.countryId
+      ) {
+        this.countryArtists = this.teamState.activePlayerTeam?.teamArtists;
+      } else {
+        for (let team of this.teamState.activeNpcTeams) {
+          if (team.countryId == this.clickedGridCountry.id) {
+            this.countryArtists = team?.teamArtists;
+          }
+        }
+      }
+      if (!this.countryArtists) {
+        for (let team of this.teamState.inactiveNpcTeams) {
+          if (team.countryId == this.clickedGridCountry.id) {
+            this.countryArtists = team?.teamArtists;
+          }
+        }
+      }
+      for (let team of this.countryArtists) {
+        for (let flag of this.flags) {
+          if (team.countryId == flag.id) {
+            team.flag = flag.name;
+          }
+        }
+      }
+      this.countrySongs = this.countryArtists[0]?.songs;
+      this.teamPopup.show();
+    },
   } as GridOptions;
   public attackBtn: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -468,6 +653,242 @@ export class MusicRiskWorldMapComponent implements OnInit {
       },
     ],
   });
+  standingsHistoryDefs = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'text',
+      headerName: 'Description',
+      flex: 5,
+      floatingFilter: false,
+    },
+  ];
+  battleLogs: TurnHistoryGrid[] = [];
+  public standingsGridOptions: GridOptions = {
+    columnDefs: this.standingsHistoryDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {},
+  } as GridOptions;
+  standingsTurnDefs = [
+    {
+      field: 'turnNumber',
+      headerName: 'Turn number',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'winnerTeamId',
+      headerName: 'Winner team',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'loserTeamId',
+      headerName: 'Loser Team',
+      flex: 1,
+      floatingFilter: false,
+    },
+  ];
+  public playSong(who: string, id: number) {
+    if (who === 'PLAYER') {
+      this.playerStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        this.turnHistory[this.playerStandingSongs[id].id].songASpotifyId +
+        '?utm_source=generator&theme=0';
+    } else {
+      this.npcStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        this.turnHistory[this.npcStandingSongs[id].id].songBSpotifyId +
+        '?utm_source=generator&theme=0';
+    }
+  }
+
+  battleTurns: BattleLogBattleResult[];
+  isAnyRowClicked = false;
+  standingsSongsArray = [];
+  playerStandingSongs = [];
+  npcStandingSongs = [];
+  songsForm: Definition[] = [];
+  public someModal: any;
+  public standingsTurnGridOptions: GridOptions = {
+    columnDefs: this.standingsTurnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      const winnerTeamID = +event['data']['winnerTeamId'];
+      const loserTeamID = +event['data']['loserTeamId'];
+      this.flagWinner = '';
+      this.flagLoser = '';
+      this.standingsSongsArray = [];
+      this.playerStandingSongs = [];
+      this.npcStandingSongs = [];
+      this.songsForm = [];
+      this.popUpStandingFormConfig.children = null;
+      this.popUpStandingFormConfig.model = null;
+      this.isAnyRowClicked = true;
+      let elements: BattleLogEntry[] = [];
+      let wonCase = 'PLAYER';
+      let playerFlagId = 0;
+      let npcFlagId = 0;
+      let winnerFound = false;
+      let winnerFlagID = 0;
+      let winnerFlagName = '';
+      let loserFlagName = '';
+      let loserFlagID = 0;
+      if (this.teamState.activePlayerTeam.id == winnerTeamID) {
+        for (let flag of this.flags) {
+          if (this.teamState.activePlayerTeam.countryId == flag.id) {
+            this.flagWinner = 'fi fi-' + flag.name.toLowerCase();
+            winnerFlagID = flag.id;
+            winnerFlagName = flag.name;
+            winnerFound = true;
+            break;
+          }
+        }
+      } else if (this.teamState.activePlayerTeam.id == loserTeamID) {
+        for (let flag of this.flags) {
+          if (this.teamState.activePlayerTeam.countryId == flag.id) {
+            this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
+            loserFlagID = flag.id;
+            loserFlagName = flag.name;
+            break;
+          }
+        }
+      }
+      if (!winnerFound) {
+        for (let team of this.teamState.activeNpcTeams) {
+          if (team.id == winnerTeamID) {
+            for (let flag of this.flags) {
+              if (team.countryId == flag.id) {
+                this.flagWinner = 'fi fi-' + flag.name.toLowerCase();
+                winnerFlagID = flag.id;
+                winnerFlagName = flag.name;
+                break;
+              }
+            }
+          }
+        }
+      }
+      for (let team of this.teamState.inactiveNpcTeams) {
+        if (team.id == loserTeamID) {
+          for (let flag of this.flags) {
+            if (team.countryId == flag.id) {
+              this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
+              loserFlagID = flag.id;
+              loserFlagName = flag.name;
+              break;
+            }
+          }
+        }
+      }
+      for (let team of this.teamState.activeNpcTeams) {
+        if (team.id == loserTeamID) {
+          for (let flag of this.flags) {
+            if (team.countryId == flag.id) {
+              this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
+              loserFlagID = flag.id;
+              loserFlagName = flag.name;
+              break;
+            }
+          }
+        }
+      }
+      // if (this.teamState.activePlayerTeam.id == winnerTeamID) {
+      //   playerFlagId = this.teamState.activePlayerTeam.countryId;
+      //   for (let team of this.teamState.inactiveNpcTeams) {
+      //     if (team.id === loserTeamID) npcFlagId = team.countryId;
+      //   }
+      // } else {
+      //   for (let team of this.teamState.activeNpcTeams) {
+      //     if (team.id === winnerTeamID) playerFlagId = team.countryId;
+      //   }
+      //   if (this.teamState.activePlayerTeam.countryId == loserTeamID) {
+      //     npcFlagId = this.teamState.activePlayerTeam.countryId;
+      //   } else {
+      //     for (let team of this.teamState.activeNpcTeams) {
+      //       if (team.id === loserTeamID) npcFlagId = team.countryId;
+      //     }
+      //     if (!npcFlagId) {
+      //       for (let team of this.teamState.inactiveNpcTeams) {
+      //         if (team.id == loserTeamID) {
+      //           npcFlagId = team.countryId;
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
+      for (let flag of this.flags) {
+        if (loserFlagID == flag.id)
+          this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
+        if (winnerFlagID == flag.id)
+          this.flagWinner = 'fi fi-' + flag.name.toLowerCase();
+      }
+
+      for (let i = 0; i < this.turnHistory.length; i++) {
+        let turn = this.turnHistory[i];
+        if (turn.battleResultId === +event['data']['id']) {
+          elements.push(turn);
+          const playerSong = {
+            name: turn.playerASongName,
+            spotifyId: turn.songASpotifyId,
+            checked: turn.winnerSongId === turn.playerASongId,
+            id: i,
+          };
+          const npcSong = {
+            name: turn.playerBSongName,
+            spotifyId: turn.songBSpotifyId,
+            checked: turn.winnerSongId === turn.playerBSongId,
+            id: i,
+          };
+          this.standingsSongsArray.push(playerSong);
+          this.playerStandingSongs.push(playerSong);
+          this.standingsSongsArray.push(npcSong);
+          this.npcStandingSongs.push(npcSong);
+          this.songsForm.push(
+            new Definition({
+              template: 'ZxCheckbox',
+              class: ['col-12'],
+              type: 'classic',
+              name: 'song' + this.indx,
+              label: 'Classic checkbox',
+            })
+          );
+          this.songsForm.push(
+            new Definition({
+              template: 'ZxCheckbox',
+              class: ['col-12'],
+              type: 'classic',
+              name: 'song' + (this.indx + 1),
+              label: 'Classic checkbox',
+            })
+          );
+          this.indx += 2;
+        }
+      }
+      this.popUpStandingFormConfig.updateListModel();
+      this.popUpStandingFormConfig.children = this.songsForm;
+      let inx = 0;
+      for (let song of this.standingsSongsArray) {
+        this.popUpStandingFormConfig.children[inx].label = song.name;
+        this.popUpStandingFormConfig.children[inx].disabled = true;
+        this.popUpStandingFormConfig.children[inx].defaultValue = song.checked;
+        inx += 1;
+      }
+      this.npcStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        elements[0].songASpotifyId +
+        '?utm_source=generator&theme=0';
+      this.playerStandingUrl =
+        'https://open.spotify.com/embed/track/' +
+        elements[1].songASpotifyId +
+        '?utm_source=generator&theme=0';
+    },
+  } as GridOptions;
   public viewAndAlterRosterBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
@@ -479,12 +900,15 @@ export class MusicRiskWorldMapComponent implements OnInit {
       },
     ],
   });
+  searchedFor = false;
   public viewStandingsBtn: ZxButtonModel = new ZxButtonModel({
     items: [
       {
         icon: 'far fa-layer-group',
         label: 'View Standings',
-        action: () => {},
+        action: () => {
+          this.viewStandingsPopup.show();
+        },
       },
     ],
   });
@@ -495,11 +919,25 @@ export class MusicRiskWorldMapComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.setAttackPopUpFormConfig();
+    this.setTeamPopupFormConfig();
   }
   chart: Chart;
   loadData() {
     this.route.params.subscribe((params) => {
       this.musicService.getLastTurn(params.id).subscribe((data: BattleTurn) => {
+        Object.keys(data.turnCombatState.battleLogs[0].textHistory).forEach(
+          (key, index) => {
+            this.battleLogs.push(
+              new TurnHistoryGrid(
+                key,
+                data.turnCombatState.battleLogs[0].textHistory[key]
+              )
+            );
+          }
+        );
+        this.battleLogs.reverse();
+        this.battleTurns = data.turnCombatState.battleLogs[0].battleResults;
+        this.turnHistory = data.turnCombatState.battleLogs[0].turnHistory;
         this.setPopUpFormConfig();
         this.battleId = +params.id;
         this.battleTurn = data;
@@ -516,6 +954,80 @@ export class MusicRiskWorldMapComponent implements OnInit {
         this.mapState = data.mapState;
         this.teamInfo.push(data.mapState);
         this.teamState = data.teamState;
+        if (!this.searchedFor) {
+          //GET FLAGS
+          const countryIds = [];
+          countryIds.push(this.teamState.activePlayerTeam.countryId);
+          for (let team of this.mapState.countries) {
+            countryIds.push(team.countryId);
+          }
+          const uniquesOnly = [...new Set(countryIds)];
+          this.musicService.getFlags(uniquesOnly).subscribe((data) => {
+            this.flags = data;
+            this.activePlayerTeamArtists =
+              this.teamState.activePlayerTeam.teamArtists.map((artist) => {
+                let flagFound = '';
+                for (let i = 0; i < this.flags.length; i++) {
+                  if (this.flags[i].id === artist.countryId) {
+                    flagFound = 'fi fi-' + this.flags[i].name.toLowerCase();
+                    break;
+                  }
+                }
+                return { name: artist.name, flag: flagFound };
+              });
+            this.countriesInfo = [];
+            this.countriesInfo.push(
+              new GridOfCountries(
+                this.teamState.activePlayerTeam.countryId,
+                this.teamState.activePlayerTeam.countryName,
+                'PLAYER',
+                'Active',
+                Object.values(
+                  this.teamState.activePlayerTeam.eligibleCountryIds
+                )
+              )
+            );
+            for (let team of this.teamState.activeNpcTeams) {
+              this.countriesInfo.push(
+                new GridOfCountries(
+                  team.countryId,
+                  team.countryName,
+                  'NPC',
+                  'Active',
+                  Object.values(team.eligibleCountryIds)
+                )
+              );
+            }
+            for (let team of this.teamState.inactiveNpcTeams) {
+              this.countriesInfo.push(
+                new GridOfCountries(
+                  team.countryId,
+                  team.countryName,
+                  'NPC',
+                  'InActive',
+                  Object.values(team.eligibleCountryIds)
+                )
+              );
+            }
+            for (let country of this.countriesInfo) {
+              country.ownedFlags = [];
+              for (let eligibleCountry of country.ownedFlagsIds) {
+                for (let flag of this.flags) {
+                  if (eligibleCountry == flag.id) {
+                    country.ownedFlags.push(flag.name.toLowerCase());
+                  }
+                }
+              }
+              for (let flag of this.flags) {
+                if (country.id == flag.id) {
+                  country.flag = flag.name.toLowerCase();
+                }
+              }
+            }
+          });
+          this.searchedFor = true;
+        }
+        this.setViewStandingsPopup();
         this.setupMap();
       });
     });
@@ -525,6 +1037,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
 
     return scores.get(country);
   }
+
   setupMap() {
     fetch('https://unpkg.com/world-atlas/countries-50m.json')
       .then((r) => r.json())

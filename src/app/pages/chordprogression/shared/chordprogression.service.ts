@@ -7,6 +7,9 @@ import {
   GenreResponse,
   ChordProgressionResponse,
   EraResponse,
+  ChordProgressionOverview,
+  ChrodProgressionCreateRequest,
+  SongChorProgressionResponse,
 } from './chordprogression.model';
 
 @Injectable({
@@ -40,5 +43,18 @@ export class ChordProgressionService {
         return stories;
       })
     );
+  }
+  getChord(id: number): Observable<ChordProgressionOverview> {
+    return this.api.get(ChordProgressionApi.GET_CHORDPROGRESSION.replace("#", id.toString())).pipe(map(response => {
+      return response['payload'];
+    }));
+  }
+  //updateChord(instrument: ChrodProgressionCreateRequest): Observable<any> {
+    //return this.api.put(ChordProgressionApi.UPDATE_CHORDPROGRESSION.replace("#", instrument.id.toString()), instrument);
+  //}
+  getSongsChord(id: number) {
+    return this.api.get(ChordProgressionApi.GET_SONGS_CHORD.replace("#", id.toString())).pipe(map(response => {
+      return response['payload'];
+    }));
   }
 }

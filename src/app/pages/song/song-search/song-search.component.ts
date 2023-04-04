@@ -6,6 +6,8 @@ import { Definition } from '@zff/zx-forms';
 import { AppBox } from '../../shared/box/box.model';
 import { SongSearchRequest } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
+import { title } from 'process';
 
 @Component({
   selector: 'app-song-search',
@@ -13,6 +15,18 @@ import { SongService } from '../shared/song.service';
   styleUrls: ['./song-search.component.scss'],
 })
 export class SongSearchComponent implements OnInit {
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+      { index: 'playtime', class: 'col-12' },
+      { index: 'created', class: 'col-12 align-right' },
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./song/' + event['id'] + '/overview']);
+    },
+  });
+
   public songsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     label: 'songs',
@@ -35,6 +49,32 @@ export class SongSearchComponent implements OnInit {
       },
     ],
   });
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
 
   public searchButton: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -179,7 +219,7 @@ export class SongSearchComponent implements OnInit {
     });
   }
 
-  constructor(private router: Router, private songService: SongService) {}
+  constructor(private router: Router, private songService: SongService) { }
 
   ngOnInit(): void {
     this.setFormConfig();
@@ -205,6 +245,8 @@ export class SongSearchComponent implements OnInit {
 
     this.songService.searchSongs(searchRequest).subscribe((response) => {
       this.foundSongs = response as unknown as AppBox[];
+      this.listLayout.list = response;
+
       this.loading = false;
     });
   }

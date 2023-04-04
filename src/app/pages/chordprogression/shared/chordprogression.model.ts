@@ -34,4 +34,29 @@ export class ChordProgressionSearchRequest {
     this.pageSize = pageSize;
     this.sortBy = sortBy;
   }
+ 
 }
+export class  ChordProgressionOverview {
+  id:number;
+  name: string;
+  status:string;
+  information:string;
+  outlineText:string;
+  imageUrl:string;
+songCount:number;
+}
+export class ChrodProgressionCreateRequest {
+  id: number;
+  information: string;
+  name:string;
+  outlineText:string;
+  coverImageData: string | ArrayBuffer;
+  coverImage: string;
+  coverImage_files: File[];
+}
+export class SongChorProgressionResponse {
+  songName: string;
+  genreName: string;
+  flagAbbriviation:string;
+  playtime:string;
+};

@@ -13,20 +13,38 @@
       </p>
       <p>
         Current Roster:
-        <span
-          *ngFor="
-            let artist of teamState.activePlayerTeam.teamArtists;
-            let i = index
-          "
+        <span *ngFor="let artist of this.activePlayerTeamArtists; let i = index"
           >{{ artist.name }}
-          <span *ngIf="i < teamState.activePlayerTeam.teamArtists.length - 1"
-            >,</span
-          >
+          <span
+            style="margin-right: 5px; margin-left: 5px; font-size: 18px"
+            class="{{ artist.flag }}"
+          ></span>
+          <span *ngIf="i < this.activePlayerTeamArtists.length - 1">,</span>
         </span>
       </p>
       <p>
         Total Player Countries:
         <span>{{ teamState.activeNpcTeams.length }}</span>
+      </p>
+      <p>
+        Active player teams:
+        <span>{{ mapState.numberOfActivePlayerTeams }}</span>
+      </p>
+      <p>
+        Active npc teams:
+        <span>{{ mapState.numberOfActiveNpcTeams }}</span>
+      </p>
+      <p>
+        Active countries:
+        <span>{{ mapState.numberOfActiveCountries }}</span>
+      </p>
+      <p>
+        Inactive countries:
+        <span>{{ mapState.numberOfInactiveCountries }}</span>
+      </p>
+      <p>
+        Passive countries:
+        <span>{{ mapState.numberOfPassiveCountries }}</span>
       </p>
     </div>
     <div style="display: flex; flex-direction: column; width: 100%">
@@ -59,7 +77,7 @@
         <zx-grid
           zx-block-body
           [gridOptions]="infoGridOptions"
-          [source]="teamInfo"
+          [source]="countriesInfo"
           domLayout="autoHeight"
         >
         </zx-grid>
@@ -83,6 +101,172 @@
         class="align-right"
       ></zx-button>
     </div>
+  </zx-popup>
+  <zx-popup [config]="viewStandingsPopup">
+    <div zx-popup-body>
+      <zx-block [config]="popUpStandingsConfig">
+        <div zx-block-body>
+          <div style="display: flex; height: 250px">
+            <zx-grid
+              zx-block-body
+              [gridOptions]="standingsGridOptions"
+              [source]="battleLogs"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+            <zx-grid
+              zx-block-body
+              [gridOptions]="standingsTurnGridOptions"
+              [source]="battleTurns"
+              domLayout="autoHeight"
+            >
+            </zx-grid>
+          </div>
+          <div zx-popup-body *ngIf="isAnyRowClicked">
+            <zx-block [config]="attackBlockConfig">
+              <div style="width: 100%" zx-block-body>
+                <div
+                  style="
+                    margin-left: auto;
+                    margin-right: auto;
+                    display: flex;
+                    justify-content: center;
+                    gap: 10px;
+                    width: 500px;
+                  "
+                >
+                  <div style="display: flex; gap: 5px">
+                    <p>Winner country:</p>
+                    <span
+                      style="
+                        margin-right: 5px;
+                        margin-left: 5px;
+                        font-size: 25px;
+                      "
+                      class="{{ flagWinner }}"
+                    ></span>
+                  </div>
+                  <div style="display: flex; gap: 5px">
+                    <p>Loser country:</p>
+                    <span
+                      style="
+                        margin-right: 5px;
+                        margin-left: 5px;
+                        font-size: 25px;
+                      "
+                      class="{{ flagLoser }}"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 20px" zx-block-body>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <!-- <div *ngIf="artistImageOne">
+                    <img
+                      [src]="artistImageOne.imageUrl"
+                      alt=""
+                      style="width: 250px; height: 250px"
+                    />
+                  </div> -->
+                  <iframe
+                    style="border-radius: 12px"
+                    [src]="playerStandingUrl | safe : 'resourceUrl'"
+                    width="250px"
+                    height="100"
+                    frameBorder="0"
+                    allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  ></iframe>
+                  <div
+                    *ngFor="let song of this.playerStandingSongs; let i = index"
+                    style="display: flex; flex-direction: column; gap: 5px"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        gap: 15px;
+                        align-items: center;
+                        cursor: pointer;
+                      "
+                      (click)="playSong('PLAYER', i)"
+                    >
+                      <i
+                        class="far fa-play fa-sm"
+                        style="color: #000000; cursor: pointer"
+                      ></i>
+                      <p style="font-size: 12px; cursor: pointer">
+                        {{ song.name }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    width: 500px;
+                  "
+                >
+                  <zx-form-loader
+                    *ngIf="popUpStandingFormConfig"
+                    [component]="popUpStandingFormConfig"
+                    [model]="someModal"
+                    class="col-24"
+                  ></zx-form-loader>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <!-- <div *ngIf="artistImageTwo">
+                    <img
+                      [src]="artistImageTwo.imageUrl"
+                      alt=""
+                      style="width: 250px; height: 250px"
+                    />
+                  </div> -->
+                  <iframe
+                    style="border-radius: 12px"
+                    [src]="npcStandingUrl | safe : 'resourceUrl'"
+                    width="250px"
+                    height="100"
+                    frameBorder="0"
+                    allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  ></iframe>
+                  <div
+                    *ngFor="let song of this.npcStandingSongs; let i = index"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        gap: 15px;
+                        align-items: center;
+                        cursor: pointer;
+                      "
+                      (click)="playSong('NPC', i)"
+                    >
+                      <i
+                        class="far fa-play fa-sm"
+                        style="color: #000000; cursor: pointer"
+                      ></i>
+                      <p style="font-size: 12px; cursor: pointer">
+                        {{ song.name }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </zx-block>
+          </div>
+        </div>
+      </zx-block>
+    </div>
+    <zx-button
+      zx-popup-footer
+      [config]="linkPopupStandingsFooterButtons"
+      class="align-right"
+    ></zx-button>
   </zx-popup>
   <zx-popup [config]="attackPopup">
     <div zx-popup-body>
@@ -150,5 +334,32 @@
         class="align-right"
       ></zx-button>
     </div>
+  </zx-popup>
+  <zx-popup [config]="teamPopup">
+    <div zx-popup-body style="height: 450px">
+      <zx-block [config]="teamPopupBlockConfig">
+        <div zx-block-body style="height: 200px">
+          <zx-grid
+            [gridOptions]="teamGridOptions"
+            [source]="countryArtists"
+            domLayout="autoHeight"
+          >
+          </zx-grid>
+        </div>
+        <div *ngIf="this.countrySongs" zx-block-body style="height: 200px">
+          <zx-grid
+            [gridOptions]="songTeamGridOptions"
+            [source]="countrySongs"
+            domLayout="autoHeight"
+          >
+          </zx-grid>
+        </div>
+      </zx-block>
+    </div>
+    <zx-button
+      zx-popup-footer
+      [config]="teamPopupFooterBtn"
+      class="align-right"
+    ></zx-button>
   </zx-popup>
 </div>
