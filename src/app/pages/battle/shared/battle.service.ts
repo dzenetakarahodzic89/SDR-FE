@@ -21,6 +21,14 @@ export class BattleService {
     );
   }
 
+  getAllBattles() {
+    return this.api.get(BattleApi.GET_ALL_BATTLES).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
   getSingleBattle (id: number):Observable<BattleSingleOverviewModel> {
     return this.api.get(BattleApi.GET_SINGLE_OVERVIEW.replace('#',id.toString())).pipe(
       map((response) => {
