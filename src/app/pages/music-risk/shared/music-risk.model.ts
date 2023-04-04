@@ -59,6 +59,7 @@ export class Artist {
   countryName: string;
   name: string;
   songs: Song[];
+  flag?: string;
 }
 export class Song {
   songId: number;

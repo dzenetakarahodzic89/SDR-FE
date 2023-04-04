@@ -335,4 +335,31 @@
       ></zx-button>
     </div>
   </zx-popup>
+  <zx-popup [config]="teamPopup">
+    <div zx-popup-body style="height: 450px">
+      <zx-block [config]="teamPopupBlockConfig">
+        <div zx-block-body style="height: 200px">
+          <zx-grid
+            [gridOptions]="teamGridOptions"
+            [source]="countryArtists"
+            domLayout="autoHeight"
+          >
+          </zx-grid>
+        </div>
+        <div *ngIf="this.countrySongs" zx-block-body style="height: 200px">
+          <zx-grid
+            [gridOptions]="songTeamGridOptions"
+            [source]="countrySongs"
+            domLayout="autoHeight"
+          >
+          </zx-grid>
+        </div>
+      </zx-block>
+    </div>
+    <zx-button
+      zx-popup-footer
+      [config]="teamPopupFooterBtn"
+      class="align-right"
+    ></zx-button>
+  </zx-popup>
 </div>
