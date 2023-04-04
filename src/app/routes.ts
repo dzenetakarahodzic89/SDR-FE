@@ -51,6 +51,7 @@ import { HistoryComponent } from './pages/playlist/history/history.component';
 import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-timeline/album-timeline.component';
 
 import { SetupComponent } from './pages/music-risk/setup/setup.component';
+import { ChordprogressionOverviewComponent } from './pages/chordprogression/chordprogression-overview/chordprogression-overview.component';
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -130,4 +131,5 @@ export const appRoutes: Routes = [
   { path: 'artist/update/:id', component: ArtistCreateComponent },
   { path: 'playlist/history', component: HistoryComponent },
   { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
+  {path: 'chordProgression/:id/overview', component: ChordprogressionOverviewComponent},
 ];
