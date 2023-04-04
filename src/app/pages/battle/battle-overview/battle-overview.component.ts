@@ -225,12 +225,8 @@ export class BattleSearchComponent implements OnInit {
 
   loadBattles() {
     this.battleAreLoading = true;
-    let getParams = new BattleOverviewSearchRequest();
-
-    getParams.page = this.paginationDetails.page;
-    getParams.size = 10;
-
-    this.battleService.getBattles(getParams).subscribe((response) => {
+   
+    this.battleService.getAllBattles().subscribe((response) => {
       this.battle = response['payload'] as unknown as BattleResponse[];
 
       this.paginationDetails.page = response['page'];
