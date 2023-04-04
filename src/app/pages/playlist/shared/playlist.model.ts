@@ -174,6 +174,19 @@ export class PlayListResponsee {
   spotifyId: string;
 }
 
+export class PlayListResponseOverview {
+  playlistName: string;
+  songId: number;
+  songName: string;
+  spotifyId: number;
+  genre: string;
+  country: string;
+  artistName: string;
+  playtime: string;
+  songImageUrl: string;
+  songAudioUrl: string;
+}
+
 export class SongPlaylistReq {
   playlistId: number;
   songId: number;
