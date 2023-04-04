@@ -17,6 +17,7 @@ export class BattleSearchComponent implements OnInit {
   battleAreLoading: boolean;
   selectedBattleOverview:BattleSingleOverviewModel;
   selectedCountryName = '';
+  selectedCountryId :string;
   
   battlesAreLoading: boolean;
   foundBattles: BattleResponse[];
@@ -128,6 +129,9 @@ export class BattleSearchComponent implements OnInit {
       {
         name: 'Continue Battle',
         label: 'Continue Battle',
+        action: () => {
+          if(this.selectedCountryId)
+          this.router.navigate([`./battle/${this.selectedCountryId}/world-map`])},
       },
     ],
   });
@@ -188,6 +192,7 @@ export class BattleSearchComponent implements OnInit {
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) => {
+      this.selectedCountryId = event['data']['id'];
       this.selectedCountryName = event['data']['countryName'];
       this.selectBattle(event['data']['id']);
 
