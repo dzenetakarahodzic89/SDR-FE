@@ -20,13 +20,45 @@
                 </div>
             </div>
             <hr />
+            <div id="table" class="tableWrapper">
             <zx-grid
               zx-block-body
               [gridOptions]="battleGridOptions"
               [source]="battle"
-              domLayout="autoHeight"
+              style="height:250px"
             >
             </zx-grid>
         </div>
+            <hr/>
+
+        <div *ngIf="selectedBattleOverview" > 
+            <h2>
+            Battle Stats for {{selectedCountryName}}
+            </h2>
+        </div>
+            <div *ngIf="selectedBattleOverview" class="row col-24">
+                <div class="col-6 chartSection">
+                    <div class="pie">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            
+                <div class="col-10 chartSection">
+                    <div class="lineChart">
+                    <canvas  id="lineChartTeam"></canvas>
+                    </div>
+                </div>
+                <div class="col-8 chartSection">
+                    <zx-grid
+                    zx-block-body
+                    [gridOptions]="artistGridOptions"
+                    [source]="selectedBattleOverview.artistState"
+                    domLayout="autoHeight"
+                  >
+                  </zx-grid>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>

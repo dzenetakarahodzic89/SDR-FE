@@ -32,16 +32,20 @@ export class BattleTurn {
   teamState: TeamState;
   turn: number;
   mapState: MapState;
+  turnCombatState: BattleLogs;
 }
 export class TeamState {
   activeNpcTeams: Team[];
   activePlayerTeam: Team;
-  inactiveNpcTeams: Team;
+  inactiveNpcTeams: Team[];
+}
+interface CountryIds {
+  [key: string]: number;
 }
 export class Team {
   countryId: number;
   countryName: string;
-  eligibleCountryIds: number[];
+  eligibleCountryIds: CountryIds;
   id: number;
   lastActiveTurn: number;
   numberOfLoses: number;
@@ -79,4 +83,76 @@ export class GenerateBattleRequest {
   songSize: number;
   teamSize: number;
   countries: any[];
+}
+export class AttackCountry {
+  attackingCountryId: number;
+  attackedCountryId: number;
+}
+export class PreMoveBattleAttack {
+  attackerId: number;
+  attackedId: number;
+  attackerName: string;
+  attackedName: string;
+  isAttackedPassive: boolean;
+  battleId: number;
+}
+export class BattleTurnUpdateRequest {
+  battleTurnId: number;
+  attackerName: string;
+  attackedName: string;
+  attackerCountryId: number;
+  attackedCountryId: number;
+  songBattleExplained: string[];
+  songBattles: BattleLogEntry[];
+  wonCase: string;
+}
+
+export class BattleLogEntry {
+  playerASongId: number;
+  playerBSongId: number;
+  playerASongName: string;
+  playerBSongName: string;
+  songASpotifyId: string;
+  songBSpotifyId: string;
+  songAAudioUrl: string;
+  songBAudioUrl: string;
+  winnerSongId: number;
+  loserSongId: number;
+  userCodeOfDecider: string;
+  battleResultId: number;
+}
+export class ArtistImageResponse {
+  id: number;
+  name: string;
+  imageUrl: string;
+}
+export class BattleLogs {
+  status: string;
+  battleLogs: BattleLog[];
+}
+export interface textMap {
+  [key: string]: string;
+}
+export class BattleLog {
+  textHistory: textMap[];
+  turnHistory: BattleLogEntry[];
+  battleResults: BattleLogBattleResult[];
+  battleWinnerTeamId: number;
+  battleLoserTeamId: number;
+}
+
+export class BattleLogBattleResult {
+  id: number;
+  turnNumber: number;
+  winnerTeamId: number;
+  loserTeamId: number;
+  winnerEligibleCountryIds: number[];
+  loserEligibleCountryIds: number[];
+}
+export class TurnHistoryGrid {
+  id: string;
+  text: string;
+  constructor(id: string, text: string) {
+    (this.id = id), (this.text = text);
+  }
 }

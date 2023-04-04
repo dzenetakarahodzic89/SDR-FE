@@ -8,12 +8,40 @@ export class BattleOverviewSearchRequest{
     
 
 }
+export class TeamBattleState {
+    id:number;
+    countryId:number;
+    countryName:string;
+    availableArtistsByTurn:number[];
+}
 
+export class BattleSingleOverviewModel{
+
+    teamBattleStates:any;
+     artistState:BattleArtistStateResponse[];
+     numberOfSongsWon:number;
+     numberOfSongsLost:number;
+     winPercentage:number;
+
+     
+}
+
+export class BattleArtistStateResponse{
+
+        id:number;
+        name:string;
+        songs: any;
+        numberOfSongsWon: number;
+        numberOfSongsLost: number;
+
+}
 
 export class BattleResponse {
     id: number;
+    songSize:number;
+    teamSize:number;
     name: string;
-    turn: string;
+    lastTurn: string;
     countryName: string;
   }
 export class Battle {
@@ -90,12 +118,26 @@ export class SongExtended {
     artistId: number;
     song: Song;
 
-    constructor(song) {
+    constructor(song?) {
+        if(song) {
         this.id=song.song.songId;
         this.name=song.song.name;
         this.song=song.song;
         this.artistId = song.artistId;
+        } else {
+            this.id=0;
+        }
     }
+
+}
+
+export class SongModel {
+    id: number;
+    name: string;
+    artistId: number;
+    song: Song;
+
+
 }
 
 

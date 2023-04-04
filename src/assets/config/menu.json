@@ -33,7 +33,7 @@
           {
             "code": "HUB_COUNTRY_STATIC",
             "label": "Country Relations",
-            "url": "country-relations/overview",
+            "url": "country-relations/create",
             "attributes": {}
           },
           {
@@ -73,6 +73,20 @@
             "attributes": {}
           },
           {
+            "code": "HUB_LABEL_STATIC",
+            "icon": "fad fa-music",
+            "label": "Labels",
+            "url": "label/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_BATTLE_STATIC",
+            "icon": "fad fa-battle",
+            "label": "Battles",
+            "url": "music-risk/battle-overview",
+            "attributes": {}
+          },
+          {
             "code": "HUB_CHORD_PROGRESSION_STATIC",
             "icon": "far fa-music",
             "label": "Chord Progressions",
@@ -84,6 +98,13 @@
             "icon": "fad fa-calendar-star",
             "label": "Event search",
             "url": "event/search",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_RELEASE_STATIC",
+            "icon": "fad fa-record-vinyl",
+            "label": "Releases",
+            "url": "release/search",
             "attributes": {}
           }
         ]
@@ -111,13 +132,12 @@
         "attributes": {}
       },
       {
-        "code": "HUB_ARTISTS_BY_ERAS_STATIC",
-        "icon": "fad fa-user-music",
-        "label": "Artists distribution over eras",
-        "url": "era/artists-over-eras",
+        "code": "HUB_BATTLE_OVERVIEW_STATIC",
+        "icon": "fad fa-swords",
+        "label": "Music Risk",
+        "url": "battle/overview",
         "attributes": {}
       },
-
       {
         "code": "HUB_STATISTICS_STATIC",
         "label": "Statistics",
@@ -146,6 +166,18 @@
             "code": "HUB_PERSONSTATISTICS_STATIC",
             "label": "Person Distribution over Countries - World Map",
             "url": "person-statistics",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_ARTISTS_BY_ERAS_STATIC",
+            "label": "Artists distribution over eras",
+            "url": "era/artists-over-eras",
+            "attributes": {}
+          },
+          {
+            "code": "HUB_SPOTIFY_STATIC",
+            "label": "Spotify Statistics",
+            "url": "spotify-integration",
             "attributes": {}
           }
         ]

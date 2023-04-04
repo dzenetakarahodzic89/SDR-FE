@@ -3,7 +3,7 @@ import { Component, OnInit, SystemJsNgModuleLoaderConfig } from '@angular/core';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
-import { AddArtistModel, ArtistExtended, Battle, Country, Song, SongExtended, Team, TeamArtist } from '../shared/battle.model';
+import { AddArtistModel, ArtistExtended, Battle, Country, Song, SongExtended, SongModel, Team, TeamArtist } from '../shared/battle.model';
 import {getCode} from '../../../../../node_modules/iso-3166-1-alpha-2';
 import { ToastrService } from 'ngx-toastr';
 import { BattleService } from '../shared/battle.service';
@@ -23,7 +23,7 @@ export class BattleRosterComponent implements OnInit {
   selectedArtist: ArtistExtended = null;
   selectedSong: SongExtended = null;
   availableSongs: SongExtended[] = [];
-  songToAdd: SongExtended = null;
+  songToAdd: SongModel;
   allSongs: SongExtended[] = [];
   battle : Battle;
   eligibleCountries : any[];
@@ -37,7 +37,7 @@ export class BattleRosterComponent implements OnInit {
 
   public popUpBlockConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
-  public formConfig;
+  public formConfig : Definition;
 
   public blockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -211,6 +211,7 @@ export class BattleRosterComponent implements OnInit {
       children: [],
       model: this.songToAdd
     });
+  
     this.formConfig.addChildren = [
       new Definition({
         template: 'ZxSelect',
@@ -340,10 +341,12 @@ export class BattleRosterComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+   
     this.isLoading = true;
     this.setFormConfig();
     this.setPopUpFormConfig();
     this.loadData();
+    this.songToAdd = new SongModel();
     this.addArtistModel = new AddArtistModel();
   }
 

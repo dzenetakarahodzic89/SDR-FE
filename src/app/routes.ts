@@ -6,6 +6,7 @@ import { GalleryCreateComponent } from './pages/gallery/gallery-create/gallery-c
 import { PersonOverviewComponent } from './pages/person/person-overview/person-overview.component';
 import { PersonSearchComponent } from './pages/person/person-search/person-search.component';
 import { LabelOverviewComponent } from './pages/label/label-overview/label-overview.component';
+import { LabelSearchComponent } from './pages/label/label-search/label-search.component';
 import { CountryOverviewComponent } from './pages/country/country-overview/country-overview.component';
 
 import { InstrumentOverviewComponent } from './pages/instrument/instrument-overview/instrument-overview.component';
@@ -44,14 +45,22 @@ import { PersonStatisticsComponent } from './pages/person/person-statistics/pers
 import { UrmScorePerCountryComponent } from './pages/urm/urm-score-per-country/urm-score-per-country.component';
 import { BattleSearchComponent } from './pages/battle/battle-overview/battle-overview.component';
 import { BattleRosterComponent } from './pages/battle/battle-roster/battle-roster.component';
-import { CountryRelationsOverviewComponent } from './pages/country/country-relation-overview/country-relation-overview.component';
 import { MusicRiskWorldMapComponent } from './pages/music-risk/music-risk-world-map/music-risk-world-map/music-risk-world-map.component';
 import { ArtistCreateComponent } from './pages/artist/artist-create/artist-create.component';
 import { HistoryComponent } from './pages/playlist/history/history.component';
 import { AlbumTimelineComponent } from './pages/artist-album-timeline/album-timeline/album-timeline.component';
+import { EraOverviewComponent } from './pages/era/era-overview/era-overview.component';
+import { ReleaseSearchComponent } from './pages/release/release-search/release-search.component';
+import { SpotifyStatisticsComponent } from './pages/spotify/spotify-statistics/spotify-statistics.component';
 
 import { SetupComponent } from './pages/music-risk/setup/setup.component';
+
 import { ChordprogressionOverviewComponent } from './pages/chordprogression/chordprogression-overview/chordprogression-overview.component';
+
+import { CountryRelationsCreateComponent } from './pages/country/country-relation-create/country-relation-create.component';
+import { EditPlaylistComponent } from './pages/playlist/edit-playlist/edit-playlist.component';
+import { PlaylistOverviewComponent } from './pages/playlist/playlist-overview/playlist-overview.component';
+
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -73,6 +82,7 @@ export const appRoutes: Routes = [
   { path: 'album/:id/overview', component: AlbumOverviewComponent },
   { path: 'song/search', component: SongSearchComponent },
   { path: 'album/search', component: AlbumSearchComponent },
+  { path: 'label/search', component: LabelSearchComponent },
 
   { path: 'battle/setup', component: SetupComponent },
   {
@@ -118,18 +128,24 @@ export const appRoutes: Routes = [
   { path: 'person-statistics', component: PersonStatisticsComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
   {
-    path: 'country-relations/overview',
-    component: CountryRelationsOverviewComponent,
+    path: 'country-relations/create',
+    component: CountryRelationsCreateComponent,
   },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
-  { path: 'music-risk/battle-overview', component: BattleSearchComponent },
+  { path: 'battle/overview', component: BattleSearchComponent },
   { path: 'battle/:id/create-roster', component: BattleRosterComponent },
   { path: 'battle/:id/alter-roster', component: BattleRosterComponent },
-  { path: 'music-risk/:id/world-map', component: MusicRiskWorldMapComponent },
-
+  { path: 'battle/:id/world-map', component: MusicRiskWorldMapComponent },
   { path: 'artist/create', component: ArtistCreateComponent },
   { path: 'artist/update/:id', component: ArtistCreateComponent },
   { path: 'playlist/history', component: HistoryComponent },
+  { path: 'playlist/:id/overview', component: PlaylistOverviewComponent },
+  { path: 'playlist/:id/edit', component: EditPlaylistComponent },
   { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
+
   {path: 'chordProgression/:id/overview', component: ChordprogressionOverviewComponent},
+
+  { path: 'release/search', component: ReleaseSearchComponent },
+  { path: 'spotify-integration', component: SpotifyStatisticsComponent },
+
 ];
