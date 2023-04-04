@@ -19,6 +19,7 @@ import {
   BattleTurn,
   BattleTurnUpdateRequest,
   Country,
+  GridOfCountries,
   MapState,
   PreMoveBattleAttack,
   Song,
@@ -38,6 +39,10 @@ Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
   styleUrls: ['./music-risk-world-map.component.scss'],
 })
 export class MusicRiskWorldMapComponent implements OnInit {
+  countriesInfo: GridOfCountries[] = [];
+  clickedGridCountry: GridOfCountries;
+  countryArtists: Artist[];
+  countrySongs: Song[];
   flags: { id: number; name: string }[] = [];
   flagWinner = '';
   flagLoser = '';
@@ -45,6 +50,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
   playerStandingUrl = '';
   turnHistory: BattleLogEntry[];
   npcUrl = '';
+  activePlayerTeamArtists: { name: string; flag: string }[];
   playerUrl = '';
   attackerCountryId: number;
   songSize: number = 0;
@@ -73,6 +79,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
   public popUpStandingsTurnConfig: ZxBlockModel;
   public popUpFormConfig: Definition;
   public attackBlockConfig: ZxBlockModel;
+  public teamPopupBlockConfig: ZxBlockModel;
   public popUpAttackFormConfig: Definition;
   public artistImageOne: ArtistImageResponse;
   public artistImageTwo: ArtistImageResponse;
@@ -90,6 +97,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
     hideHeader: true,
     hideCloseButton: false,
     size: 'col-20',
+  });
+  public teamPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-14',
   });
   countryPlayerInput: Definition = new Definition({
     template: 'ZxSelect',
@@ -183,6 +195,9 @@ export class MusicRiskWorldMapComponent implements OnInit {
                 .preMoveAttack(this.attackObject)
                 .subscribe((response) => {
                   this.toastr.success(response);
+                  setTimeout(() => {
+                    location.reload();
+                  }, 1000);
                   this.popup.hide();
                   this.loadData();
                   return;
@@ -241,10 +256,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
               this.checkBoxesMap.set(i + 1, i);
               i += 2;
             }
-            console.log('SONG SIZE');
-            console.log(this.songSize * 2);
             for (let i = 0; i < this.songSize * 2; i++) {
-              console.log(i);
               this.formCheckboxesForAttack.push(
                 new Definition({
                   template: 'ZxCheckbox',
@@ -256,7 +268,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
               );
               this.indx += 1;
             }
-            console.log(this.formCheckboxesForAttack);
             /* Fill songs 0-x with mix of artists from npc and player */
             let playerCount = 1;
             let npcCount = 0;
@@ -272,8 +283,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
               }
             }
             this.popUpAttackFormConfig.children = this.formCheckboxesForAttack;
-            console.log('CHILDREN FFS');
-            console.log(this.popUpAttackFormConfig.children.length);
             /* checkbox manipulation (if one is checked other is not) */
             for (
               let j = 0;
@@ -335,6 +344,19 @@ export class MusicRiskWorldMapComponent implements OnInit {
         icon: 'fal fa-times',
         action: () => {
           this.popup.hide();
+        },
+      },
+    ],
+  });
+  public teamPopupFooterBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'close',
+        description: 'close',
+        label: 'Close',
+        class: 'classic primary',
+        action: () => {
+          this.teamPopup.hide();
         },
       },
     ],
@@ -408,6 +430,9 @@ export class MusicRiskWorldMapComponent implements OnInit {
                 this.eligibleCountryIds.push(this.attackedCountryId);
               this.chart.destroy();
               this.loadData();
+              setTimeout(() => {
+                location.reload();
+              }, 1000);
             });
         },
       },
@@ -452,6 +477,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
       children: [this.countryPlayerInput, this.countryAttackedInput],
     });
   }
+  public setTeamPopupFormConfig() {
+    this.teamPopupBlockConfig = new ZxBlockModel({
+      label: 'Team info',
+    });
+  }
   public setAttackPopUpFormConfig() {
     this.attackBlockConfig = new ZxBlockModel({
       label: 'Attack country',
@@ -468,41 +498,144 @@ export class MusicRiskWorldMapComponent implements OnInit {
 
   artistColumnDefs = [
     {
-      field: 'numberOfActivePlayerTeams',
-      headerName: 'Active player teams',
+      field: 'countryName',
+      headerName: 'Country name',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfActiveNpcTeams',
-      headerName: 'Active npc teams',
+      field: 'belongsTo',
+      headerName: 'Belongs to',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfActiveCountries',
-      headerName: 'Active countries',
+      field: 'flag',
+      headerName: 'Country flag',
+      flex: 1,
+      floatingFilter: false,
+      cellRenderer: function (params) {
+        return (
+          '<span>' +
+          '<span style="" class="fi fi-' +
+          params.data.flag +
+          '">' +
+          '</span>' +
+          '</span>'
+        );
+      },
+    },
+    {
+      field: 'ownedFlags',
+      headerName: 'Owned flags',
+      flex: 1,
+      floatingFilter: false,
+      cellRenderer: function (params) {
+        let startString = '<span>';
+        const endString = '</span>';
+        for (let flag of params.data.ownedFlags) {
+          startString += '<span style="" class="fi fi-' + flag + '">';
+          startString +=
+            '<span style="padding-left:20px; padding-right:20px; width:40px">';
+        }
+
+        startString += endString;
+        return startString;
+      },
+    },
+  ];
+  teamColumnDefs = [
+    {
+      field: 'name',
+      headerName: 'Artist name',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfInactiveCountries',
-      headerName: 'Inactive countries',
+      field: 'countryName',
+      headerName: 'Country name',
       flex: 1,
       floatingFilter: false,
     },
     {
-      field: 'numberOfPassiveCountries',
-      headerName: 'Passive countries',
+      field: 'flag',
+      headerName: 'Flag',
+      flex: 1,
+      floatingFilter: false,
+      cellRenderer: function (params) {
+        return (
+          '<span>' +
+          '<span class="fi fi-' +
+          params.data.flag.toLowerCase() +
+          '">' +
+          '</span>' +
+          '</span>'
+        );
+      },
+    },
+  ];
+  public teamGridOptions: GridOptions = {
+    columnDefs: this.teamColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.countrySongs = event.data.songs;
+    },
+  } as GridOptions;
+  songTeamColumnDefs = [
+    {
+      field: 'name',
+      headerName: 'Song name',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'spotifyId',
+      headerName: 'Spotify Id',
       flex: 1,
       floatingFilter: false,
     },
   ];
+  public songTeamGridOptions: GridOptions = {
+    columnDefs: this.songTeamColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {},
+  } as GridOptions;
   public infoGridOptions: GridOptions = {
     columnDefs: this.artistColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
-    onRowClicked: (event) => {},
+    onRowClicked: (event) => {
+      this.clickedGridCountry = event.data;
+      if (
+        this.clickedGridCountry.id == this.teamState.activePlayerTeam.countryId
+      ) {
+        this.countryArtists = this.teamState.activePlayerTeam?.teamArtists;
+      } else {
+        for (let team of this.teamState.activeNpcTeams) {
+          if (team.countryId == this.clickedGridCountry.id) {
+            this.countryArtists = team?.teamArtists;
+          }
+        }
+      }
+      if (!this.countryArtists) {
+        for (let team of this.teamState.inactiveNpcTeams) {
+          if (team.countryId == this.clickedGridCountry.id) {
+            this.countryArtists = team?.teamArtists;
+          }
+        }
+      }
+      for (let team of this.countryArtists) {
+        for (let flag of this.flags) {
+          if (team.countryId == flag.id) {
+            team.flag = flag.name;
+          }
+        }
+      }
+      this.countrySongs = this.countryArtists[0]?.songs;
+      this.teamPopup.show();
+    },
   } as GridOptions;
   public attackBtn: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -587,6 +720,10 @@ export class MusicRiskWorldMapComponent implements OnInit {
     rowModelType: 'clientSide',
     enableColResize: true,
     onRowClicked: (event) => {
+      const winnerTeamID = +event['data']['winnerTeamId'];
+      const loserTeamID = +event['data']['loserTeamId'];
+      this.flagWinner = '';
+      this.flagLoser = '';
       this.standingsSongsArray = [];
       this.playerStandingSongs = [];
       this.npcStandingSongs = [];
@@ -595,26 +732,100 @@ export class MusicRiskWorldMapComponent implements OnInit {
       this.popUpStandingFormConfig.model = null;
       this.isAnyRowClicked = true;
       let elements: BattleLogEntry[] = [];
-      const winnerTeamID = +event['data']['winnerTeamId'];
-      const loserTeamID = +event['data']['loserTeamId'];
       let wonCase = 'PLAYER';
       let playerFlagId = 0;
       let npcFlagId = 0;
+      let winnerFound = false;
+      let winnerFlagID = 0;
+      let winnerFlagName = '';
+      let loserFlagName = '';
+      let loserFlagID = 0;
       if (this.teamState.activePlayerTeam.id == winnerTeamID) {
-        playerFlagId = this.teamState.activePlayerTeam.countryId;
-        for (let team of this.teamState.inactiveNpcTeams) {
-          if (team.id === loserTeamID) npcFlagId = team.countryId;
+        for (let flag of this.flags) {
+          if (this.teamState.activePlayerTeam.countryId == flag.id) {
+            this.flagWinner = 'fi fi-' + flag.name.toLowerCase();
+            winnerFlagID = flag.id;
+            winnerFlagName = flag.name;
+            winnerFound = true;
+            break;
+          }
         }
-      } else {
-        playerFlagId = this.teamState.activePlayerTeam.countryId;
-        for (let team of this.teamState.activeNpcTeams) {
-          if (team.id === loserTeamID) npcFlagId = team.countryId;
+      } else if (this.teamState.activePlayerTeam.id == loserTeamID) {
+        for (let flag of this.flags) {
+          if (this.teamState.activePlayerTeam.countryId == flag.id) {
+            this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
+            loserFlagID = flag.id;
+            loserFlagName = flag.name;
+            break;
+          }
         }
       }
+      if (!winnerFound) {
+        for (let team of this.teamState.activeNpcTeams) {
+          if (team.id == winnerTeamID) {
+            for (let flag of this.flags) {
+              if (team.countryId == flag.id) {
+                this.flagWinner = 'fi fi-' + flag.name.toLowerCase();
+                winnerFlagID = flag.id;
+                winnerFlagName = flag.name;
+                break;
+              }
+            }
+          }
+        }
+      }
+      for (let team of this.teamState.inactiveNpcTeams) {
+        if (team.id == loserTeamID) {
+          for (let flag of this.flags) {
+            if (team.countryId == flag.id) {
+              this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
+              loserFlagID = flag.id;
+              loserFlagName = flag.name;
+              break;
+            }
+          }
+        }
+      }
+      for (let team of this.teamState.activeNpcTeams) {
+        if (team.id == loserTeamID) {
+          for (let flag of this.flags) {
+            if (team.countryId == flag.id) {
+              this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
+              loserFlagID = flag.id;
+              loserFlagName = flag.name;
+              break;
+            }
+          }
+        }
+      }
+      // if (this.teamState.activePlayerTeam.id == winnerTeamID) {
+      //   playerFlagId = this.teamState.activePlayerTeam.countryId;
+      //   for (let team of this.teamState.inactiveNpcTeams) {
+      //     if (team.id === loserTeamID) npcFlagId = team.countryId;
+      //   }
+      // } else {
+      //   for (let team of this.teamState.activeNpcTeams) {
+      //     if (team.id === winnerTeamID) playerFlagId = team.countryId;
+      //   }
+      //   if (this.teamState.activePlayerTeam.countryId == loserTeamID) {
+      //     npcFlagId = this.teamState.activePlayerTeam.countryId;
+      //   } else {
+      //     for (let team of this.teamState.activeNpcTeams) {
+      //       if (team.id === loserTeamID) npcFlagId = team.countryId;
+      //     }
+      //     if (!npcFlagId) {
+      //       for (let team of this.teamState.inactiveNpcTeams) {
+      //         if (team.id == loserTeamID) {
+      //           npcFlagId = team.countryId;
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
       for (let flag of this.flags) {
-        if (npcFlagId == flag.id)
+        if (loserFlagID == flag.id)
           this.flagLoser = 'fi fi-' + flag.name.toLowerCase();
-        if (playerFlagId == flag.id)
+        if (winnerFlagID == flag.id)
           this.flagWinner = 'fi fi-' + flag.name.toLowerCase();
       }
 
@@ -668,7 +879,6 @@ export class MusicRiskWorldMapComponent implements OnInit {
         this.popUpStandingFormConfig.children[inx].defaultValue = song.checked;
         inx += 1;
       }
-      console.log(elements);
       this.npcStandingUrl =
         'https://open.spotify.com/embed/track/' +
         elements[0].songASpotifyId +
@@ -697,25 +907,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
         icon: 'far fa-layer-group',
         label: 'View Standings',
         action: () => {
-          if (!this.searchedFor) {
-            //GET FLAGS
-            console.log('ZOVEM FLAGS');
-            this.viewStandingsPopup.show();
-            const countryIds = [];
-            countryIds.push(this.teamState.activePlayerTeam.countryId);
-            for (let team of this.battleTurns) {
-              countryIds.push(...team.loserEligibleCountryIds);
-              countryIds.push(...team.winnerEligibleCountryIds);
-            }
-            const uniquesOnly = [...new Set(countryIds)];
-            this.musicService.getFlags(uniquesOnly).subscribe((data) => {
-              this.flags = data;
-              console.log(uniquesOnly);
-              console.log('FLAGS');
-              console.log(this.flags);
-            });
-            this.searchedFor = true;
-          }
+          this.viewStandingsPopup.show();
         },
       },
     ],
@@ -727,6 +919,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.setAttackPopUpFormConfig();
+    this.setTeamPopupFormConfig();
   }
   chart: Chart;
   loadData() {
@@ -742,9 +935,9 @@ export class MusicRiskWorldMapComponent implements OnInit {
             );
           }
         );
+        this.battleLogs.reverse();
         this.battleTurns = data.turnCombatState.battleLogs[0].battleResults;
         this.turnHistory = data.turnCombatState.battleLogs[0].turnHistory;
-
         this.setPopUpFormConfig();
         this.battleId = +params.id;
         this.battleTurn = data;
@@ -761,6 +954,79 @@ export class MusicRiskWorldMapComponent implements OnInit {
         this.mapState = data.mapState;
         this.teamInfo.push(data.mapState);
         this.teamState = data.teamState;
+        if (!this.searchedFor) {
+          //GET FLAGS
+          const countryIds = [];
+          countryIds.push(this.teamState.activePlayerTeam.countryId);
+          for (let team of this.mapState.countries) {
+            countryIds.push(team.countryId);
+          }
+          const uniquesOnly = [...new Set(countryIds)];
+          this.musicService.getFlags(uniquesOnly).subscribe((data) => {
+            this.flags = data;
+            this.activePlayerTeamArtists =
+              this.teamState.activePlayerTeam.teamArtists.map((artist) => {
+                let flagFound = '';
+                for (let i = 0; i < this.flags.length; i++) {
+                  if (this.flags[i].id === artist.countryId) {
+                    flagFound = 'fi fi-' + this.flags[i].name.toLowerCase();
+                    break;
+                  }
+                }
+                return { name: artist.name, flag: flagFound };
+              });
+            this.countriesInfo = [];
+            this.countriesInfo.push(
+              new GridOfCountries(
+                this.teamState.activePlayerTeam.countryId,
+                this.teamState.activePlayerTeam.countryName,
+                'PLAYER',
+                'Active',
+                Object.values(
+                  this.teamState.activePlayerTeam.eligibleCountryIds
+                )
+              )
+            );
+            for (let team of this.teamState.activeNpcTeams) {
+              this.countriesInfo.push(
+                new GridOfCountries(
+                  team.countryId,
+                  team.countryName,
+                  'NPC',
+                  'Active',
+                  Object.values(team.eligibleCountryIds)
+                )
+              );
+            }
+            for (let team of this.teamState.inactiveNpcTeams) {
+              this.countriesInfo.push(
+                new GridOfCountries(
+                  team.countryId,
+                  team.countryName,
+                  'NPC',
+                  'InActive',
+                  Object.values(team.eligibleCountryIds)
+                )
+              );
+            }
+            for (let country of this.countriesInfo) {
+              country.ownedFlags = [];
+              for (let eligibleCountry of country.ownedFlagsIds) {
+                for (let flag of this.flags) {
+                  if (eligibleCountry == flag.id) {
+                    country.ownedFlags.push(flag.name.toLowerCase());
+                  }
+                }
+              }
+              for (let flag of this.flags) {
+                if (country.id == flag.id) {
+                  country.flag = flag.name.toLowerCase();
+                }
+              }
+            }
+          });
+          this.searchedFor = true;
+        }
         this.setViewStandingsPopup();
         this.setupMap();
       });
