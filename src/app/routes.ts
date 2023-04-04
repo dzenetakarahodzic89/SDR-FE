@@ -54,9 +54,13 @@ import { ReleaseSearchComponent } from './pages/release/release-search/release-s
 import { SpotifyStatisticsComponent } from './pages/spotify/spotify-statistics/spotify-statistics.component';
 
 import { SetupComponent } from './pages/music-risk/setup/setup.component';
+
+import { ChordprogressionOverviewComponent } from './pages/chordprogression/chordprogression-overview/chordprogression-overview.component';
+
 import { CountryRelationsCreateComponent } from './pages/country/country-relation-create/country-relation-create.component';
 import { EditPlaylistComponent } from './pages/playlist/edit-playlist/edit-playlist.component';
 import { PlaylistOverviewComponent } from './pages/playlist/playlist-overview/playlist-overview.component';
+
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'person/search', component: PersonSearchComponent },
@@ -138,6 +142,10 @@ export const appRoutes: Routes = [
   { path: 'playlist/:id/overview', component: PlaylistOverviewComponent },
   { path: 'playlist/:id/edit', component: EditPlaylistComponent },
   { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
+
+  {path: 'chordProgression/:id/overview', component: ChordprogressionOverviewComponent},
+
   { path: 'release/search', component: ReleaseSearchComponent },
   { path: 'spotify-integration', component: SpotifyStatisticsComponent },
+
 ];

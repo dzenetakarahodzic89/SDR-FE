@@ -6,9 +6,10 @@ import { ChordProgressionService } from './shared/chordprogression.service';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { ZxFormsModule } from '@zff/zx-forms';
+import { ChordprogressionOverviewComponent } from './chordprogression-overview/chordprogression-overview.component';
 
 @NgModule({
-  declarations: [ChordProgressionSearchComponent],
+  declarations: [ChordProgressionSearchComponent, ChordprogressionOverviewComponent],
   imports: [
     SharedModule,
 
@@ -17,7 +18,7 @@ import { ZxFormsModule } from '@zff/zx-forms';
     ZxPopupLayoutModule,
     ZxFormsModule,
   ],
-  exports: [ChordProgressionSearchComponent],
+  exports: [ChordProgressionSearchComponent, ChordprogressionOverviewComponent],
   providers: [
     ChordProgressionService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
