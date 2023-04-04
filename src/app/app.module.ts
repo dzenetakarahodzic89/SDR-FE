@@ -62,10 +62,7 @@ import { UrmModule } from './pages/urm/urm.module';
 import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
 import { ArtistAlbumTimelineModule } from './pages/artist-album-timeline/artist-album-timeline.module';
 
-import { UrmModule } from './pages/urm/urm.module';
 import { MusicRiskModule } from './pages/music-risk/music-risk.module';
-import { NewsArticlesModule } from './pages/news-articles/news-articles.module';
-import { BattleModule } from './pages/battle/battle.module';
 import { ReleaseModule } from './pages/release/release.module';
 import { SpotifyModule } from './pages/spotify/spotify.module';
 
@@ -106,7 +103,6 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     PlaylistModule,
     SongModule,
     AngMusicPlayerModule,
-    SongModule,
     InstrumentModule,
     NotesheetModule,
     AlbumModule,
