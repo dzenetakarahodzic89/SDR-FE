@@ -10,19 +10,16 @@
       <strong>
         <h1>{{ label.name }}</h1>
       </strong>
-
       <div class="container">
         <div>
-          <h3>
-            {{ label.foundingDate | date : "dd.MM.yyyy" }}
-            - {{ artistsLabel.length }} Artists
-          </h3>
+          <h3> {{ label.foundingDate | date : "dd.MM.yyyy" }} - {{ artistsLabel.length }} Artists </h3>
         </div>
         <div class="row">
           <zx-button id="galleryBtn" zx-block-action [config]="galleryButton"></zx-button>
           <zx-button id="addAlbumBtn" zx-block-action [config]="addAlbum"></zx-button>
           <zx-button id="editBtn" zx-block-action [config]="editBtn"></zx-button>
           <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
+          <zx-button id="addCommentBtn" zx-block-action [config]="addCommentBtn"></zx-button>
           <zx-popup [config]="popup">
             <div zx-popup-body>
               <zx-block [config]="popUpBlockConfig">
@@ -31,6 +28,15 @@
               </zx-block>
             </div>
             <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+          </zx-popup>
+          <zx-popup [config]="addCommentPopup">
+            <div zx-popup-body>
+              <zx-block *ngIf="addCommentPopupBlockConfig" [config]="addCommentPopupBlockConfig">
+                <zx-form-loader *ngIf="addCommentPopupFormConfig" zx-block-body [component]="addCommentPopupFormConfig"
+                  [model]="addCommentModel" class="col-24"></zx-form-loader>
+              </zx-block>
+            </div>
+            <zx-button zx-popup-footer [config]="addCommentPopupFooterButtons" class="align-right"></zx-button>
           </zx-popup>
         </div>
       </div>
@@ -53,10 +59,16 @@
           <h5>Label name: {{ label.name }}</h5>
         </div>
         <hr />
-        <zx-block [config]="labelsBlockConfig">
-          <zx-grid zx-block-body [gridOptions]="labelGridOptions" [source]="artistsLabel" domLayout="autoHeight">
-          </zx-grid>
-        </zx-block>
+        <zx-tabs [config]="tabConfig">
+          <zx-block zx-tab-item id="artistsTab" [config]="labelsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="labelGridOptions" [source]="artistsLabel" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="commentsTab" [config]="commentsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="commentGridOptions" [source]="comments" domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+        </zx-tabs>
       </div>
     </zx-block>
   </div>

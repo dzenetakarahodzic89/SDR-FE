@@ -21,6 +21,13 @@ import {
   LoV,
 } from '../shared/album.model';
 import { AlbumService } from '../shared/album.service';
+import { ZxTabModel } from '@zff/zx-tab-layout';
+import {
+  AddCommentRequest,
+  CommentsFetchRequest,
+} from '../../shared/comment/comment.model';
+import { HomeService } from '../../home/shared/home-page.service';
+import { CommentService } from '../../shared/comment/comment.service';
 
 @Component({
   selector: 'app-album-overview',
@@ -28,7 +35,6 @@ import { AlbumService } from '../shared/album.service';
   styleUrls: ['./album-overview.component.scss'],
 })
 export class AlbumOverviewComponent implements OnInit {
-
   srcUrl: string = '';
   type = ObjectType.ALBUM;
   testFlag: string = 'fi fi-';
@@ -38,6 +44,7 @@ export class AlbumOverviewComponent implements OnInit {
   artistsAreLoading: Boolean;
   connectionSources = [];
   connectionTypes = [];
+  comments: Comment[];
   songsPopUp: LoV[];
   artistsPopUp: LoV[];
   labelsPopUp: LoV[];
@@ -58,7 +65,7 @@ export class AlbumOverviewComponent implements OnInit {
 
   public detailsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
-    label: 'Album songs',
+    label: 'Album details',
   });
 
   public songsBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -67,6 +74,30 @@ export class AlbumOverviewComponent implements OnInit {
 
   public albumsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
+  });
+
+  public commentsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+
+  public tabConfig: ZxTabModel = new ZxTabModel({
+    orientation: 'portrait',
+    hideExpand: false,
+    items: [
+      {
+        name: 'AlbumSongs',
+        id: 'songsTab',
+        label: 'Album songs',
+        icon: 'fal fa-music',
+      },
+
+      {
+        name: 'Comments',
+        id: 'commentsTab',
+        label: 'Comments',
+        icon: 'fal fa-comments',
+      },
+    ],
   });
 
   public galleryButton: ZxButtonModel = new ZxButtonModel({
@@ -120,7 +151,18 @@ export class AlbumOverviewComponent implements OnInit {
       {
         name: 'linkImagesToSongs',
         label: 'Link Images To Songs In Album',
-        action: () => this.connectImagesToSongsInAlbum()
+        action: () => this.connectImagesToSongsInAlbum(),
+      },
+    ],
+  });
+
+  public addCommentBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-comment-plus fa-flip-horizontal',
+        name: 'addComment',
+        label: 'Add comment',
+        action: () => this.addCommentPopup.show(),
       },
     ],
   });
@@ -307,6 +349,29 @@ export class AlbumOverviewComponent implements OnInit {
       floatingFilter: false,
     },
   ];
+  commentColumnDefs = [
+    {
+      field: 'createdBy',
+      headerName: 'User',
+      maxWidth: 125,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Date of creation(mm/dd/yy)',
+      maxWidth: 200,
+      floatingFilter: false,
+      type: 'datetime',
+    },
+    {
+      field: 'content',
+      headerName: 'Content',
+      flex: 1,
+      floatingFilter: false,
+      autoHeight: true,
+      wrapText: true,
+    },
+  ];
 
   public songGridOptions: GridOptions = {
     columnDefs: this.songColumnDefs,
@@ -316,6 +381,66 @@ export class AlbumOverviewComponent implements OnInit {
       this.router.navigate(['./song/' + event['data']['id'] + '/overview']);
     },
   } as GridOptions;
+  public commentGridOptions: GridOptions = {
+    columnDefs: this.commentColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    sideBar: null,
+  } as GridOptions;
+
+  public addCommentPopupBlockConfig: ZxBlockModel;
+  public addCommentPopupFormConfig: Definition;
+  public addCommentPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public addCommentPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.addCommentToAlbum();
+        },
+      },
+      {
+        name: 'cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.addCommentPopup.hide();
+          this.addCommentModel = new AddCommentRequest();
+        },
+      },
+    ],
+  });
+  public addCommentModel: AddCommentRequest;
+  public setAddCommentPopUpFormConfig() {
+    this.addCommentPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add Comment to Album',
+    });
+    this.addCommentPopupFormConfig = new Definition({
+      name: 'addComment',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        new Definition({
+          template: 'ZxTextarea',
+          class: ['col-24', 'span-3'],
+          type: 'textarea',
+          name: 'content',
+          label: 'Content of the comment:',
+          validation: { required: true },
+        }),
+      ],
+      model: this.addCommentModel,
+    });
+  }
 
   linkedAlbums: any[];
   album: AlbumResponse;
@@ -324,9 +449,42 @@ export class AlbumOverviewComponent implements OnInit {
     private route: ActivatedRoute,
     public confirmation: ZxConfirmation,
     private albumService: AlbumService,
+    private commentService: CommentService,
+    private homeService: HomeService,
     private connectedMediaService: ConnectedMediaService,
     private toastr: ToastrService
   ) {}
+
+  addCommentToAlbum() {
+    if (!this.addCommentPopupFormConfig.isValid) {
+      this.toastr.error('Fill in required comment content!');
+      return;
+    }
+
+    this.addCommentPopup.hide();
+
+    this.homeService.getUserCode().subscribe((response) => {
+      this.addCommentModel.createdBy = response.userCode;
+      this.addCommentModel.objectId = this.album.id;
+      this.addCommentModel.objectType = this.type;
+      this.addCommentModel.status = 'Active';
+
+      this.commentService.createComment(this.addCommentModel).subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Comment successfully added to album!');
+            this.addCommentModel = new AddCommentRequest();
+            this.getCommentsForAlbum(this.type, this.album.id);
+          } else {
+            this.toastr.error('Failed to add comment to album!');
+          }
+        },
+        (errorMsg: string) => {
+          this.toastr.error('Failed to add comment to album!');
+        }
+      );
+    });
+  }
 
   ngOnInit(): void {
     let id = 1;
@@ -347,6 +505,7 @@ export class AlbumOverviewComponent implements OnInit {
 
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
     this.addSongModel = new SongOfAlbumUpdateRequest();
+    this.addCommentModel = new AddCommentRequest();
     this.loadData();
     this.loadSongs();
     this.loadArtists();
@@ -367,8 +526,10 @@ export class AlbumOverviewComponent implements OnInit {
           '?utm_source=generator&theme=0';
         this.album = response;
         this.setConnectMediaPopUpFormConfig();
+        this.setAddCommentPopUpFormConfig();
         this.setAddSongPopUpFormConfig();
         this.albumIsLoading = false;
+        this.getCommentsForAlbum(this.type, this.album.id);
       });
     });
   }
@@ -406,6 +567,12 @@ export class AlbumOverviewComponent implements OnInit {
           this.toastr.error(errorMsg);
         }
       );
+  }
+
+  getCommentsForAlbum(objectType: string, objectId: number) {
+    this.commentService
+      .fetchComments(new CommentsFetchRequest(objectType, objectId))
+      .subscribe((response) => (this.comments = response));
   }
 
   loadSongs() {
@@ -454,8 +621,11 @@ export class AlbumOverviewComponent implements OnInit {
           this.album.songs = [...this.album.songs, response['payload']];
           this.addSongPopUpFormConfig.children[0].list =
             this.songInput.lov.filter((s) => s.id != this.addSongModel.songId);
-          this.album.songs = [... this.album.songs, response['payload']];
-          this.addSongPopUpFormConfig.children[0].list = this.addSongPopUpFormConfig.children[0].list.filter(s => s.id != this.addSongModel.songId);
+          this.album.songs = [...this.album.songs, response['payload']];
+          this.addSongPopUpFormConfig.children[0].list =
+            this.addSongPopUpFormConfig.children[0].list.filter(
+              (s) => s.id != this.addSongModel.songId
+            );
           this.addSongModel = new SongOfAlbumUpdateRequest();
         } else {
           this.toastr.error('Failed to add song!');

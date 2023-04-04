@@ -17,6 +17,7 @@
         <zx-button id="createArtistFromPerson" zx-block-action [config]="createArtistFromPersonBtn"></zx-button>
         <zx-button id="linkPerson" zx-block-action [config]="linkPerson"></zx-button>
         <zx-button id="connectMedia" zx-block-action [config]="connectMediaBtn"></zx-button>
+        <zx-button id="addCommentBtn" zx-block-action [config]="addCommentBtn"></zx-button>
         <zx-popup [config]="connectMediaPopup">
           <div zx-popup-body>
             <zx-block [config]="popUpBlockConfig">
@@ -25,6 +26,15 @@
             </zx-block>
           </div>
           <zx-button zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+        </zx-popup>
+        <zx-popup [config]="addCommentPopup">
+          <div zx-popup-body>
+            <zx-block *ngIf="addCommentPopupBlockConfig" [config]="addCommentPopupBlockConfig">
+              <zx-form-loader *ngIf="addCommentPopupFormConfig" zx-block-body [component]="addCommentPopupFormConfig"
+                [model]="addCommentModel" class="col-24"></zx-form-loader>
+            </zx-block>
+          </div>
+          <zx-button zx-popup-footer [config]="addCommentPopupFooterButtons" class="align-right"></zx-button>
         </zx-popup>
       </div>
       <hr />
@@ -81,6 +91,10 @@
           <zx-block zx-tab-item id="songInstrumentsTab" [config]="songInstrumentsBlockConfig">
             <zx-grid zx-block-body [gridOptions]="songInstrumentGridOptions" [source]="instruments"
               domLayout="autoHeight">
+            </zx-grid>
+          </zx-block>
+          <zx-block zx-tab-item id="commentsTab" [config]="commentsBlockConfig">
+            <zx-grid zx-block-body [gridOptions]="commentGridOptions" [source]="comments" domLayout="autoHeight">
             </zx-grid>
           </zx-block>
         </zx-tabs>

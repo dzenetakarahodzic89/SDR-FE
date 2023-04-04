@@ -114,10 +114,16 @@ export const appRoutes: Routes = [
   { path: 'compare-score', component: UrmComponent },
   { path: 'era/genres-over-eras', component: GenresOverErasComponent },
   { path: 'news-articles/new', component: NewsArticlesNewsComponent },
-  { path: 'playlist/generate-ga-playlist', component: GenerateGaPlaylistComponent, },
+  {
+    path: 'playlist/generate-ga-playlist',
+    component: GenerateGaPlaylistComponent,
+  },
   { path: 'person-statistics', component: PersonStatisticsComponent },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
-  { path: 'country-relations/create', component: CountryRelationsCreateComponent },
+  {
+    path: 'country-relations/create',
+    component: CountryRelationsCreateComponent,
+  },
   { path: 'urm/avg-score-per-country', component: UrmScorePerCountryComponent },
   { path: 'battle/overview', component: BattleSearchComponent },
   { path: 'battle/:id/create-roster', component: BattleRosterComponent },
@@ -129,5 +135,6 @@ export const appRoutes: Routes = [
   { path: 'playlist/:id/edit', component: EditPlaylistComponent },
   { path: 'artist/:id/album-timeline', component: AlbumTimelineComponent },
   { path: 'release/search', component: ReleaseSearchComponent },
-  { path: 'spotify-integration', component: SpotifyStatisticsComponent }
+  { path: 'spotify-integration', component: SpotifyStatisticsComponent },
+  { path: 'era/:id/overview', component: EraOverviewComponent },
 ];

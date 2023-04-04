@@ -33,6 +33,13 @@ import {
   LyricResponseUpdate,
 } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
+import {
+  AddCommentRequest,
+  CommentsFetchRequest,
+} from '../../shared/comment/comment.model';
+import { CommentService } from '../../shared/comment/comment.service';
+import { HomeService } from '../../home/shared/home-page.service';
+import { ZxTabModel } from '@zff/zx-tab-layout';
 
 @Component({
   selector: 'app-song-overview',
@@ -52,6 +59,7 @@ export class SongOverviewComponent implements OnInit {
   artists: ArtistSongResponse[];
   instruments: InstrumentResponse[];
   instrumentsNoteSheet: SongInstrumentsResponse[];
+  comments: Comment[];
   subGenresText: string[];
   audioArray: string[];
   audioName: string;
@@ -72,6 +80,26 @@ export class SongOverviewComponent implements OnInit {
         name: 'instrumentPopUp',
         label: 'Show notesheet',
         action: () => this.instrumentPopUp.show(),
+      },
+    ],
+  });
+
+  public tabConfig: ZxTabModel = new ZxTabModel({
+    orientation: 'portrait',
+    hideExpand: false,
+    items: [
+      {
+        name: 'Artists',
+        id: 'artistsTab',
+        label: 'Artists',
+        icon: 'fal fa-users',
+      },
+
+      {
+        name: 'Comments',
+        id: 'commentsTab',
+        label: 'Comments',
+        icon: 'fal fa-comments',
       },
     ],
   });
@@ -481,16 +509,46 @@ export class SongOverviewComponent implements OnInit {
       floatingFilter: false,
     },
   ];
+  commentColumnDefs = [
+    {
+      field: 'createdBy',
+      headerName: 'User',
+      maxWidth: 125,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Date of creation(mm/dd/yy)',
+      maxWidth: 200,
+      floatingFilter: false,
+      type: 'datetime',
+    },
+    {
+      field: 'content',
+      headerName: 'Content',
+      flex: 1,
+      floatingFilter: false,
+      autoHeight: true,
+      wrapText: true,
+    },
+  ];
 
   public artistGridOptions: GridOptions = {
     columnDefs: this.artistColumnDefs,
     rowModelType: 'clientSide',
     enableColResize: true,
+    sideBar: null,
     onRowClicked: (event) => {
       this.router.navigate([
         './person/' + event['data']['personId'] + '/overview',
       ]);
     },
+  } as GridOptions;
+  public commentGridOptions: GridOptions = {
+    columnDefs: this.commentColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    sideBar: null,
   } as GridOptions;
 
   public infoBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -508,6 +566,9 @@ export class SongOverviewComponent implements OnInit {
   });
 
   public personsBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+  public commentsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
 
@@ -825,11 +886,77 @@ export class SongOverviewComponent implements OnInit {
     });
   }
 
+  public addCommentBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fal fa-comment-plus fa-flip-horizontal',
+        name: 'addComment',
+        label: 'Add comment',
+        action: () => this.addCommentPopup.show(),
+      },
+    ],
+  });
+  public addCommentPopupBlockConfig: ZxBlockModel;
+  public addCommentPopupFormConfig: Definition;
+  public addCommentPopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+  public addCommentPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'save',
+        label: 'Save',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.addCommentToSong();
+        },
+      },
+      {
+        name: 'cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.addCommentPopup.hide();
+          this.addCommentModel = new AddCommentRequest();
+        },
+      },
+    ],
+  });
+  public addCommentModel: AddCommentRequest;
+  public setAddCommentPopUpFormConfig() {
+    this.addCommentPopupBlockConfig = new ZxBlockModel({
+      hideExpand: true,
+      label: 'Add Comment to Song',
+    });
+    this.addCommentPopupFormConfig = new Definition({
+      name: 'addComment',
+      template: 'ZxForm',
+      disabled: false,
+      children: [
+        new Definition({
+          template: 'ZxTextarea',
+          class: ['col-24', 'span-3'],
+          type: 'textarea',
+          name: 'content',
+          label: 'Content of the comment:',
+          validation: { required: true },
+        }),
+      ],
+      model: this.addCommentModel,
+    });
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private songService: SongService,
     private connectedMediaService: ConnectedMediaService,
+    private commentService: CommentService,
+    private homeService: HomeService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
     private location: Location
@@ -881,6 +1008,38 @@ export class SongOverviewComponent implements OnInit {
           this.getInstrumentsThatAreNotInSong();
       });
   }
+
+  addCommentToSong() {
+    if (!this.addCommentPopupFormConfig.isValid) {
+      this.toastr.error('Fill in required comment content!');
+      return;
+    }
+
+    this.addCommentPopup.hide();
+
+    this.homeService.getUserCode().subscribe((response) => {
+      this.addCommentModel.createdBy = response.userCode;
+      this.addCommentModel.objectId = this.song.id;
+      this.addCommentModel.objectType = this.type;
+      this.addCommentModel.status = 'Active';
+
+      this.commentService.createComment(this.addCommentModel).subscribe(
+        (responseCode) => {
+          if (responseCode.hasOwnProperty('payload')) {
+            this.toastr.success('Comment successfully added to song!');
+            this.addCommentModel = new AddCommentRequest();
+            this.getCommentsForSong(this.type, this.song.id);
+          } else {
+            this.toastr.error('Failed to add comment to song!');
+          }
+        },
+        (errorMsg: string) => {
+          this.toastr.error('Failed to add comment to song!');
+        }
+      );
+    });
+  }
+
   ngOnInit(): void {
     this.instrumentPopUpModel = new FindNoteSheet();
     this.showEditor = false;
@@ -904,6 +1063,7 @@ export class SongOverviewComponent implements OnInit {
     this.connectedMediaModel = new ConnectedMediaDetailCreateRequest();
     this.addInstrumentModel = new AddInstrumentToSongRequest();
     this.similarityCreateRequest = new SimilarityCreateRequest();
+    this.addCommentModel = new AddCommentRequest();
     this.loadData();
     this.getNoteSheet();
   }
@@ -924,10 +1084,12 @@ export class SongOverviewComponent implements OnInit {
         this.setUpSongUploadFormConfig();
         this.setLyricPopupFormConfig();
         this.setAddInstrumentPopUpFormConfig();
+        this.setAddCommentPopUpFormConfig();
         this.instrumentsNoteSheet = response.instruments;
         this.loadInstruments();
         this.setInstrumentPopUpFormConfig();
         this.artists = response.artists;
+        this.getCommentsForSong(this.type, this.song.id);
         this.songIsLoading = false;
         this.getSubGenresText();
         this.audioList.push({
@@ -947,6 +1109,12 @@ export class SongOverviewComponent implements OnInit {
           this.statusOfAudio = response;
         });
     });
+  }
+
+  getCommentsForSong(objectType: string, objectId: number) {
+    this.commentService
+      .fetchComments(new CommentsFetchRequest(objectType, objectId))
+      .subscribe((response) => (this.comments = response));
   }
 
   getLanguages(): void {
