@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ZxApi } from '@zff/zx-core';
-import { ZxAppHeaderModule } from '@zff/zx-app-header';
+import { ZxAppHeaderModule, ZxNotification } from '@zff/zx-app-header';
 import { AgGridModule } from '@ag-grid-community/angular';
 
 import {
@@ -65,6 +65,7 @@ import { ArtistAlbumTimelineModule } from './pages/artist-album-timeline/artist-
 import { MusicRiskModule } from './pages/music-risk/music-risk.module';
 import { ReleaseModule } from './pages/release/release.module';
 import { SpotifyModule } from './pages/spotify/spotify.module';
+import { ZxNotificationsModule } from '@zff/zx-notifications';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -92,6 +93,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     ZxFormsModule,
     ZxTreeModule,
     ZxGridModule,
+    ZxNotificationsModule,
     AgGridModule.withComponents([]),
     SharedModule,
     HomeModule,

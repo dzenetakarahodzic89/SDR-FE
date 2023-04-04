@@ -1,7 +1,8 @@
-<zx-page-layout-landscape [config]="layout">
-  <zx-menu zx-body-left [config]="menuConfig"> </zx-menu>
-  <zx-app-header zx-header [config]="headerConfig"></zx-app-header>
-  <zx-breadcrumbs [config]="breadcrumbConfig" zx-body-header></zx-breadcrumbs>
+<zx-page-layout-landscape [config]="{orientation: 'landscape'}">
+  <zx-menu zx-body-left [config]="menu"> </zx-menu>
+  <zx-app-header zx-header [config]="header"></zx-app-header>
+  <zx-breadcrumbs [config]="breadcrumb" zx-body-header></zx-breadcrumbs>
   <router-outlet zx-body> </router-outlet>
   <zx-settings zx-content [config]="settings"></zx-settings>
+  <zx-notifications zx-body-right [config]="header.notification"></zx-notifications>
 </zx-page-layout-landscape>
