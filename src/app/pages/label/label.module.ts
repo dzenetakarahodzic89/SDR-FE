@@ -5,9 +5,10 @@ import { SharedModule } from '../shared/shared.module';
 import { LabelOverviewComponent } from './label-overview/label-overview.component';
 import { LabelService } from './shared/label.service';
 import { LabelCreateComponent } from './label-create/label-create.component';
+import { LabelSearchComponent } from './label-search/label-search.component';
 
 @NgModule({
-  declarations: [LabelOverviewComponent, LabelCreateComponent],
+  declarations: [LabelOverviewComponent, LabelCreateComponent, LabelSearchComponent],
   imports: [SharedModule, EditorModule, AutocompleteLibModule],
   exports: [LabelOverviewComponent, LabelCreateComponent,],
   providers: [

@@ -26,6 +26,7 @@ import {
   LyricResponseUpdate,
 } from './song.model';
 import { SongCreateRequest } from './song.model';
+import { SongPlaylistReq } from '../../playlist/shared/playlist.model';
 
 @Injectable({
   providedIn: 'root',
@@ -261,5 +262,21 @@ export class SongService {
     return this.api
       .get(SongApi.GET_LANGUAGES)
       .pipe(map((response) => response['payload']));
+  }
+
+  deleteSongFromPlaylist(playlistId: number, songId: number) {
+    return this.api
+      .delete(
+        SongApi.DELETE_SONG_FROM_PLAYLIST.replace(
+          ':playlistId',
+          playlistId.toString()
+        ).replace(':songId', songId.toString())
+      )
+      .pipe(
+        map((response) => {
+          const deleteResponse = response['payload'] as string;
+          return deleteResponse;
+        })
+      );
   }
 }
