@@ -73,6 +73,13 @@
             "attributes": {}
           },
           {
+            "code": "HUB_LABEL_STATIC",
+            "icon": "fad fa-music",
+            "label": "Labels",
+            "url": "label/search",
+            "attributes": {}
+          },
+          {
             "code": "HUB_BATTLE_STATIC",
             "icon": "fad fa-battle",
             "label": "Battles",
