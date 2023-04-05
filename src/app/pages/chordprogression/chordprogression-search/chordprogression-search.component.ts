@@ -21,7 +21,7 @@ export class ChordProgressionSearchComponent implements OnInit {
     ],
     list: [],
     action: (event: any) => {
-      this.router.navigate(['./playlist/' + event['id'] + '/overview']);
+      this.router.navigate(['./chordprogression/' + event['id'] + '/overview']);
     },
   });
 
@@ -68,7 +68,7 @@ export class ChordProgressionSearchComponent implements OnInit {
         name: 'newChordProgression',
         label: 'New ChordProgression',
         action: (btn: any, output: any) => {
-          this.router.navigate(['./chord-progression/create']);
+          this.router.navigate(['./chordProgression/create']);
         },
       },
     ],

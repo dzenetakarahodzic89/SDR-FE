@@ -23,7 +23,7 @@ export class LabelSearchComponent implements OnInit {
     ],
     list: [],
     action: (event: any) => {
-      this.router.navigate(['./playlist/' + event['id'] + '/overview']);
+      this.router.navigate(['./label/' + event['id'] + '/overview']);
     },
   });
 
