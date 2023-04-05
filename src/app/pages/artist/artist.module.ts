@@ -9,9 +9,10 @@ import { SharedModule } from '../shared/shared.module';
 import { ArtistService } from './shared/artist.service';
 import { ArtistOverviewComponent } from './artist-overview/artist-overview.component';
 import { ArtistCreateComponent } from './artist-create/artist-create.component';
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 
 @NgModule({
-  declarations: [ArtistSearchComponent,ArtistOverviewComponent, ArtistCreateComponent],
+  declarations: [ArtistSearchComponent, ArtistOverviewComponent, ArtistCreateComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -19,11 +20,12 @@ import { ArtistCreateComponent } from './artist-create/artist-create.component';
     AutocompleteLibModule,
     ZxPopupLayoutModule,
     ZxFormsModule,
+    CxListLayoutModule
   ],
-  exports: [ArtistSearchComponent,ArtistOverviewComponent],
+  exports: [ArtistSearchComponent, ArtistOverviewComponent],
   providers: [
     ArtistService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
 })
-export class ArtistModule {}
+export class ArtistModule { }

@@ -9,6 +9,7 @@ import { PersonSearchComponent } from './person-search/person-search.component';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { ZxFormsModule } from '@zff/zx-forms';
 import { PersonStatisticsComponent } from './person-statistics/person-statistics.component';
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 @NgModule({
   declarations: [
     PersonSearchComponent,
@@ -22,6 +23,8 @@ import { PersonStatisticsComponent } from './person-statistics/person-statistics
     AutocompleteLibModule,
     ZxPopupLayoutModule,
     ZxFormsModule,
+    CxListLayoutModule
+
   ],
   exports: [
     PersonSearchComponent,
@@ -33,4 +36,4 @@ import { PersonStatisticsComponent } from './person-statistics/person-statistics
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
 })
-export class PersonModule {}
+export class PersonModule { }

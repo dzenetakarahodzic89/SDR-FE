@@ -7,6 +7,7 @@ import { BoxComponent } from '../../shared/box/box.component';
 import { AppBox } from '../../shared/box/box.model';
 import { PersonSearchRequest } from '../shared/person.model';
 import { PersonService } from '../shared/person.service';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
 
 @Component({
   selector: 'app-person-search',
@@ -18,6 +19,43 @@ export class PersonSearchComponent implements OnInit {
     hideExpand: true,
     label: 'Persons',
   });
+
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+      { index: 'surname', class: 'col-12' }
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./person/' + event['id'] + '/overview']);
+    },
+  });
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
 
   public searchBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -128,7 +166,7 @@ export class PersonSearchComponent implements OnInit {
     });
   }
 
-  constructor(private router: Router, private personService: PersonService) {}
+  constructor(private router: Router, private personService: PersonService) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -150,6 +188,8 @@ export class PersonSearchComponent implements OnInit {
 
     this.personService.searchPersons(searchRequest).subscribe((response) => {
       this.foundPersons = response as unknown as AppBox[];
+      this.listLayout.list = response;
+
       this.loading = false;
     });
   }

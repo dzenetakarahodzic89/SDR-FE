@@ -6,6 +6,7 @@ import { Definition } from '@zff/zx-forms';
 import { AppBox } from '../../shared/box/box.model';
 import { LabelSearchRequest } from '../shared/label.model';
 import { LabelService } from '../shared/label.service';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
 
 @Component({
   selector: 'app-label-search',
@@ -13,6 +14,46 @@ import { LabelService } from '../shared/label.service';
   styleUrls: ['./label-search.component.scss']
 })
 export class LabelSearchComponent implements OnInit {
+
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+      { index: 'numberOfArtists', class: 'col-12' },
+      { index: 'foundingDate', class: 'col-12 align-right' },
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./playlist/' + event['id'] + '/overview']);
+    },
+  });
+
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
+
   public labelsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     label: 'Labels',
@@ -145,7 +186,7 @@ export class LabelSearchComponent implements OnInit {
     });
   }
 
-  constructor(private router: Router, private labelService: LabelService) {}
+  constructor(private router: Router, private labelService: LabelService) { }
 
 
   ngOnInit(): void {
@@ -196,6 +237,7 @@ export class LabelSearchComponent implements OnInit {
     this.labelService.searchLabels(searchParams).subscribe(response => {
       this.foundLabels = response['payload'] as unknown as AppBox[];
 
+      this.listLayout.list = response['payload'];
       this.paginationDetails.page = response['page'];
       this.paginationDetails.totalPages = response['numberOfPages'];
       this.labelsAreLoading = false;

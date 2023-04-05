@@ -9,17 +9,19 @@ import { AlbumCreateComponent } from './album-create/album-create.component';
 import { ZxFormsModule } from '@zff/zx-forms';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { AngMusicPlayerModule } from 'ang-music-player';
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 
 
 @NgModule({
-  declarations: [AlbumOverviewComponent, AlbumCreateComponent,AlbumSearchComponent],
+  declarations: [AlbumOverviewComponent, AlbumCreateComponent, AlbumSearchComponent],
   imports: [
     SharedModule,
     EditorModule,
     AutocompleteLibModule,
     ZxPopupLayoutModule,
     ZxFormsModule,
-    AngMusicPlayerModule
+    AngMusicPlayerModule,
+    CxListLayoutModule
   ],
   exports: [
     AlbumOverviewComponent,
@@ -29,4 +31,4 @@ import { AngMusicPlayerModule } from 'ang-music-player';
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
 })
-export class AlbumModule {}
+export class AlbumModule { }

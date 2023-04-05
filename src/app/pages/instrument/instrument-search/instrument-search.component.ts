@@ -6,6 +6,7 @@ import { Definition } from '@zff/zx-forms';
 import { AppBox } from '../../shared/box/box.model';
 import { InstrumentService } from '../shared/instrument.service';
 import { InstrumentSearchRequest } from '../shared/instrument.model';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
 
 
 @Component({
@@ -15,6 +16,44 @@ import { InstrumentSearchRequest } from '../shared/instrument.model';
 })
 
 export class InstrumentSearchComponent implements OnInit {
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+      { index: '', class: 'col-12' },
+      { index: 'created', class: 'col-12 align-right' },
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./instrument/' + event['id'] + '/overview']);
+    },
+  });
+
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
 
   public instrumentsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -73,7 +112,7 @@ export class InstrumentSearchComponent implements OnInit {
     ],
   });
 
-  instrumentsAreLoading = false;
+  loading = false;
 
   public model: any = {};
 
@@ -85,22 +124,25 @@ export class InstrumentSearchComponent implements OnInit {
     label: 'Name',
   };
 
-  
-  sortInput: Definition = new Definition({
+
+  sortList = [
+    { code: 'last_created', displayName: 'Last Created' },
+    { code: 'instrument_name', displayName: 'Alphabetical order' },
+  ];
+  sortByInput = {
     template: 'ZxSelect',
     class: ['col-24'],
-    type: 'filter',
+    type: 'select',
     name: 'sortBy',
-    label: 'Sort By',
-  });
-
-  public formConfig: Definition;
-  foundInstruments:AppBox[] = [];
-  paginationDetails= {
-    page:1,
-    totalPages:0
+    label: 'Sort by',
+    list: this.sortList,
   };
-
+  public formConfig: Definition;
+  foundInstruments: AppBox[] = [];
+  paginationDetails = {
+    page: 1,
+    totalPages: 12,
+  };
   public setFormConfig() {
     this.formConfig = new Definition({
       label: 'Search Instruments',
@@ -109,37 +151,42 @@ export class InstrumentSearchComponent implements OnInit {
       disabled: false,
       children: [
         this.nameInput,
-        this.sortInput
+        this.sortByInput
       ],
       model: this.model
     });
   }
 
 
-  constructor(private router:Router, private instrumentService: InstrumentService) { }
+  constructor(private router: Router, private instrumentService: InstrumentService) { }
 
   ngOnInit(): void {
     this.loadData();
-    this.sortInput.list = [{ id: 0, name: "No of Persons" }, { id: 1, name: "Last edit" }, { id: 2, name: "Alphabetical order" }]
     this.setFormConfig();
   }
 
-  loadData()
-  {
-   this.searchInstruments();
+  loadData() {
+    this.searchInstruments();
   }
 
-  searchInstruments(){
-    this.instrumentsAreLoading=true;
 
-   this.instrumentService.searchInstruments(this.model.id, this.model.sortBy).subscribe(response=>{
-   this.foundInstruments= response as unknown as AppBox[];
-       this.paginationDetails.page = response['page'];
-        this.paginationDetails.totalPages = response['numberOfPages'];
-      this.instrumentsAreLoading=false;
-      });
+  searchInstruments() {
+    this.loading = true;
+    let instrumentRequest = new InstrumentSearchRequest(
+      this.model.name,
+      this.model.sortBy,
+      this.paginationDetails.page,
+      this.paginationDetails.totalPages
+    );
+
+    this.instrumentService.searchInstruments(instrumentRequest).subscribe((response) => {
+      this.foundInstruments = response as unknown as AppBox[];
+      this.listLayout.list = response;
+      console.log(this.listLayout.list)
+      this.loading = false;
+    });
   }
-  
+
   getPreviousPage() {
     if (this.paginationDetails.page > 1) {
       this.paginationDetails.page--;
@@ -148,15 +195,9 @@ export class InstrumentSearchComponent implements OnInit {
   }
 
   getNextPage() {
-    if (
-       (
-        this.paginationDetails.totalPages > 
-          this.paginationDetails.page
-        )
-    ) {
+    if (this.foundInstruments.length >= this.paginationDetails.totalPages) {
       this.paginationDetails.page++;
       this.searchInstruments();
-
     }
   }
 

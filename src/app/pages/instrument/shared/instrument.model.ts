@@ -17,36 +17,37 @@ export class SongInstrumentResponse {
 };
 
 export class InstrumentSearchRequest {
-    id: number;
+
     name: string;
-    information: string;
-    type: string;
-    outlineText: string;
+    sortBy: number;
+    page: number;
+    pageSize: number;
 
-    objectifiedRequest: any = {};
-
-    constructor (id: number) {
-        this.id = id;
-        Object.assign(this.objectifiedRequest, {"id" : this.id})
+    constructor(
+        name: string,
+        sortBy: number,
+        page: number,
+        pageSize: number
+    ) {
+        this.name = name;
+        this.sortBy = sortBy;
+        this.page = page;
+        this.pageSize = pageSize;
     }
-
-    getObjectifiedRequest(): any {
-      return this.objectifiedRequest;
-   }
 };
 
 export class SongInstrumentSearchRequest {
-    songId : number;
+    songId: number;
     instrumentId: number;
-    personId: number; 
+    personId: number;
     name: string;
-    outlineText: string;  
+    outlineText: string;
 
     objectifiedRequest: any = {};
 
     constructor(instrumentId: number) {
         this.instrumentId = instrumentId;
-        Object.assign(this.objectifiedRequest, {"instrument.id" : this.instrumentId})
+        Object.assign(this.objectifiedRequest, { "instrument.id": this.instrumentId })
     }
 
     getObjectifiedRequest(): any {
@@ -58,8 +59,8 @@ export class InstrumentCreateRequest {
     id: number;
     information: string;
     type: string;
-    name:string;
-    outlineText:string;
+    name: string;
+    outlineText: string;
     coverImageData: string | ArrayBuffer;
     coverImage: string;
     coverImage_files: File[];

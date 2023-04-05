@@ -7,16 +7,17 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { ZxFormsModule } from '@zff/zx-forms';
 import { ChordprogressionOverviewComponent } from './chordprogression-overview/chordprogression-overview.component';
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 
 @NgModule({
   declarations: [ChordProgressionSearchComponent, ChordprogressionOverviewComponent],
   imports: [
     SharedModule,
-
     EditorModule,
     AutocompleteLibModule,
     ZxPopupLayoutModule,
     ZxFormsModule,
+    CxListLayoutModule
   ],
   exports: [ChordProgressionSearchComponent, ChordprogressionOverviewComponent],
   providers: [

@@ -8,26 +8,28 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { EraService } from './shared/era.service';
 import { EraOverviewComponent } from './era-overview/era-overview.component';
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 
 @NgModule({
   declarations: [
-    EraSearchComponent, 
+    EraSearchComponent,
     EraCreateComponent,
     ArtistsByErasComponent,
     EraOverviewComponent,
     GenresOverErasComponent
   ],
   imports: [
-    SharedModule, 
-    EditorModule, 
-    AutocompleteLibModule
+    SharedModule,
+    EditorModule,
+    AutocompleteLibModule,
+    CxListLayoutModule
   ],
   exports: [
     EraCreateComponent
   ],
-  providers:[
+  providers: [
     //EraSearchComponent,
-	//ArtistsByErasComponent, 
+    //ArtistsByErasComponent, 
     EraService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
   ]

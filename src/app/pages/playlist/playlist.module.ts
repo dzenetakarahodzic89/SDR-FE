@@ -10,6 +10,7 @@ import { HistoryComponent } from './history/history.component';
 import { EditPlaylistComponent } from './edit-playlist/edit-playlist.component';
 import { PlaylistOverviewComponent } from './playlist-overview/playlist-overview.component';
 import { AngMusicPlayerModule } from 'ang-music-player';
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,8 @@ import { AngMusicPlayerModule } from 'ang-music-player';
     EditorModule,
     AutocompleteLibModule,
     AngMusicPlayerModule,
+    CxListLayoutModule
+
   ],
   exports: [
     PlaylistSearchComponent,
@@ -37,4 +40,4 @@ import { AngMusicPlayerModule } from 'ang-music-player';
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
 })
-export class PlaylistModule {}
+export class PlaylistModule { }
