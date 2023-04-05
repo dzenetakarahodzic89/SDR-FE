@@ -285,9 +285,10 @@ export class ArtistOverviewComponent implements OnInit {
     },
     {
       field: 'dateOfRelease',
-      headerName: 'Date Of Release',
+      headerName: 'Date Of Release(mm/dd/yy)',
       flex: 1,
       floatingFilter: false,
+      type: 'date',
     },
   ];
 
@@ -300,9 +301,10 @@ export class ArtistOverviewComponent implements OnInit {
     },
     {
       field: 'dateOfRelease',
-      headerName: 'Date Of Release',
+      headerName: 'Date Of Release(mm/dd/yy)',
       flex: 1,
       floatingFilter: false,
+      type: 'date',
     },
     {
       field: 'eraName',
@@ -327,9 +329,10 @@ export class ArtistOverviewComponent implements OnInit {
     },
     {
       field: 'created',
-      headerName: 'Created',
+      headerName: 'Created(mm/dd/yy)',
       flex: 1,
       floatingFilter: false,
+      type: 'date',
     },
   ];
 
