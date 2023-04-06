@@ -1,0 +1,14 @@
+<div class="row mainContainer">
+    <zx-block [config]="topicsBlockConfig" class="col-24">
+        <div zx-block-body class="row">
+            <zx-preloader *ngIf="!isLoaded"></zx-preloader>
+        </div>
+        
+            <cx-list-layout  *ngIf="isLoaded" [config]="listLayout" zx-block-body></cx-list-layout>
+       
+        <div zx-block-footer class="align-center">
+            <zx-button [config]="previousPageButton"> </zx-button>
+            <zx-button [config]="nextPageButton"></zx-button>
+          </div>
+    </zx-block>
+</div>
