@@ -6,14 +6,24 @@ import { LabelOverviewComponent } from './label-overview/label-overview.componen
 import { LabelService } from './shared/label.service';
 import { LabelCreateComponent } from './label-create/label-create.component';
 import { LabelSearchComponent } from './label-search/label-search.component';
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 
 @NgModule({
-  declarations: [LabelOverviewComponent, LabelCreateComponent, LabelSearchComponent],
-  imports: [SharedModule, EditorModule, AutocompleteLibModule],
-  exports: [LabelOverviewComponent, LabelCreateComponent,],
+  declarations: [
+    LabelOverviewComponent,
+    LabelCreateComponent,
+    LabelSearchComponent,
+  ],
+  imports: [
+    SharedModule,
+    EditorModule,
+    AutocompleteLibModule,
+    CxListLayoutModule,
+  ],
+  exports: [LabelOverviewComponent, LabelCreateComponent],
   providers: [
     LabelService,
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
 })
-export class LabelModule {}
+export class LabelModule { }

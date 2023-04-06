@@ -5,13 +5,53 @@ import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
 import { AppBox } from '../../shared/box/box.model';
 import { PlaylistService } from '../shared/playlist.service';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
 
 @Component({
   selector: 'app-playlist-search',
   templateUrl: './playlist-search.component.html',
   styleUrls: ['./playlist-search.component.scss']
 })
+
 export class PlaylistSearchComponent implements OnInit {
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+      { index: 'totalPlaytime', class: 'col-12' },
+      { index: 'status', class: 'col-12 align-right' },
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./playlist/' + event['id'] + '/overview']);
+    },
+  });
+
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
 
   public playlistsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
@@ -173,6 +213,7 @@ export class PlaylistSearchComponent implements OnInit {
       this.foundPlaylists = response as unknown as AppBox[];
       this.paginationDetails.page = response['page'];
       this.paginationDetails.totalPages = response['numberOfPages'];
+      this.listLayout.list = response;
       this.playlistsAreLoading = false;
     });
 
