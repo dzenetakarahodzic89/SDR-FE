@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { BattleOverviewSearchRequest, BattleSingleOverviewModel } from './battle.model';
 import { BattleApi } from './battle-api.constants';
-import { Battle, EligibleArtistsInformation, Team, TeamInformation } from './battle.model';
+import { Battle, EligibleArtistsInformation, Team, TeamInformation,BattleWinnerLoser } from './battle.model';
 
 
 @Injectable()
@@ -74,6 +74,15 @@ export class BattleService {
       })
     );
   }
+
+  getWinnerLoser(id: number):Observable<BattleWinnerLoser> {
+    return this.api.get(BattleApi.GET_WINNER_LOSER.replace('#',id.toString())).pipe(
+      map((response) => {
+        return response['payload'] as BattleWinnerLoser;
+      })
+    )
+  }
+
 
 }
  

@@ -29,3 +29,39 @@ img {
   display: inline;
 
 }
+
+#topzxblock{
+  position: relative;
+  top:10%;
+  bottom: 5%;
+  left:24%;
+}
+#topzxblock1{
+  position: relative;
+  left:24%;
+  
+}
+#header{
+  font-weight: bold;
+  position:absolute;
+  
+}
+img {
+  width: 200px;
+  height: 250px;
+  object-fit: contain;
+  position: absolute;
+  top:10%;
+  left:5%;
+}
+#song{
+position:absolute;
+top:54%;
+
+}
+
+#close
+{
+  position:relative;
+  top:99%;
+}
