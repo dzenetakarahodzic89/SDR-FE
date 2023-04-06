@@ -6,15 +6,18 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { ZxFormsModule } from '@zff/zx-forms';
 import { ZxPopupLayoutModule } from '@zff/zx-popup-layout';
 import { ChatService } from "./shared/chat.service";
+import { CxListLayoutModule } from "@zff-common/cx-list-layout";
+import { ChatOverviewComponent } from './chat-overview/chat-overview.component';
 
 @NgModule({
-    declarations: [TopicOverviewComponent],
+    declarations: [TopicOverviewComponent, ChatOverviewComponent],
     imports: [
       SharedModule,
       EditorModule,
       AutocompleteLibModule,
       ZxPopupLayoutModule,
-      ZxFormsModule
+      ZxFormsModule,
+      CxListLayoutModule,
     ],
     exports: [TopicOverviewComponent
     ], providers: [ChatService,

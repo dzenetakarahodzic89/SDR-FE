@@ -1,14 +1,26 @@
 <div class="row mainContainer">
     <zx-block [config]="topicsBlockConfig" class="col-24">
+        <zx-button zx-block-action [config]="addTopicBtn"></zx-button>
         <div zx-block-body class="row">
             <zx-preloader *ngIf="!isLoaded"></zx-preloader>
         </div>
-        
-            <cx-list-layout  *ngIf="isLoaded" [config]="listLayout" zx-block-body></cx-list-layout>
-       
+        <cx-list-layout
+      *ngIf="isLoaded"
+      [config]="listLayout"
+      zx-block-body
+    ></cx-list-layout>
         <div zx-block-footer class="align-center">
             <zx-button [config]="previousPageButton"> </zx-button>
             <zx-button [config]="nextPageButton"></zx-button>
-          </div>
+        </div>
     </zx-block>
+    <zx-popup [config]="popUp">
+        <div zx-popup-body>
+          <zx-block *ngIf="popUpBlockConfig" [config]="popUpBlockConfig">
+            <zx-form-loader *ngIf="popUpFormConfig" zx-block-body [component]="popUpFormConfig"
+              [model]="newTopicModel" class="col-24"></zx-form-loader>
+          </zx-block>
+        </div>
+        <zx-button zx-popup-footer [config]="popUpFooterButtons" class="align-right"></zx-button>
+      </zx-popup>
 </div>

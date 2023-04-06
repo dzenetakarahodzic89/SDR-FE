@@ -15,3 +15,14 @@ export class ChatEntry {
     userCode: string;
     created: Date;
 }
+
+export class ChatTopicCreateRequest {
+    topic: string;
+    content: string;
+}
+
+export class ChatCreateRequest {
+    chatId: string;
+    topic:string;
+    content:string;
+}
