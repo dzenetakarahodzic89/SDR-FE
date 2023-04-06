@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { Definition } from '@zff/zx-forms';
-import { PlaylistService } from '../../playlist/shared/playlist.service';
 import { AppBox } from '../../shared/box/box.model';
 import { ArtistService } from '../shared/artist.service';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
 
 @Component({
   selector: 'app-artist-search',
@@ -13,6 +13,46 @@ import { ArtistService } from '../shared/artist.service';
   styleUrls: ['./artist-search.component.scss'],
 })
 export class ArtistSearchComponent implements OnInit {
+
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./artist/' + event['id'] + '/overview']);
+    },
+  });
+
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+          this.searchArtists();
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
+
+
   public artistsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     label: 'Artists',
@@ -164,7 +204,7 @@ export class ArtistSearchComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private artistService: ArtistService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.setFormConfig();
@@ -206,6 +246,7 @@ export class ArtistSearchComponent implements OnInit {
         this.foundArtists = response as unknown as AppBox[];
         this.paginationDetails.page = response['page'];
         this.paginationDetails.totalPages = response['numberOfPages'];
+        this.listLayout.list = response;
         this.artistsAreLoading = false;
       });
   }

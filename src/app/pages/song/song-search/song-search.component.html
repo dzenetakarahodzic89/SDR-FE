@@ -1,8 +1,8 @@
 <div class="row mainContainer">
   <zx-block [config]="songsBlockConfig" class="col-16">
     <zx-button zx-block-action [config]="viewModeBtn"></zx-button>
-
     <zx-button zx-block-action [config]="newSongBtn"></zx-button>
+
     <div zx-block-body class="row">
       <zx-preloader *ngIf="loading"></zx-preloader>
     </div>
@@ -30,7 +30,7 @@
     </div>
 
     <cx-list-layout
-      *ngIf="isListView"
+      *ngIf="isListView && foundSongs && foundSongs.length > 0"
       [config]="listLayout"
       zx-block-body
     ></cx-list-layout>

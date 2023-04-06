@@ -6,19 +6,21 @@ import { InstrumentOverviewComponent } from './instrument-overview/instrument-ov
 import { InstrumentSearchComponent } from './instrument-search/instrument-search.component';
 import { InstrumentService } from './shared/instrument.service';
 import { InstrumentCreateComponent } from './instrument-create/instrument-create.component';
+import { CxListLayoutModule } from '@zff-common/cx-list-layout';
 
 
 
 @NgModule({
   declarations: [
-      InstrumentOverviewComponent,
-      InstrumentSearchComponent,
-      InstrumentCreateComponent
+    InstrumentOverviewComponent,
+    InstrumentSearchComponent,
+    InstrumentCreateComponent
   ],
   imports: [
     SharedModule,
     EditorModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    CxListLayoutModule
   ],
   exports: [
     InstrumentOverviewComponent,

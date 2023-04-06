@@ -1,11 +1,13 @@
 <div class="row mainContainer">
   <zx-block [config]="personsBlockConfig" class="col-16">
+    <zx-button zx-block-action [config]="viewModeBtn"></zx-button>
+
     <zx-button zx-block-action [config]="newPersonBtn"></zx-button>
     <div zx-block-body class="row">
       <zx-preloader *ngIf="loading"></zx-preloader>
     </div>
     <div
-      *ngIf="foundPersons && foundPersons.length > 0"
+      *ngIf="isGridView && foundPersons && foundPersons.length > 0"
       zx-block-body
       class="searchResults"
     >
@@ -26,6 +28,11 @@
       <zx-button [config]="previousPageButton"></zx-button>
       <zx-button [config]="nextPageButton"></zx-button>
     </div>
+    <cx-list-layout
+      *ngIf="isListView && foundPersons && foundPersons.length > 0"
+      [config]="listLayout"
+      zx-block-body
+    ></cx-list-layout>
   </zx-block>
 
   <zx-block [config]="searchBlockConfig" class="col-8">

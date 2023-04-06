@@ -6,6 +6,7 @@ import { Definition } from '@zff/zx-forms';
 import { AppBox } from '../../shared/box/box.model';
 import { ChordProgressionService } from '../shared/chordprogression.service';
 import { ChordProgressionSearchRequest } from '../shared/chordprogression.model';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
 
 @Component({
   selector: 'app-ChordProgression-search',
@@ -13,6 +14,43 @@ import { ChordProgressionSearchRequest } from '../shared/chordprogression.model'
   styleUrls: ['./chordprogression-search.component.scss'],
 })
 export class ChordProgressionSearchComponent implements OnInit {
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+      { index: 'outlineText', class: 'col-12' },
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./chordprogression/' + event['id'] + '/overview']);
+    },
+  });
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
+
   public chordProgressionsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     label: 'ChordProgressions',
@@ -30,7 +68,7 @@ export class ChordProgressionSearchComponent implements OnInit {
         name: 'newChordProgression',
         label: 'New ChordProgression',
         action: (btn: any, output: any) => {
-          this.router.navigate(['./chord-progression/create']);
+          this.router.navigate(['./chordProgression/create']);
         },
       },
     ],
@@ -177,6 +215,8 @@ export class ChordProgressionSearchComponent implements OnInit {
       searchRequest
     ).subscribe((response) => {
       this.foundChordProgressions = response as unknown as AppBox[];
+      this.listLayout.list = response;
+
       this.loading = false;
     });
   }

@@ -6,6 +6,7 @@ import { Definition } from '@zff/zx-forms';
 import { AppBox } from '../../shared/box/box.model';
 import { EraSearchRequest } from '../shared/era.model';
 import { EraService } from '../shared/era.service';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
 
 @Component({
   selector: 'app-era-search',
@@ -13,6 +14,44 @@ import { EraService } from '../shared/era.service';
   styleUrls: ['./era-search.component.scss'],
 })
 export class EraSearchComponent implements OnInit {
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+      { index: 'scope', class: 'col-12' },
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./era/' + event['id'] + '/overview']);
+    },
+  });
+
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
+
   public ErasBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     label: 'Eras',
@@ -160,7 +199,7 @@ export class EraSearchComponent implements OnInit {
     });
   }
 
-  constructor(private router: Router, private Eraservice: EraService) {}
+  constructor(private router: Router, private Eraservice: EraService) { }
 
   ngOnInit(): void {
     this.setFormConfig();
@@ -182,6 +221,8 @@ export class EraSearchComponent implements OnInit {
     );
     this.Eraservice.searchEras(searchRequest).subscribe((response) => {
       this.foundEras = response as unknown as AppBox[];
+      this.listLayout.list = response;
+
     });
   }
 

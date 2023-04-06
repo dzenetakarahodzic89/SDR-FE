@@ -7,6 +7,7 @@ import { BoxComponent } from '../../shared/box/box.component';
 import { AppBox } from '../../shared/box/box.model';
 import { AlbumSearchRequest } from '../shared/album.model';
 import { AlbumService } from '../shared/album.service';
+import { CxListLayoutModel } from '@zff-common/cx-list-layout';
 
 @Component({
   selector: 'app-album-search',
@@ -14,6 +15,45 @@ import { AlbumService } from '../shared/album.service';
   styleUrls: ['./album-search.component.scss'],
 })
 export class AlbumSearchComponent implements OnInit {
+
+  public listLayout = new CxListLayoutModel({
+    mapping: [
+      { index: 'name', buttons: true, title: true },
+
+    ],
+    list: [],
+    action: (event: any) => {
+      this.router.navigate(['./album/' + event['id'] + '/overview']);
+    },
+  });
+
+
+  public viewModeBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        icon: 'fas fa-th',
+        name: 'grid-view',
+        label: 'Grid view',
+        action: (btn: any, output: any) => {
+          this.isGridView = true;
+          this.isListView = false;
+        },
+      },
+      {
+        icon: 'fas fa-list',
+        name: 'list-view',
+        label: 'List view',
+        action: (btn: any, output: any) => {
+          this.isGridView = false;
+          this.isListView = true;
+        },
+      },
+    ],
+  });
+
+  public isGridView: boolean = true;
+  public isListView: boolean = false;
+
   public albumsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
     label: 'Albums',
@@ -165,7 +205,7 @@ export class AlbumSearchComponent implements OnInit {
     });
   }
 
-  constructor(private router: Router, private albumService: AlbumService) {}
+  constructor(private router: Router, private albumService: AlbumService) { }
 
 
   ngOnInit(): void {
@@ -229,7 +269,7 @@ export class AlbumSearchComponent implements OnInit {
     )
 
   };
-  
+
 
 
 
@@ -272,6 +312,7 @@ export class AlbumSearchComponent implements OnInit {
 
     this.albumService.searchAlbums(searchParams).subscribe(response => {
       this.foundAlbums = response['payload'] as unknown as AppBox[];
+      this.listLayout.list = response['payload'];
 
       this.paginationDetails.page = response['page'];
       this.paginationDetails.totalPages = response['numberOfPages'];
