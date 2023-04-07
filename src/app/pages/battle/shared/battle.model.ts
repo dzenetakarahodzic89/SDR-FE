@@ -156,3 +156,36 @@ export class AddArtistModel {
     artistId : number;
     songId : number[];
 }
+
+
+export class BattleWinnerLoser{
+    id:number;
+    countryId:number;
+    countryName:string;
+    battleName:string;
+    artistsSongs:ArtistSongInformation[];
+    countryResults: CountryResults[];
+  }
+  export class ArtistSongInformation{
+  
+    artistId:number;
+    artistName:string;
+    songId:number;
+    songName:string;
+    spotifyId:string;
+    audioUrl:string;
+    playtime:string;
+    imageUrl:string;
+  }
+
+  export class CountryResults{
+    countryWon:string;
+    countryLoserId:number;
+    countryLoserName:string;
+    winnerLoserName:string;
+    type:string;
+    turn:number;
+  
+  
+  }
+  

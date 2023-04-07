@@ -62,3 +62,57 @@
     </div>
 
 </div>
+
+<zx-popup [config]="finalBattlePopup">
+    <div zx-popup-body>
+        <div id="header" *ngIf="battleWinnerLoser">
+            <h4>{{ battleWinnerLoser.battleName }} - Winner country: </h4> 
+            <h4>{{ battleWinnerLoser.countryName }}</h4>
+            </div>
+            
+            <div class="row col-24 topContainer"id ="topzxblock">
+                <zx-block [config]="countriesBlockConfigs" style="width:75%; height:40%;">
+                    <zx-grid zx-block-body [gridOptions]="countryGridOptionss" [source]="countryResults" domLayout="autoHeight">
+                    </zx-grid>
+                </zx-block>
+            </div>
+            <div class="row col-24 topContainer"id ="topzxblock1">
+                <zx-block [config]="artistsBlockConfigs" style="width:75%; height:40%;">
+                    <zx-grid zx-block-body [gridOptions]="artistGridOption" [source]="artistSongInformation" domLayout="autoHeight">
+                    </zx-grid>
+                </zx-block>
+            </div>
+            
+            
+            <img *ngIf="artistSongInformation" [src]="artistSongInformation[0].imageUrl" class="width:250px" div="pic"/>
+
+            <div id="song">
+                <div
+                 zx-block-body
+                 *ngIf="srcUrl.length > 0"
+                 style="padding-left: 5px; padding-top: 5px"
+               >
+                 <iframe
+                 *ngIf="srcUrl"
+                   [src]="srcUrl | safe : 'resourceUrl'"
+                   style="border-radius: 12px"
+                   width="300px"
+                   height="100"
+                   frameBorder="0"
+                   allowfullscreen=""
+                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                   loading="lazy"
+                 ></iframe>
+               </div>
+       
+               <div *ngIf="this.audioList[0]">
+                 <ang-music-player
+                   [audioList]="audioList"
+                   width="310px"
+                   height="75px"
+                 ></ang-music-player>
+               </div>
+       </div>
+    </div>
+      <zx-button id="close" zx-popup-footer [config]="popupFooterButtons" class="align-right"></zx-button>
+</zx-popup>
