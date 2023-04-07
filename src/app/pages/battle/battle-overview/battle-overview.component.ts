@@ -1,12 +1,13 @@
 import {  GridOptions } from '@ag-grid-community/all-modules';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ZxBlockModel } from '@zff/zx-block';
 import { ZxButtonModel } from '@zff/zx-button';
 import { BattleService } from '../shared/battle.service';
-import { BattleOverviewSearchRequest, BattleResponse, BattleSingleOverviewModel, TeamBattleState } from '../shared/battle.model';
+import { BattleOverviewSearchRequest, BattleResponse, BattleSingleOverviewModel, TeamBattleState,BattleWinnerLoser, CountryResults, ArtistSongInformation } from '../shared/battle.model';
 import { Chart, registerables } from 'node_modules/chart.js';
 import { ChartType } from 'chart.js';
+import { ZxPopupLayoutModel } from '@zff/zx-popup-layout';
 
 @Component({
   selector: 'app-battle-overview',
@@ -22,7 +23,7 @@ export class BattleSearchComponent implements OnInit {
   battlesAreLoading: boolean;
   foundBattles: BattleResponse[];
 
-  constructor(private router: Router, private battleService: BattleService) {}
+  constructor(private router: Router, private battleService: BattleService,  private route: ActivatedRoute,) {}
 
   public newBattleButton: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -136,14 +137,7 @@ export class BattleSearchComponent implements OnInit {
     ],
   });
 
-  public finalBattleResponseBtn: ZxButtonModel = new ZxButtonModel({
-    items: [
-      {
-        name: 'Final Battle Response',
-        label: 'Final Battle Response',
-      },
-    ],
-  });
+
 
   ngOnInit(): void {
     this.loadBattles();
@@ -239,4 +233,168 @@ export class BattleSearchComponent implements OnInit {
       this.battlesAreLoading = false;
     });
   }
+
+  public finalBattleResponseBtn: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'victoryScreen',
+        label: 'Victory Screen',
+        action: () => {
+        if(this.selectedCountryId)
+        {
+        this.selectedBattleInfo(this.selectedCountryId)
+        this.finalBattlePopup.show()
+        }
+        }
+      },
+    ],
+  });
+
+  selectedBattleInfo(id){
+    this.battleService.getWinnerLoser(id).subscribe(response=>{
+     
+      this.battleWinnerLoser = response;
+      this.countryResults=response.countryResults;
+      this.artistSongInformation=response.artistsSongs;
+      this.srcUrl =
+      'https://open.spotify.com/embed/track/' +
+       this.artistSongInformation[0].spotifyId +
+      '?utm_source=generator&theme=0';
+
+     
+      this.audioList.push({
+        title: this.artistSongInformation[0].songName,
+        cover: this.artistSongInformation[0].imageUrl,
+        url: this.artistSongInformation[0].audioUrl,
+      });
+      console.log(this.audioList);
+    });}
+
+  public finalBattlePopup: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-24',
+  });
+
+ 
+ 
+
+  public popupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Close',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.finalBattlePopup.hide();     
+        },
+      },
+    ],
+  });
+  battleWinnerLoser:BattleWinnerLoser;
+  countryResults : CountryResults[];
+ 
+  srcUrl: string = '';
+  artistSongInformation:ArtistSongInformation[];
+  audioList = [];
+  
+
+  
+  public countriesBlockConfigs: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+
+
+  countryColumnDefss = [
+    {
+      field: 'turn',
+      headerName: 'Turn',
+      flex: 0.5,
+      floatingFilter: false,
+    },
+    {
+      field: 'winnerLoserName',
+      headerName: 'Battle',
+      flex: 1.5,
+      floatingFilter: false,
+    },
+    {
+      field: 'countryWon',
+      headerName: 'Winner',
+      flex: 0.9,
+      floatingFilter: false,
+    },
+    {
+      field: 'type',
+      headerName: 'Type',
+      flex: 0.5,
+      floatingFilter: false,
+    },
+  ];
+
+  public countryGridOptionss: GridOptions = {
+    columnDefs: this.countryColumnDefss,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+   
+    
+  } as GridOptions;
+  
+  
+
+  public artistsBlockConfigs: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+  });
+
+  artistColumnDef = [
+    {
+      field: 'artistName',
+      headerName: 'Artists',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'songName',
+      headerName: 'Songs',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'playtime',
+      headerName: 'Playtime',
+      flex: 1,
+      floatingFilter: false,
+    },
+  ];
+  public artistGridOption: GridOptions = {
+    columnDefs: this.artistColumnDef,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+    this.srcUrl =
+    'https://open.spotify.com/embed/track/' +
+    event['data']['spotifyId'] +
+    '?utm_source=generator&theme=0';
+
+  this.audioList = [];
+  if(this.artistSongInformation!=null)
+  {
+  this.audioList.push({
+    title: event['data']['songName'],
+    cover: event['data']['imageUrl'],
+    url: event['data']['audioUrl'],
+  });
+}
+
+  console.log(this.audioList);
+},
+
+  } as GridOptions;
+
+
+
+
+
 }
