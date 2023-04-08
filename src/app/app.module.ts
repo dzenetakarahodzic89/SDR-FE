@@ -66,6 +66,7 @@ import { MusicRiskModule } from './pages/music-risk/music-risk.module';
 import { ReleaseModule } from './pages/release/release.module';
 import { SpotifyModule } from './pages/spotify/spotify.module';
 import { ZxNotificationsModule } from '@zff/zx-notifications';
+import { ZxUserModule } from '@zff/zx-user';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -121,7 +122,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     MusicRiskModule,
     ArtistAlbumTimelineModule,
     ReleaseModule,
-    SpotifyModule
+    SpotifyModule,
+    ZxUserModule
     // use forRoot() in main app module only.
   ],
   providers: [
