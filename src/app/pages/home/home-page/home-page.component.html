@@ -1,51 +1,144 @@
 <div id="searchBlock">
-    <h1>Sound Repository</h1>
-    <div id="searchInput" class="ng-autocomplete">
-        <ng-autocomplete [data]="allMultiSearchObjects" [searchKeyword]="keyword" (selected)="selectEvent($event)"
-            (inputChanged)="onChangeSearch($event)" (inputFocused)="onFocused($event)" [itemTemplate]="itemTemplate"
-            [notFoundTemplate]="notFoundTemplate">
-        </ng-autocomplete>
+  <h1>Sound Repository</h1>
+  <div id="searchInput" class="ng-autocomplete">
+    <ng-autocomplete
+      [data]="allMultiSearchObjects"
+      [searchKeyword]="keyword"
+      (selected)="selectEvent($event)"
+      (inputChanged)="onChangeSearch($event)"
+      (inputFocused)="onFocused($event)"
+      [itemTemplate]="itemTemplate"
+      [notFoundTemplate]="notFoundTemplate"
+    >
+    </ng-autocomplete>
 
-        <ng-template #itemTemplate let-item>
-            <app-multi-search-item [multiSearchItem]="item"></app-multi-search-item>
-        </ng-template>
+    <ng-template #itemTemplate let-item>
+      <app-multi-search-item [multiSearchItem]="item"></app-multi-search-item>
+    </ng-template>
 
-        <ng-template #notFoundTemplate let-notFound>
-            <div [innerHTML]="notFound"></div>
-        </ng-template>
-    </div>
+    <ng-template #notFoundTemplate let-notFound>
+      <div [innerHTML]="notFound"></div>
+    </ng-template>
+  </div>
+  <zx-button
+    id="resolveBattlesBtn"
+    zx-block-action
+    [config]="resolveBattlesBtn"
+  ></zx-button>
 </div>
 
 <div id="gridAll">
-    <zx-block [config]="gamesBlockConfig" id="gridBlock">
-        <zx-grid zx-block-body id="gridTopTenPlaylist" [gridOptions]="gridTopTenSongsOptions" [source]="topSongsList">
-        </zx-grid>
-    </zx-block>
-    <zx-block [config]="wikiBlockConfig" id="wikiBlock">
-        <zx-grid zx-block-body id="gridWiki" [gridOptions]="gridOptions" [source]="wikiData"></zx-grid> 
-    </zx-block>
+  <zx-block [config]="gamesBlockConfig" id="gridBlock">
+    <zx-grid
+      zx-block-body
+      id="gridTopTenPlaylist"
+      [gridOptions]="gridTopTenSongsOptions"
+      [source]="topSongsList"
+    >
+    </zx-grid>
+  </zx-block>
+  <zx-block [config]="wikiBlockConfig" id="wikiBlock">
+    <zx-grid
+      zx-block-body
+      id="gridWiki"
+      [gridOptions]="gridOptions"
+      [source]="wikiData"
+    ></zx-grid>
+  </zx-block>
 </div>
 <div id="bottomGrid">
-    <zx-block [config]="userRecommendedPlaylistConfig" id="bottomBlock" >
-     <zx-grid zx-block-body id="gridRecommnededPlaylist" [gridOptions]="gridRandomPlaylistOption" [source]="randomUserPlaylist"  >
+  <zx-block [config]="userRecommendedPlaylistConfig" id="bottomBlock">
+    <zx-grid
+      zx-block-body
+      id="gridRecommnededPlaylist"
+      [gridOptions]="gridRandomPlaylistOption"
+      [source]="randomUserPlaylist"
+    >
     </zx-grid>
-</zx-block>
+  </zx-block>
 </div>
 
 <div id="playeri">
-    <div *ngIf="audioList && audioList.length > 0">
-        <ang-music-player [audioList]="this.audioList"></ang-music-player>
-    </div>    
-    <div *ngIf="srcUrl.length>0">
-        <iframe
-            style="border-radius: 12px"
-            [src]="srcUrl | safe : 'resourceUrl'"
-            width="500px"
-            height="152"         
-            frameBorder="0"
-            allowfullscreen=""  
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"     
-            loading="lazy"
-        ></iframe> 
-    </div>
+  <div *ngIf="audioList && audioList.length > 0">
+    <ang-music-player [audioList]="this.audioList"></ang-music-player>
+  </div>
+  <div *ngIf="srcUrl.length > 0">
+    <iframe
+      style="border-radius: 12px"
+      [src]="srcUrl | safe : 'resourceUrl'"
+      width="500px"
+      height="152"
+      frameBorder="0"
+      allowfullscreen=""
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+    ></iframe>
+  </div>
 </div>
+<zx-popup [config]="attackPopup">
+  <div zx-popup-body>
+    <zx-block [config]="attackBlockConfig">
+      <div style="display: flex; gap: 20px" zx-block-body>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <div *ngIf="artistImageOne">
+            <img
+              [src]="artistImageOne.imageUrl"
+              alt=""
+              style="width: 250px; height: 250px"
+            />
+          </div>
+          <iframe
+            style="border-radius: 12px"
+            [src]="playerUrl | safe : 'resourceUrl'"
+            width="250px"
+            height="100"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 500px;
+          "
+        >
+          <zx-form-loader
+            *ngIf="popUpAttackFormConfig"
+            [component]="popUpAttackFormConfig"
+            [model]="attackCountryModel"
+            class="col-24"
+          ></zx-form-loader>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <div *ngIf="artistImageTwo">
+            <img
+              [src]="artistImageTwo.imageUrl"
+              alt=""
+              style="width: 250px; height: 250px"
+            />
+          </div>
+
+          <iframe
+            style="border-radius: 12px"
+            [src]="npcUrl | safe : 'resourceUrl'"
+            width="250px"
+            height="100"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </zx-block>
+    <zx-button
+      zx-popup-footer
+      [config]="linkAttackPopupFooterBtn"
+      class="align-right"
+    ></zx-button>
+  </div>
+</zx-popup>
