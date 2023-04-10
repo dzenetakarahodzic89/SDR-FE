@@ -60,6 +60,8 @@ import { ChordprogressionOverviewComponent } from './pages/chordprogression/chor
 import { CountryRelationsCreateComponent } from './pages/country/country-relation-create/country-relation-create.component';
 import { EditPlaylistComponent } from './pages/playlist/edit-playlist/edit-playlist.component';
 import { PlaylistOverviewComponent } from './pages/playlist/playlist-overview/playlist-overview.component';
+import { TopicOverviewComponent } from './pages/chat/topic-overview/topic-overview.component';
+import { ChatOverviewComponent } from './pages/chat/chat-overview/chat-overview.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomePageComponent },
@@ -148,4 +150,6 @@ export const appRoutes: Routes = [
   { path: 'release/search', component: ReleaseSearchComponent },
   { path: 'spotify-integration', component: SpotifyStatisticsComponent },
   { path: 'era/:id/overview', component: EraOverviewComponent },
+  { path: 'chat/topics', component: TopicOverviewComponent },
+  { path: 'chat/topic/:name', component: ChatOverviewComponent}
 ];
