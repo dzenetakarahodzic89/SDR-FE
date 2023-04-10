@@ -22,6 +22,7 @@ import {
 } from '../../shared/comment/comment.model';
 import { CommentService } from '../../shared/comment/comment.service';
 import { HomeService } from '../../home/shared/home-page.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-label-overview',
@@ -353,7 +354,8 @@ export class LabelOverviewComponent implements OnInit {
     private connectedMediaService: ConnectedMediaService,
     private commentService: CommentService,
     private homeService: HomeService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location
   ) {}
 
   addCommentToLabel() {
@@ -369,6 +371,17 @@ export class LabelOverviewComponent implements OnInit {
       this.addCommentModel.objectId = this.label.id;
       this.addCommentModel.objectType = this.type;
       this.addCommentModel.status = 'Active';
+
+      const pattern = /@(\w+(?:\.\w+)?)/g;
+      this.addCommentModel.mentionTargets = [];
+      let match;
+      while ((match = pattern.exec(this.addCommentModel.content))) {
+        this.addCommentModel.mentionTargets.push(match[1]);
+      }
+
+      this.addCommentModel.objectName = this.label.name;
+      this.addCommentModel.overviewUrl =
+        window.location.origin + '/sdrfe' + this.location.path();
 
       this.commentService.createComment(this.addCommentModel).subscribe(
         (responseCode) => {

@@ -20,6 +20,7 @@ import {
   CommentsFetchRequest,
 } from '../../shared/comment/comment.model';
 import { ObjectType } from '../../shared/object-type.constant';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-chordprogression-overview',
@@ -40,7 +41,8 @@ export class ChordprogressionOverviewComponent implements OnInit {
     private connectedMediaService: ConnectedMediaService,
     private commentService: CommentService,
     private homeService: HomeService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location
   ) {}
 
   public containerBlockConfig: ZxBlockModel = new ZxBlockModel({
@@ -247,6 +249,17 @@ export class ChordprogressionOverviewComponent implements OnInit {
       this.addCommentModel.objectId = this.chordProgression.id;
       this.addCommentModel.objectType = this.type;
       this.addCommentModel.status = 'Active';
+
+      const pattern = /@(\w+(?:\.\w+)?)/g;
+      this.addCommentModel.mentionTargets = [];
+      let match;
+      while ((match = pattern.exec(this.addCommentModel.content))) {
+        this.addCommentModel.mentionTargets.push(match[1]);
+      }
+
+      this.addCommentModel.objectName = this.chordProgression.name;
+      this.addCommentModel.overviewUrl =
+        window.location.origin + '/sdrfe' + this.location.path();
 
       this.commentService.createComment(this.addCommentModel).subscribe(
         (responseCode) => {

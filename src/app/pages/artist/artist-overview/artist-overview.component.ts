@@ -21,6 +21,7 @@ import { HomeService } from '../../home/shared/home-page.service';
 import { CommentService } from '../../shared/comment/comment.service';
 import { ObjectType } from '../../shared/object-type.constant';
 import { ToastrService } from 'ngx-toastr';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-artist-overview',
@@ -226,7 +227,8 @@ export class ArtistOverviewComponent implements OnInit {
     private commentService: CommentService,
     private homeService: HomeService,
     private artistService: ArtistService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location
   ) {}
 
   addCommentToArtist() {
@@ -242,6 +244,18 @@ export class ArtistOverviewComponent implements OnInit {
       this.addCommentModel.objectId = this.artist.id;
       this.addCommentModel.objectType = this.type;
       this.addCommentModel.status = 'Active';
+
+      const pattern = /@(\w+(?:\.\w+)?)/g;
+      this.addCommentModel.mentionTargets = [];
+      let match;
+      while ((match = pattern.exec(this.addCommentModel.content))) {
+        this.addCommentModel.mentionTargets.push(match[1]);
+      }
+
+      this.addCommentModel.objectName =
+        this.artist.name + ' ' + this.artist.surname;
+      this.addCommentModel.overviewUrl =
+        window.location.origin + '/sdrfe' + this.location.path();
 
       this.commentService.createComment(this.addCommentModel).subscribe(
         (responseCode) => {

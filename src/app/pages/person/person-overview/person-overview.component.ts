@@ -33,6 +33,7 @@ import {
 } from '../../shared/comment/comment.model';
 import { CommentService } from '../../shared/comment/comment.service';
 import { HomeService } from '../../home/shared/home-page.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-person-overview',
@@ -541,7 +542,8 @@ export class PersonOverviewComponent implements OnInit {
     private homeService: HomeService,
     public confirmation: ZxConfirmation,
     private connectedMediaService: ConnectedMediaService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location
   ) {}
   public linkPerson: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -617,6 +619,18 @@ export class PersonOverviewComponent implements OnInit {
       this.addCommentModel.objectId = this.person.id;
       this.addCommentModel.objectType = this.type;
       this.addCommentModel.status = 'Active';
+
+      const pattern = /@(\w+(?:\.\w+)?)/g;
+      this.addCommentModel.mentionTargets = [];
+      let match;
+      while ((match = pattern.exec(this.addCommentModel.content))) {
+        this.addCommentModel.mentionTargets.push(match[1]);
+      }
+
+      this.addCommentModel.objectName =
+        this.person.name + ' ' + this.person.surname;
+      this.addCommentModel.overviewUrl =
+        window.location.origin + '/sdrfe' + this.location.path();
 
       this.commentService.createComment(this.addCommentModel).subscribe(
         (responseCode) => {
