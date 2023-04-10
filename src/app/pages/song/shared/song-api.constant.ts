@@ -28,5 +28,7 @@ export class SongApi {
   public static GET_PERSON_LOV = '/sdrbe/person/lov';
   public static GET_NOTESHEETS = '/sdrbe/notesheet/#';
   public static DELETE_SONG_FROM_PLAYLIST =
-    '/sdrbe/song-playlist/delete?playlistId=:playlistId&songId=:songId';
+    '/sdrbe/song-playlist/delete?playlistId=:playlistId&songId=:songId';    
+public static GET_ALL_PLAYLISTS_FOR_USERS = '/sdrbe/playlist/user';
+public static POST_SONG_TO_PLAYLIST = '/sdrbe/song-playlist';
 }

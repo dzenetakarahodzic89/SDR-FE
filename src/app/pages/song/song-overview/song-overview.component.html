@@ -70,6 +70,15 @@
                 </div>
                 <zx-button zx-popup-footer [config]="linkPopupFooterButtons" class="align-right"></zx-button>
               </zx-popup>
+              <zx-popup [config]="playlistPopUp">
+                <div zx-popup-body>
+                  <zx-block [config]="playlistPopupBlockConfig">
+                    <zx-grid zx-block-body [gridOptions]="playlistGridOptions" [source]="playlists" domLayout="autoHeight">
+                    </zx-grid>
+                  </zx-block>
+                </div>
+                <zx-button zx-popup-footer [config]="playlistPopupFooterButtons" class="align-right"></zx-button>
+              </zx-popup>
               <zx-popup [config]="popup">
                 <div zx-popup-body>
                   <zx-block [config]="popUpBlockConfig">
