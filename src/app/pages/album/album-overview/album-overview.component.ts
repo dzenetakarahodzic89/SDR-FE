@@ -28,6 +28,7 @@ import {
 } from '../../shared/comment/comment.model';
 import { HomeService } from '../../home/shared/home-page.service';
 import { CommentService } from '../../shared/comment/comment.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-album-overview',
@@ -452,7 +453,8 @@ export class AlbumOverviewComponent implements OnInit {
     private commentService: CommentService,
     private homeService: HomeService,
     private connectedMediaService: ConnectedMediaService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location
   ) {}
 
   addCommentToAlbum() {
@@ -468,6 +470,17 @@ export class AlbumOverviewComponent implements OnInit {
       this.addCommentModel.objectId = this.album.id;
       this.addCommentModel.objectType = this.type;
       this.addCommentModel.status = 'Active';
+
+      const pattern = /@(\w+(?:\.\w+)?)/g;
+      this.addCommentModel.mentionTargets = [];
+      let match;
+      while ((match = pattern.exec(this.addCommentModel.content))) {
+        this.addCommentModel.mentionTargets.push(match[1]);
+      }
+
+      this.addCommentModel.objectName = this.album.name;
+      this.addCommentModel.overviewUrl =
+        window.location.origin + '/sdrfe' + this.location.path();
 
       this.commentService.createComment(this.addCommentModel).subscribe(
         (responseCode) => {

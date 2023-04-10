@@ -18,6 +18,7 @@ import {
 } from '../../shared/comment/comment.model';
 import { CommentService } from '../../shared/comment/comment.service';
 import { HomeService } from '../../home/shared/home-page.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-era-overview',
@@ -409,7 +410,8 @@ export class EraOverviewComponent implements OnInit {
     private toastr: ToastrService,
     private commentService: CommentService,
     private homeService: HomeService,
-    public confirmation: ZxConfirmation
+    public confirmation: ZxConfirmation,
+    private location: Location
   ) {}
 
   addCommentToEra() {
@@ -425,6 +427,17 @@ export class EraOverviewComponent implements OnInit {
       this.addCommentModel.objectId = this.era.id;
       this.addCommentModel.objectType = this.type;
       this.addCommentModel.status = 'Active';
+
+      const pattern = /@(\w+(?:\.\w+)?)/g;
+      this.addCommentModel.mentionTargets = [];
+      let match;
+      while ((match = pattern.exec(this.addCommentModel.content))) {
+        this.addCommentModel.mentionTargets.push(match[1]);
+      }
+
+      this.addCommentModel.objectName = this.era.name;
+      this.addCommentModel.overviewUrl =
+        window.location.origin + '/sdrfe' + this.location.path();
 
       this.commentService.createComment(this.addCommentModel).subscribe(
         (responseCode) => {

@@ -1023,6 +1023,17 @@ export class SongOverviewComponent implements OnInit {
       this.addCommentModel.objectType = this.type;
       this.addCommentModel.status = 'Active';
 
+      const pattern = /@(\w+(?:\.\w+)?)/g;
+      this.addCommentModel.mentionTargets = [];
+      let match;
+      while ((match = pattern.exec(this.addCommentModel.content))) {
+        this.addCommentModel.mentionTargets.push(match[1]);
+      }
+
+      this.addCommentModel.objectName = this.song.name;
+      this.addCommentModel.overviewUrl =
+        window.location.origin + '/sdrfe' + this.location.path();
+
       this.commentService.createComment(this.addCommentModel).subscribe(
         (responseCode) => {
           if (responseCode.hasOwnProperty('payload')) {

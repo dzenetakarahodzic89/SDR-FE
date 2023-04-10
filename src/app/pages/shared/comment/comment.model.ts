@@ -6,6 +6,9 @@ export class AddCommentRequest {
   objectId: number;
   objectType: ObjectType;
   status: string;
+  mentionTargets: string[];
+  objectName: string;
+  overviewUrl: string;
 }
 
 export class Comment {
