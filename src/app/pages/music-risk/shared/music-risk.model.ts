@@ -33,6 +33,7 @@ export class BattleTurn {
   turn: number;
   mapState: MapState;
   turnCombatState: BattleLogs;
+  status: string;
 }
 export class TeamState {
   activeNpcTeams: Team[];

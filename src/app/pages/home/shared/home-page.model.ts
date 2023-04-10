@@ -1,128 +1,120 @@
-import { LongTapEvent } from "@ag-grid-enterprise/all-modules";
+import { LongTapEvent } from '@ag-grid-enterprise/all-modules';
+import { Artist } from '../../music-risk/shared/music-risk.model';
 
-export class SearchItem
-{
+export class SearchItem {
+  id: number;
+  name: string;
+  type: string;
+  imageUrl: string;
 
-    id: number;
-    name: string;
-    type: string;
-    imageUrl: string;
-
-    constructor(id: number, name: string, type: string, imageUrl: string)
-    {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.imageUrl = imageUrl;
-    }
-
+  constructor(id: number, name: string, type: string, imageUrl: string) {
+    this.id = id;
+    this.name = name;
+    this.type = type;
+    this.imageUrl = imageUrl;
+  }
 }
 
-export class TopTenSongsResponse
-{
-    songName: string;
-    songScore: number;
+export class TopTenSongsResponse {
+  songName: string;
+  songScore: number;
 
-    constructor(songName: string, songScore: number)
-    {
-        this.songName=songName;
-        this.songScore=songScore;
-    }
-
-    
+  constructor(songName: string, songScore: number) {
+    this.songName = songName;
+    this.songScore = songScore;
+  }
 }
 
+export class CountItem {
+  name: string;
+  countType: number;
 
-
-export class CountItem
-{
-
-    name: string;
-    countType: number;
-
-    constructor(name: string, countType: number)
-    {
-
-        this.name = name;
-        this.countType = countType;
-    }
-
+  constructor(name: string, countType: number) {
+    this.name = name;
+    this.countType = countType;
+  }
 }
-export class VolumeItem
-{
-    created: Date;
+export class VolumeItem {
+  created: Date;
 
-    createdBy: string;
+  createdBy: string;
 
-    releaseDate: Date;
+  releaseDate: Date;
 
-    type: string;
+  type: string;
 
-    name: string;
+  name: string;
 
-    imageUrl: string;
-    outlineText: string;
+  imageUrl: string;
+  outlineText: string;
 
+  constructor(
+    created: Date,
+    createdBy: string,
 
-    constructor(created: Date,
-        createdBy: string,
+    releaseDate: Date,
 
-        releaseDate: Date,
+    type: string,
 
-        type: string,
+    name: string,
 
-        name: string,
+    imageUrl: string,
 
-        imageUrl: string,
+    outlineText: string
+  ) {
+    this.created = created;
 
-        outlineText: string
+    this.createdBy = createdBy;
 
-    )
-    {
-        this.created = created;
+    this.releaseDate = releaseDate;
 
-        this.createdBy = createdBy;
+    this.type = type;
 
-        this.releaseDate = releaseDate;
+    this.name = name;
 
-        this.type = type;
+    this.imageUrl = imageUrl;
 
-        this.name = name;
-
-        this.imageUrl = imageUrl;
-
-        this.outlineText = outlineText;
-    }
-   
+    this.outlineText = outlineText;
+  }
 }
-export class RandomPlaylistResponse
-{
-    playlistId: number;
-    songId:number;
-    songName: string;
-    playtimeInSeconds: number;
-    audioUrl:string;
-    spotifyId:string
+export class RandomPlaylistResponse {
+  playlistId: number;
+  songId: number;
+  songName: string;
+  playtimeInSeconds: number;
+  audioUrl: string;
+  spotifyId: string;
 
-    constructor(playlistId: number, songId:number,songName: string, playtimeInSeconds: number,audioUrl:string,spotifyId:string)
-    {
-        this.playlistId=playlistId;
-        this.songId=songId;
-        this.songName=songName;
-        this.playtimeInSeconds=playtimeInSeconds;
-        this.audioUrl=audioUrl;
-        this.spotifyId=spotifyId
-        
-    }
-
-    
+  constructor(
+    playlistId: number,
+    songId: number,
+    songName: string,
+    playtimeInSeconds: number,
+    audioUrl: string,
+    spotifyId: string
+  ) {
+    this.playlistId = playlistId;
+    this.songId = songId;
+    this.songName = songName;
+    this.playtimeInSeconds = playtimeInSeconds;
+    this.audioUrl = audioUrl;
+    this.spotifyId = spotifyId;
+  }
 }
 
-export class UserCodeResponse
-{
-    userCode:string
-    constructor(userCode:string)
-    {
-        this.userCode=userCode;
-    }
+export class UserCodeResponse {
+  userCode: string;
+  constructor(userCode: string) {
+    this.userCode = userCode;
+  }
+}
+
+export class LastUnfinishedBattleTurn {
+  battleTurnId: number;
+  countryAId: number;
+  countryBId: number;
+  countryAName: string;
+  countryBName: string;
+  countryATeamArtists: Artist[];
+  countryBTeamArtists: Artist[];
 }

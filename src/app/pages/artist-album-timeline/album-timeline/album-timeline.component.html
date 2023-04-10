@@ -36,7 +36,7 @@
       <div zx-block-body>
         <div class="container" *ngIf="artist" >
           <img zx-block-body [src]="artist.imageUrl"  />
-          <h5  >Name: {{ artist.name}}
+          <h5  >Name: {{ artist.fullName}}
          <hr/>
          <br/>DOB: {{ artist.dateOfBirth | date : "dd.MM.yyyy"}}
           

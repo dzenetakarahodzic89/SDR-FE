@@ -39,6 +39,7 @@ Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
   styleUrls: ['./music-risk-world-map.component.scss'],
 })
 export class MusicRiskWorldMapComponent implements OnInit {
+  isAttackStopped: boolean = false;
   countriesInfo: GridOfCountries[] = [];
   clickedGridCountry: GridOfCountries;
   countryArtists: Artist[];
@@ -326,7 +327,11 @@ export class MusicRiskWorldMapComponent implements OnInit {
               .preMoveAttack(this.attackObject)
               .subscribe((response) => {
                 this.battleTurnId = +response;
-                this.attackPopup.show();
+                this.toastr.info('Turn has been created, waiting for result!');
+                // this.attackPopup.show();
+                this.setAlterRosterButton(true);
+                this.setAttackCountryBtn(true);
+                this.isAttackStopped = true;
                 this.loadData();
                 this.popup.hide();
               });
@@ -637,22 +642,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
       this.teamPopup.show();
     },
   } as GridOptions;
-  public attackBtn: ZxButtonModel = new ZxButtonModel({
-    items: [
-      {
-        icon: 'fal fa-swords',
-        label: 'Attack Country',
-        action: () => {
-          this.musicService
-            .getCountryLovs(this.eligibleCountryIds)
-            .subscribe((data) => {
-              this.popUpFormConfig.children[0].list = data;
-            });
-          this.popup.show();
-        },
-      },
-    ],
-  });
+  public attackBtn: ZxButtonModel;
   standingsHistoryDefs = [
     {
       field: 'id',
@@ -889,17 +879,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
         '?utm_source=generator&theme=0';
     },
   } as GridOptions;
-  public viewAndAlterRosterBtn: ZxButtonModel = new ZxButtonModel({
-    items: [
-      {
-        icon: 'far fa-street-view',
-        label: 'View and Alter Roster',
-        action: () => {
-          this.router.navigate(['./battle/' + this.battleId + '/alter-roster']);
-        },
-      },
-    ],
-  });
+  public viewAndAlterRosterBtn: ZxButtonModel;
   searchedFor = false;
   public viewStandingsBtn: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -915,6 +895,41 @@ export class MusicRiskWorldMapComponent implements OnInit {
   public personsBlockConfig: ZxBlockModel = new ZxBlockModel({
     hideExpand: true,
   });
+  setAlterRosterButton(disabled: boolean) {
+    this.viewAndAlterRosterBtn = new ZxButtonModel({
+      items: [
+        {
+          icon: 'far fa-street-view',
+          label: 'View and Alter Roster',
+          action: () => {
+            this.router.navigate([
+              './battle/' + this.battleId + '/alter-roster',
+            ]);
+          },
+          disabled,
+        },
+      ],
+    });
+  }
+  setAttackCountryBtn(disabled: boolean) {
+    this.attackBtn = new ZxButtonModel({
+      items: [
+        {
+          icon: 'fal fa-swords',
+          label: 'Attack Country',
+          action: () => {
+            this.musicService
+              .getCountryLovs(this.eligibleCountryIds)
+              .subscribe((data) => {
+                this.popUpFormConfig.children[0].list = data;
+              });
+            this.popup.show();
+          },
+          disabled,
+        },
+      ],
+    });
+  }
   scores = new Map();
   ngOnInit(): void {
     this.loadData();
@@ -925,6 +940,14 @@ export class MusicRiskWorldMapComponent implements OnInit {
   loadData() {
     this.route.params.subscribe((params) => {
       this.musicService.getLastTurn(params.id).subscribe((data: BattleTurn) => {
+        if (data.status === 'WAITING') {
+          this.isAttackStopped = true;
+          this.setAttackCountryBtn(true);
+          this.setAlterRosterButton(true);
+        } else {
+          this.setAttackCountryBtn(false);
+          this.setAlterRosterButton(false);
+        }
         Object.keys(data.turnCombatState.battleLogs[0].textHistory).forEach(
           (key, index) => {
             this.battleLogs.push(
@@ -998,17 +1021,7 @@ export class MusicRiskWorldMapComponent implements OnInit {
                 )
               );
             }
-            for (let team of this.teamState.inactiveNpcTeams) {
-              this.countriesInfo.push(
-                new GridOfCountries(
-                  team.countryId,
-                  team.countryName,
-                  'NPC',
-                  'InActive',
-                  Object.values(team.eligibleCountryIds)
-                )
-              );
-            }
+
             for (let country of this.countriesInfo) {
               country.ownedFlags = [];
               for (let eligibleCountry of country.ownedFlagsIds) {
