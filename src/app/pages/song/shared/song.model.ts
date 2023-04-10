@@ -235,3 +235,15 @@ export class NotesheetResponse {
   songId: number;
   instrumentId: number;
 }
+
+
+export class PlaylistResponse
+{
+  id:number;
+  name:string;
+  userCode:string;
+  information:string;
+  created:Date;
+  createdBy:string;
+  numberOfPlays:number;
+}

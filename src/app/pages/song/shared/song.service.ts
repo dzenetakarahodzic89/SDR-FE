@@ -24,6 +24,7 @@ import {
   SubgenreLoV,
   LanguageNameResponse,
   LyricResponseUpdate,
+  PlaylistResponse,
 } from './song.model';
 import { SongCreateRequest } from './song.model';
 import { SongPlaylistReq } from '../../playlist/shared/playlist.model';
@@ -279,4 +280,29 @@ export class SongService {
         })
       );
   }
-}
+
+  getUserPlaylist(): Observable<PlaylistResponse[]> {
+    const url = SongApi.GET_ALL_PLAYLISTS_FOR_USERS;
+    return this.api.get(url).pipe(
+        map((response) => {
+            const playlistItems = response['payload'] as PlaylistResponse[];
+            return playlistItems;
+        })
+    );
+  }
+  
+  addSongToPlaylist(songId:number,playlistId:number): Observable<any> {
+    const url = SongApi.POST_SONG_TO_PLAYLIST;
+    return this.api.post(url,{
+      songId:songId,
+      playlistId:playlistId
+    }).pipe(
+        map((response) => {
+            const res = response['payload'] as PlaylistResponse[];
+            return res;
+        })
+    );
+  }
+  
+   }
+

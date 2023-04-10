@@ -31,6 +31,7 @@ import {
   LanguageNameResponse,
   LyricPopupModel,
   LyricResponseUpdate,
+   PlaylistResponse,
 } from '../shared/song.model';
 import { SongService } from '../shared/song.service';
 import {
@@ -40,6 +41,7 @@ import {
 import { CommentService } from '../../shared/comment/comment.service';
 import { HomeService } from '../../home/shared/home-page.service';
 import { ZxTabModel } from '@zff/zx-tab-layout';
+import { PlayListResponsee } from '../../playlist/shared/playlist.model';
 
 @Component({
   selector: 'app-song-overview',
@@ -160,6 +162,63 @@ export class SongOverviewComponent implements OnInit {
       model: this.lyricPopupModel,
     });
   }
+
+   public playlistPopUp: ZxPopupLayoutModel = new ZxPopupLayoutModel({
+    hideHeader: true,
+    hideCloseButton: false,
+    size: 'col-12',
+  });
+
+
+
+  playlistsColumnDefs = [
+    {
+      field: 'id',
+      headerName: 'Playlist Id',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'name',
+      headerName: 'Playlist name',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'information',
+      headerName: 'Playlist information',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'created',
+      headerName: 'Created',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+      field: 'numberOfPlays',
+      headerName: 'Number of plays',
+      flex: 1,
+      floatingFilter: false,
+    },
+    {
+    field: 'createdBy',
+      headerName: 'Created By',
+      flex: 1,
+      floatingFilter: false,
+    },
+  ];
+  public playlistGridOptions: GridOptions = {
+    columnDefs: this.playlistsColumnDefs,
+    rowModelType: 'clientSide',
+    enableColResize: true,
+    onRowClicked: (event) => {
+      this.selectedPlaylist = event['data'];
+    },
+  } as GridOptions;
+
+  selectedPlaylist:PlaylistResponse;
 
   public instrumentPopUp: ZxPopupLayoutModel = new ZxPopupLayoutModel({
     hideHeader: true,
@@ -460,6 +519,7 @@ export class SongOverviewComponent implements OnInit {
       {
         name: 'Add to playlist',
         label: 'Add to playlist',
+        action: () => this.playlistPopUp.show(),
       },
     ],
   });
@@ -574,6 +634,10 @@ export class SongOverviewComponent implements OnInit {
 
   public popUpBlockConfig: ZxBlockModel;
   public linkPopupBlockConfig: ZxBlockModel;
+   public playlistPopupBlockConfig: ZxBlockModel = new ZxBlockModel({
+    hideExpand: true,
+    label: 'Add song to playlist',
+  });
 
   similarityCreateRequest: SimilarityCreateRequest;
 
@@ -705,6 +769,32 @@ export class SongOverviewComponent implements OnInit {
     ],
   });
 
+  public playlistPopupFooterButtons: ZxButtonModel = new ZxButtonModel({
+    items: [
+      {
+        name: 'Add to playlist',
+        description: 'Add Song To Playlists',
+        label: 'Add To Playlist',
+        class: 'classic primary',
+        icon: 'fal fa-check-circle',
+        action: () => {
+          this.addSongToPlaylist();
+        },
+      },
+      {
+        name: 'cancel',
+        description: 'Cancel',
+        label: 'Cancel',
+        class: 'classic',
+        icon: 'fal fa-times',
+        action: () => {
+          this.playlistPopUp.hide();
+          
+        },
+      },
+    ],
+  });
+
   linkSongs(): void {
     this.similarityCreateRequest.songA = this.song.id;
     this.songService
@@ -745,6 +835,8 @@ export class SongOverviewComponent implements OnInit {
   connectionSources = [];
   connectionTypes = [];
   songsAreLoading = false;
+  playlists: PlaylistResponse[] = [];
+
 
   public addInstrumentBtn: ZxButtonModel = new ZxButtonModel({
     items: [
@@ -1077,6 +1169,16 @@ export class SongOverviewComponent implements OnInit {
     this.addCommentModel = new AddCommentRequest();
     this.loadData();
     this.getNoteSheet();
+    this.loadPlaylists();
+  }
+
+  addSongToPlaylist(){
+    if(this.selectedPlaylist){
+      this.songService.addSongToPlaylist(this.song.id,this.selectedPlaylist.id).subscribe(res=>{
+
+      });
+      this.playlistPopUp.hide();
+    }
   }
 
   loadData(): void {
@@ -1153,6 +1255,12 @@ export class SongOverviewComponent implements OnInit {
       });
     });
   }
+
+  loadPlaylists() {
+    this.songService.getUserPlaylist().subscribe(response=>{
+      this.playlists = response;
+    });
+}
 
   addConnectedMedia() {
     if (!this.popUpFormConfig.isValid) {
