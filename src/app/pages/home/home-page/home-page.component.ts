@@ -76,7 +76,6 @@ export class HomePageComponent implements OnInit {
         icon: 'far fa-swords',
         label: 'Resolve battles',
         action: () => {
-          this.attackPopup.show();
           this.artistImageOne = null;
           this.artistImageTwo = null;
           this.playerUrl = '';
@@ -92,6 +91,7 @@ export class HomePageComponent implements OnInit {
           this.homeService
             .getLastUnfinishedBattleTurn()
             .subscribe((response) => {
+              this.attackPopup.show();
               this.battleTurnId = response.battleTurnId;
               this.battleTurn = response;
               this.playerUrl =
