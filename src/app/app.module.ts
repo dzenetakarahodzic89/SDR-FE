@@ -124,7 +124,7 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     ArtistAlbumTimelineModule,
     ReleaseModule,
     SpotifyModule,
-    ZxUserModule
+    ZxUserModule,
     ChatModule
     // use forRoot() in main app module only.
   ],
