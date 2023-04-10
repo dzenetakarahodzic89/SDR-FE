@@ -67,6 +67,7 @@ import { ReleaseModule } from './pages/release/release.module';
 import { SpotifyModule } from './pages/spotify/spotify.module';
 import { ZxNotificationsModule } from '@zff/zx-notifications';
 import { ZxUserModule } from '@zff/zx-user';
+import { ChatModule } from './pages/chat/chat.module';
 
 environment.languages.map((v) => registerLocaleData(v.locale));
 
@@ -123,7 +124,8 @@ environment.languages.map((v) => registerLocaleData(v.locale));
     ArtistAlbumTimelineModule,
     ReleaseModule,
     SpotifyModule,
-    ZxUserModule
+    ZxUserModule,
+    ChatModule
     // use forRoot() in main app module only.
   ],
   providers: [

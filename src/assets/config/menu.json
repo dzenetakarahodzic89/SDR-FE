@@ -201,6 +201,13 @@
             "attributes": {}
           }
         ]
+      },
+      {
+        "code": "HUB_CHAT_STATIC",
+        "icon": "fad fa-comments",
+        "label": "Forum",
+        "url": "chat/topics",
+        "attributes": {}
       }
     ]
   }

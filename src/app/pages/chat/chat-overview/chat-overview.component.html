@@ -1,0 +1,24 @@
+<div class="row mainContainer">
+    <zx-block *ngIf="isLoaded" [config]="chatBlockConfig" class="col-24">
+        <zx-button zx-block-action [config]="addPostBtn"></zx-button>
+        <div zx-block-body class="row">
+            <zx-preloader *ngIf="!isLoaded"></zx-preloader>
+        </div>
+        <cx-list-layout
+      *ngIf="isLoaded"
+      [config]="listLayout"
+      zx-block-body
+    ></cx-list-layout>
+        <div zx-block-footer class="align-center">
+            <zx-button [config]="previousPageButton"> </zx-button>
+            <zx-button [config]="nextPageButton"></zx-button>
+        </div>
+    </zx-block>
+</div>
+<div clas="row bottomContainer">
+    <zx-block *ngIf="showForm && formBlockConfig" [config]="formBlockConfig" class=" row col-24">
+        <zx-form-loader  zx-block-body [component]="formConfig" 
+        [model]="addPostModel" class="col-24"></zx-form-loader>
+        <zx-button zx-block-action  [config]="footerButtons" class="align-right"></zx-button>
+      </zx-block>
+</div>
