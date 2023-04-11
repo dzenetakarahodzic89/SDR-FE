@@ -1168,8 +1168,9 @@ export class SongOverviewComponent implements OnInit {
     this.similarityCreateRequest = new SimilarityCreateRequest();
     this.addCommentModel = new AddCommentRequest();
     this.loadData();
-    this.getNoteSheet();
+
     this.loadPlaylists();
+    this.getNoteSheet();
   }
 
   addSongToPlaylist(){
@@ -1257,6 +1258,7 @@ export class SongOverviewComponent implements OnInit {
   }
 
   loadPlaylists() {
+    console.log('GET ALL PLAYLISTS')
     this.songService.getUserPlaylist().subscribe(response=>{
       this.playlists = response;
     });
